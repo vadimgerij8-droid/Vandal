@@ -3,71 +3,67 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>FANTASYAS – Black on White 2s</title>
+  <title>Адаптивний FANTASYAS</title>
   <style>
     body {
       margin: 0;
-      height: 100vh;
-      background: #ffffff;
+      min-height: 100vh;
+      background: #fff;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-family: system-ui, sans-serif;
+    }
+
+    .logo-container {
+      text-align: center;
     }
 
     .logo {
-      font-size: clamp(80px, 18vw, 160px);   /* обмежуємо максимальний розмір */
+      font-size: clamp(60px, 20vw, 180px);
       font-weight: 900;
-      letter-spacing: 0.15em;                /* значно зменшили інтервал */
-      color: #000000;
+      letter-spacing: 0.2em;
+      color: #000;
       text-transform: uppercase;
-      opacity: 0;
-      white-space: nowrap;                   /* не переносимо на новий рядок */
-      animation: appear-pulse-fade 2s cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
+      transition: all 0.4s ease;
+      white-space: nowrap;
     }
 
     .letter-f {
       font-weight: 950;
-      font-size: 1.18em;
-      margin-right: -0.04em;                 /* мінімальна корекція */
+      font-size: 1.2em;
+      margin-right: -0.05em;
     }
 
-    @keyframes appear-pulse-fade {
-      0% {
-        opacity: 0;
-        transform: scale(0.92) translateY(12px);
+    /* Адаптація */
+    @media (max-width: 600px) {
+      .logo {
+        font-size: clamp(48px, 18vw, 100px);
+        letter-spacing: 0.12em;
       }
-      20% {
-        opacity: 1;
-        transform: scale(1.03) translateY(0);
-      }
-      50% {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-      }
-      80% {
-        opacity: 0.18;
-        transform: scale(0.98) translateY(-6px);
-      }
-      100% {
-        opacity: 0;
-        transform: scale(0.92) translateY(12px);
-      }
+      .full-text { display: none; }
+      .short-text { display: inline; }
     }
 
-    /* На дуже вузьких екранах зменшуємо ще більше */
     @media (max-width: 400px) {
       .logo {
-        font-size: clamp(60px, 22vw, 100px);
+        font-size: clamp(36px, 22vw, 70px);
         letter-spacing: 0.08em;
       }
+      .short-text::after {
+        content: "…"; /* або просто іконку */
+      }
     }
+
+    /* Для ще менших — можна додати тільки F як символ */
   </style>
 </head>
 <body>
 
-  <div class="logo">
-    <span class="letter-f">F</span>ANTASYAS
+  <div class="logo-container">
+    <div class="logo">
+      <span class="letter-f">F</span><span class="full-text">ANTASYAS</span><span class="short-text">ANTASYAS</span>
+    </div>
   </div>
 
 </body>
