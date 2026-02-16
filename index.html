@@ -16,32 +16,28 @@
     }
 
     .logo {
-      font-size: 14vw;
-      min-font-size: 100px;
-      max-font-size: 160px;
+      font-size: clamp(80px, 18vw, 160px);   /* обмежуємо максимальний розмір */
       font-weight: 900;
-      letter-spacing: 0.35em;
+      letter-spacing: 0.15em;                /* значно зменшили інтервал */
       color: #000000;
       text-transform: uppercase;
       opacity: 0;
-      display: inline-flex;
-      align-items: baseline;
+      white-space: nowrap;                   /* не переносимо на новий рядок */
       animation: appear-pulse-fade 2s cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
     }
 
     .letter-f {
-      font-weight: 950;           /* робимо F максимально товстою */
-      font-size: 1.22em;          /* трохи більша за інші букви */
-      letter-spacing: 0.1em;
-      margin-right: -0.08em;      /* щоб краще злилася з A */
+      font-weight: 950;
+      font-size: 1.18em;
+      margin-right: -0.04em;                 /* мінімальна корекція */
     }
 
     @keyframes appear-pulse-fade {
       0% {
         opacity: 0;
-        transform: scale(0.88) translateY(15px);
+        transform: scale(0.92) translateY(12px);
       }
-      18% {
+      20% {
         opacity: 1;
         transform: scale(1.03) translateY(0);
       }
@@ -49,13 +45,21 @@
         opacity: 1;
         transform: scale(1) translateY(0);
       }
-      82% {
-        opacity: 0.2;
-        transform: scale(0.97) translateY(-8px);
+      80% {
+        opacity: 0.18;
+        transform: scale(0.98) translateY(-6px);
       }
       100% {
         opacity: 0;
-        transform: scale(0.88) translateY(15px);
+        transform: scale(0.92) translateY(12px);
+      }
+    }
+
+    /* На дуже вузьких екранах зменшуємо ще більше */
+    @media (max-width: 400px) {
+      .logo {
+        font-size: clamp(60px, 22vw, 100px);
+        letter-spacing: 0.08em;
       }
     }
   </style>
