@@ -1,85 +1,81 @@
-<!-- FANTASYAS Splash Screen -->
-<div id="fantasyas-splash" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0a0c10; display: flex; align-items: center; justify-content: center; z-index: 9999; transition: opacity 0.8s ease; pointer-events: none;">
-  <div style="position: relative; width: 300px; height: 300px; display: flex; align-items: center; justify-content: center;">
-    <!-- Півмісяць (SVG) -->
-    <svg width="300" height="300" viewBox="0 0 100 100" style="position: absolute; animation: rotateMoon 12s infinite linear; filter: drop-shadow(0 0 15px rgba(255,255,255,0.5));">
-      <defs>
-        <radialGradient id="moonGlow" cx="30%" cy="30%" r="70%">
-          <stop offset="0%" stop-color="#fff9e6" />
-          <stop offset="70%" stop-color="#a0b0ff" />
-          <stop offset="100%" stop-color="#4a5c8c" />
-        </radialGradient>
-        <filter id="glow">
-          <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-          <feMerge>
-            <feMergeNode in="coloredBlur"/>
-            <feMergeNode in="SourceGraphic"/>
-          </feMerge>
-        </filter>
-      </defs>
-      <!-- Темна сторона (фон) -->
-      <circle cx="50" cy="50" r="40" fill="#0a0c10" />
-      <!-- Півмісяць (світла частина) -->
-      <path d="M50,10 A40,40 0 0,1 50,90 A40,40 0 0,1 50,10" fill="url(#moonGlow)" filter="url(#glow)" opacity="0.95">
-        <animate attributeName="opacity" values="0.9;1;0.9" dur="4s" repeatCount="indefinite" />
-      </path>
-    </svg>
-    <!-- Текст -->
-    <div style="position: relative; z-index: 2; font-family: 'Manrope', sans-serif; font-size: 2.8rem; font-weight: 800; letter-spacing: 6px; color: white; text-transform: uppercase; animation: textPulse 2s infinite ease-in-out; text-shadow: 0 0 20px rgba(255,255,255,0.8);">
-      FANTASYAS
-    </div>
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FANTASYAS Splash</title>
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle at top, #0a0a1a, #000000);
+    overflow: hidden;
+    font-family: 'Manrope', sans-serif;
+  }
+
+  .splash-container {
+    position: relative;
+    text-align: center;
+    color: white;
+  }
+
+  /* Півмісяць */
+  .moon {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 40%, #ffffcc, #aaaa77);
+    position: relative;
+    margin: 0 auto 20px auto;
+    animation: rotateMoon 8s linear infinite;
+    box-shadow: 0 0 40px 5px #ffffcc;
+  }
+
+  /* Виріз для півмісяця */
+  .moon::after {
+    content: '';
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 60% 40%, #0a0a1a, #000);
+    top: 0;
+    left: 0;
+  }
+
+  @keyframes rotateMoon {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  /* Текст всередині */
+  .moon-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-shadow: 0 0 15px #ffffcc, 0 0 30px #ffff99;
+    animation: glowText 2s ease-in-out infinite alternate;
+  }
+
+  @keyframes glowText {
+    from { text-shadow: 0 0 15px #ffffcc, 0 0 30px #ffff99; }
+    to { text-shadow: 0 0 30px #ffffcc, 0 0 60px #ffffff; }
+  }
+</style>
+</head>
+<body>
+
+<div class="splash-container">
+  <div class="moon">
+    <div class="moon-text">FANTASYAS</div>
   </div>
 </div>
 
-<style>
-@keyframes rotateMoon {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-@keyframes textPulse {
-  0% { text-shadow: 0 0 10px rgba(255,255,240,0.8), 0 0 20px rgba(180,200,255,0.5); }
-  50% { text-shadow: 0 0 30px rgba(255,255,255,1), 0 0 50px rgba(200,220,255,0.9); }
-  100% { text-shadow: 0 0 10px rgba(255,255,240,0.8), 0 0 20px rgba(180,200,255,0.5); }
-}
-
-/* Адаптація для мобільних */
-@media (max-width: 600px) {
-  #fantasyas-splash div:first-child {
-    width: 200px;
-    height: 200px;
-  }
-  #fantasyas-splash svg {
-    width: 200px;
-    height: 200px;
-  }
-  #fantasyas-splash div:last-child {
-    font-size: 2rem;
-  }
-}
-</style>
-
-<script>
-(function() {
-  // Приховуємо splash через 2.5 секунди або після завантаження сторінки
-  const splash = document.getElementById('fantasyas-splash');
-  if (splash) {
-    // Функція приховування
-    const hideSplash = () => {
-      splash.style.opacity = '0';
-      setTimeout(() => {
-        splash.style.display = 'none';
-      }, 800); // чекаємо завершення transition
-    };
-
-    // Якщо сторінка вже завантажена
-    if (document.readyState === 'complete') {
-      setTimeout(hideSplash, 500); // невелика затримка, щоб побачити анімацію
-    } else {
-      window.addEventListener('load', () => {
-        setTimeout(hideSplash, 500);
-      });
-    }
-  }
-})();
-</script>
+</body>
+</html>
