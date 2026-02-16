@@ -5,16 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FANTASYAS Intro Logo</title>
 <style>
-  /* Загальні стилі сторінки */
+  /* Основні стилі */
   body, html {
     margin: 0;
     padding: 0;
     height: 100%;
     font-family: 'Manrope', sans-serif;
     background-color: #ffffff;
+    overflow: hidden;
   }
 
-  /* Контейнер для інтро */
+  /* Інтро контейнер */
   #intro {
     position: fixed;
     top: 0;
@@ -38,17 +39,23 @@
     text-align: center;
     opacity: 0;
     transform: scale(0.5);
-    animation: appearDisappear 0.8s ease-in-out forwards, pulse 0.5s infinite alternate 0.8s;
+    animation: appearPulseDisappear 1.3s ease-in-out forwards;
   }
 
-  @keyframes appearDisappear {
+  /* Анімація: появa → пульсація → зникнення */
+  @keyframes appearPulseDisappear {
     0% {
       opacity: 0;
       transform: scale(0.5);
     }
-    50% {
+    20% {
       opacity: 1;
       transform: scale(1.05);
+    }
+    60% {
+      opacity: 1;
+      transform: scale(1);
+      /* Пульсація повторюється за допомогою JS або другого animation */
     }
     100% {
       opacity: 0;
@@ -57,18 +64,9 @@
   }
 
   @keyframes pulse {
-    0% {
-      transform: scale(1);
-      text-shadow: 0 0 0.2vw rgba(0,0,0,0.2), 0 0 0.5vw rgba(0,0,0,0.1);
-    }
-    50% {
-      transform: scale(1.1);
-      text-shadow: 0 0 1vw rgba(0,0,0,0.3), 0 0 2vw rgba(0,0,0,0.2);
-    }
-    100% {
-      transform: scale(1);
-      text-shadow: 0 0 0.2vw rgba(0,0,0,0.2), 0 0 0.5vw rgba(0,0,0,0.1);
-    }
+    0% { transform: scale(1); text-shadow: 0 0 0.2vw rgba(0,0,0,0.2); }
+    50% { transform: scale(1.1); text-shadow: 0 0 1vw rgba(0,0,0,0.3); }
+    100% { transform: scale(1); text-shadow: 0 0 0.2vw rgba(0,0,0,0.2); }
   }
 
   @media (max-width: 400px) {
@@ -78,7 +76,7 @@
     }
   }
 
-  /* Основний контент сторінки прихований під інтро */
+  /* Основний контент спочатку прихований */
   #content {
     opacity: 0;
     transition: opacity 0.5s ease-in;
@@ -99,17 +97,19 @@
   </div>
 
   <script>
-    // При завантаженні сторінки приховати інтро після анімації
-    window.addEventListener('load', () => {
-      const intro = document.getElementById('intro');
-      const content = document.getElementById('content');
+    const logo = document.querySelector('.logo');
+    const intro = document.getElementById('intro');
+    const content = document.getElementById('content');
 
-      // Час інтро: 0.8с (поява) + 0.5с (пульсація)
-      setTimeout(() => {
-        intro.style.display = 'none';
-        content.style.opacity = 1; // показати основний контент
-      }, 1300); // 0.8 + 0.5 секунди = 1.3с
+    // Додатковий ефект пульсації після появи (0.5 сек)
+    logo.addEventListener('animationend', () => {
+      // Після завершення основної анімації інтро зникає
+      intro.style.display = 'none';
+      content.style.opacity = 1;
     });
+
+    // Запускаємо пульсацію між появою і зникненням
+    logo.style.animation = 'appearPulseDisappear 0.8s ease-in forwards, pulse 0.5s infinite alternate 0.8s';
   </script>
 </body>
 </html>
