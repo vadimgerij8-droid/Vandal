@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>FANTASYAS Logo</title>
+  <title>FANTASYAS Logo – Black & White Pulse</title>
   <style>
     body {
       margin: 0;
       height: 100vh;
-      background: radial-gradient(circle at 50% 50%, #0a0015, #000000);
+      background: #000000;
       overflow: hidden;
       display: flex;
       align-items: center;
@@ -18,114 +18,87 @@
 
     .logo-container {
       position: relative;
-      perspective: 1200px;
+      perspective: 800px;
     }
 
     .logo {
-      font-size: 18vw;          /* адаптивний розмір */
-      min-font-size: 140px;
+      font-size: 16vw;          /* адаптивно, але не надто великий */
+      min-font-size: 120px;
+      max-font-size: 180px;
       font-weight: 900;
-      letter-spacing: 0.4em;
-      color: #f0e8ff;
+      letter-spacing: 0.5em;
+      color: #ffffff;
       text-transform: uppercase;
       text-shadow:
-        0 0 8px  #c8a0ff,
-        0 0 25px #a050ff,
-        0 0 60px #7020d0,
-        0 0 120px #401080;
-      animation: pulse-glow 20s ease-in-out infinite;
+        0 0 10px rgba(255,255,255,0.4),
+        0 0 25px rgba(255,255,255,0.25),
+        0 0 50px rgba(255,255,255,0.12),
+        0 0 100px rgba(255,255,255,0.05);
+      animation: pulse-bw 5s ease-in-out infinite;
       transform-style: preserve-3d;
+      will-change: text-shadow, transform;
     }
 
-    /* Основна пульсація + зміна кольору свічення */
-    @keyframes pulse-glow {
-      0%   {
+    @keyframes pulse-bw {
+      0%, 100% {
+        transform: scale(1) translateZ(0);
         text-shadow:
-          0 0 8px  #c8a0ff,
-          0 0 25px #a050ff,
-          0 0 60px #7020d0,
-          0 0 120px #401080;
-        transform: scale(1) rotateX(0deg) rotateY(0deg);
+          0 0 10px rgba(255,255,255,0.4),
+          0 0 25px rgba(255,255,255,0.25),
+          0 0 50px rgba(255,255,255,0.12),
+          0 0 100px rgba(255,255,255,0.05);
       }
-      15%  {
+      50% {
+        transform: scale(1.06) translateZ(20px);
         text-shadow:
-          0 0 15px #00f0ff,
-          0 0 40px #00c0ff,
-          0 0 90px #0088cc,
-          0 0 180px #004466;
-      }
-      30%  {
-        text-shadow:
-          0 0 12px #ff40ff,
-          0 0 35px #ff00ff,
-          0 0 80px #cc00cc,
-          0 0 160px #660066;
-      }
-      50%  {
-        text-shadow:
-          0 0 20px #40ff80,
-          0 0 50px #00ff40,
-          0 0 110px #00cc33,
-          0 0 220px #00661a;
-        transform: scale(1.08) rotateX(4deg) rotateY(6deg);
-      }
-      65%  {
-        text-shadow:
-          0 0 18px #ffd740,
-          0 0 45px #ffcc00,
-          0 0 100px #cc9900,
-          0 0 200px #664d00;
-      }
-      80%  {
-        text-shadow:
-          0 0 10px #ff6b6b,
-          0 0 30px #ff4040,
-          0 0 70px #cc0000,
-          0 0 140px #660000;
-      }
-      100% {
-        text-shadow:
-          0 0 8px  #c8a0ff,
-          0 0 25px #a050ff,
-          0 0 60px #7020d0,
-          0 0 120px #401080;
-        transform: scale(1) rotateX(0deg) rotateY(0deg);
+          0 0 25px rgba(255,255,255,0.8),
+          0 0 60px rgba(255,255,255,0.5),
+          0 0 120px rgba(255,255,255,0.25),
+          0 0 200px rgba(255,255,255,0.1);
       }
     }
 
-    /* Дуже легке дихання фону (додатковий вайб) */
+    /* Дуже легке "дихання" фону для глибини */
     body::before {
       content: "";
       position: absolute;
       inset: 0;
-      background: radial-gradient(circle at 30% 70%, rgba(120, 80, 220, 0.08), transparent 40%);
-      animation: bg-breath 20s ease-in-out infinite;
+      background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.04), transparent 60%);
+      animation: bg-breath 5s ease-in-out infinite;
       pointer-events: none;
     }
 
     @keyframes bg-breath {
-      0%, 100% { opacity: 0.6; transform: scale(1); }
-      50%      { opacity: 1;   transform: scale(1.15); }
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50%      { opacity: 0.7; transform: scale(1.12); }
     }
 
-    /* Додатковий шар "енергії" (опціонально) */
+    /* Тонкий блиск (light sweep), що проходить зверху вниз */
     .logo::after {
       content: "FANTASYAS";
       position: absolute;
       inset: 0;
       color: transparent;
-      background: linear-gradient(90deg, #00f0ff, #ff40ff, #40ff80, #ffd740, #ff6b6b, #c8a0ff);
-      background-size: 400%;
+      background: linear-gradient(
+        180deg,
+        transparent 0%,
+        rgba(255,255,255,0.3) 45%,
+        rgba(255,255,255,0.6) 50%,
+        rgba(255,255,255,0.3) 55%,
+        transparent 100%
+      );
+      background-size: 100% 300%;
+      background-position: 0% 0%;
       -webkit-background-clip: text;
       background-clip: text;
-      animation: shimmer 20s linear infinite;
-      opacity: 0.15;
+      animation: sweep 5s linear infinite;
       mix-blend-mode: screen;
+      pointer-events: none;
     }
 
-    @keyframes shimmer {
-      0%   { background-position: 0%  }
-      100% { background-position: 400% }
+    @keyframes sweep {
+      0%   { background-position: 0% -100%; }
+      100% { background-position: 0% 200%; }
     }
   </style>
 </head>
