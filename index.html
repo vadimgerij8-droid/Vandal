@@ -1,156 +1,139 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FANTASYAS Splash</title>
-<style>
-  /* ===== БАЗОВИЙ ФОН ===== */
-  body {
-    margin: 0;
-    height: 100vh;
-    background: radial-gradient(circle at top, #0a0a1a, #000000);
-    font-family: 'Manrope', sans-serif;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    color: white;
-  }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FANTASYAS Logo</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: radial-gradient(circle at 50% 50%, #0a0015, #000000);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+    }
 
-  /* ===== ЗІРКИ ===== */
-  .stars {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: transparent;
-    z-index: 0;
-  }
+    .logo-container {
+      position: relative;
+      perspective: 1200px;
+    }
 
-  .star {
-    position: absolute;
-    width: 2px;
-    height: 2px;
-    background: white;
-    border-radius: 50%;
-    opacity: 0.8;
-    animation: twinkle 2s infinite alternate;
-  }
+    .logo {
+      font-size: 18vw;          /* адаптивний розмір */
+      min-font-size: 140px;
+      font-weight: 900;
+      letter-spacing: 0.4em;
+      color: #f0e8ff;
+      text-transform: uppercase;
+      text-shadow:
+        0 0 8px  #c8a0ff,
+        0 0 25px #a050ff,
+        0 0 60px #7020d0,
+        0 0 120px #401080;
+      animation: pulse-glow 20s ease-in-out infinite;
+      transform-style: preserve-3d;
+    }
 
-  @keyframes twinkle {
-    from { opacity: 0.2; }
-    to { opacity: 1; }
-  }
+    /* Основна пульсація + зміна кольору свічення */
+    @keyframes pulse-glow {
+      0%   {
+        text-shadow:
+          0 0 8px  #c8a0ff,
+          0 0 25px #a050ff,
+          0 0 60px #7020d0,
+          0 0 120px #401080;
+        transform: scale(1) rotateX(0deg) rotateY(0deg);
+      }
+      15%  {
+        text-shadow:
+          0 0 15px #00f0ff,
+          0 0 40px #00c0ff,
+          0 0 90px #0088cc,
+          0 0 180px #004466;
+      }
+      30%  {
+        text-shadow:
+          0 0 12px #ff40ff,
+          0 0 35px #ff00ff,
+          0 0 80px #cc00cc,
+          0 0 160px #660066;
+      }
+      50%  {
+        text-shadow:
+          0 0 20px #40ff80,
+          0 0 50px #00ff40,
+          0 0 110px #00cc33,
+          0 0 220px #00661a;
+        transform: scale(1.08) rotateX(4deg) rotateY(6deg);
+      }
+      65%  {
+        text-shadow:
+          0 0 18px #ffd740,
+          0 0 45px #ffcc00,
+          0 0 100px #cc9900,
+          0 0 200px #664d00;
+      }
+      80%  {
+        text-shadow:
+          0 0 10px #ff6b6b,
+          0 0 30px #ff4040,
+          0 0 70px #cc0000,
+          0 0 140px #660000;
+      }
+      100% {
+        text-shadow:
+          0 0 8px  #c8a0ff,
+          0 0 25px #a050ff,
+          0 0 60px #7020d0,
+          0 0 120px #401080;
+        transform: scale(1) rotateX(0deg) rotateY(0deg);
+      }
+    }
 
-  /* ===== ПІВМІСЯЦЬ ===== */
-  .moon {
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-    background: radial-gradient(circle at 40% 40%, #ffffcc, #aaaa77);
-    position: relative;
-    margin-bottom: 20px;
-    animation: rotateMoon 12s linear infinite;
-    box-shadow: 0 0 40px 5px #ffffcc;
-    z-index: 1;
-  }
+    /* Дуже легке дихання фону (додатковий вайб) */
+    body::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 30% 70%, rgba(120, 80, 220, 0.08), transparent 40%);
+      animation: bg-breath 20s ease-in-out infinite;
+      pointer-events: none;
+    }
 
-  /* Виріз для півмісяця */
-  .moon::after {
-    content: '';
-    position: absolute;
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-    background: radial-gradient(circle at 60% 40%, #0a0a1a, #000);
-    top: 0;
-    left: 0;
-  }
+    @keyframes bg-breath {
+      0%, 100% { opacity: 0.6; transform: scale(1); }
+      50%      { opacity: 1;   transform: scale(1.15); }
+    }
 
-  @keyframes rotateMoon {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
+    /* Додатковий шар "енергії" (опціонально) */
+    .logo::after {
+      content: "FANTASYAS";
+      position: absolute;
+      inset: 0;
+      color: transparent;
+      background: linear-gradient(90deg, #00f0ff, #ff40ff, #40ff80, #ffd740, #ff6b6b, #c8a0ff);
+      background-size: 400%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      animation: shimmer 20s linear infinite;
+      opacity: 0.15;
+      mix-blend-mode: screen;
+    }
 
-  /* ===== ТЕКСТ В ПІВМІСЯЦІ ===== */
-  .moon-text {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 2.5rem;
-    font-weight: 700;
-    text-shadow: 0 0 15px #ffffcc, 0 0 30px #ffff99;
-    animation: glowText 2s ease-in-out infinite alternate;
-  }
-
-  @keyframes glowText {
-    from { text-shadow: 0 0 15px #ffffcc, 0 0 30px #ffff99; }
-    to { text-shadow: 0 0 30px #ffffcc, 0 0 60px #ffffff; }
-  }
-
-  /* ===== ПІДЗАГОЛОВОК ===== */
-  .subtitle {
-    font-size: 1.2rem;
-    margin-bottom: 30px;
-    color: #cccccc;
-    z-index: 1;
-  }
-
-  /* ===== КНОПКА ===== */
-  .start-btn {
-    font-size: 1rem;
-    font-weight: 600;
-    padding: 12px 30px;
-    border: none;
-    border-radius: 25px;
-    background: #ffffcc;
-    color: #0a0a1a;
-    cursor: pointer;
-    box-shadow: 0 0 15px #ffffcc66;
-    transition: all 0.3s ease;
-    z-index: 1;
-  }
-
-  .start-btn:hover {
-    box-shadow: 0 0 30px #ffffcc;
-    transform: scale(1.05);
-  }
-
-</style>
+    @keyframes shimmer {
+      0%   { background-position: 0%  }
+      100% { background-position: 400% }
+    }
+  </style>
 </head>
 <body>
 
-<div class="stars" id="stars"></div>
-
-<div class="moon">
-  <div class="moon-text">FANTASYAS</div>
-</div>
-
-<p class="subtitle">Чати. Стрічка. Без шуму.</p>
-<button class="start-btn" id="startBtn">Почати</button>
-
-<script>
-  /* ===== СТВОРЮЄМО ЗІРКИ ===== */
-  const starsContainer = document.getElementById('stars');
-  for (let i = 0; i < 100; i++) {
-    const star = document.createElement('div');
-    star.classList.add('star');
-    star.style.top = Math.random() * window.innerHeight + 'px';
-    star.style.left = Math.random() * window.innerWidth + 'px';
-    star.style.animationDuration = 1 + Math.random() * 2 + 's';
-    starsContainer.appendChild(star);
-  }
-
-  /* ===== КНОПКА «ПОЧАТИ» ===== */
-  const startBtn = document.getElementById('startBtn');
-  startBtn.addEventListener('click', () => {
-    alert("Заставка завершена! Тут можна запускати основний сайт.");
-    // Тут можна робити редирект на головну сторінку:
-    // window.location.href = "/main.html";
-  });
-</script>
+  <div class="logo-container">
+    <div class="logo">FANTASYAS</div>
+  </div>
 
 </body>
 </html>
