@@ -5,33 +5,55 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FANTASYAS Splash</title>
 <style>
+  /* ===== БАЗОВИЙ ФОН ===== */
   body {
     margin: 0;
     height: 100vh;
+    background: radial-gradient(circle at top, #0a0a1a, #000000);
+    font-family: 'Manrope', sans-serif;
+    overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
-    background: radial-gradient(circle at top, #0a0a1a, #000000);
-    overflow: hidden;
-    font-family: 'Manrope', sans-serif;
-  }
-
-  .splash-container {
-    position: relative;
-    text-align: center;
+    flex-direction: column;
     color: white;
   }
 
-  /* Півмісяць */
+  /* ===== ЗІРКИ ===== */
+  .stars {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    z-index: 0;
+  }
+
+  .star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: white;
+    border-radius: 50%;
+    opacity: 0.8;
+    animation: twinkle 2s infinite alternate;
+  }
+
+  @keyframes twinkle {
+    from { opacity: 0.2; }
+    to { opacity: 1; }
+  }
+
+  /* ===== ПІВМІСЯЦЬ ===== */
   .moon {
     width: 200px;
     height: 200px;
     border-radius: 50%;
     background: radial-gradient(circle at 40% 40%, #ffffcc, #aaaa77);
     position: relative;
-    margin: 0 auto 20px auto;
-    animation: rotateMoon 8s linear infinite;
+    margin-bottom: 20px;
+    animation: rotateMoon 12s linear infinite;
     box-shadow: 0 0 40px 5px #ffffcc;
+    z-index: 1;
   }
 
   /* Виріз для півмісяця */
@@ -51,7 +73,7 @@
     100% { transform: rotate(360deg); }
   }
 
-  /* Текст всередині */
+  /* ===== ТЕКСТ В ПІВМІСЯЦІ ===== */
   .moon-text {
     position: absolute;
     top: 50%;
@@ -67,15 +89,68 @@
     from { text-shadow: 0 0 15px #ffffcc, 0 0 30px #ffff99; }
     to { text-shadow: 0 0 30px #ffffcc, 0 0 60px #ffffff; }
   }
+
+  /* ===== ПІДЗАГОЛОВОК ===== */
+  .subtitle {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+    color: #cccccc;
+    z-index: 1;
+  }
+
+  /* ===== КНОПКА ===== */
+  .start-btn {
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 25px;
+    background: #ffffcc;
+    color: #0a0a1a;
+    cursor: pointer;
+    box-shadow: 0 0 15px #ffffcc66;
+    transition: all 0.3s ease;
+    z-index: 1;
+  }
+
+  .start-btn:hover {
+    box-shadow: 0 0 30px #ffffcc;
+    transform: scale(1.05);
+  }
+
 </style>
 </head>
 <body>
 
-<div class="splash-container">
-  <div class="moon">
-    <div class="moon-text">FANTASYAS</div>
-  </div>
+<div class="stars" id="stars"></div>
+
+<div class="moon">
+  <div class="moon-text">FANTASYAS</div>
 </div>
+
+<p class="subtitle">Чати. Стрічка. Без шуму.</p>
+<button class="start-btn" id="startBtn">Почати</button>
+
+<script>
+  /* ===== СТВОРЮЄМО ЗІРКИ ===== */
+  const starsContainer = document.getElementById('stars');
+  for (let i = 0; i < 100; i++) {
+    const star = document.createElement('div');
+    star.classList.add('star');
+    star.style.top = Math.random() * window.innerHeight + 'px';
+    star.style.left = Math.random() * window.innerWidth + 'px';
+    star.style.animationDuration = 1 + Math.random() * 2 + 's';
+    starsContainer.appendChild(star);
+  }
+
+  /* ===== КНОПКА «ПОЧАТИ» ===== */
+  const startBtn = document.getElementById('startBtn');
+  startBtn.addEventListener('click', () => {
+    alert("Заставка завершена! Тут можна запускати основний сайт.");
+    // Тут можна робити редирект на головну сторінку:
+    // window.location.href = "/main.html";
+  });
+</script>
 
 </body>
 </html>
