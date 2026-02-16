@@ -3,136 +3,67 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>FANTASYAS – Monochrome Reveal Pulse Fade</title>
+  <title>FANTASYAS – Black on White 2s</title>
   <style>
     body {
       margin: 0;
       height: 100vh;
-      background: #000000;
-      overflow: hidden;
+      background: #ffffff;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-family: system-ui, -apple-system, BlinkMacOSystemFont, 'Segoe UI', Roboto, sans-serif;
-    }
-
-    .logo-container {
-      position: relative;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
 
     .logo {
-      font-size: 15vw;
-      min-font-size: 110px;
+      font-size: 14vw;
+      min-font-size: 100px;
       max-font-size: 160px;
       font-weight: 900;
-      letter-spacing: 0.55em;
-      color: #ffffff;
+      letter-spacing: 0.35em;
+      color: #000000;
       text-transform: uppercase;
       opacity: 0;
-      text-shadow: 
-        0 0 8px rgba(255,255,255,0.25),
-        0 0 20px rgba(255,255,255,0.12);
-      animation: 
-        reveal-pulse-fade 5s cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
-      will-change: opacity, text-shadow, transform;
+      display: inline-flex;
+      align-items: baseline;
+      animation: appear-pulse-fade 2s cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
     }
 
-    @keyframes reveal-pulse-fade {
+    .letter-f {
+      font-weight: 950;           /* робимо F максимально товстою */
+      font-size: 1.22em;          /* трохи більша за інші букви */
+      letter-spacing: 0.1em;
+      margin-right: -0.08em;      /* щоб краще злилася з A */
+    }
+
+    @keyframes appear-pulse-fade {
       0% {
         opacity: 0;
-        transform: scale(0.92) translateY(10px);
-        text-shadow: 
-          0 0 0 rgba(255,255,255,0),
-          0 0 0 rgba(255,255,255,0);
+        transform: scale(0.88) translateY(15px);
       }
-      15% {
+      18% {
         opacity: 1;
-        transform: scale(1.02) translateY(0);
-        text-shadow: 
-          0 0 12px rgba(255,255,255,0.6),
-          0 0 30px rgba(255,255,255,0.35),
-          0 0 60px rgba(255,255,255,0.15);
+        transform: scale(1.03) translateY(0);
       }
-      40% {
+      50% {
         opacity: 1;
-        transform: scale(1);
-        text-shadow: 
-          0 0 20px rgba(255,255,255,0.8),
-          0 0 45px rgba(255,255,255,0.5),
-          0 0 90px rgba(255,255,255,0.2);
+        transform: scale(1) translateY(0);
       }
-      60% {
-        opacity: 1;
-        transform: scale(1.015);
-        text-shadow: 
-          0 0 15px rgba(255,255,255,0.7),
-          0 0 35px rgba(255,255,255,0.4),
-          0 0 70px rgba(255,255,255,0.18);
-      }
-      85% {
-        opacity: 0.3;
+      82% {
+        opacity: 0.2;
         transform: scale(0.97) translateY(-8px);
-        text-shadow: 
-          0 0 8px rgba(255,255,255,0.3),
-          0 0 20px rgba(255,255,255,0.15);
       }
       100% {
         opacity: 0;
-        transform: scale(0.92) translateY(10px);
-        text-shadow: 
-          0 0 0 rgba(255,255,255,0),
-          0 0 0 rgba(255,255,255,0);
+        transform: scale(0.88) translateY(15px);
       }
-    }
-
-    /* Дуже делікатне фонове дихання для глибини (не відволікає) */
-    body::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.03) 0%, transparent 70%);
-      animation: subtle-breath 5s ease-in-out infinite;
-      pointer-events: none;
-    }
-
-    @keyframes subtle-breath {
-      0%, 100% { opacity: 0.4; transform: scale(1); }
-      50%      { opacity: 0.9; transform: scale(1.08); }
-    }
-
-    /* Легкий sweep-блик зверху для преміум-відчуття */
-    .logo::after {
-      content: "FANTASYAS";
-      position: absolute;
-      inset: 0;
-      color: transparent;
-      background: linear-gradient(
-        to bottom,
-        transparent 0%,
-        rgba(255,255,255,0.4) 48%,
-        rgba(255,255,255,0.7) 52%,
-        transparent 100%
-      );
-      background-size: 100% 400%;
-      background-position: 0% -100%;
-      -webkit-background-clip: text;
-      background-clip: text;
-      animation: light-sweep 5s ease-in-out infinite;
-      mix-blend-mode: screen;
-      pointer-events: none;
-    }
-
-    @keyframes light-sweep {
-      0%, 20%   { background-position: 0% -100%; }
-      40%, 60%  { background-position: 0% 100%; }
-      100%      { background-position: 0% 300%; }
     }
   </style>
 </head>
 <body>
 
-  <div class="logo-container">
-    <div class="logo">FANTASYAS</div>
+  <div class="logo">
+    <span class="letter-f">F</span>ANTASYAS
   </div>
 
 </body>
