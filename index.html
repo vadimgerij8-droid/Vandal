@@ -36,9 +36,39 @@
     letter-spacing: 0.5vw;
     font-stretch: condensed;
     text-align: center;
+
+    /* Початкові значення для появи */
     opacity: 0;
     transform: scale(0.5);
-    transition: all 0.3s ease-in-out;
+
+    /* Анімація появи → пульсації → зникнення */
+    animation: logoIntro 1.3s ease-in-out forwards;
+  }
+
+  /* Анімація: появa → пульсація → зникнення */
+  @keyframes logoIntro {
+    0% {
+      opacity: 0;
+      transform: scale(0.5);
+    }
+    20% {
+      opacity: 1;
+      transform: scale(1.05); /* швидка поява */
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1); /* стоїть */
+    }
+    65% {
+      transform: scale(1.1); /* перший пульс */
+    }
+    80% {
+      transform: scale(1); /* другий пульс */
+    }
+    100% {
+      opacity: 0;
+      transform: scale(0.5); /* плавне зникнення */
+    }
   }
 
   @media (max-width: 400px) {
@@ -69,38 +99,15 @@
   </div>
 
   <script>
-    const logo = document.querySelector('.logo');
+    // Показати основний контент після завершення інтро
     const intro = document.getElementById('intro');
     const content = document.getElementById('content');
+    const logo = document.querySelector('.logo');
 
-    // 1. Поява
-    setTimeout(() => {
-      logo.style.opacity = 1;
-      logo.style.transform = 'scale(1)';
-    }, 100);
-
-    // 2. Пульсація протягом 0.5 сек
-    setTimeout(() => {
-      logo.style.transition = 'transform 0.25s ease-in-out, text-shadow 0.25s ease-in-out';
-      let pulseCount = 0;
-      const pulseInterval = setInterval(() => {
-        logo.style.transform = pulseCount % 2 === 0 ? 'scale(1.05)' : 'scale(1)';
-        pulseCount++;
-        if (pulseCount > 3) clearInterval(pulseInterval); // пульсація 2 цикли
-      }, 250);
-    }, 900); // 0.8–0.9 сек після появи
-
-    // 3. Зникнення
-    setTimeout(() => {
-      logo.style.opacity = 0;
-      logo.style.transform = 'scale(0.5)';
-    }, 1600); // після появи і пульсації
-
-    // Показати основний контент після зникнення
-    setTimeout(() => {
+    logo.addEventListener('animationend', () => {
       intro.style.display = 'none';
       content.style.opacity = 1;
-    }, 2000);
+    });
   </script>
 
 </body>
