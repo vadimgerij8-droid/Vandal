@@ -2,794 +2,550 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>MONO · сучасне кіно</title>
-    <!-- Font Awesome (чорно-білі іконки) -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOP CINEMA · монохромний</title>
+    <!-- Font Awesome for icons (optional, but adds modern feel) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        /* ----- ЧОРНО-БІЛА ГАМА · СУЧАСНИЙ МІНІМАЛІЗМ ----- */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background: #0a0a0c;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            color: #eee;
-            line-height: 1.4;
+            background-color: #0a0a0a;
+            color: #e5e5e5;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* головний контейнер */
+        /* шрифт Inter через fallback */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap');
+
         .app {
-            max-width: 800px;
+            max-width: 1440px;
             margin: 0 auto;
-            background: #000;
-            box-shadow: 0 0 40px rgba(0,0,0,0.8);
-            min-height: 100vh;
+            padding: 0 24px;
         }
 
-        /* ========== ПЛЕЄР (чорно-білий, керування поверх) ========== */
-        .player-section {
-            background: #000;
-            position: relative;
-            width: 100%;
-        }
-
-        .video-wrapper {
-            position: relative;
-            width: 100%;
-            background: #000;
-            line-height: 0;
-        }
-
-        video {
-            display: block;
-            width: 100%;
-            height: auto;
-            background: #000;
-        }
-
-        /* оверлей з контролами (з'являється по тапу) */
-        .controls-overlay {
-            position: absolute;
+        /* ----- HEADER (липкий) ----- */
+        .header {
+            position: sticky;
             top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.4);
-            opacity: 0;
-            transition: opacity 0.2s ease;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            pointer-events: none;
+            z-index: 100;
+            background-color: #0a0a0a;
+            padding: 20px 0 12px 0;
+            border-bottom: 1px solid #2a2a2a;
+            backdrop-filter: blur(8px);
+            background-color: rgba(10, 10, 10, 0.85);
         }
 
-        .controls-overlay.visible {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        /* центральна кнопка Play */
-        .center-play {
-            width: 80px;
-            height: 80px;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(6px);
-            border: 2px solid rgba(255,255,255,0.5);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-            cursor: pointer;
-            transition: 0.1s;
-        }
-
-        .center-play i {
-            font-size: 3rem;
-            color: white;
-            text-shadow: 0 2px 10px black;
-        }
-
-        .center-play:active {
-            background: rgba(255,255,255,0.3);
-            transform: scale(0.95);
-        }
-
-        /* нижня панель */
-        .bottom-controls {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 70%, transparent 100%);
-            backdrop-filter: blur(4px);
-            padding: 18px 16px 16px 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .progress-area {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .time-display {
-            color: #eee;
-            font-size: 0.85rem;
-            font-family: 'Courier New', monospace;
-            background: rgba(0,0,0,0.5);
-            padding: 4px 12px;
-            border-radius: 40px;
-            border: 1px solid #444;
-            white-space: nowrap;
-        }
-
-        .progress-container {
-            flex: 1;
-            height: 40px;
-            display: flex;
-            align-items: center;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 5px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 10px;
-            -webkit-appearance: none;
-            appearance: none;
-        }
-
-        .progress-bar::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            background: white;
-            border-radius: 50%;
-            border: 2px solid #111;
-            box-shadow: 0 2px 8px black;
-            margin-top: -7px;
-        }
-
-        .progress-bar::-webkit-slider-runnable-track {
-            height: 5px;
-            background: linear-gradient(to right, #fff 0%, #fff var(--progress-percent, 0%), rgba(255,255,255,0.2) var(--progress-percent, 0%));
-            border-radius: 10px;
-        }
-
-        .buttons-row {
+        .header-top {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 8px;
+            margin-bottom: 16px;
         }
 
-        .left-group, .right-group {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .ctrl-btn {
-            background: transparent;
-            border: none;
-            color: white;
-            font-size: 1.6rem;
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: background 0.1s;
-        }
-
-        .ctrl-btn:active {
-            background: rgba(255,255,255,0.15);
-        }
-
-        .volume-wrap {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(0,0,0,0.5);
-            border: 1px solid #444;
-            padding: 4px 12px 4px 8px;
-            border-radius: 40px;
-        }
-
-        .volume-slider {
-            width: 70px;
-            height: 4px;
-            background: #555;
-            border-radius: 4px;
-            -webkit-appearance: none;
-            appearance: none;
-        }
-
-        .volume-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 16px;
-            height: 16px;
-            background: white;
-            border-radius: 50%;
-            border: 1px solid #000;
-        }
-
-        .speed-select {
-            background: rgba(20,20,20,0.9);
-            border: 1px solid #555;
-            color: white;
-            padding: 6px 12px;
-            border-radius: 30px;
-            font-size: 0.85rem;
-            outline: none;
-        }
-
-        .file-label {
-            background: rgba(20,20,20,0.9);
-            border: 1px solid #555;
-            color: white;
-            padding: 6px 14px;
-            border-radius: 30px;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-        }
-        .file-label:active { background: #333; }
-        #file-input { display: none; }
-
-        .url-section {
-            display: flex;
-            background: rgba(0,0,0,0.7);
-            border: 1px solid #444;
-            border-radius: 40px;
-            padding: 4px 4px 4px 16px;
-            align-items: center;
-            width: 100%;
-            backdrop-filter: blur(4px);
-        }
-
-        .url-input {
-            background: transparent;
-            border: none;
-            color: white;
-            font-size: 0.85rem;
-            padding: 8px 0;
-            flex: 1;
-            outline: none;
-        }
-        .url-input::placeholder { color: #777; }
-
-        .url-btn {
-            background: #3a3a3a;
-            border: none;
-            color: white;
-            padding: 6px 16px;
-            border-radius: 40px;
-            font-size: 0.85rem;
-            cursor: pointer;
-            border: 1px solid #666;
-            white-space: nowrap;
-        }
-        .url-btn:active { background: #555; }
-
-        /* ========== КАТАЛОГ (стиль uakino, але сучасніший) ========== */
-        .catalog {
-            padding: 20px 16px;
-            background: #0f0f0f;
-            border-top: 1px solid #222;
-        }
-
-        .catalog-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 18px;
-        }
-
-        .catalog-header h2 {
-            font-size: 1.5rem;
-            font-weight: 500;
-            letter-spacing: -0.5px;
-            color: #fff;
-        }
-
-        .filters {
-            display: flex;
-            gap: 12px;
-            overflow-x: auto;
-            padding-bottom: 8px;
-            margin-bottom: 12px;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .filter-chip {
-            background: #1a1a1a;
-            border: 1px solid #333;
-            color: #ccc;
-            padding: 8px 16px;
-            border-radius: 40px;
-            font-size: 0.9rem;
-            white-space: nowrap;
-            cursor: pointer;
-            transition: 0.1s;
-        }
-
-        .filter-chip.active {
-            background: #fff;
-            color: #000;
-            border-color: #fff;
-        }
-
-        .filter-chip:active {
-            background: #333;
-            color: #fff;
-        }
-
-        /* сітка карток */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 16px;
-        }
-
-        .card {
-            background: #111;
-            border: 1px solid #2a2a2a;
-            border-radius: 16px;
-            overflow: hidden;
-            transition: transform 0.1s, border-color 0.1s;
-            cursor: pointer;
-        }
-
-        .card:active {
-            transform: scale(0.98);
-            border-color: #555;
-        }
-
-        .card-poster {
-            aspect-ratio: 2/3;
-            background: #1e1e1e;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #333;
-            font-size: 0.8rem;
-            position: relative;
-        }
-
-        .card-poster img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: grayscale(100%);
-            opacity: 0.9;
-        }
-
-        .card-info {
-            padding: 12px 10px;
-        }
-
-        .card-title {
+        .logo {
+            font-size: 1.8rem;
             font-weight: 600;
-            font-size: 1rem;
-            margin-bottom: 4px;
-            color: #fff;
-            line-height: 1.3;
+            letter-spacing: -0.02em;
+            color: white;
+            text-decoration: none;
         }
-
-        .card-meta {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            font-size: 0.75rem;
+        .logo span {
+            font-weight: 300;
             color: #aaa;
-            margin-bottom: 6px;
         }
 
-        .badge {
-            background: #2a2a2a;
-            padding: 2px 8px;
-            border-radius: 20px;
+        .search-box {
+            display: flex;
+            align-items: center;
+            background-color: #1a1a1a;
+            border-radius: 40px;
+            padding: 8px 16px;
+            width: 300px;
+            border: 1px solid #333;
+            transition: border 0.2s;
+        }
+        .search-box:focus-within {
+            border-color: #777;
+        }
+        .search-box i {
+            color: #777;
+            margin-right: 8px;
+            font-size: 1rem;
+        }
+        .search-box input {
+            background: transparent;
+            border: none;
+            color: white;
+            width: 100%;
+            outline: none;
+            font-size: 0.95rem;
+        }
+        .search-box input::placeholder {
+            color: #555;
+        }
+
+        .user-icon {
             color: #ccc;
-            font-size: 0.7rem;
-            border: 1px solid #3a3a3a;
-        }
-
-        .imdb {
-            color: #bbb;
-            font-weight: 600;
+            font-size: 1.6rem;
+            cursor: default;
         }
 
         /* навігація */
-        .nav-bar {
+        .nav-links {
             display: flex;
-            justify-content: space-around;
-            padding: 12px 16px;
-            background: #0a0a0a;
-            border-top: 1px solid #222;
+            gap: 32px;
+            font-weight: 500;
             border-bottom: 1px solid #222;
+            padding-bottom: 8px;
+        }
+        .nav-links a {
+            color: #aaa;
+            text-decoration: none;
+            font-size: 1rem;
+            letter-spacing: 0.3px;
+            transition: color 0.2s;
+        }
+        .nav-links a.active {
+            color: white;
+            border-bottom: 2px solid white;
+            padding-bottom: 6px;
+        }
+        .nav-links a:hover {
+            color: white;
         }
 
-        .nav-item {
-            color: #888;
-            font-size: 1.3rem;
+        /* ----- ФІЛЬТРИ (сучасні чіпси) ----- */
+        .filter-section {
+            margin: 28px 0 20px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .genre-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .chip {
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            color: #ccc;
+            padding: 6px 16px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s;
+            white-space: nowrap;
+        }
+        .chip:hover {
+            background-color: #2a2a2a;
+            border-color: #555;
+            color: white;
+        }
+        .chip.active {
+            background-color: white;
+            color: black;
+            border-color: white;
+            font-weight: 600;
+        }
+
+        .sort-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #aaa;
+        }
+        .sort-control select {
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            color: white;
+            padding: 8px 24px 8px 12px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            outline: none;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23aaaaaa' stroke-width='2'><polyline points='6 9 12 15 18 9'/></svg>");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+        }
+
+        /* ----- СІТКА КАРТОК (сучасна, адаптивна) ----- */
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 24px 16px;
+            margin: 32px 0 48px;
+        }
+
+        /* картка (мінімалізм) */
+        .movie-card {
+            background-color: #121212;
+            border-radius: 16px;
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s;
+            border: 1px solid #252525;
             display: flex;
             flex-direction: column;
+        }
+        .movie-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 30px -10px rgba(255,255,255,0.05);
+            border-color: #444;
+        }
+
+        .card-poster {
+            aspect-ratio: 2 / 3;
+            background: linear-gradient(145deg, #2a2a2a 0%, #1a1a1a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #555;
+            font-size: 3rem;
+            font-weight: 600;
+            border-bottom: 1px solid #2a2a2a;
+            position: relative;
+        }
+        /* імітація постера: перші літери */
+        .card-poster span {
+            opacity: 0.5;
+            font-size: 3rem;
+            font-weight: 300;
+        }
+        .card-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(255,255,255,0.9);
+            color: black;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 30px;
+            letter-spacing: 0.3px;
+        }
+
+        .card-info {
+            padding: 14px 12px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .card-title {
+            font-weight: 600;
+            font-size: 1rem;
+            line-height: 1.3;
+            color: white;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            min-height: 42px;
+        }
+        .card-meta {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 6px 8px;
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+        .card-year {
+            background-color: #1f1f1f;
+            padding: 2px 10px;
+            border-radius: 30px;
+            font-weight: 400;
+        }
+        .card-imdb {
+            display: flex;
             align-items: center;
             gap: 4px;
+            background-color: #2b2b2b;
+            padding: 2px 8px;
+            border-radius: 30px;
+            color: #f5c518; /* жовтий — єдиний колірний акцент, але можна залишити білим */
+            font-weight: 600;
         }
-        .nav-item.active { color: #fff; }
-        .nav-item span { font-size: 0.7rem; }
+        .card-imdb i {
+            color: #f5c518;
+            font-size: 0.7rem;
+        }
+        .card-genres {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 4px;
+        }
+        .genre-tag {
+            background-color: #1a1a1a;
+            color: #bbb;
+            font-size: 0.7rem;
+            padding: 3px 10px;
+            border-radius: 30px;
+            border: 1px solid #2f2f2f;
+            white-space: nowrap;
+        }
+        .card-type {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: #777;
+            letter-spacing: 0.4px;
+            margin-top: 6px;
+        }
 
-        /* адаптація під iPhone */
-        @media (max-width: 400px) {
-            .grid { grid-template-columns: repeat(2, 1fr); }
-            .buttons-row { flex-direction: column; align-items: stretch; }
-            .left-group, .right-group { justify-content: space-around; }
+        /* футер простий */
+        .footer {
+            border-top: 1px solid #222;
+            padding: 30px 0 40px;
+            color: #666;
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .footer a {
+            color: #aaa;
+            text-decoration: none;
+            margin-right: 24px;
+        }
+        .footer a:hover {
+            color: white;
+        }
+
+        /* стан коли немає результатів */
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px;
+            color: #666;
+            font-size: 1.2rem;
+        }
+
+        /* маленькі адаптації */
+        @media (max-width: 600px) {
+            .app { padding: 0 16px; }
+            .header-top { flex-wrap: wrap; gap: 12px; }
+            .search-box { width: 100%; order: 3; }
+            .nav-links { gap: 16px; }
+            .movies-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
         }
     </style>
 </head>
 <body>
-    <div class="app">
-        <!-- Плеєр (чорно-білий, керування поверх) -->
-        <div class="player-section">
-            <div class="video-wrapper">
-                <video id="video" playsinline webkit-playsinline preload="metadata" poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='225' viewBox='0 0 400 225'%3E%3Crect width='400' height='225' fill='%23111'/%3E%3Ctext x='50%25' y='50%25' font-size='24' fill='%23fff' text-anchor='middle' dy='.3em' font-family='monospace'%3EMONO%3C/text%3E%3C/svg%3E">
-                    <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
-                </video>
-
-                <!-- Оверлей з контролами -->
-                <div class="controls-overlay" id="controlsOverlay">
-                    <div class="center-play" id="centerPlayPause">
-                        <i class="fas fa-play" id="centerPlayIcon"></i>
-                    </div>
-
-                    <div class="bottom-controls">
-                        <div class="progress-area">
-                            <span class="time-display" id="timeDisplay">00:00 / 00:00</span>
-                            <div class="progress-container">
-                                <input type="range" class="progress-bar" id="progress" min="0" max="100" value="0" step="0.1">
-                            </div>
-                        </div>
-
-                        <div class="buttons-row">
-                            <div class="left-group">
-                                <button class="ctrl-btn" id="skipBack" title="-10 с"><i class="fas fa-undo-alt"></i></button>
-                                <button class="ctrl-btn" id="skipForward" title="+10 с"><i class="fas fa-redo-alt"></i></button>
-                                <div class="volume-wrap">
-                                    <button class="ctrl-btn" id="muteToggle" style="width:auto; font-size:1.4rem;"><i class="fas fa-volume-up"></i></button>
-                                    <input type="range" class="volume-slider" id="volume" min="0" max="1" step="0.05" value="1">
-                                </div>
-                            </div>
-
-                            <div class="right-group">
-                                <select class="speed-select" id="playbackSpeed">
-                                    <option value="0.5">0.5x</option>
-                                    <option value="0.75">0.75x</option>
-                                    <option value="1" selected>1x</option>
-                                    <option value="1.25">1.25x</option>
-                                    <option value="1.5">1.5x</option>
-                                    <option value="2">2x</option>
-                                </select>
-                                <button class="ctrl-btn" id="pipBtn" title="PiP"><i class="fas fa-closed-captioning"></i></button>
-                                <button class="ctrl-btn" id="fullscreenBtn" title="Повний екран"><i class="fas fa-expand"></i></button>
-                                <label for="file-input" class="file-label"><i class="fas fa-folder-open"></i> Файл</label>
-                                <input type="file" id="file-input" accept="video/*">
-                            </div>
-                        </div>
-
-                        <!-- Онлайн-посилання -->
-                        <div class="url-section">
-                            <input type="text" class="url-input" id="videoUrl" placeholder="Вставте посилання на відео...">
-                            <button class="url-btn" id="loadUrl">online</button>
-                        </div>
-                    </div>
-                </div>
+<div class="app">
+    <!-- ШАПКА (липка) -->
+    <header class="header">
+        <div class="header-top">
+            <div class="logo">TOP<span>CINEMA</span></div>
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="search" placeholder="Пошук фільмів, серіалів..." aria-label="Пошук">
+            </div>
+            <div class="user-icon">
+                <i class="far fa-user-circle"></i>
             </div>
         </div>
-
-        <!-- Навігація (як у додатку) -->
-        <div class="nav-bar">
-            <div class="nav-item active"><i class="fas fa-home"></i><span>Головна</span></div>
-            <div class="nav-item"><i class="fas fa-film"></i><span>Фільми</span></div>
-            <div class="nav-item"><i class="fas fa-tv"></i><span>Серіали</span></div>
-            <div class="nav-item"><i class="fas fa-star"></i><span>Аніме</span></div>
-            <div class="nav-item"><i class="fas fa-search"></i><span>Пошук</span></div>
+        <div class="nav-links">
+            <a href="#" class="active">Головна</a>
+            <a href="#">Фільми</a>
+            <a href="#">Серіали</a>
+            <a href="#">Добірки</a>
+            <a href="#">Рейтинги</a>
         </div>
+    </header>
 
-        <!-- Каталог (стиль uakino) -->
-        <div class="catalog">
-            <div class="catalog-header">
-                <h2>Популярне</h2>
-                <span style="color:#777; font-size:0.9rem;">✸ 1080p</span>
-            </div>
-
-            <!-- Фільтри -->
-            <div class="filters">
-                <span class="filter-chip active">Всі</span>
-                <span class="filter-chip">Екшн</span>
-                <span class="filter-chip">Драми</span>
-                <span class="filter-chip">Комедії</span>
-                <span class="filter-chip">Трилери</span>
-                <span class="filter-chip">Аніме</span>
-                <span class="filter-chip">Серіали</span>
-            </div>
-
-            <!-- Сітка карток (на основі даних uakino) -->
-            <div class="grid" id="catalogGrid">
-                <!-- картки генеруються динамічно, але для прикладу заповнимо статикою -->
-            </div>
+    <!-- СЕКЦІЯ ФІЛЬТРІВ (чіпси жанрів + сортування) -->
+    <div class="filter-section">
+        <div class="genre-chips" id="genreChips">
+            <!-- будуть додані через JS -->
+        </div>
+        <div class="sort-control">
+            <span><i class="fas fa-sort"></i></span>
+            <select id="sortSelect">
+                <option value="default">за замовчуванням</option>
+                <option value="rating">за рейтингом IMDb</option>
+                <option value="year">за роком (новіші)</option>
+            </select>
         </div>
     </div>
 
-    <script>
-        (function() {
-            // ========== ПЛЕЄР (логіка) ==========
-            const video = document.getElementById('video');
-            const overlay = document.getElementById('controlsOverlay');
-            const centerPlay = document.getElementById('centerPlayPause');
-            const centerPlayIcon = document.getElementById('centerPlayIcon');
-            const skipBack = document.getElementById('skipBack');
-            const skipForward = document.getElementById('skipForward');
-            const timeDisplay = document.getElementById('timeDisplay');
-            const progress = document.getElementById('progress');
-            const volumeSlider = document.getElementById('volume');
-            const muteToggle = document.getElementById('muteToggle');
-            const speedSelect = document.getElementById('playbackSpeed');
-            const pipBtn = document.getElementById('pipBtn');
-            const fullscreenBtn = document.getElementById('fullscreenBtn');
-            const fileInput = document.getElementById('file-input');
-            const urlInput = document.getElementById('videoUrl');
-            const loadUrlBtn = document.getElementById('loadUrl');
+    <!-- ОСНОВНА СІТКА ФІЛЬМІВ -->
+    <main>
+        <div class="movies-grid" id="moviesGrid"></div>
+    </main>
 
-            let lastVolume = 1;
-            let hideTimeout = null;
+    <!-- ФУТЕР (чорно-білий) -->
+    <footer class="footer">
+        <div>© 2025 TOP CINEMA — мінімалістичний кінотеатр</div>
+        <div>
+            <a href="#">Про нас</a>
+            <a href="#">API</a>
+            <a href="#">Підтримка</a>
+        </div>
+    </footer>
+</div>
 
-            function showControls() {
-                overlay.classList.add('visible');
-                if (hideTimeout) clearTimeout(hideTimeout);
-                hideTimeout = setTimeout(() => {
-                    overlay.classList.remove('visible');
-                }, 4000);
+<script>
+    (function() {
+        // ---------- ДАНІ (на основі uakino.best) ----------
+        const movies = [
+            { title: "Т.І.М.", genres: ["Трилери", "Фантастика", "Жахи"], year: 2023, imdb: 5.5, type: "movie" },
+            { title: "Натхненник / Геній", genres: ["Кримінал", "Драми"], year: 2024, imdb: 6.3, type: "movie" },
+            { title: "Гноми: Нові капелюхи", genres: ["Повнометражні"], year: 2023, imdb: 5.9, type: "movie" },
+            { title: "Сісу: Шлях до помсти", genres: ["Екшн", "Військові"], year: 2023, imdb: 6.8, type: "movie" },
+            { title: "Розслідування Люсі Летбі", genres: ["Документальне кіно", "Кримінал"], year: 2023, imdb: 5.5, type: "movie" },
+            { title: "Місто страху", genres: ["Екшн", "Драми", "Кримінал"], year: 2023, imdb: null, type: "movie" },
+            { title: "Губка Боб у кіно: У пошуках Квадратних Штанів", genres: ["Повнометражні"], year: 2023, imdb: 5.7, type: "movie" },
+            { title: "Королева шахів", genres: ["Документальне кіно", "Біографія"], year: 2023, imdb: 8.2, type: "movie" },
+            { title: "Місія «Санта»", genres: ["Повнометражні"], year: 2023, imdb: 5.7, type: "movie" },
+            { title: "Без близнюка", genres: ["Комедія", "Драми"], year: 2023, imdb: 7.4, type: "movie" },
+            { title: "Служниця", genres: ["Детективи", "Драми", "Трилери"], year: 2023, imdb: 7.0, type: "movie" },
+            { title: "Снігова королева", genres: ["Повнометражні"], year: 2023, imdb: 6.1, type: "movie" },
+            { title: "Дивні дива 5 сезон", genres: ["Детективи", "Драма", "Жахи", "Трилери", "Фантастика"], year: 2025, imdb: 8.6, type: "series", seasons: 5 },
+            { title: "Світанкова Йона 1 сезон", genres: ["Багатосерійне аніме"], year: 2023, imdb: 8.0, type: "series" },
+            { title: "Мандрівники 1 сезон", genres: ["Фантастика", "Драма", "Детективи"], year: 2023, imdb: 8.0, type: "series" },
+            { title: "Воно: Ласкаво просимо в Деррі 1 сезон", genres: ["Драма", "Жахи"], year: 2025, imdb: 8.0, type: "series" },
+            { title: "Планктон: Фільм", genres: ["Повнометражні"], year: 2024, imdb: 5.3, type: "movie" },
+            { title: "Переліт", genres: ["Повнометражні"], year: 2023, imdb: 6.6, type: "movie" },
+            { title: "Фрірен: після кінця пригоди 2 сезон", genres: ["Багатосерійне аніме"], year: 2024, imdb: 8.9, type: "series" },
+            { title: "На низькому старті: Битва за Uber", genres: ["Драма"], year: 2023, imdb: 7.3, type: "series" }
+        ];
+
+        // ---------- СТАН ----------
+        let activeGenre = 'Усі';
+        let currentSort = 'default';
+
+        // Знайти всі унікальні жанри
+        const allGenresSet = new Set();
+        movies.forEach(m => m.genres.forEach(g => allGenresSet.add(g)));
+        const allGenres = ['Усі', ...Array.from(allGenresSet).sort()];
+
+        // Контейнери
+        const grid = document.getElementById('moviesGrid');
+        const chipsContainer = document.getElementById('genreChips');
+        const sortSelect = document.getElementById('sortSelect');
+
+        // ---------- ВІДМАЛЮВАННЯ КАРТОК ----------
+        function renderMovies(moviesArray) {
+            if (!moviesArray.length) {
+                grid.innerHTML = `<div class="no-results">😕 Нічого не знайдено за цим жанром</div>`;
+                return;
             }
 
-            function hideControls() {
-                if (hideTimeout) clearTimeout(hideTimeout);
-                overlay.classList.remove('visible');
-            }
+            let html = '';
+            moviesArray.forEach(m => {
+                // обрізаємо довгі назви для постера (перші літери)
+                const posterLetters = m.title.split(' ').slice(0, 2).map(w => w[0]).join('').toUpperCase() || '🎬';
+                // рейтинг
+                const imdbValue = m.imdb ? m.imdb.toFixed(1) : '—';
+                // тип (серіал чи фільм)
+                const typeLabel = m.type === 'series' ? 'серіал' : 'фільм';
+                // перші два жанри для тегів
+                const displayGenres = m.genres.slice(0, 2);
+                const extraGenresCount = m.genres.length - 2;
 
-            video.addEventListener('click', (e) => {
-                e.stopPropagation();
-                if (overlay.classList.contains('visible')) hideControls();
-                else showControls();
-            });
-
-            overlay.addEventListener('click', (e) => e.stopPropagation());
-
-            function formatTime(seconds) {
-                if (isNaN(seconds) || seconds < 0) seconds = 0;
-                const h = Math.floor(seconds / 3600);
-                const m = Math.floor((seconds % 3600) / 60);
-                const s = Math.floor(seconds % 60);
-                if (h > 0) return `${h}:${m < 10 ? '0'+m : m}:${s < 10 ? '0'+s : s}`;
-                return `${m}:${s < 10 ? '0'+s : s}`;
-            }
-
-            function updateUI() {
-                const current = video.currentTime || 0;
-                const duration = video.duration || 0;
-                timeDisplay.textContent = `${formatTime(current)} / ${formatTime(duration)}`;
-                if (duration) {
-                    const percent = (current / duration) * 100;
-                    progress.value = percent;
-                    progress.style.setProperty('--progress-percent', percent + '%');
-                } else {
-                    progress.value = 0;
-                    progress.style.setProperty('--progress-percent', '0%');
-                }
-            }
-
-            function setVolumeIcon() {
-                if (video.muted || video.volume === 0) muteToggle.innerHTML = '<i class="fas fa-volume-off"></i>';
-                else if (video.volume < 0.5) muteToggle.innerHTML = '<i class="fas fa-volume-down"></i>';
-                else muteToggle.innerHTML = '<i class="fas fa-volume-up"></i>';
-            }
-
-            function syncVolume() {
-                if (video.muted) volumeSlider.value = 0;
-                else volumeSlider.value = video.volume;
-                setVolumeIcon();
-            }
-
-            function togglePlay() {
-                if (video.paused) video.play().catch(() => {});
-                else video.pause();
-            }
-
-            video.addEventListener('play', () => centerPlayIcon.className = 'fas fa-pause');
-            video.addEventListener('pause', () => centerPlayIcon.className = 'fas fa-play');
-            centerPlay.addEventListener('click', (e) => { e.stopPropagation(); togglePlay(); showControls(); });
-
-            skipBack.addEventListener('click', (e) => { e.stopPropagation(); video.currentTime = Math.max(0, video.currentTime - 10); showControls(); });
-            skipForward.addEventListener('click', (e) => { e.stopPropagation(); video.currentTime = Math.min(video.duration, video.currentTime + 10); showControls(); });
-
-            video.addEventListener('loadedmetadata', updateUI);
-            video.addEventListener('timeupdate', updateUI);
-
-            progress.addEventListener('input', (e) => {
-                e.stopPropagation();
-                if (video.duration) video.currentTime = (e.target.value / 100) * video.duration;
-                showControls();
-            });
-
-            volumeSlider.addEventListener('input', (e) => {
-                e.stopPropagation();
-                const val = parseFloat(e.target.value);
-                video.volume = val;
-                video.muted = (val === 0);
-                if (val > 0) lastVolume = val;
-                setVolumeIcon();
-                showControls();
-            });
-
-            muteToggle.addEventListener('click', (e) => {
-                e.stopPropagation();
-                if (video.muted || video.volume === 0) {
-                    video.muted = false;
-                    video.volume = lastVolume > 0 ? lastVolume : 0.5;
-                    volumeSlider.value = video.volume;
-                } else {
-                    lastVolume = video.volume;
-                    video.muted = true;
-                    video.volume = 0;
-                    volumeSlider.value = 0;
-                }
-                setVolumeIcon();
-                showControls();
-            });
-
-            video.addEventListener('volumechange', syncVolume);
-            syncVolume();
-
-            speedSelect.addEventListener('change', (e) => { video.playbackRate = parseFloat(e.target.value); showControls(); });
-
-            pipBtn.addEventListener('click', async (e) => {
-                e.stopPropagation();
-                if (document.pictureInPictureEnabled) {
-                    try {
-                        if (video !== document.pictureInPictureElement) await video.requestPictureInPicture();
-                        else await document.exitPictureInPicture();
-                    } catch (err) {}
-                } else alert('PiP не підтримується');
-                showControls();
-            });
-
-            fullscreenBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                if (!document.fullscreenElement) {
-                    if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
-                    else if (document.documentElement.webkitRequestFullscreen) document.documentElement.webkitRequestFullscreen();
-                } else {
-                    if (document.exitFullscreen) document.exitFullscreen();
-                }
-                showControls();
-            });
-
-            fileInput.addEventListener('change', (e) => {
-                const file = e.target.files[0];
-                if (file) {
-                    const url = URL.createObjectURL(file);
-                    video.pause();
-                    video.src = url;
-                    video.load();
-                    video.play().catch(() => {});
-                    video.onloadedmetadata = () => URL.revokeObjectURL(url);
-                }
-                fileInput.value = '';
-                showControls();
-            });
-
-            loadUrlBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                let url = urlInput.value.trim();
-                if (!url) return;
-                if (!url.startsWith('http://') && !url.startsWith('https://') && !url.startsWith('//')) {
-                    url = 'https://' + url;
-                }
-                video.pause();
-                video.src = url;
-                video.load();
-                video.play().catch(err => alert('Не вдалося завантажити відео.'));
-                showControls();
-            });
-
-            let touchStartX = 0;
-            video.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, {passive: true});
-            video.addEventListener('touchend', (e) => {
-                if (!touchStartX) return;
-                const diff = e.changedTouches[0].clientX - touchStartX;
-                if (Math.abs(diff) > 40) {
-                    if (diff > 0) video.currentTime = Math.min(video.duration, video.currentTime + 15);
-                    else video.currentTime = Math.max(0, video.currentTime - 15);
-                }
-                touchStartX = 0;
-                showControls();
-            });
-
-            updateUI();
-            setTimeout(() => hideControls(), 4000);
-
-            // ========== ГЕНЕРАЦІЯ КАРТОК (на основі uakino) ==========
-            const movies = [
-                { title: "Т.І.М.", genres: ["Трилери","Фантастика","Жахи"], imdb: "5.5", type: "film" },
-                { title: "Натхненник / Геній", genres: ["Кримінал","Драми"], imdb: "6.3", type: "film" },
-                { title: "Гноми: Нові капелюхи", genres: ["Повнометражні"], imdb: "5.9", type: "film" },
-                { title: "Сісу: Шлях до помсти", genres: ["Екшн","Військові"], imdb: "6.8", type: "film" },
-                { title: "Розслідування Люсі Летбі", genres: ["Документальне","Кримінал"], imdb: "5.5", type: "film" },
-                { title: "Місто страху", genres: ["Екшн","Драми","Кримінал"], imdb: "—", type: "film" },
-                { title: "Королева шахів", genres: ["Документальне","Біографія"], imdb: "8.2", type: "film" },
-                { title: "Дивні дива 5 сезон", genres: ["Детективи","Драма","Жахи"], imdb: "8.6", type: "series", season: "5 сезон" },
-                { title: "Фрірен 2 сезон", genres: ["Аніме","Фентезі"], imdb: "8.9", type: "series", season: "2 сезон" },
-                { title: "Воно: Ласкаво просимо в Деррі", genres: ["Драма","Жахи"], imdb: "8.0", type: "series", season: "1 сезон" },
-                { title: "Мандрівники 1 сезон", genres: ["Фантастика","Драма"], imdb: "8.0", type: "series", season: "1 сезон" },
-                { title: "Планктон: Фільм", genres: ["Повнометражні"], imdb: "5.3", type: "film" }
-            ];
-
-            const grid = document.getElementById('catalogGrid');
-            function renderCards(filter = 'Всі') {
-                grid.innerHTML = '';
-                movies.forEach(m => {
-                    const card = document.createElement('div');
-                    card.className = 'card';
-                    card.setAttribute('data-title', m.title);
-                    // при кліку можна змінювати джерело відео (демо)
-                    card.addEventListener('click', () => {
-                        // тут можна підставити реальне відео, але для демо залишимо поточне
-                        showControls();
-                    });
-
-                    const posterHtml = `<div class="card-poster"><img src="https://via.placeholder.com/200x300/222/444?text=${encodeURIComponent(m.title.slice(0,10))}" alt="poster"></div>`;
-                    const infoHtml = `
+                html += `
+                    <div class="movie-card">
+                        <div class="card-poster">
+                            <span>${posterLetters}</span>
+                            ${m.type === 'series' ? '<span class="card-badge"><i class="fas fa-tv"></i> серіал</span>' : ''}
+                        </div>
                         <div class="card-info">
                             <div class="card-title">${m.title}</div>
                             <div class="card-meta">
-                                ${m.genres.slice(0,2).map(g => `<span class="badge">${g}</span>`).join('')}
-                                ${m.imdb !== '—' ? `<span class="badge imdb">IMDB ${m.imdb}</span>` : ''}
+                                <span class="card-year">${m.year}</span>
+                                <span class="card-imdb"><i class="fab fa-imdb"></i> ${imdbValue}</span>
                             </div>
-                            ${m.season ? `<div style="font-size:0.75rem; color:#888;">${m.season}</div>` : ''}
+                            <div class="card-genres">
+                                ${displayGenres.map(g => `<span class="genre-tag">${g}</span>`).join('')}
+                                ${extraGenresCount > 0 ? `<span class="genre-tag">+${extraGenresCount}</span>` : ''}
+                            </div>
+                            <div class="card-type">${typeLabel}</div>
                         </div>
-                    `;
-                    card.innerHTML = posterHtml + infoHtml;
-                    grid.appendChild(card);
-                });
-            }
-            renderCards();
-
-            // фільтри (просто демонстрація)
-            document.querySelectorAll('.filter-chip').forEach(chip => {
-                chip.addEventListener('click', function() {
-                    document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-                    this.classList.add('active');
-                    // тут можна додати фільтрацію, але для прикладу просто перерендеримо
-                    renderCards();
-                });
+                    </div>
+                `;
             });
-        })();
-    </script>
+            grid.innerHTML = html;
+        }
+
+        // ---------- ФІЛЬТРАЦІЯ ТА СОРТУВАННЯ ----------
+        function getFilteredAndSorted() {
+            let filtered = movies;
+            // фільтр за жанром
+            if (activeGenre !== 'Усі') {
+                filtered = filtered.filter(m => m.genres.includes(activeGenre));
+            }
+
+            // сортування
+            if (currentSort === 'rating') {
+                filtered = [...filtered].sort((a, b) => {
+                    const ra = a.imdb ?? 0;
+                    const rb = b.imdb ?? 0;
+                    return rb - ra; // від вищого до нижчого
+                });
+            } else if (currentSort === 'year') {
+                filtered = [...filtered].sort((a, b) => b.year - a.year);
+            } else {
+                // default: залишаємо в початковому порядку (як у масиві)
+                // але щоб не мутувати оригінал, просто повертаємо копію
+                filtered = [...filtered];
+            }
+            return filtered;
+        }
+
+        function updateMovies() {
+            const filteredSorted = getFilteredAndSorted();
+            renderMovies(filteredSorted);
+        }
+
+        // ---------- СТВОРЕННЯ ЧІПСІВ ЖАНРІВ ----------
+        function renderChips() {
+            chipsContainer.innerHTML = '';
+            allGenres.forEach(genre => {
+                const chip = document.createElement('span');
+                chip.className = `chip ${activeGenre === genre ? 'active' : ''}`;
+                chip.textContent = genre;
+                chip.dataset.genre = genre;
+                chip.addEventListener('click', () => {
+                    // оновлюємо активний жанр
+                    activeGenre = genre;
+                    // перемалювати чіпси (активний стан)
+                    renderChips();
+                    // оновити картки
+                    updateMovies();
+                });
+                chipsContainer.appendChild(chip);
+            });
+        }
+
+        // ---------- СЛУХАЧ СОРТУВАННЯ ----------
+        sortSelect.addEventListener('change', (e) => {
+            currentSort = e.target.value;
+            updateMovies();
+        });
+
+        // ---------- ІНІЦІАЛІЗАЦІЯ ----------
+        renderChips();
+        updateMovies();
+
+        // невелика емуляція "персональних рекомендацій" — можна просто залишити всі фільми
+        // але в шапці пошук поки не працює (це демо)
+    })();
+</script>
+
+<!-- невеликий хак для підтримки шрифтів -->
 </body>
 </html>
