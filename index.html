@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TOP CINEMA · монохромний</title>
-    <!-- Font Awesome for icons (optional, but adds modern feel) -->
+    <title>SAYS UA · монохромний кінотеатр</title>
+    <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         /* ----- ЧОРНО-БІЛА ГАМА · СУЧАСНИЙ МІНІМАЛІЗМ ----- */
@@ -22,8 +22,7 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* шрифт Inter через fallback */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,800&display=swap');
 
         .app {
             max-width: 1440px;
@@ -51,15 +50,12 @@
         }
 
         .logo {
-            font-size: 1.8rem;
-            font-weight: 600;
+            font-size: 2.2rem;
+            font-weight: 800;  /* жирне написання */
             letter-spacing: -0.02em;
             color: white;
             text-decoration: none;
-        }
-        .logo span {
-            font-weight: 300;
-            color: #aaa;
+            line-height: 1;
         }
 
         .search-box {
@@ -94,8 +90,12 @@
 
         .user-icon {
             color: #ccc;
-            font-size: 1.6rem;
-            cursor: default;
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .user-icon:hover {
+            color: white;
         }
 
         /* навігація */
@@ -112,6 +112,7 @@
             font-size: 1rem;
             letter-spacing: 0.3px;
             transition: color 0.2s;
+            cursor: pointer;
         }
         .nav-links a.active {
             color: white;
@@ -122,7 +123,7 @@
             color: white;
         }
 
-        /* ----- ФІЛЬТРИ (сучасні чіпси) ----- */
+        /* ----- ФІЛЬТРИ (чіпси) ----- */
         .filter-section {
             margin: 28px 0 20px;
             display: flex;
@@ -182,7 +183,7 @@
             background-position: right 8px center;
         }
 
-        /* ----- СІТКА КАРТОК (сучасна, адаптивна) ----- */
+        /* ----- СІТКА КАРТОК ----- */
         .movies-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -190,7 +191,6 @@
             margin: 32px 0 48px;
         }
 
-        /* картка (мінімалізм) */
         .movie-card {
             background-color: #121212;
             border-radius: 16px;
@@ -199,6 +199,7 @@
             border: 1px solid #252525;
             display: flex;
             flex-direction: column;
+            cursor: pointer;
         }
         .movie-card:hover {
             transform: translateY(-6px);
@@ -218,7 +219,6 @@
             border-bottom: 1px solid #2a2a2a;
             position: relative;
         }
-        /* імітація постера: перші літери */
         .card-poster span {
             opacity: 0.5;
             font-size: 3rem;
@@ -275,7 +275,7 @@
             background-color: #2b2b2b;
             padding: 2px 8px;
             border-radius: 30px;
-            color: #f5c518; /* жовтий — єдиний колірний акцент, але можна залишити білим */
+            color: #f5c518;
             font-weight: 600;
         }
         .card-imdb i {
@@ -305,7 +305,7 @@
             margin-top: 6px;
         }
 
-        /* футер простий */
+        /* футер */
         .footer {
             border-top: 1px solid #222;
             padding: 30px 0 40px;
@@ -320,12 +320,12 @@
             color: #aaa;
             text-decoration: none;
             margin-right: 24px;
+            cursor: pointer;
         }
         .footer a:hover {
             color: white;
         }
 
-        /* стан коли немає результатів */
         .no-results {
             grid-column: 1 / -1;
             text-align: center;
@@ -334,7 +334,6 @@
             font-size: 1.2rem;
         }
 
-        /* маленькі адаптації */
         @media (max-width: 600px) {
             .app { padding: 0 16px; }
             .header-top { flex-wrap: wrap; gap: 12px; }
@@ -346,32 +345,30 @@
 </head>
 <body>
 <div class="app">
-    <!-- ШАПКА (липка) -->
+    <!-- ШАПКА -->
     <header class="header">
         <div class="header-top">
-            <div class="logo">TOP<span>CINEMA</span></div>
+            <div class="logo">SAYS UA</div>
             <div class="search-box">
                 <i class="fas fa-search"></i>
-                <input type="search" placeholder="Пошук фільмів, серіалів..." aria-label="Пошук">
+                <input type="search" id="searchInput" placeholder="Пошук фільмів, серіалів..." aria-label="Пошук">
             </div>
-            <div class="user-icon">
+            <div class="user-icon" id="userIcon">
                 <i class="far fa-user-circle"></i>
             </div>
         </div>
-        <div class="nav-links">
-            <a href="#" class="active">Головна</a>
-            <a href="#">Фільми</a>
-            <a href="#">Серіали</a>
-            <a href="#">Добірки</a>
-            <a href="#">Рейтинги</a>
+        <div class="nav-links" id="navLinks">
+            <a data-nav="home" class="active">Головна</a>
+            <a data-nav="movies">Фільми</a>
+            <a data-nav="series">Серіали</a>
+            <a data-nav="collections">Добірки</a>
+            <a data-nav="ratings">Рейтинги</a>
         </div>
     </header>
 
-    <!-- СЕКЦІЯ ФІЛЬТРІВ (чіпси жанрів + сортування) -->
+    <!-- ФІЛЬТРИ -->
     <div class="filter-section">
-        <div class="genre-chips" id="genreChips">
-            <!-- будуть додані через JS -->
-        </div>
+        <div class="genre-chips" id="genreChips"></div>
         <div class="sort-control">
             <span><i class="fas fa-sort"></i></span>
             <select id="sortSelect">
@@ -382,83 +379,128 @@
         </div>
     </div>
 
-    <!-- ОСНОВНА СІТКА ФІЛЬМІВ -->
+    <!-- СІТКА КОНТЕНТУ -->
     <main>
         <div class="movies-grid" id="moviesGrid"></div>
     </main>
 
-    <!-- ФУТЕР (чорно-білий) -->
+    <!-- ФУТЕР -->
     <footer class="footer">
-        <div>© 2025 TOP CINEMA — мінімалістичний кінотеатр</div>
+        <div>© 2025 SAYS UA — мінімалістичний кінотеатр</div>
         <div>
-            <a href="#">Про нас</a>
-            <a href="#">API</a>
-            <a href="#">Підтримка</a>
+            <a id="footerAbout">Про нас</a>
+            <a id="footerApi">API</a>
+            <a id="footerSupport">Підтримка</a>
         </div>
     </footer>
 </div>
 
 <script>
     (function() {
-        // ---------- ДАНІ (на основі uakino.best) ----------
+        // ---------- ДАНІ ----------
         const movies = [
-            { title: "Т.І.М.", genres: ["Трилери", "Фантастика", "Жахи"], year: 2023, imdb: 5.5, type: "movie" },
-            { title: "Натхненник / Геній", genres: ["Кримінал", "Драми"], year: 2024, imdb: 6.3, type: "movie" },
-            { title: "Гноми: Нові капелюхи", genres: ["Повнометражні"], year: 2023, imdb: 5.9, type: "movie" },
-            { title: "Сісу: Шлях до помсти", genres: ["Екшн", "Військові"], year: 2023, imdb: 6.8, type: "movie" },
-            { title: "Розслідування Люсі Летбі", genres: ["Документальне кіно", "Кримінал"], year: 2023, imdb: 5.5, type: "movie" },
-            { title: "Місто страху", genres: ["Екшн", "Драми", "Кримінал"], year: 2023, imdb: null, type: "movie" },
-            { title: "Губка Боб у кіно: У пошуках Квадратних Штанів", genres: ["Повнометражні"], year: 2023, imdb: 5.7, type: "movie" },
-            { title: "Королева шахів", genres: ["Документальне кіно", "Біографія"], year: 2023, imdb: 8.2, type: "movie" },
-            { title: "Місія «Санта»", genres: ["Повнометражні"], year: 2023, imdb: 5.7, type: "movie" },
-            { title: "Без близнюка", genres: ["Комедія", "Драми"], year: 2023, imdb: 7.4, type: "movie" },
-            { title: "Служниця", genres: ["Детективи", "Драми", "Трилери"], year: 2023, imdb: 7.0, type: "movie" },
-            { title: "Снігова королева", genres: ["Повнометражні"], year: 2023, imdb: 6.1, type: "movie" },
-            { title: "Дивні дива 5 сезон", genres: ["Детективи", "Драма", "Жахи", "Трилери", "Фантастика"], year: 2025, imdb: 8.6, type: "series", seasons: 5 },
-            { title: "Світанкова Йона 1 сезон", genres: ["Багатосерійне аніме"], year: 2023, imdb: 8.0, type: "series" },
-            { title: "Мандрівники 1 сезон", genres: ["Фантастика", "Драма", "Детективи"], year: 2023, imdb: 8.0, type: "series" },
-            { title: "Воно: Ласкаво просимо в Деррі 1 сезон", genres: ["Драма", "Жахи"], year: 2025, imdb: 8.0, type: "series" },
-            { title: "Планктон: Фільм", genres: ["Повнометражні"], year: 2024, imdb: 5.3, type: "movie" },
-            { title: "Переліт", genres: ["Повнометражні"], year: 2023, imdb: 6.6, type: "movie" },
-            { title: "Фрірен: після кінця пригоди 2 сезон", genres: ["Багатосерійне аніме"], year: 2024, imdb: 8.9, type: "series" },
-            { title: "На низькому старті: Битва за Uber", genres: ["Драма"], year: 2023, imdb: 7.3, type: "series" }
+            { id: 1, title: "Т.І.М.", genres: ["Трилери", "Фантастика", "Жахи"], year: 2023, imdb: 5.5, type: "movie" },
+            { id: 2, title: "Натхненник / Геній", genres: ["Кримінал", "Драми"], year: 2024, imdb: 6.3, type: "movie" },
+            { id: 3, title: "Гноми: Нові капелюхи", genres: ["Повнометражні"], year: 2023, imdb: 5.9, type: "movie" },
+            { id: 4, title: "Сісу: Шлях до помсти", genres: ["Екшн", "Військові"], year: 2023, imdb: 6.8, type: "movie" },
+            { id: 5, title: "Розслідування Люсі Летбі", genres: ["Документальне кіно", "Кримінал"], year: 2023, imdb: 5.5, type: "movie" },
+            { id: 6, title: "Місто страху", genres: ["Екшн", "Драми", "Кримінал"], year: 2023, imdb: null, type: "movie" },
+            { id: 7, title: "Губка Боб у кіно: У пошуках Квадратних Штанів", genres: ["Повнометражні"], year: 2023, imdb: 5.7, type: "movie" },
+            { id: 8, title: "Королева шахів", genres: ["Документальне кіно", "Біографія"], year: 2023, imdb: 8.2, type: "movie" },
+            { id: 9, title: "Місія «Санта»", genres: ["Повнометражні"], year: 2023, imdb: 5.7, type: "movie" },
+            { id: 10, title: "Без близнюка", genres: ["Комедія", "Драми"], year: 2023, imdb: 7.4, type: "movie" },
+            { id: 11, title: "Служниця", genres: ["Детективи", "Драми", "Трилери"], year: 2023, imdb: 7.0, type: "movie" },
+            { id: 12, title: "Снігова королева", genres: ["Повнометражні"], year: 2023, imdb: 6.1, type: "movie" },
+            { id: 13, title: "Дивні дива 5 сезон", genres: ["Детективи", "Драма", "Жахи", "Трилери", "Фантастика"], year: 2025, imdb: 8.6, type: "series" },
+            { id: 14, title: "Світанкова Йона 1 сезон", genres: ["Багатосерійне аніме"], year: 2023, imdb: 8.0, type: "series" },
+            { id: 15, title: "Мандрівники 1 сезон", genres: ["Фантастика", "Драма", "Детективи"], year: 2023, imdb: 8.0, type: "series" },
+            { id: 16, title: "Воно: Ласкаво просимо в Деррі 1 сезон", genres: ["Драма", "Жахи"], year: 2025, imdb: 8.0, type: "series" },
+            { id: 17, title: "Планктон: Фільм", genres: ["Повнометражні"], year: 2024, imdb: 5.3, type: "movie" },
+            { id: 18, title: "Переліт", genres: ["Повнометражні"], year: 2023, imdb: 6.6, type: "movie" },
+            { id: 19, title: "Фрірен: після кінця пригоди 2 сезон", genres: ["Багатосерійне аніме"], year: 2024, imdb: 8.9, type: "series" },
+            { id: 20, title: "На низькому старті: Битва за Uber", genres: ["Драма"], year: 2023, imdb: 7.3, type: "series" }
         ];
 
         // ---------- СТАН ----------
         let activeGenre = 'Усі';
         let currentSort = 'default';
+        let activeNav = 'home';        // home, movies, series, collections, ratings
+        let searchQuery = '';
 
-        // Знайти всі унікальні жанри
+        // Унікальні жанри
         const allGenresSet = new Set();
         movies.forEach(m => m.genres.forEach(g => allGenresSet.add(g)));
         const allGenres = ['Усі', ...Array.from(allGenresSet).sort()];
 
-        // Контейнери
+        // DOM-елементи
         const grid = document.getElementById('moviesGrid');
         const chipsContainer = document.getElementById('genreChips');
         const sortSelect = document.getElementById('sortSelect');
+        const searchInput = document.getElementById('searchInput');
+        const navLinks = document.querySelectorAll('#navLinks a');
+        const userIcon = document.getElementById('userIcon');
+        const footerAbout = document.getElementById('footerAbout');
+        const footerApi = document.getElementById('footerApi');
+        const footerSupport = document.getElementById('footerSupport');
 
-        // ---------- ВІДМАЛЮВАННЯ КАРТОК ----------
+        // ---------- ДОПОМІЖНІ ФУНКЦІЇ ----------
+        function filterAndSortMovies() {
+            let filtered = movies;
+
+            // 1. Фільтр за навігацією
+            if (activeNav === 'movies') {
+                filtered = filtered.filter(m => m.type === 'movie');
+            } else if (activeNav === 'series') {
+                filtered = filtered.filter(m => m.type === 'series');
+            } else if (activeNav === 'collections') {
+                // Добірки: імітуємо добірку "Високий рейтинг"
+                filtered = filtered.filter(m => m.imdb && m.imdb >= 8.0);
+            } else if (activeNav === 'ratings') {
+                // Рейтинги: просто сортуємо за рейтингом (але залишимо фільтр)
+                filtered = filtered.filter(m => m.imdb);
+            }
+            // home — всі
+
+            // 2. Фільтр за жанром
+            if (activeGenre !== 'Усі') {
+                filtered = filtered.filter(m => m.genres.includes(activeGenre));
+            }
+
+            // 3. Фільтр за пошуком
+            if (searchQuery.trim() !== '') {
+                const query = searchQuery.trim().toLowerCase();
+                filtered = filtered.filter(m => m.title.toLowerCase().includes(query));
+            }
+
+            // 4. Сортування
+            if (currentSort === 'rating') {
+                filtered = [...filtered].sort((a, b) => (b.imdb ?? 0) - (a.imdb ?? 0));
+            } else if (currentSort === 'year') {
+                filtered = [...filtered].sort((a, b) => b.year - a.year);
+            } else {
+                // default: спочатку за типом? залишимо як є
+                filtered = [...filtered];
+            }
+
+            return filtered;
+        }
+
         function renderMovies(moviesArray) {
             if (!moviesArray.length) {
-                grid.innerHTML = `<div class="no-results">😕 Нічого не знайдено за цим жанром</div>`;
+                grid.innerHTML = `<div class="no-results">😕 Нічого не знайдено</div>`;
                 return;
             }
 
             let html = '';
             moviesArray.forEach(m => {
-                // обрізаємо довгі назви для постера (перші літери)
                 const posterLetters = m.title.split(' ').slice(0, 2).map(w => w[0]).join('').toUpperCase() || '🎬';
-                // рейтинг
                 const imdbValue = m.imdb ? m.imdb.toFixed(1) : '—';
-                // тип (серіал чи фільм)
                 const typeLabel = m.type === 'series' ? 'серіал' : 'фільм';
-                // перші два жанри для тегів
                 const displayGenres = m.genres.slice(0, 2);
                 const extraGenresCount = m.genres.length - 2;
 
                 html += `
-                    <div class="movie-card">
+                    <div class="movie-card" data-id="${m.id}">
                         <div class="card-poster">
                             <span>${posterLetters}</span>
                             ${m.type === 'series' ? '<span class="card-badge"><i class="fas fa-tv"></i> серіал</span>' : ''}
@@ -479,39 +521,24 @@
                 `;
             });
             grid.innerHTML = html;
-        }
 
-        // ---------- ФІЛЬТРАЦІЯ ТА СОРТУВАННЯ ----------
-        function getFilteredAndSorted() {
-            let filtered = movies;
-            // фільтр за жанром
-            if (activeGenre !== 'Усі') {
-                filtered = filtered.filter(m => m.genres.includes(activeGenre));
-            }
-
-            // сортування
-            if (currentSort === 'rating') {
-                filtered = [...filtered].sort((a, b) => {
-                    const ra = a.imdb ?? 0;
-                    const rb = b.imdb ?? 0;
-                    return rb - ra; // від вищого до нижчого
+            // Додаємо обробники на кожну картку
+            document.querySelectorAll('.movie-card').forEach(card => {
+                card.addEventListener('click', (e) => {
+                    const id = parseInt(card.dataset.id);
+                    const movie = movies.find(m => m.id === id);
+                    if (movie) {
+                        alert(`🎬 ${movie.title}\nРік: ${movie.year}\nРейтинг IMDb: ${movie.imdb ?? '—'}\nЖанри: ${movie.genres.join(', ')}`);
+                    }
                 });
-            } else if (currentSort === 'year') {
-                filtered = [...filtered].sort((a, b) => b.year - a.year);
-            } else {
-                // default: залишаємо в початковому порядку (як у масиві)
-                // але щоб не мутувати оригінал, просто повертаємо копію
-                filtered = [...filtered];
-            }
-            return filtered;
+            });
         }
 
         function updateMovies() {
-            const filteredSorted = getFilteredAndSorted();
+            const filteredSorted = filterAndSortMovies();
             renderMovies(filteredSorted);
         }
 
-        // ---------- СТВОРЕННЯ ЧІПСІВ ЖАНРІВ ----------
         function renderChips() {
             chipsContainer.innerHTML = '';
             allGenres.forEach(genre => {
@@ -520,32 +547,74 @@
                 chip.textContent = genre;
                 chip.dataset.genre = genre;
                 chip.addEventListener('click', () => {
-                    // оновлюємо активний жанр
                     activeGenre = genre;
-                    // перемалювати чіпси (активний стан)
                     renderChips();
-                    // оновити картки
                     updateMovies();
                 });
                 chipsContainer.appendChild(chip);
             });
         }
 
-        // ---------- СЛУХАЧ СОРТУВАННЯ ----------
-        sortSelect.addEventListener('change', (e) => {
-            currentSort = e.target.value;
-            updateMovies();
-        });
+        function setActiveNav(targetNav) {
+            navLinks.forEach(link => {
+                const nav = link.dataset.nav;
+                if (nav === targetNav) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+        }
 
         // ---------- ІНІЦІАЛІЗАЦІЯ ----------
         renderChips();
         updateMovies();
 
-        // невелика емуляція "персональних рекомендацій" — можна просто залишити всі фільми
-        // але в шапці пошук поки не працює (це демо)
+        // ---------- СЛУХАЧІ ПОДІЙ ----------
+
+        // Сортування
+        sortSelect.addEventListener('change', (e) => {
+            currentSort = e.target.value;
+            updateMovies();
+        });
+
+        // Пошук (з debounce для плавності)
+        let searchTimeout;
+        searchInput.addEventListener('input', (e) => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                searchQuery = e.target.value;
+                updateMovies();
+            }, 300);
+        });
+
+        // Навігація
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const nav = link.dataset.nav;
+                activeNav = nav;
+                setActiveNav(nav);
+                // Скидаємо жанр на "Усі" при зміні розділу? Можна залишити як є, але логічніше скинути
+                activeGenre = 'Усі';
+                renderChips();  // перемалювати чіпси з активним "Усі"
+                updateMovies();
+            });
+        });
+
+        // Іконка користувача
+        userIcon.addEventListener('click', () => {
+            alert('👤 Вхід / Реєстрація — функція в розробці');
+        });
+
+        // Футер
+        footerAbout.addEventListener('click', () => alert('ℹ️ SAYS UA — ваш монохромний кінотеатр. Про нас: мінімалізм та якість.'));
+        footerApi.addEventListener('click', () => alert('🔧 API документація з’явиться незабаром.'));
+        footerSupport.addEventListener('click', () => alert('📧 Підтримка: support@saysua.example'));
+
+        // Початкова установка активного nav (home)
+        setActiveNav('home');
     })();
 </script>
-
-<!-- невеликий хак для підтримки шрифтів -->
 </body>
 </html>
