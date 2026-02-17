@@ -2,202 +2,210 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NOVA web · online плеєр</title>
-    <!-- Font Awesome 6 (outline style, пасує до Nova) -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>NOVA mobile · iPhone плеєр</title>
+    <!-- Font Awesome для іконок (чорно-біла гама) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent; /* прибирає сірий квадрат при тапі на iOS */
         }
 
         body {
-            background: #0b0e12;
+            background: #000;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
-            padding: 16px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            padding: 0;
+            margin: 0;
+            background: #030405;
         }
 
-        /* основний контейнер — темний, з легким градієнтом, як у Nova */
-        .nova-player {
-            width: min(1200px, 100%);
-            background: #0f1215;
-            border-radius: 32px;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+        /* контейнер плеєра — на всю ширину, без заокруглень (як нативний) */
+        .ios-player {
+            width: 100%;
+            max-width: 500px; /* на iPhone виглядає як нативний плеєр */
+            background: #0c0c0c;
+            border-radius: 0;
             overflow: hidden;
-            backdrop-filter: blur(2px);
-            transition: box-shadow 0.25s;
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.1);
+            margin: 0;
         }
 
-        .nova-player:hover {
-            box-shadow: 0 40px 80px rgba(0, 0, 0, 1), 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
-        }
-
-        /* відео контейнер */
-        .video-container {
+        /* відео на всю ширину */
+        .video-wrapper {
             position: relative;
             background: #000;
-            line-height: 0;
+            width: 100%;
             cursor: pointer;
         }
 
         video {
+            display: block;
             width: 100%;
             height: auto;
-            display: block;
             background: #000;
+            pointer-events: auto;
         }
 
-        /* панель керування — скляна, чорна з легким відтінком */
+        /* панель керування — великі зручні кнопки для тачів */
         .controls {
-            padding: 20px 24px;
-            background: rgba(18, 22, 28, 0.92);
-            backdrop-filter: blur(12px);
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 16px 12px 18px 12px;
+            background: #111;
+            border-top: 1px solid #2a2a2a;
             display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 20px;
-            color: #fff;
-        }
-
-        .controls-group {
-            display: flex;
-            align-items: center;
+            flex-direction: column;
             gap: 16px;
+            user-select: none;
         }
 
-        .left-group {
-            flex: 2 1 240px;
-        }
-
-        .center-group {
-            flex: 3 1 360px;
-            justify-content: center;
-        }
-
-        .right-group {
-            flex: 2 1 280px;
-            justify-content: flex-end;
-        }
-
-        /* кнопки в стилі Nova — тонкі, білі, з ефектом */
-        .ctrl-btn {
-            background: transparent;
-            border: none;
-            color: rgba(255, 255, 255, 0.75);
-            font-size: 1.5rem;
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
+        /* верхній рядок: час і прогрес */
+        .top-row {
             display: flex;
             align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: 1px solid transparent;
+            gap: 12px;
         }
 
-        .ctrl-btn:hover {
-            background: rgba(255, 255, 255, 0.08);
-            color: white;
-            border-color: rgba(255, 255, 255, 0.15);
-            transform: scale(1.02);
-        }
-
-        .ctrl-btn:active {
-            background: rgba(255, 255, 255, 0.12);
-            transform: scale(0.96);
-        }
-
-        /* час — моно, як у Nova */
-        .time-badge {
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(4px);
-            padding: 8px 18px;
+        .time-display {
+            font-family: 'SF Mono', 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #ccc;
+            background: #1e1e1e;
+            padding: 6px 14px;
             border-radius: 40px;
-            font-size: 0.95rem;
-            font-weight: 400;
-            letter-spacing: 1px;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            color: #eee;
-            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            border: 1px solid #333;
             white-space: nowrap;
+            letter-spacing: 0.5px;
         }
 
-        /* прогрес бар — супертонкий, як у Nova */
         .progress-container {
             flex: 1;
-            position: relative;
+            height: 36px; /* збільшена зона для тапу */
             display: flex;
             align-items: center;
         }
 
         .progress-bar {
             width: 100%;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.12);
+            height: 5px;
+            background: #2a2a2a;
             border-radius: 10px;
             -webkit-appearance: none;
             appearance: none;
-            cursor: pointer;
+            outline: none;
         }
 
         .progress-bar::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
-            width: 14px;
-            height: 14px;
+            width: 20px;  /* великий thumb для зручного тапу */
+            height: 20px;
             background: white;
             border-radius: 50%;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
-            border: 2px solid #111;
-            margin-top: -5px;
-            transition: 0.1s;
-        }
-
-        .progress-bar::-moz-range-thumb {
-            width: 14px;
-            height: 14px;
-            background: white;
-            border-radius: 50%;
-            border: 2px solid #111;
+            border: 2px solid #000;
+            box-shadow: 0 2px 8px rgba(255,255,255,0.3);
+            margin-top: -7.5px;
         }
 
         .progress-bar::-webkit-slider-runnable-track {
-            height: 4px;
-            background: linear-gradient(to right, #fff 0%, #fff var(--progress-percent, 0%), rgba(255,255,255,0.12) var(--progress-percent, 0%));
+            height: 5px;
+            background: linear-gradient(to right, #fff 0%, #fff var(--progress-percent, 0%), #2a2a2a var(--progress-percent, 0%));
             border-radius: 10px;
         }
 
-        .progress-bar::-moz-range-track {
-            height: 4px;
-            background: rgba(255,255,255,0.12);
-            border-radius: 10px;
+        /* середній ряд: основні кнопки */
+        .middle-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            margin: 4px 0;
         }
 
-        .progress-bar::-moz-range-progress {
-            height: 4px;
-            background: #fff;
-            border-radius: 10px;
+        .ctrl-btn {
+            background: transparent;
+            border: none;
+            color: #f0f0f0;
+            font-size: 2.2rem;  /* великі іконки для зручного тикання */
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.1s;
+            -webkit-touch-callout: none;
+            border: 1px solid rgba(255,255,255,0.05);
         }
 
-        /* гучність — тонкий вертикальний слайдер при наведенні? (але залишимо горизонтальний, стильний) */
-        .volume-wrap {
+        .ctrl-btn:active {
+            background: #2a2a2a;
+            transform: scale(0.96);
+        }
+
+        /* кнопка Play/Pause трохи більша */
+        .play-pause {
+            font-size: 2.8rem;
+            width: 80px;
+            height: 80px;
+            background: #1a1a1a;
+            border: 1px solid #444;
+        }
+
+        /* нижній ряд: додаткові функції */
+        .bottom-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 4px;
+        }
+
+        .group {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .icon-btn {
+            background: #1c1c1c;
+            border: 1px solid #3a3a3a;
+            color: #eee;
+            font-size: 1.4rem;
+            width: 48px;
+            height: 48px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+
+        .icon-btn:active {
+            background: #333;
+        }
+
+        .volume-row {
             display: flex;
             align-items: center;
             gap: 8px;
+            background: #1a1a1a;
+            padding: 4px 12px 4px 8px;
+            border-radius: 40px;
+            border: 1px solid #333;
         }
 
         .volume-slider {
-            width: 80px;
+            width: 100px;
             height: 4px;
-            background: rgba(255,255,255,0.15);
+            background: #333;
             border-radius: 4px;
             -webkit-appearance: none;
             appearance: none;
@@ -206,52 +214,35 @@
         .volume-slider::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
-            width: 12px;
-            height: 12px;
+            width: 18px;
+            height: 18px;
             background: white;
             border-radius: 50%;
             border: 1px solid black;
         }
 
-        .volume-slider::-moz-range-thumb {
-            width: 12px;
-            height: 12px;
-            background: white;
-            border-radius: 50%;
-            border: 1px solid black;
-        }
-
-        /* швидкість та інші елементи */
         .speed-select {
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: #1a1a1a;
+            border: 1px solid #444;
             color: white;
-            padding: 8px 14px;
-            border-radius: 30px;
-            font-size: 0.9rem;
-            font-weight: 400;
-            cursor: pointer;
+            padding: 10px 18px;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-weight: 500;
             outline: none;
             appearance: none;
+            text-align: center;
         }
 
-        .speed-select option {
-            background: #1a1e24;
-            color: white;
-        }
-
-        /* зона URL (онлайн фішка, як у Nova) */
-        .url-area {
+        /* зона URL — адаптована під тач */
+        .url-section {
             display: flex;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 50px;
+            padding: 4px 4px 4px 18px;
             align-items: center;
-            background: rgba(0, 0, 0, 0.35);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 60px;
-            padding: 4px 4px 4px 20px;
-            margin-right: 8px;
-            flex: 1 1 260px;
+            flex: 1;
             min-width: 200px;
         }
 
@@ -259,130 +250,113 @@
             background: transparent;
             border: none;
             color: white;
-            font-size: 0.9rem;
-            padding: 10px 0;
-            width: 100%;
+            font-size: 0.95rem;
+            padding: 12px 0;
+            flex: 1;
             outline: none;
-            font-family: 'Inter', sans-serif;
+            -webkit-appearance: none;
         }
 
         .url-input::placeholder {
-            color: rgba(255, 255, 255, 0.3);
-            font-weight: 300;
+            color: #555;
         }
 
         .url-btn {
-            background: rgba(255, 255, 255, 0.1);
+            background: #333;
             border: none;
             color: white;
-            border-radius: 50px;
-            padding: 8px 22px;
-            font-size: 0.9rem;
+            padding: 10px 22px;
+            border-radius: 40px;
+            font-size: 0.95rem;
             font-weight: 500;
             cursor: pointer;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: 0.15s;
+            border: 1px solid #555;
             white-space: nowrap;
         }
 
-        .url-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: rgba(255, 255, 255, 0.3);
+        .url-btn:active {
+            background: #444;
         }
 
-        /* кнопка файлу (мінімалізм) */
+        /* кнопка вибору файлу */
         .file-label {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: #1a1a1a;
+            border: 1px solid #444;
             color: #eee;
-            padding: 8px 18px;
+            padding: 12px 22px;
             border-radius: 40px;
-            font-size: 0.9rem;
-            display: flex;
+            font-size: 0.95rem;
+            display: inline-flex;
             align-items: center;
             gap: 8px;
             cursor: pointer;
-            transition: 0.15s;
             white-space: nowrap;
         }
-
-        .file-label:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.25);
-            color: white;
+        .file-label:active {
+            background: #2a2a2a;
         }
-
         #file-input {
             display: none;
         }
 
-        /* дрібний роздільник */
-        .divider-light {
-            width: 1px;
-            height: 28px;
-            background: rgba(255, 255, 255, 0.1);
-            margin: 0 8px;
+        /* індикатор muted */
+        .muted i {
+            opacity: 0.6;
         }
 
-        /* адаптація */
-        @media (max-width: 900px) {
-            .controls {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .right-group {
-                justify-content: flex-start;
-            }
-            .url-area {
-                width: 100%;
-            }
+        /* адаптація під маленькі екрани */
+        @media (max-width: 380px) {
+            .ctrl-btn { width: 52px; height: 52px; font-size: 1.8rem; }
+            .play-pause { width: 68px; height: 68px; font-size: 2.4rem; }
+            .bottom-row { flex-direction: column; align-items: stretch; }
+        }
+
+        /* приховуємо стандартний UI браузера */
+        video::-webkit-media-controls {
+            display: none !important;
+        }
+        video::-webkit-media-controls-enclosure {
+            display: none !important;
         }
     </style>
 </head>
 <body>
-    <div class="nova-player">
-        <div class="video-container">
-            <video id="video" tabindex="-1" preload="metadata" poster="https://via.placeholder.com/1280x720/111/222?text=NOVA+PLAYER">
-                <!-- дефолтне онлайн-відео (Big Buck Bunny) -->
+    <div class="ios-player">
+        <div class="video-wrapper">
+            <video id="video" playsinline webkit-playsinline preload="metadata" poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='225' viewBox='0 0 400 225'%3E%3Crect width='400' height='225' fill='%23111'/%3E%3Ctext x='50%25' y='50%25' font-size='20' fill='%23555' text-anchor='middle' dy='.3em' font-family='monospace'%3ENOVA%3C/text%3E%3C/svg%3E">
+                <!-- дефолтне відео (бажано з правильним CORS) -->
                 <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
             </video>
         </div>
 
         <div class="controls">
-            <!-- ліва група: play, step, час -->
-            <div class="controls-group left-group">
-                <button class="ctrl-btn" id="play-pause" title="Відтворити/Пауза (пробіл)"><i class="fas fa-play"></i></button>
-                <button class="ctrl-btn" id="skip-back" title="-10 с (←)"><i class="fas fa-rotate-left"></i></button>
-                <button class="ctrl-btn" id="skip-forward" title="+10 с (→)"><i class="fas fa-rotate-right"></i></button>
-                <div class="time-badge" id="time-display">00:00 / 00:00</div>
-            </div>
-
-            <!-- центральна група: прогрес -->
-            <div class="controls-group center-group" style="flex:1">
+            <!-- Верхній ряд: час + прогрес -->
+            <div class="top-row">
+                <span class="time-display" id="timeDisplay">00:00 / 00:00</span>
                 <div class="progress-container">
                     <input type="range" class="progress-bar" id="progress" min="0" max="100" value="0" step="0.1">
                 </div>
             </div>
 
-            <!-- права група: гучність, швидкість, PiP, fullscreen, файл + найкрутіше: ONLINE URL -->
-            <div class="controls-group right-group">
-                <!-- URL онлайн (родзинка) -->
-                <div class="url-area">
-                    <input type="text" class="url-input" id="video-url" placeholder="Вставити посилання на відео...">
-                    <button class="url-btn" id="load-url"><i class="fas fa-play" style="margin-right: 6px;"></i> online</button>
+            <!-- Середній ряд: основні кнопки управління (великі) -->
+            <div class="middle-row">
+                <button class="ctrl-btn" id="skipBack" title="-10"><i class="fas fa-undo-alt"></i></button>
+                <button class="ctrl-btn play-pause" id="playPause" title="Play/Pause"><i class="fas fa-play"></i></button>
+                <button class="ctrl-btn" id="skipForward" title="+10"><i class="fas fa-redo-alt"></i></button>
+            </div>
+
+            <!-- Нижній ряд: додаткові фішки (онлайн, гучність, швидкість, файл) -->
+            <div class="bottom-row">
+                <!-- Ліва група: гучність та mute -->
+                <div class="group">
+                    <div class="volume-row">
+                        <button class="icon-btn" id="muteToggle"><i class="fas fa-volume-up"></i></button>
+                        <input type="range" class="volume-slider" id="volume" min="0" max="1" step="0.05" value="1">
+                    </div>
                 </div>
 
-                <div class="divider-light"></div>
-
-                <!-- гучність -->
-                <div class="volume-wrap">
-                    <button class="ctrl-btn" id="mute-toggle" title="Вимкнути звук (M)"><i class="fas fa-volume-up"></i></button>
-                    <input type="range" class="volume-slider" id="volume" min="0" max="1" step="0.05" value="1">
-                </div>
-
-                <div class="divider-light"></div>
-
-                <select class="speed-select" id="playback-speed" title="Швидкість">
+                <!-- Центр: швидкість -->
+                <select class="speed-select" id="playbackSpeed">
                     <option value="0.5">0.5x</option>
                     <option value="0.75">0.75x</option>
                     <option value="1" selected>1x</option>
@@ -391,55 +365,62 @@
                     <option value="2">2x</option>
                 </select>
 
-                <button class="ctrl-btn" id="pip-btn" title="Картинка в картинці (P)"><i class="fas fa-closed-captioning"></i></button>
-                <button class="ctrl-btn" id="fullscreen-btn" title="Повний екран (F)"><i class="fas fa-expand"></i></button>
+                <!-- Права група: PiP, Fullscreen, файл -->
+                <div class="group">
+                    <button class="icon-btn" id="pipBtn" title="PiP"><i class="fas fa-closed-captioning"></i></button>
+                    <button class="icon-btn" id="fullscreenBtn" title="Fullscreen"><i class="fas fa-expand"></i></button>
+                    <label for="file-input" class="file-label"><i class="fas fa-folder-open"></i> Файл</label>
+                    <input type="file" id="file-input" accept="video/*">
+                </div>
+            </div>
 
-                <!-- локальний файл (теж корисно) -->
-                <label for="file-input" class="file-label" title="Відкрити файл з комп'ютера">
-                    <i class="fas fa-folder-open"></i> <span>Файл</span>
-                </label>
-                <input type="file" id="file-input" accept="video/*">
+            <!-- Окремий рядок для вставки URL (онлайн-фішка) -->
+            <div class="url-section">
+                <input type="text" class="url-input" id="videoUrl" placeholder="Вставте посилання на відео...">
+                <button class="url-btn" id="loadUrl"><i class="fas fa-play"></i> online</button>
             </div>
         </div>
     </div>
 
     <script>
         (function() {
+            // Елементи
             const video = document.getElementById('video');
-            const playBtn = document.getElementById('play-pause');
-            const skipBack = document.getElementById('skip-back');
-            const skipForward = document.getElementById('skip-forward');
-            const timeDisplay = document.getElementById('time-display');
+            const playPause = document.getElementById('playPause');
+            const skipBack = document.getElementById('skipBack');
+            const skipForward = document.getElementById('skipForward');
+            const timeDisplay = document.getElementById('timeDisplay');
             const progress = document.getElementById('progress');
             const volumeSlider = document.getElementById('volume');
-            const muteBtn = document.getElementById('mute-toggle');
-            const speedSelect = document.getElementById('playback-speed');
-            const pipBtn = document.getElementById('pip-btn');
-            const fullscreenBtn = document.getElementById('fullscreen-btn');
+            const muteToggle = document.getElementById('muteToggle');
+            const speedSelect = document.getElementById('playbackSpeed');
+            const pipBtn = document.getElementById('pipBtn');
+            const fullscreenBtn = document.getElementById('fullscreenBtn');
             const fileInput = document.getElementById('file-input');
-            const urlInput = document.getElementById('video-url');
-            const loadUrlBtn = document.getElementById('load-url');
-            const container = document.querySelector('.nova-player');
+            const urlInput = document.getElementById('videoUrl');
+            const loadUrlBtn = document.getElementById('loadUrl');
+            const playerContainer = document.querySelector('.ios-player');
 
+            // Змінні
             let lastVolume = 1;
 
-            // формат часу
+            // Формат часу
             function formatTime(seconds) {
                 if (isNaN(seconds) || seconds < 0) seconds = 0;
                 const h = Math.floor(seconds / 3600);
                 const m = Math.floor((seconds % 3600) / 60);
                 const s = Math.floor(seconds % 60);
-                if (h > 0) return `${h}:${m < 10 ? '0' + m : m}:${s < 10 ? '0' + s : s}`;
-                return `${m < 10 ? '0' + m : m}:${s < 10 ? '0' + s : s}`;
+                if (h > 0) return `${h}:${m < 10 ? '0'+m : m}:${s < 10 ? '0'+s : s}`;
+                return `${m < 10 ? '0'+m : m}:${s < 10 ? '0'+s : s}`;
             }
 
-            function updateTime() {
-                timeDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
-            }
-
-            function updateProgress() {
-                if (video.duration) {
-                    const percent = (video.currentTime / video.duration) * 100;
+            // Оновлення часу і прогресу
+            function updateUI() {
+                const current = video.currentTime || 0;
+                const duration = video.duration || 0;
+                timeDisplay.textContent = `${formatTime(current)} / ${formatTime(duration)}`;
+                if (duration) {
+                    const percent = (current / duration) * 100;
                     progress.value = percent;
                     progress.style.setProperty('--progress-percent', percent + '%');
                 } else {
@@ -448,10 +429,15 @@
                 }
             }
 
+            // Іконка гучності
             function setVolumeIcon() {
-                if (video.muted || video.volume === 0) muteBtn.innerHTML = '<i class="fas fa-volume-off"></i>';
-                else if (video.volume < 0.5) muteBtn.innerHTML = '<i class="fas fa-volume-down"></i>';
-                else muteBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+                if (video.muted || video.volume === 0) {
+                    muteToggle.innerHTML = '<i class="fas fa-volume-off"></i>';
+                } else if (video.volume < 0.5) {
+                    muteToggle.innerHTML = '<i class="fas fa-volume-down"></i>';
+                } else {
+                    muteToggle.innerHTML = '<i class="fas fa-volume-up"></i>';
+                }
             }
 
             function syncVolume() {
@@ -460,33 +446,41 @@
                 setVolumeIcon();
             }
 
-            // play/pause
+            // Play/Pause
             function togglePlay() {
-                if (video.paused) video.play().catch(() => {});
-                else video.pause();
+                if (video.paused) {
+                    video.play().catch(err => console.log('Play error:', err));
+                } else {
+                    video.pause();
+                }
             }
 
-            video.addEventListener('play', () => playBtn.innerHTML = '<i class="fas fa-pause"></i>');
-            video.addEventListener('pause', () => playBtn.innerHTML = '<i class="fas fa-play"></i>');
-            playBtn.addEventListener('click', togglePlay);
-            video.addEventListener('click', togglePlay);
+            video.addEventListener('play', () => {
+                playPause.innerHTML = '<i class="fas fa-pause"></i>';
+            });
+            video.addEventListener('pause', () => {
+                playPause.innerHTML = '<i class="fas fa-play"></i>';
+            });
+            playPause.addEventListener('click', togglePlay);
+            video.addEventListener('click', togglePlay); // тап по відео
 
-            // скіпи
+            // Скіпи
             skipBack.addEventListener('click', () => video.currentTime = Math.max(0, video.currentTime - 10));
             skipForward.addEventListener('click', () => video.currentTime = Math.min(video.duration, video.currentTime + 10));
 
-            // timeupdate
-            video.addEventListener('loadedmetadata', () => { updateTime(); updateProgress(); });
-            video.addEventListener('timeupdate', () => { updateTime(); updateProgress(); });
+            // Оновлення по timeupdate
+            video.addEventListener('loadedmetadata', updateUI);
+            video.addEventListener('timeupdate', updateUI);
+            video.addEventListener('seeking', updateUI);
 
-            // прогрес
+            // Прогрес-бар
             progress.addEventListener('input', (e) => {
                 if (video.duration) {
                     video.currentTime = (e.target.value / 100) * video.duration;
                 }
             });
 
-            // гучність
+            // Гучність
             volumeSlider.addEventListener('input', (e) => {
                 const val = parseFloat(e.target.value);
                 video.volume = val;
@@ -495,7 +489,7 @@
                 setVolumeIcon();
             });
 
-            muteBtn.addEventListener('click', () => {
+            muteToggle.addEventListener('click', () => {
                 if (video.muted || video.volume === 0) {
                     video.muted = false;
                     video.volume = lastVolume > 0 ? lastVolume : 0.5;
@@ -512,29 +506,45 @@
             video.addEventListener('volumechange', syncVolume);
             syncVolume();
 
-            // швидкість
+            // Швидкість
             speedSelect.addEventListener('change', (e) => video.playbackRate = parseFloat(e.target.value));
 
-            // PiP
+            // Picture-in-Picture (на iOS підтримується, але тільки через WebKit)
             pipBtn.addEventListener('click', async () => {
-                try {
-                    if (document.pictureInPictureElement) await document.exitPictureInPicture();
-                    else await video.requestPictureInPicture();
-                } catch (err) {}
+                if (document.pictureInPictureEnabled) {
+                    try {
+                        if (video !== document.pictureInPictureElement) {
+                            await video.requestPictureInPicture();
+                        } else {
+                            await document.exitPictureInPicture();
+                        }
+                    } catch (err) {}
+                } else {
+                    alert('PiP не підтримується на цьому пристрої');
+                }
             });
 
-            // fullscreen
+            // Fullscreen (найкраще через requestFullscreen, але на iOS воно працює)
             fullscreenBtn.addEventListener('click', () => {
-                if (!document.fullscreenElement) container.requestFullscreen();
-                else document.exitFullscreen();
+                if (!document.fullscreenElement) {
+                    if (playerContainer.requestFullscreen) {
+                        playerContainer.requestFullscreen();
+                    } else if (playerContainer.webkitRequestFullscreen) {
+                        playerContainer.webkitRequestFullscreen();
+                    }
+                } else {
+                    if (document.exitFullscreen) document.exitFullscreen();
+                }
             });
 
+            // Оновлення іконки fullscreen
             document.addEventListener('fullscreenchange', () => {
-                fullscreenBtn.innerHTML = document.fullscreenElement ? '<i class="fas fa-compress"></i>' : '<i class="fas fa-expand"></i>';
+                if (document.fullscreenElement) fullscreenBtn.innerHTML = '<i class="fas fa-compress"></i>';
+                else fullscreenBtn.innerHTML = '<i class="fas fa-expand"></i>';
             });
 
-            // локальний файл
-            fileInput.addEventListener('change', function(e) {
+            // Локальний файл
+            fileInput.addEventListener('change', (e) => {
                 const file = e.target.files[0];
                 if (file) {
                     const url = URL.createObjectURL(file);
@@ -547,38 +557,43 @@
                 fileInput.value = '';
             });
 
-            // ОНЛАЙН ЗА ПОСИЛАННЯМ (ключова фішка)
+            // Завантаження по URL (онлайн)
             loadUrlBtn.addEventListener('click', () => {
-                const url = urlInput.value.trim();
+                let url = urlInput.value.trim();
                 if (!url) return;
-                // проста валідація, що схоже на посилання
+                // якщо користувач забув протокол - додаємо https
                 if (!url.startsWith('http://') && !url.startsWith('https://') && !url.startsWith('//')) {
-                    alert('Будь ласка, введіть посилання, що починається з http:// або https://');
-                    return;
+                    url = 'https://' + url;
                 }
                 video.pause();
                 video.src = url;
                 video.load();
-                video.play().catch(e => alert('Не вдалося відтворити відео за посиланням. Можливо, CORS або формат не підтримується.'));
+                video.play().catch(err => alert('Не вдалося завантажити відео. Перевірте посилання.'));
             });
 
-            // гарячі клавіші
-            document.addEventListener('keydown', (e) => {
-                if (e.target.matches('input, select, textarea, label')) return;
-                const key = e.key.toLowerCase();
-                if (key === ' ') { e.preventDefault(); togglePlay(); }
-                else if (key === 'arrowleft') { e.preventDefault(); video.currentTime = Math.max(0, video.currentTime - 10); }
-                else if (key === 'arrowright') { e.preventDefault(); video.currentTime = Math.min(video.duration, video.currentTime + 10); }
-                else if (key === 'arrowup') { e.preventDefault(); video.volume = Math.min(1, video.volume + 0.05); volumeSlider.value = video.volume; video.muted = false; syncVolume(); }
-                else if (key === 'arrowdown') { e.preventDefault(); video.volume = Math.max(0, video.volume - 0.05); volumeSlider.value = video.volume; video.muted = (video.volume === 0); syncVolume(); }
-                else if (key === 'm') { e.preventDefault(); muteBtn.click(); }
-                else if (key === 'f') { e.preventDefault(); fullscreenBtn.click(); }
-                else if (key === 'p') { e.preventDefault(); pipBtn.click(); }
+            // Жести для iPhone (свайпи вліво/вправо по відео для перемотування)
+            let touchStartX = 0;
+            video.addEventListener('touchstart', (e) => {
+                touchStartX = e.touches[0].clientX;
+            }, {passive: true});
+
+            video.addEventListener('touchend', (e) => {
+                if (!touchStartX) return;
+                const diff = e.changedTouches[0].clientX - touchStartX;
+                if (Math.abs(diff) > 40) { // свайп більше 40px
+                    if (diff > 0) {
+                        // свайп вправо -> вперед
+                        video.currentTime = Math.min(video.duration, video.currentTime + 15);
+                    } else {
+                        // свайп вліво -> назад
+                        video.currentTime = Math.max(0, video.currentTime - 15);
+                    }
+                }
+                touchStartX = 0;
             });
 
-            // ініціалізація
-            updateTime();
-            updateProgress();
+            // Ініціалізація
+            updateUI();
         })();
     </script>
 </body>
