@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>mono · плеєр для iPhone</title>
-    <!-- Font Awesome для іконок (чорно-білі) -->
+    <title>MONO · сучасне кіно</title>
+    <!-- Font Awesome (чорно-білі іконки) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * {
@@ -15,27 +15,28 @@
         }
 
         body {
-            background: #000;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            background: #0a0a0c;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            padding: 0;
-            margin: 0;
+            color: #eee;
+            line-height: 1.4;
         }
 
-        /* контейнер плеєра — на всю ширину, чорний */
-        .iphone-player {
-            width: 100%;
-            max-width: 480px; /* ширина як у iPhone */
+        /* головний контейнер */
+        .app {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #000;
+            box-shadow: 0 0 40px rgba(0,0,0,0.8);
+            min-height: 100vh;
+        }
+
+        /* ========== ПЛЕЄР (чорно-білий, керування поверх) ========== */
+        .player-section {
             background: #000;
             position: relative;
-            overflow: hidden;
-            box-shadow: 0 0 0 1px #222;
+            width: 100%;
         }
 
-        /* відео на всю ширину */
         .video-wrapper {
             position: relative;
             width: 100%;
@@ -50,21 +51,21 @@
             background: #000;
         }
 
-        /* затемнений оверлей при активних контролах (трохи затемнює відео, щоб кнопки були видніше) */
+        /* оверлей з контролами (з'являється по тапу) */
         .controls-overlay {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.4); /* напівпрозорий чорний */
+            background: rgba(0, 0, 0, 0.4);
             opacity: 0;
             transition: opacity 0.2s ease;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            pointer-events: none; /* щоб кліки проходили крізь, коли оверлей прихований */
+            pointer-events: none;
         }
 
         .controls-overlay.visible {
@@ -72,49 +73,47 @@
             pointer-events: auto;
         }
 
-        /* центральна кнопка Play/Pause (велика) */
+        /* центральна кнопка Play */
         .center-play {
-            width: 90px;
-            height: 90px;
+            width: 80px;
+            height: 80px;
             background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(4px);
-            border: 2px solid rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(6px);
+            border: 2px solid rgba(255,255,255,0.5);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             cursor: pointer;
-            transition: all 0.1s;
-            border-color: #ccc;
+            transition: 0.1s;
         }
 
         .center-play i {
-            font-size: 3.5rem;
+            font-size: 3rem;
             color: white;
             text-shadow: 0 2px 10px black;
         }
 
         .center-play:active {
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(255,255,255,0.3);
             transform: scale(0.95);
         }
 
-        /* нижня панель керування (прогрес, час, кнопки) */
+        /* нижня панель */
         .bottom-controls {
             position: absolute;
             bottom: 0;
             left: 0;
             width: 100%;
-            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 80%, transparent 100%);
-            padding: 20px 16px 16px 16px;
+            background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 70%, transparent 100%);
+            backdrop-filter: blur(4px);
+            padding: 18px 16px 16px 16px;
             display: flex;
             flex-direction: column;
             gap: 12px;
-            backdrop-filter: blur(2px);
         }
 
-        /* прогрес + час */
         .progress-area {
             display: flex;
             align-items: center;
@@ -125,8 +124,8 @@
             color: #eee;
             font-size: 0.85rem;
             font-family: 'Courier New', monospace;
-            background: rgba(0,0,0,0.6);
-            padding: 4px 10px;
+            background: rgba(0,0,0,0.5);
+            padding: 4px 12px;
             border-radius: 40px;
             border: 1px solid #444;
             white-space: nowrap;
@@ -156,7 +155,7 @@
             background: white;
             border-radius: 50%;
             border: 2px solid #111;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+            box-shadow: 0 2px 8px black;
             margin-top: -7px;
         }
 
@@ -166,45 +165,43 @@
             border-radius: 10px;
         }
 
-        /* ряд кнопок */
         .buttons-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 8px;
         }
 
         .left-group, .right-group {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
         }
 
         .ctrl-btn {
             background: transparent;
             border: none;
             color: white;
-            font-size: 1.7rem;
-            width: 48px;
-            height: 48px;
+            font-size: 1.6rem;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             transition: background 0.1s;
-            text-shadow: 0 1px 5px black;
         }
 
         .ctrl-btn:active {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.15);
         }
 
         .volume-wrap {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             background: rgba(0,0,0,0.5);
             border: 1px solid #444;
             padding: 4px 12px 4px 8px;
@@ -212,7 +209,7 @@
         }
 
         .volume-slider {
-            width: 80px;
+            width: 70px;
             height: 4px;
             background: #555;
             border-radius: 4px;
@@ -223,8 +220,8 @@
         .volume-slider::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
-            width: 18px;
-            height: 18px;
+            width: 16px;
+            height: 16px;
             background: white;
             border-radius: 50%;
             border: 1px solid #000;
@@ -234,44 +231,35 @@
             background: rgba(20,20,20,0.9);
             border: 1px solid #555;
             color: white;
-            padding: 8px 16px;
-            border-radius: 36px;
-            font-size: 0.9rem;
-            font-weight: 500;
+            padding: 6px 12px;
+            border-radius: 30px;
+            font-size: 0.85rem;
             outline: none;
-            appearance: none;
-            backdrop-filter: blur(2px);
         }
 
         .file-label {
             background: rgba(20,20,20,0.9);
             border: 1px solid #555;
             color: white;
-            padding: 8px 16px;
-            border-radius: 36px;
-            font-size: 0.9rem;
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 0.85rem;
             display: flex;
             align-items: center;
             gap: 6px;
             cursor: pointer;
-            backdrop-filter: blur(2px);
         }
-        .file-label:active {
-            background: #333;
-        }
-        #file-input {
-            display: none;
-        }
+        .file-label:active { background: #333; }
+        #file-input { display: none; }
 
         .url-section {
             display: flex;
             background: rgba(0,0,0,0.7);
             border: 1px solid #444;
             border-radius: 40px;
-            padding: 4px 4px 4px 18px;
+            padding: 4px 4px 4px 16px;
             align-items: center;
             width: 100%;
-            margin-top: 8px;
             backdrop-filter: blur(4px);
         }
 
@@ -279,124 +267,283 @@
             background: transparent;
             border: none;
             color: white;
-            font-size: 0.9rem;
-            padding: 10px 0;
+            font-size: 0.85rem;
+            padding: 8px 0;
             flex: 1;
             outline: none;
         }
-
-        .url-input::placeholder {
-            color: #aaa;
-        }
+        .url-input::placeholder { color: #777; }
 
         .url-btn {
             background: #3a3a3a;
             border: none;
             color: white;
-            padding: 8px 20px;
+            padding: 6px 16px;
             border-radius: 40px;
-            font-size: 0.9rem;
-            font-weight: 500;
+            font-size: 0.85rem;
             cursor: pointer;
             border: 1px solid #666;
             white-space: nowrap;
         }
+        .url-btn:active { background: #555; }
 
-        .url-btn:active {
-            background: #555;
+        /* ========== КАТАЛОГ (стиль uakino, але сучасніший) ========== */
+        .catalog {
+            padding: 20px 16px;
+            background: #0f0f0f;
+            border-top: 1px solid #222;
         }
 
-        /* кнопка закриття оверлею (на майбутнє) не потрібна */
-
-        /* прибираємо нативні контроли */
-        video::-webkit-media-controls {
-            display: none !important;
+        .catalog-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
         }
 
-        /* адаптація для дуже маленьких екранів */
+        .catalog-header h2 {
+            font-size: 1.5rem;
+            font-weight: 500;
+            letter-spacing: -0.5px;
+            color: #fff;
+        }
+
+        .filters {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .filter-chip {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            color: #ccc;
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+
+        .filter-chip.active {
+            background: #fff;
+            color: #000;
+            border-color: #fff;
+        }
+
+        .filter-chip:active {
+            background: #333;
+            color: #fff;
+        }
+
+        /* сітка карток */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 16px;
+        }
+
+        .card {
+            background: #111;
+            border: 1px solid #2a2a2a;
+            border-radius: 16px;
+            overflow: hidden;
+            transition: transform 0.1s, border-color 0.1s;
+            cursor: pointer;
+        }
+
+        .card:active {
+            transform: scale(0.98);
+            border-color: #555;
+        }
+
+        .card-poster {
+            aspect-ratio: 2/3;
+            background: #1e1e1e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            font-size: 0.8rem;
+            position: relative;
+        }
+
+        .card-poster img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%);
+            opacity: 0.9;
+        }
+
+        .card-info {
+            padding: 12px 10px;
+        }
+
+        .card-title {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 4px;
+            color: #fff;
+            line-height: 1.3;
+        }
+
+        .card-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            font-size: 0.75rem;
+            color: #aaa;
+            margin-bottom: 6px;
+        }
+
+        .badge {
+            background: #2a2a2a;
+            padding: 2px 8px;
+            border-radius: 20px;
+            color: #ccc;
+            font-size: 0.7rem;
+            border: 1px solid #3a3a3a;
+        }
+
+        .imdb {
+            color: #bbb;
+            font-weight: 600;
+        }
+
+        /* навігація */
+        .nav-bar {
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 16px;
+            background: #0a0a0a;
+            border-top: 1px solid #222;
+            border-bottom: 1px solid #222;
+        }
+
+        .nav-item {
+            color: #888;
+            font-size: 1.3rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        .nav-item.active { color: #fff; }
+        .nav-item span { font-size: 0.7rem; }
+
+        /* адаптація під iPhone */
         @media (max-width: 400px) {
-            .buttons-row {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .left-group, .right-group {
-                width: 100%;
-                justify-content: space-around;
-            }
-            .volume-wrap {
-                flex: 1;
-            }
+            .grid { grid-template-columns: repeat(2, 1fr); }
+            .buttons-row { flex-direction: column; align-items: stretch; }
+            .left-group, .right-group { justify-content: space-around; }
         }
     </style>
 </head>
 <body>
-    <div class="iphone-player">
-        <div class="video-wrapper">
-            <video id="video" playsinline webkit-playsinline preload="metadata" poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='225' viewBox='0 0 400 225'%3E%3Crect width='400' height='225' fill='%23111'/%3E%3Ctext x='50%25' y='50%25' font-size='24' fill='%23fff' text-anchor='middle' dy='.3em' font-family='monospace'%3EMONO%3C/text%3E%3C/svg%3E">
-                <!-- дефолтне відео -->
-                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
-            </video>
+    <div class="app">
+        <!-- Плеєр (чорно-білий, керування поверх) -->
+        <div class="player-section">
+            <div class="video-wrapper">
+                <video id="video" playsinline webkit-playsinline preload="metadata" poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='225' viewBox='0 0 400 225'%3E%3Crect width='400' height='225' fill='%23111'/%3E%3Ctext x='50%25' y='50%25' font-size='24' fill='%23fff' text-anchor='middle' dy='.3em' font-family='monospace'%3EMONO%3C/text%3E%3C/svg%3E">
+                    <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+                </video>
 
-            <!-- Оверлей з контролами (з'являється по тапу) -->
-            <div class="controls-overlay" id="controlsOverlay">
-                <!-- Центральна кнопка Play/Pause (велика) -->
-                <div class="center-play" id="centerPlayPause">
-                    <i class="fas fa-play" id="centerPlayIcon"></i>
-                </div>
-
-                <!-- Нижня панель -->
-                <div class="bottom-controls">
-                    <div class="progress-area">
-                        <span class="time-display" id="timeDisplay">00:00 / 00:00</span>
-                        <div class="progress-container">
-                            <input type="range" class="progress-bar" id="progress" min="0" max="100" value="0" step="0.1">
-                        </div>
+                <!-- Оверлей з контролами -->
+                <div class="controls-overlay" id="controlsOverlay">
+                    <div class="center-play" id="centerPlayPause">
+                        <i class="fas fa-play" id="centerPlayIcon"></i>
                     </div>
 
-                    <div class="buttons-row">
-                        <div class="left-group">
-                            <button class="ctrl-btn" id="skipBack" title="-10 с"><i class="fas fa-undo-alt"></i></button>
-                            <button class="ctrl-btn" id="skipForward" title="+10 с"><i class="fas fa-redo-alt"></i></button>
-                            <div class="volume-wrap">
-                                <button class="ctrl-btn" id="muteToggle" style="width:auto; font-size:1.5rem;"><i class="fas fa-volume-up"></i></button>
-                                <input type="range" class="volume-slider" id="volume" min="0" max="1" step="0.05" value="1">
+                    <div class="bottom-controls">
+                        <div class="progress-area">
+                            <span class="time-display" id="timeDisplay">00:00 / 00:00</span>
+                            <div class="progress-container">
+                                <input type="range" class="progress-bar" id="progress" min="0" max="100" value="0" step="0.1">
                             </div>
                         </div>
 
-                        <div class="right-group">
-                            <select class="speed-select" id="playbackSpeed">
-                                <option value="0.5">0.5x</option>
-                                <option value="0.75">0.75x</option>
-                                <option value="1" selected>1x</option>
-                                <option value="1.25">1.25x</option>
-                                <option value="1.5">1.5x</option>
-                                <option value="2">2x</option>
-                            </select>
-                            <button class="ctrl-btn" id="pipBtn" title="PiP"><i class="fas fa-closed-captioning"></i></button>
-                            <button class="ctrl-btn" id="fullscreenBtn" title="Повний екран"><i class="fas fa-expand"></i></button>
-                            <label for="file-input" class="file-label"><i class="fas fa-folder-open"></i> Файл</label>
-                            <input type="file" id="file-input" accept="video/*">
+                        <div class="buttons-row">
+                            <div class="left-group">
+                                <button class="ctrl-btn" id="skipBack" title="-10 с"><i class="fas fa-undo-alt"></i></button>
+                                <button class="ctrl-btn" id="skipForward" title="+10 с"><i class="fas fa-redo-alt"></i></button>
+                                <div class="volume-wrap">
+                                    <button class="ctrl-btn" id="muteToggle" style="width:auto; font-size:1.4rem;"><i class="fas fa-volume-up"></i></button>
+                                    <input type="range" class="volume-slider" id="volume" min="0" max="1" step="0.05" value="1">
+                                </div>
+                            </div>
+
+                            <div class="right-group">
+                                <select class="speed-select" id="playbackSpeed">
+                                    <option value="0.5">0.5x</option>
+                                    <option value="0.75">0.75x</option>
+                                    <option value="1" selected>1x</option>
+                                    <option value="1.25">1.25x</option>
+                                    <option value="1.5">1.5x</option>
+                                    <option value="2">2x</option>
+                                </select>
+                                <button class="ctrl-btn" id="pipBtn" title="PiP"><i class="fas fa-closed-captioning"></i></button>
+                                <button class="ctrl-btn" id="fullscreenBtn" title="Повний екран"><i class="fas fa-expand"></i></button>
+                                <label for="file-input" class="file-label"><i class="fas fa-folder-open"></i> Файл</label>
+                                <input type="file" id="file-input" accept="video/*">
+                            </div>
+                        </div>
+
+                        <!-- Онлайн-посилання -->
+                        <div class="url-section">
+                            <input type="text" class="url-input" id="videoUrl" placeholder="Вставте посилання на відео...">
+                            <button class="url-btn" id="loadUrl">online</button>
                         </div>
                     </div>
-
-                    <!-- Поле для вставки посилання -->
-                    <div class="url-section">
-                        <input type="text" class="url-input" id="videoUrl" placeholder="Посилання на відео...">
-                        <button class="url-btn" id="loadUrl">online</button>
-                    </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Навігація (як у додатку) -->
+        <div class="nav-bar">
+            <div class="nav-item active"><i class="fas fa-home"></i><span>Головна</span></div>
+            <div class="nav-item"><i class="fas fa-film"></i><span>Фільми</span></div>
+            <div class="nav-item"><i class="fas fa-tv"></i><span>Серіали</span></div>
+            <div class="nav-item"><i class="fas fa-star"></i><span>Аніме</span></div>
+            <div class="nav-item"><i class="fas fa-search"></i><span>Пошук</span></div>
+        </div>
+
+        <!-- Каталог (стиль uakino) -->
+        <div class="catalog">
+            <div class="catalog-header">
+                <h2>Популярне</h2>
+                <span style="color:#777; font-size:0.9rem;">✸ 1080p</span>
+            </div>
+
+            <!-- Фільтри -->
+            <div class="filters">
+                <span class="filter-chip active">Всі</span>
+                <span class="filter-chip">Екшн</span>
+                <span class="filter-chip">Драми</span>
+                <span class="filter-chip">Комедії</span>
+                <span class="filter-chip">Трилери</span>
+                <span class="filter-chip">Аніме</span>
+                <span class="filter-chip">Серіали</span>
+            </div>
+
+            <!-- Сітка карток (на основі даних uakino) -->
+            <div class="grid" id="catalogGrid">
+                <!-- картки генеруються динамічно, але для прикладу заповнимо статикою -->
             </div>
         </div>
     </div>
 
     <script>
         (function() {
-            // Елементи
+            // ========== ПЛЕЄР (логіка) ==========
             const video = document.getElementById('video');
             const overlay = document.getElementById('controlsOverlay');
             const centerPlay = document.getElementById('centerPlayPause');
             const centerPlayIcon = document.getElementById('centerPlayIcon');
-            const playPause = document.getElementById('playPause'); // не використовуємо, але залишимо для сумісності
             const skipBack = document.getElementById('skipBack');
             const skipForward = document.getElementById('skipForward');
             const timeDisplay = document.getElementById('timeDisplay');
@@ -413,39 +560,27 @@
             let lastVolume = 1;
             let hideTimeout = null;
 
-            // Показати оверлей
             function showControls() {
                 overlay.classList.add('visible');
-                // Скинути таймер приховування
                 if (hideTimeout) clearTimeout(hideTimeout);
                 hideTimeout = setTimeout(() => {
                     overlay.classList.remove('visible');
-                }, 4000); // ховаємо через 4 секунди бездіяльності
+                }, 4000);
             }
 
-            // Сховати оверлей примусово
             function hideControls() {
                 if (hideTimeout) clearTimeout(hideTimeout);
                 overlay.classList.remove('visible');
             }
 
-            // При тапі по відео показуємо/ховаємо контроли
             video.addEventListener('click', (e) => {
                 e.stopPropagation();
-                if (overlay.classList.contains('visible')) {
-                    hideControls();
-                } else {
-                    showControls();
-                }
+                if (overlay.classList.contains('visible')) hideControls();
+                else showControls();
             });
 
-            // Якщо тап по самому оверлею (наприклад, по кнопках) — не ховаємо, а подовжуємо таймер
-            overlay.addEventListener('click', (e) => {
-                e.stopPropagation();
-                showControls(); // перезапустить таймер
-            });
+            overlay.addEventListener('click', (e) => e.stopPropagation());
 
-            // Форматування часу (mm:ss або hh:mm:ss)
             function formatTime(seconds) {
                 if (isNaN(seconds) || seconds < 0) seconds = 0;
                 const h = Math.floor(seconds / 3600);
@@ -470,13 +605,9 @@
             }
 
             function setVolumeIcon() {
-                if (video.muted || video.volume === 0) {
-                    muteToggle.innerHTML = '<i class="fas fa-volume-off"></i>';
-                } else if (video.volume < 0.5) {
-                    muteToggle.innerHTML = '<i class="fas fa-volume-down"></i>';
-                } else {
-                    muteToggle.innerHTML = '<i class="fas fa-volume-up"></i>';
-                }
+                if (video.muted || video.volume === 0) muteToggle.innerHTML = '<i class="fas fa-volume-off"></i>';
+                else if (video.volume < 0.5) muteToggle.innerHTML = '<i class="fas fa-volume-down"></i>';
+                else muteToggle.innerHTML = '<i class="fas fa-volume-up"></i>';
             }
 
             function syncVolume() {
@@ -485,54 +616,27 @@
                 setVolumeIcon();
             }
 
-            // Play/Pause через центральну кнопку та відео
             function togglePlay() {
-                if (video.paused) {
-                    video.play().catch(() => {});
-                } else {
-                    video.pause();
-                }
+                if (video.paused) video.play().catch(() => {});
+                else video.pause();
             }
 
-            video.addEventListener('play', () => {
-                centerPlayIcon.className = 'fas fa-pause';
-            });
-            video.addEventListener('pause', () => {
-                centerPlayIcon.className = 'fas fa-play';
-            });
+            video.addEventListener('play', () => centerPlayIcon.className = 'fas fa-pause');
+            video.addEventListener('pause', () => centerPlayIcon.className = 'fas fa-play');
+            centerPlay.addEventListener('click', (e) => { e.stopPropagation(); togglePlay(); showControls(); });
 
-            centerPlay.addEventListener('click', (e) => {
-                e.stopPropagation();
-                togglePlay();
-                showControls(); // подовжити показ
-            });
+            skipBack.addEventListener('click', (e) => { e.stopPropagation(); video.currentTime = Math.max(0, video.currentTime - 10); showControls(); });
+            skipForward.addEventListener('click', (e) => { e.stopPropagation(); video.currentTime = Math.min(video.duration, video.currentTime + 10); showControls(); });
 
-            // Скіпи
-            skipBack.addEventListener('click', (e) => {
-                e.stopPropagation();
-                video.currentTime = Math.max(0, video.currentTime - 10);
-                showControls();
-            });
-            skipForward.addEventListener('click', (e) => {
-                e.stopPropagation();
-                video.currentTime = Math.min(video.duration, video.currentTime + 10);
-                showControls();
-            });
-
-            // Оновлення часу
             video.addEventListener('loadedmetadata', updateUI);
             video.addEventListener('timeupdate', updateUI);
 
-            // Прогрес
             progress.addEventListener('input', (e) => {
                 e.stopPropagation();
-                if (video.duration) {
-                    video.currentTime = (e.target.value / 100) * video.duration;
-                }
+                if (video.duration) video.currentTime = (e.target.value / 100) * video.duration;
                 showControls();
             });
 
-            // Гучність
             volumeSlider.addEventListener('input', (e) => {
                 e.stopPropagation();
                 const val = parseFloat(e.target.value);
@@ -562,46 +666,30 @@
             video.addEventListener('volumechange', syncVolume);
             syncVolume();
 
-            // Швидкість
-            speedSelect.addEventListener('change', (e) => {
-                e.stopPropagation();
-                video.playbackRate = parseFloat(e.target.value);
-                showControls();
-            });
+            speedSelect.addEventListener('change', (e) => { video.playbackRate = parseFloat(e.target.value); showControls(); });
 
-            // PiP
             pipBtn.addEventListener('click', async (e) => {
                 e.stopPropagation();
                 if (document.pictureInPictureEnabled) {
                     try {
-                        if (video !== document.pictureInPictureElement) {
-                            await video.requestPictureInPicture();
-                        } else {
-                            await document.exitPictureInPicture();
-                        }
+                        if (video !== document.pictureInPictureElement) await video.requestPictureInPicture();
+                        else await document.exitPictureInPicture();
                     } catch (err) {}
-                } else {
-                    alert('PiP не підтримується');
-                }
+                } else alert('PiP не підтримується');
                 showControls();
             });
 
-            // Fullscreen
             fullscreenBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 if (!document.fullscreenElement) {
-                    if (document.documentElement.requestFullscreen) {
-                        document.documentElement.requestFullscreen();
-                    } else if (document.documentElement.webkitRequestFullscreen) {
-                        document.documentElement.webkitRequestFullscreen();
-                    }
+                    if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
+                    else if (document.documentElement.webkitRequestFullscreen) document.documentElement.webkitRequestFullscreen();
                 } else {
                     if (document.exitFullscreen) document.exitFullscreen();
                 }
                 showControls();
             });
 
-            // Локальний файл
             fileInput.addEventListener('change', (e) => {
                 const file = e.target.files[0];
                 if (file) {
@@ -616,7 +704,6 @@
                 showControls();
             });
 
-            // Завантаження з URL
             loadUrlBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 let url = urlInput.value.trim();
@@ -631,34 +718,77 @@
                 showControls();
             });
 
-            // Жести: свайп вліво/вправо для перемотування
             let touchStartX = 0;
-            video.addEventListener('touchstart', (e) => {
-                touchStartX = e.touches[0].clientX;
-            }, {passive: true});
-
+            video.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, {passive: true});
             video.addEventListener('touchend', (e) => {
                 if (!touchStartX) return;
                 const diff = e.changedTouches[0].clientX - touchStartX;
                 if (Math.abs(diff) > 40) {
-                    if (diff > 0) {
-                        video.currentTime = Math.min(video.duration, video.currentTime + 15);
-                    } else {
-                        video.currentTime = Math.max(0, video.currentTime - 15);
-                    }
+                    if (diff > 0) video.currentTime = Math.min(video.duration, video.currentTime + 15);
+                    else video.currentTime = Math.max(0, video.currentTime - 15);
                 }
                 touchStartX = 0;
-                // Показати контроли після свайпу
                 showControls();
             });
 
-            // Ініціалізація
             updateUI();
+            setTimeout(() => hideControls(), 4000);
 
-            // Сховати контроли через 4 секунди після старту
-            setTimeout(() => {
-                hideControls();
-            }, 4000);
+            // ========== ГЕНЕРАЦІЯ КАРТОК (на основі uakino) ==========
+            const movies = [
+                { title: "Т.І.М.", genres: ["Трилери","Фантастика","Жахи"], imdb: "5.5", type: "film" },
+                { title: "Натхненник / Геній", genres: ["Кримінал","Драми"], imdb: "6.3", type: "film" },
+                { title: "Гноми: Нові капелюхи", genres: ["Повнометражні"], imdb: "5.9", type: "film" },
+                { title: "Сісу: Шлях до помсти", genres: ["Екшн","Військові"], imdb: "6.8", type: "film" },
+                { title: "Розслідування Люсі Летбі", genres: ["Документальне","Кримінал"], imdb: "5.5", type: "film" },
+                { title: "Місто страху", genres: ["Екшн","Драми","Кримінал"], imdb: "—", type: "film" },
+                { title: "Королева шахів", genres: ["Документальне","Біографія"], imdb: "8.2", type: "film" },
+                { title: "Дивні дива 5 сезон", genres: ["Детективи","Драма","Жахи"], imdb: "8.6", type: "series", season: "5 сезон" },
+                { title: "Фрірен 2 сезон", genres: ["Аніме","Фентезі"], imdb: "8.9", type: "series", season: "2 сезон" },
+                { title: "Воно: Ласкаво просимо в Деррі", genres: ["Драма","Жахи"], imdb: "8.0", type: "series", season: "1 сезон" },
+                { title: "Мандрівники 1 сезон", genres: ["Фантастика","Драма"], imdb: "8.0", type: "series", season: "1 сезон" },
+                { title: "Планктон: Фільм", genres: ["Повнометражні"], imdb: "5.3", type: "film" }
+            ];
+
+            const grid = document.getElementById('catalogGrid');
+            function renderCards(filter = 'Всі') {
+                grid.innerHTML = '';
+                movies.forEach(m => {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.setAttribute('data-title', m.title);
+                    // при кліку можна змінювати джерело відео (демо)
+                    card.addEventListener('click', () => {
+                        // тут можна підставити реальне відео, але для демо залишимо поточне
+                        showControls();
+                    });
+
+                    const posterHtml = `<div class="card-poster"><img src="https://via.placeholder.com/200x300/222/444?text=${encodeURIComponent(m.title.slice(0,10))}" alt="poster"></div>`;
+                    const infoHtml = `
+                        <div class="card-info">
+                            <div class="card-title">${m.title}</div>
+                            <div class="card-meta">
+                                ${m.genres.slice(0,2).map(g => `<span class="badge">${g}</span>`).join('')}
+                                ${m.imdb !== '—' ? `<span class="badge imdb">IMDB ${m.imdb}</span>` : ''}
+                            </div>
+                            ${m.season ? `<div style="font-size:0.75rem; color:#888;">${m.season}</div>` : ''}
+                        </div>
+                    `;
+                    card.innerHTML = posterHtml + infoHtml;
+                    grid.appendChild(card);
+                });
+            }
+            renderCards();
+
+            // фільтри (просто демонстрація)
+            document.querySelectorAll('.filter-chip').forEach(chip => {
+                chip.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+                    this.classList.add('active');
+                    // тут можна додати фільтрацію, але для прикладу просто перерендеримо
+                    renderCards();
+                });
+            });
         })();
     </script>
 </body>
