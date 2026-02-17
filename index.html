@@ -2,81 +2,360 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>SAYS UA · живий кінотеатр</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAYS UA · монохромний кінотеатр</title>
+    <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* Стилі (ті самі, що й раніше, для економії місця залишаю скорочено, але в робочому коді мають бути повні) */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background-color: #0a0a0a; color: #e5e5e5; font-family: 'Inter', sans-serif; }
-        .app { max-width: 1440px; margin: 0 auto; padding: 0 16px; }
-        .header { position: sticky; top: 0; z-index: 1000; background-color: rgba(10,10,10,0.98); backdrop-filter: blur(10px); padding: 12px 0; }
-        .header-top { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-        .logo { font-size: 1.8rem; font-weight: 800; color: white; }
-        .menu-toggle { display: none; font-size: 1.8rem; background: none; border: none; color: white; }
-        .search-box { display: flex; align-items: center; background: #1a1a1a; border-radius: 40px; padding: 10px 16px; flex: 1; min-width: 200px; border: 1px solid #333; }
-        .search-box i { color: #777; margin-right: 8px; }
-        .search-box input { background: transparent; border: none; color: white; width: 100%; outline: none; }
-        .user-icon { font-size: 1.8rem; color: #ccc; cursor: pointer; }
-        .nav-links { display: flex; gap: 24px; border-bottom: 1px solid #222; padding: 8px 0; }
-        .nav-links a { color: #aaa; text-decoration: none; cursor: pointer; padding: 4px 0; }
-        .nav-links a.active { color: white; border-bottom: 2px solid white; }
-        .filter-section { margin: 20px 0; display: flex; flex-direction: column; gap: 16px; }
-        .genre-chips { display: flex; overflow-x: auto; gap: 10px; padding: 4px 0; -webkit-overflow-scrolling: touch; white-space: nowrap; }
-        .chip { background: #1a1a1a; border: 1px solid #333; color: #ccc; padding: 10px 20px; border-radius: 40px; font-size: 0.95rem; cursor: pointer; flex-shrink: 0; }
-        .chip.active { background: white; color: black; border-color: white; }
-        .sort-control select { background: #1a1a1a; border: 1px solid #333; color: white; padding: 12px 32px 12px 16px; border-radius: 40px; appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='white'><polyline points='6 9 12 15 18 9'/></svg>"); background-repeat: no-repeat; background-position: right 12px center; }
-        .movies-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px; margin: 20px 0 30px; }
-        .movie-card { background: #121212; border-radius: 16px; overflow: hidden; border: 1px solid #252525; cursor: pointer; transition: transform 0.2s; }
-        .movie-card:active { transform: scale(0.97); }
-        .card-poster { aspect-ratio: 2/3; background: linear-gradient(145deg,#2a2a2a,#1a1a1a); display: flex; align-items: center; justify-content: center; color: #555; font-size: 2.5rem; position: relative; }
-        .card-poster img { width: 100%; height: 100%; object-fit: cover; display: block; }
-        .card-badge { position: absolute; top: 8px; right: 8px; background: rgba(255,255,255,0.9); color: black; padding: 4px 8px; border-radius: 30px; font-size: 0.7rem; }
-        .card-info { padding: 12px; }
-        .card-title { font-weight: 600; font-size: 0.95rem; color: white; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        .card-meta { display: flex; gap: 8px; margin: 8px 0; font-size: 0.8rem; }
-        .card-year { background: #1f1f1f; padding: 4px 12px; border-radius: 30px; }
-        .card-imdb { background: #2b2b2b; padding: 4px 12px; border-radius: 30px; color: #f5c518; }
-        .card-genres { display: flex; flex-wrap: wrap; gap: 6px; }
-        .genre-tag { background: #1a1a1a; color: #bbb; font-size: 0.7rem; padding: 4px 10px; border-radius: 30px; border: 1px solid #2f2f2f; }
-        .card-type { font-size: 0.7rem; color: #777; margin-top: 8px; }
-        .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.95); z-index: 2000; flex-direction: column; padding: 16px; }
-        .modal.active { display: flex; }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; color: white; margin-bottom: 20px; }
-        .modal-close { font-size: 2rem; cursor: pointer; padding: 8px; }
-        .modal-content { display: flex; flex-direction: column; gap: 20px; overflow-y: auto; flex: 1; }
-        .modal-poster { width: 150px; border-radius: 12px; align-self: center; }
-        .modal-info { color: #ccc; }
-        .modal-info h3 { color: white; margin-bottom: 8px; }
-        .modal-info p { margin-bottom: 12px; line-height: 1.6; }
-        .trailer-container { width: 100%; aspect-ratio: 16/9; background: black; border-radius: 12px; overflow: hidden; }
-        .trailer-container iframe { width: 100%; height: 100%; border: none; }
-        .modal-actions { display: flex; gap: 16px; justify-content: center; margin-top: 20px; }
-        .modal-btn { background: #1a1a1a; border: 1px solid #333; color: white; padding: 12px 24px; border-radius: 40px; font-size: 1rem; display: flex; align-items: center; gap: 8px; cursor: pointer; }
-        .footer { border-top: 1px solid #222; padding: 30px 0; display: flex; flex-wrap: wrap; justify-content: space-between; color: #666; }
-        .footer a { color: #aaa; text-decoration: none; cursor: pointer; margin-right: 24px; }
-        @media (max-width: 768px) {
-            .menu-toggle { display: block; }
-            .nav-links { display: none; flex-direction: column; position: absolute; top: 100%; left: 0; right: 0; background: #0a0a0a; padding: 20px; border-bottom: 1px solid #333; }
-            .nav-links.mobile-open { display: flex; }
-            .search-box { order: 3; width: 100%; max-width: 100%; }
+        /* ----- ЧОРНО-БІЛА ГАМА · СУЧАСНИЙ МІНІМАЛІЗМ ----- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        .no-results { grid-column: 1/-1; text-align: center; padding: 40px; color: #666; }
-        .spinner { text-align: center; padding: 40px; font-size: 2rem; color: #666; }
-        .error-message { color: #ff6b6b; text-align: center; padding: 20px; font-size: 1.2rem; }
+
+        body {
+            background-color: #0a0a0a;
+            color: #e5e5e5;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,800&display=swap');
+
+        .app {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ----- HEADER (липкий) ----- */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background-color: #0a0a0a;
+            padding: 20px 0 12px 0;
+            border-bottom: 1px solid #2a2a2a;
+            backdrop-filter: blur(8px);
+            background-color: rgba(10, 10, 10, 0.85);
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .logo {
+            font-size: 2.2rem;
+            font-weight: 800;  /* жирне написання */
+            letter-spacing: -0.02em;
+            color: white;
+            text-decoration: none;
+            line-height: 1;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background-color: #1a1a1a;
+            border-radius: 40px;
+            padding: 8px 16px;
+            width: 300px;
+            border: 1px solid #333;
+            transition: border 0.2s;
+        }
+        .search-box:focus-within {
+            border-color: #777;
+        }
+        .search-box i {
+            color: #777;
+            margin-right: 8px;
+            font-size: 1rem;
+        }
+        .search-box input {
+            background: transparent;
+            border: none;
+            color: white;
+            width: 100%;
+            outline: none;
+            font-size: 0.95rem;
+        }
+        .search-box input::placeholder {
+            color: #555;
+        }
+
+        .user-icon {
+            color: #ccc;
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .user-icon:hover {
+            color: white;
+        }
+
+        /* навігація */
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            font-weight: 500;
+            border-bottom: 1px solid #222;
+            padding-bottom: 8px;
+        }
+        .nav-links a {
+            color: #aaa;
+            text-decoration: none;
+            font-size: 1rem;
+            letter-spacing: 0.3px;
+            transition: color 0.2s;
+            cursor: pointer;
+        }
+        .nav-links a.active {
+            color: white;
+            border-bottom: 2px solid white;
+            padding-bottom: 6px;
+        }
+        .nav-links a:hover {
+            color: white;
+        }
+
+        /* ----- ФІЛЬТРИ (чіпси) ----- */
+        .filter-section {
+            margin: 28px 0 20px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .genre-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .chip {
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            color: #ccc;
+            padding: 6px 16px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s;
+            white-space: nowrap;
+        }
+        .chip:hover {
+            background-color: #2a2a2a;
+            border-color: #555;
+            color: white;
+        }
+        .chip.active {
+            background-color: white;
+            color: black;
+            border-color: white;
+            font-weight: 600;
+        }
+
+        .sort-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #aaa;
+        }
+        .sort-control select {
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            color: white;
+            padding: 8px 24px 8px 12px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            outline: none;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23aaaaaa' stroke-width='2'><polyline points='6 9 12 15 18 9'/></svg>");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+        }
+
+        /* ----- СІТКА КАРТОК ----- */
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 24px 16px;
+            margin: 32px 0 48px;
+        }
+
+        .movie-card {
+            background-color: #121212;
+            border-radius: 16px;
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s;
+            border: 1px solid #252525;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+        }
+        .movie-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 30px -10px rgba(255,255,255,0.05);
+            border-color: #444;
+        }
+
+        .card-poster {
+            aspect-ratio: 2 / 3;
+            background: linear-gradient(145deg, #2a2a2a 0%, #1a1a1a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #555;
+            font-size: 3rem;
+            font-weight: 600;
+            border-bottom: 1px solid #2a2a2a;
+            position: relative;
+        }
+        .card-poster span {
+            opacity: 0.5;
+            font-size: 3rem;
+            font-weight: 300;
+        }
+        .card-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(255,255,255,0.9);
+            color: black;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 30px;
+            letter-spacing: 0.3px;
+        }
+
+        .card-info {
+            padding: 14px 12px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .card-title {
+            font-weight: 600;
+            font-size: 1rem;
+            line-height: 1.3;
+            color: white;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            min-height: 42px;
+        }
+        .card-meta {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 6px 8px;
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+        .card-year {
+            background-color: #1f1f1f;
+            padding: 2px 10px;
+            border-radius: 30px;
+            font-weight: 400;
+        }
+        .card-imdb {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background-color: #2b2b2b;
+            padding: 2px 8px;
+            border-radius: 30px;
+            color: #f5c518;
+            font-weight: 600;
+        }
+        .card-imdb i {
+            color: #f5c518;
+            font-size: 0.7rem;
+        }
+        .card-genres {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 4px;
+        }
+        .genre-tag {
+            background-color: #1a1a1a;
+            color: #bbb;
+            font-size: 0.7rem;
+            padding: 3px 10px;
+            border-radius: 30px;
+            border: 1px solid #2f2f2f;
+            white-space: nowrap;
+        }
+        .card-type {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: #777;
+            letter-spacing: 0.4px;
+            margin-top: 6px;
+        }
+
+        /* футер */
+        .footer {
+            border-top: 1px solid #222;
+            padding: 30px 0 40px;
+            color: #666;
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .footer a {
+            color: #aaa;
+            text-decoration: none;
+            margin-right: 24px;
+            cursor: pointer;
+        }
+        .footer a:hover {
+            color: white;
+        }
+
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px;
+            color: #666;
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 600px) {
+            .app { padding: 0 16px; }
+            .header-top { flex-wrap: wrap; gap: 12px; }
+            .search-box { width: 100%; order: 3; }
+            .nav-links { gap: 16px; }
+            .movies-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+        }
     </style>
 </head>
 <body>
 <div class="app">
+    <!-- ШАПКА -->
     <header class="header">
         <div class="header-top">
             <div class="logo">SAYS UA</div>
-            <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
             <div class="search-box">
                 <i class="fas fa-search"></i>
-                <input type="search" id="searchInput" placeholder="Пошук фільмів, серіалів...">
+                <input type="search" id="searchInput" placeholder="Пошук фільмів, серіалів..." aria-label="Пошук">
             </div>
-            <div class="user-icon" id="userIcon"><i class="far fa-user-circle"></i></div>
+            <div class="user-icon" id="userIcon">
+                <i class="far fa-user-circle"></i>
+            </div>
         </div>
         <div class="nav-links" id="navLinks">
             <a data-nav="home" class="active">Головна</a>
@@ -87,32 +366,27 @@
         </div>
     </header>
 
+    <!-- ФІЛЬТРИ -->
     <div class="filter-section">
         <div class="genre-chips" id="genreChips"></div>
         <div class="sort-control">
+            <span><i class="fas fa-sort"></i></span>
             <select id="sortSelect">
-                <option value="popular">Популярні</option>
-                <option value="rating">За рейтингом</option>
-                <option value="year">Новинки</option>
+                <option value="default">за замовчуванням</option>
+                <option value="rating">за рейтингом IMDb</option>
+                <option value="year">за роком (новіші)</option>
             </select>
         </div>
     </div>
 
+    <!-- СІТКА КОНТЕНТУ -->
     <main>
         <div class="movies-grid" id="moviesGrid"></div>
     </main>
 
-    <!-- Модальне вікно деталей фільму -->
-    <div class="modal" id="detailsModal">
-        <div class="modal-header">
-            <h2 id="modalTitle"></h2>
-            <span class="modal-close" id="modalClose">&times;</span>
-        </div>
-        <div class="modal-content" id="modalContent"></div>
-    </div>
-
+    <!-- ФУТЕР -->
     <footer class="footer">
-        <div>© 2025 SAYS UA — кінотеатр на базі TMDB</div>
+        <div>© 2025 SAYS UA — мінімалістичний кінотеатр</div>
         <div>
             <a id="footerAbout">Про нас</a>
             <a id="footerApi">API</a>
@@ -123,388 +397,223 @@
 
 <script>
     (function() {
-        // ⚠️ ВАШ КЛЮЧ TMDB (обов'язково вставте сюди)
-        // Отримайте токен на https://www.themoviedb.org/settings/api
-        const TMDB_TOKEN = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5ZjQyNjQ2ZTY2YzE1ZmM2MzRkOTUzZjE4YzE2YzMxMSIsIm5iZiI6MTc0MDIyMTI2Ny4wNTEsInN1YiI6IjY3YjlkOGIzYjQ5YjA2MDcyMzE3ZDRhYyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.2VvJk6GcAC0rYf7AS7H0BEPwSJETt_SQ74t7rBcV7Cg'; // замініть на ваш реальний токен
+        // ---------- ДАНІ ----------
+        const movies = [
+            { id: 1, title: "Т.І.М.", genres: ["Трилери", "Фантастика", "Жахи"], year: 2023, imdb: 5.5, type: "movie" },
+            { id: 2, title: "Натхненник / Геній", genres: ["Кримінал", "Драми"], year: 2024, imdb: 6.3, type: "movie" },
+            { id: 3, title: "Гноми: Нові капелюхи", genres: ["Повнометражні"], year: 2023, imdb: 5.9, type: "movie" },
+            { id: 4, title: "Сісу: Шлях до помсти", genres: ["Екшн", "Військові"], year: 2023, imdb: 6.8, type: "movie" },
+            { id: 5, title: "Розслідування Люсі Летбі", genres: ["Документальне кіно", "Кримінал"], year: 2023, imdb: 5.5, type: "movie" },
+            { id: 6, title: "Місто страху", genres: ["Екшн", "Драми", "Кримінал"], year: 2023, imdb: null, type: "movie" },
+            { id: 7, title: "Губка Боб у кіно: У пошуках Квадратних Штанів", genres: ["Повнометражні"], year: 2023, imdb: 5.7, type: "movie" },
+            { id: 8, title: "Королева шахів", genres: ["Документальне кіно", "Біографія"], year: 2023, imdb: 8.2, type: "movie" },
+            { id: 9, title: "Місія «Санта»", genres: ["Повнометражні"], year: 2023, imdb: 5.7, type: "movie" },
+            { id: 10, title: "Без близнюка", genres: ["Комедія", "Драми"], year: 2023, imdb: 7.4, type: "movie" },
+            { id: 11, title: "Служниця", genres: ["Детективи", "Драми", "Трилери"], year: 2023, imdb: 7.0, type: "movie" },
+            { id: 12, title: "Снігова королева", genres: ["Повнометражні"], year: 2023, imdb: 6.1, type: "movie" },
+            { id: 13, title: "Дивні дива 5 сезон", genres: ["Детективи", "Драма", "Жахи", "Трилери", "Фантастика"], year: 2025, imdb: 8.6, type: "series" },
+            { id: 14, title: "Світанкова Йона 1 сезон", genres: ["Багатосерійне аніме"], year: 2023, imdb: 8.0, type: "series" },
+            { id: 15, title: "Мандрівники 1 сезон", genres: ["Фантастика", "Драма", "Детективи"], year: 2023, imdb: 8.0, type: "series" },
+            { id: 16, title: "Воно: Ласкаво просимо в Деррі 1 сезон", genres: ["Драма", "Жахи"], year: 2025, imdb: 8.0, type: "series" },
+            { id: 17, title: "Планктон: Фільм", genres: ["Повнометражні"], year: 2024, imdb: 5.3, type: "movie" },
+            { id: 18, title: "Переліт", genres: ["Повнометражні"], year: 2023, imdb: 6.6, type: "movie" },
+            { id: 19, title: "Фрірен: після кінця пригоди 2 сезон", genres: ["Багатосерійне аніме"], year: 2024, imdb: 8.9, type: "series" },
+            { id: 20, title: "На низькому старті: Битва за Uber", genres: ["Драма"], year: 2023, imdb: 7.3, type: "series" }
+        ];
 
-        if (!TMDB_TOKEN || TMDB_TOKEN === 'ваш_токен_v4') {
-            document.getElementById('moviesGrid').innerHTML = '<div class="error-message">❌ Будь ласка, вставте дійсний токен TMDB у коді (рядок const TMDB_TOKEN).</div>';
-            return;
-        }
-
-        const API_BASE = 'https://api.themoviedb.org/3';
-        const IMG_BASE = 'https://image.tmdb.org/t/p/w500';
-
-        // Стан
-        let activeGenre = null; // id жанру
-        let currentSort = 'popular';
-        let activeNav = 'home';
+        // ---------- СТАН ----------
+        let activeGenre = 'Усі';
+        let currentSort = 'default';
+        let activeNav = 'home';        // home, movies, series, collections, ratings
         let searchQuery = '';
-        let genresList = [];
-        let currentPage = 1;
-        let isLoading = false;
-        let totalPages = 1;
 
-        // DOM
+        // Унікальні жанри
+        const allGenresSet = new Set();
+        movies.forEach(m => m.genres.forEach(g => allGenresSet.add(g)));
+        const allGenres = ['Усі', ...Array.from(allGenresSet).sort()];
+
+        // DOM-елементи
         const grid = document.getElementById('moviesGrid');
         const chipsContainer = document.getElementById('genreChips');
         const sortSelect = document.getElementById('sortSelect');
         const searchInput = document.getElementById('searchInput');
         const navLinks = document.querySelectorAll('#navLinks a');
-        const menuToggle = document.getElementById('menuToggle');
-        const mobileMenu = document.getElementById('navLinks');
-        const modal = document.getElementById('detailsModal');
-        const modalClose = document.getElementById('modalClose');
-        const modalTitle = document.getElementById('modalTitle');
-        const modalContent = document.getElementById('modalContent');
         const userIcon = document.getElementById('userIcon');
         const footerAbout = document.getElementById('footerAbout');
         const footerApi = document.getElementById('footerApi');
         const footerSupport = document.getElementById('footerSupport');
 
-        // Функції API з обробкою помилок
-        async function fetchFromTMDB(endpoint, params = {}) {
-            const url = new URL(API_BASE + endpoint);
-            Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
-            
-            try {
-                const response = await fetch(url, {
-                    headers: {
-                        'Authorization': `Bearer ${TMDB_TOKEN}`,
-                        'Content-Type': 'application/json;charset=utf-8'
-                    }
-                });
-                
-                if (!response.ok) {
-                    let errorText = await response.text();
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}\n${errorText}`);
-                }
-                return await response.json();
-            } catch (error) {
-                console.error('Fetch error:', error);
-                throw error;
+        // ---------- ДОПОМІЖНІ ФУНКЦІЇ ----------
+        function filterAndSortMovies() {
+            let filtered = movies;
+
+            // 1. Фільтр за навігацією
+            if (activeNav === 'movies') {
+                filtered = filtered.filter(m => m.type === 'movie');
+            } else if (activeNav === 'series') {
+                filtered = filtered.filter(m => m.type === 'series');
+            } else if (activeNav === 'collections') {
+                // Добірки: імітуємо добірку "Високий рейтинг"
+                filtered = filtered.filter(m => m.imdb && m.imdb >= 8.0);
+            } else if (activeNav === 'ratings') {
+                // Рейтинги: просто сортуємо за рейтингом (але залишимо фільтр)
+                filtered = filtered.filter(m => m.imdb);
             }
-        }
+            // home — всі
 
-        // Завантаження жанрів
-        async function loadGenres() {
-            try {
-                const movieGenres = await fetchFromTMDB('/genre/movie/list');
-                const tvGenres = await fetchFromTMDB('/genre/tv/list');
-                const all = [...movieGenres.genres, ...tvGenres.genres];
-                const unique = new Map(all.map(g => [g.id, g]));
-                genresList = Array.from(unique.values());
-                renderChips();
-            } catch (e) {
-                console.error('Помилка завантаження жанрів', e);
-                chipsContainer.innerHTML = '<span class="chip active">Усі</span>';
-            }
-        }
-
-        function renderChips() {
-            chipsContainer.innerHTML = '<span class="chip active" data-genre-id="all">Усі</span>';
-            genresList.forEach(genre => {
-                const chip = document.createElement('span');
-                chip.className = 'chip';
-                chip.textContent = genre.name;
-                chip.dataset.genreId = genre.id;
-                chip.addEventListener('click', () => {
-                    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-                    chip.classList.add('active');
-                    activeGenre = chip.dataset.genreId === 'all' ? null : parseInt(chip.dataset.genreId);
-                    currentPage = 1;
-                    loadContent(true);
-                });
-                chipsContainer.appendChild(chip);
-            });
-        }
-
-        // Завантаження контенту
-        async function loadContent(resetGrid = true) {
-            if (isLoading) return;
-            if (resetGrid) {
-                grid.innerHTML = '<div class="spinner"><i class="fas fa-spinner fa-spin"></i> Завантаження...</div>';
-                currentPage = 1;
+            // 2. Фільтр за жанром
+            if (activeGenre !== 'Усі') {
+                filtered = filtered.filter(m => m.genres.includes(activeGenre));
             }
 
-            isLoading = true;
-            try {
-                let endpoint = '';
-                let params = { page: currentPage };
-
-                // Визначаємо тип контенту та endpoint
-                if (activeNav === 'home' || activeNav === 'movies') {
-                    if (currentSort === 'popular') endpoint = '/movie/popular';
-                    else if (currentSort === 'rating') endpoint = '/movie/top_rated';
-                    else if (currentSort === 'year') endpoint = '/movie/now_playing';
-                } else if (activeNav === 'series') {
-                    if (currentSort === 'popular') endpoint = '/tv/popular';
-                    else if (currentSort === 'rating') endpoint = '/tv/top_rated';
-                    else if (currentSort === 'year') endpoint = '/tv/on_the_air';
-                } else if (activeNav === 'collections') {
-                    endpoint = '/trending/all/week';
-                } else if (activeNav === 'ratings') {
-                    endpoint = '/movie/top_rated';
-                }
-
-                // Пошук перекриває все
-                if (searchQuery.trim()) {
-                    endpoint = '/search/multi';
-                    params.query = searchQuery;
-                }
-
-                // Додаємо фільтр за жанром (якщо вибрано)
-                if (activeGenre && !searchQuery) {
-                    params.with_genres = activeGenre;
-                }
-
-                const data = await fetchFromTMDB(endpoint, params);
-                totalPages = data.total_pages || 1;
-
-                if (resetGrid) {
-                    displayMovies(data.results);
-                } else {
-                    appendMovies(data.results);
-                }
-            } catch (e) {
-                grid.innerHTML = `<div class="error-message">❌ Помилка завантаження: ${e.message}</div>`;
-            } finally {
-                isLoading = false;
+            // 3. Фільтр за пошуком
+            if (searchQuery.trim() !== '') {
+                const query = searchQuery.trim().toLowerCase();
+                filtered = filtered.filter(m => m.title.toLowerCase().includes(query));
             }
+
+            // 4. Сортування
+            if (currentSort === 'rating') {
+                filtered = [...filtered].sort((a, b) => (b.imdb ?? 0) - (a.imdb ?? 0));
+            } else if (currentSort === 'year') {
+                filtered = [...filtered].sort((a, b) => b.year - a.year);
+            } else {
+                // default: спочатку за типом? залишимо як є
+                filtered = [...filtered];
+            }
+
+            return filtered;
         }
 
-        function displayMovies(items) {
-            if (!items || items.length === 0) {
-                grid.innerHTML = '<div class="no-results">😕 Нічого не знайдено</div>';
+        function renderMovies(moviesArray) {
+            if (!moviesArray.length) {
+                grid.innerHTML = `<div class="no-results">😕 Нічого не знайдено</div>`;
                 return;
             }
 
             let html = '';
-            items.forEach(item => {
-                const title = item.title || item.name || 'Без назви';
-                const year = (item.release_date || item.first_air_date || '').slice(0, 4) || 'N/A';
-                const rating = item.vote_average ? item.vote_average.toFixed(1) : '—';
-                const poster = item.poster_path ? IMG_BASE + item.poster_path : null;
-                const mediaType = item.media_type || (item.title ? 'movie' : 'tv');
+            moviesArray.forEach(m => {
+                const posterLetters = m.title.split(' ').slice(0, 2).map(w => w[0]).join('').toUpperCase() || '🎬';
+                const imdbValue = m.imdb ? m.imdb.toFixed(1) : '—';
+                const typeLabel = m.type === 'series' ? 'серіал' : 'фільм';
+                const displayGenres = m.genres.slice(0, 2);
+                const extraGenresCount = m.genres.length - 2;
 
                 html += `
-                    <div class="movie-card" data-id="${item.id}" data-type="${mediaType}">
+                    <div class="movie-card" data-id="${m.id}">
                         <div class="card-poster">
-                            ${poster ? `<img src="${poster}" alt="${title}" loading="lazy">` : `<span>${title.slice(0,2)}</span>`}
-                            ${mediaType === 'tv' ? '<span class="card-badge"><i class="fas fa-tv"></i> Серіал</span>' : ''}
+                            <span>${posterLetters}</span>
+                            ${m.type === 'series' ? '<span class="card-badge"><i class="fas fa-tv"></i> серіал</span>' : ''}
                         </div>
                         <div class="card-info">
-                            <div class="card-title">${title}</div>
+                            <div class="card-title">${m.title}</div>
                             <div class="card-meta">
-                                <span class="card-year">${year}</span>
-                                <span class="card-imdb"><i class="fab fa-imdb"></i> ${rating}</span>
+                                <span class="card-year">${m.year}</span>
+                                <span class="card-imdb"><i class="fab fa-imdb"></i> ${imdbValue}</span>
                             </div>
                             <div class="card-genres">
-                                ${item.genre_ids ? item.genre_ids.slice(0,2).map(id => {
-                                    const g = genresList.find(g => g.id === id);
-                                    return g ? `<span class="genre-tag">${g.name}</span>` : '';
-                                }).join('') : ''}
+                                ${displayGenres.map(g => `<span class="genre-tag">${g}</span>`).join('')}
+                                ${extraGenresCount > 0 ? `<span class="genre-tag">+${extraGenresCount}</span>` : ''}
                             </div>
-                            <div class="card-type">${mediaType === 'movie' ? 'Фільм' : 'Серіал'}</div>
+                            <div class="card-type">${typeLabel}</div>
                         </div>
                     </div>
                 `;
             });
             grid.innerHTML = html;
 
-            // Обробники кліків
+            // Додаємо обробники на кожну картку
             document.querySelectorAll('.movie-card').forEach(card => {
-                card.addEventListener('click', () => {
-                    const id = card.dataset.id;
-                    const type = card.dataset.type;
-                    showDetails(id, type);
-                });
-            });
-        }
-
-        function appendMovies(items) {
-            if (!items || items.length === 0) return;
-            let html = '';
-            items.forEach(item => {
-                const title = item.title || item.name || 'Без назви';
-                const year = (item.release_date || item.first_air_date || '').slice(0, 4) || 'N/A';
-                const rating = item.vote_average ? item.vote_average.toFixed(1) : '—';
-                const poster = item.poster_path ? IMG_BASE + item.poster_path : null;
-                const mediaType = item.media_type || (item.title ? 'movie' : 'tv');
-
-                html += `
-                    <div class="movie-card" data-id="${item.id}" data-type="${mediaType}">
-                        <div class="card-poster">
-                            ${poster ? `<img src="${poster}" alt="${title}" loading="lazy">` : `<span>${title.slice(0,2)}</span>`}
-                            ${mediaType === 'tv' ? '<span class="card-badge"><i class="fas fa-tv"></i> Серіал</span>' : ''}
-                        </div>
-                        <div class="card-info">
-                            <div class="card-title">${title}</div>
-                            <div class="card-meta">
-                                <span class="card-year">${year}</span>
-                                <span class="card-imdb"><i class="fab fa-imdb"></i> ${rating}</span>
-                            </div>
-                            <div class="card-genres">
-                                ${item.genre_ids ? item.genre_ids.slice(0,2).map(id => {
-                                    const g = genresList.find(g => g.id === id);
-                                    return g ? `<span class="genre-tag">${g.name}</span>` : '';
-                                }).join('') : ''}
-                            </div>
-                            <div class="card-type">${mediaType === 'movie' ? 'Фільм' : 'Серіал'}</div>
-                        </div>
-                    </div>
-                `;
-            });
-            grid.insertAdjacentHTML('beforeend', html);
-
-            // Додаємо обробники до нових карток
-            document.querySelectorAll('.movie-card:not([data-listener])').forEach(card => {
-                card.setAttribute('data-listener', 'true');
-                card.addEventListener('click', () => {
-                    const id = card.dataset.id;
-                    const type = card.dataset.type;
-                    showDetails(id, type);
-                });
-            });
-        }
-
-        async function showDetails(id, type) {
-            try {
-                modalTitle.textContent = 'Завантаження...';
-                modalContent.innerHTML = '<div class="spinner"><i class="fas fa-spinner fa-spin"></i></div>';
-                modal.classList.add('active');
-
-                const endpoint = type === 'movie' ? `/movie/${id}` : `/tv/${id}`;
-                const details = await fetchFromTMDB(endpoint, { append_to_response: 'videos,credits' });
-
-                const title = details.title || details.name;
-                const year = (details.release_date || details.first_air_date || '').slice(0, 4);
-                const rating = details.vote_average ? details.vote_average.toFixed(1) : '—';
-                const poster = details.poster_path ? IMG_BASE + details.poster_path : null;
-                const overview = details.overview || 'Опис відсутній.';
-                const trailer = details.videos?.results?.find(v => v.type === 'Trailer' && v.site === 'YouTube');
-
-                modalTitle.textContent = title;
-
-                let trailerHtml = '';
-                if (trailer) {
-                    trailerHtml = `
-                        <div class="trailer-container">
-                            <iframe src="https://www.youtube.com/embed/${trailer.key}" allowfullscreen></iframe>
-                        </div>
-                    `;
-                } else {
-                    trailerHtml = '<p style="color:#777;">Трейлер не знайдено</p>';
-                }
-
-                modalContent.innerHTML = `
-                    <div style="display: flex; flex-direction: column; gap: 20px;">
-                        ${poster ? `<img src="${poster}" alt="${title}" class="modal-poster">` : ''}
-                        <div class="modal-info">
-                            <p><strong>Рік:</strong> ${year}</p>
-                            <p><strong>Рейтинг:</strong> ⭐ ${rating}</p>
-                            <p><strong>Опис:</strong> ${overview}</p>
-                            <p><strong>Актори:</strong> ${details.credits?.cast?.slice(0,5).map(c => c.name).join(', ') || '—'}</p>
-                        </div>
-                        ${trailerHtml}
-                        <div class="modal-actions">
-                            <button class="modal-btn" id="addToFavBtn"><i class="far fa-heart"></i> В обране</button>
-                        </div>
-                    </div>
-                `;
-
-                document.getElementById('addToFavBtn')?.addEventListener('click', () => {
-                    let favs = JSON.parse(localStorage.getItem('saysua_favorites')) || [];
-                    if (!favs.includes(id)) {
-                        favs.push(id);
-                        localStorage.setItem('saysua_favorites', JSON.stringify(favs));
-                        alert('Додано до улюблених!');
-                    } else {
-                        alert('Вже в улюблених');
+                card.addEventListener('click', (e) => {
+                    const id = parseInt(card.dataset.id);
+                    const movie = movies.find(m => m.id === id);
+                    if (movie) {
+                        alert(`🎬 ${movie.title}\nРік: ${movie.year}\nРейтинг IMDb: ${movie.imdb ?? '—'}\nЖанри: ${movie.genres.join(', ')}`);
                     }
                 });
-
-            } catch (e) {
-                modalContent.innerHTML = `<div class="error-message">Помилка: ${e.message}</div>`;
-            }
+            });
         }
 
-        // Навігація
-        function setActiveNav(target) {
+        function updateMovies() {
+            const filteredSorted = filterAndSortMovies();
+            renderMovies(filteredSorted);
+        }
+
+        function renderChips() {
+            chipsContainer.innerHTML = '';
+            allGenres.forEach(genre => {
+                const chip = document.createElement('span');
+                chip.className = `chip ${activeGenre === genre ? 'active' : ''}`;
+                chip.textContent = genre;
+                chip.dataset.genre = genre;
+                chip.addEventListener('click', () => {
+                    activeGenre = genre;
+                    renderChips();
+                    updateMovies();
+                });
+                chipsContainer.appendChild(chip);
+            });
+        }
+
+        function setActiveNav(targetNav) {
             navLinks.forEach(link => {
                 const nav = link.dataset.nav;
-                link.classList.toggle('active', nav === target);
+                if (nav === targetNav) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
             });
         }
 
-        navLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                activeNav = link.dataset.nav;
-                setActiveNav(activeNav);
-                activeGenre = null;
-                searchQuery = '';
-                searchInput.value = '';
-                renderChips();
-                currentPage = 1;
-                loadContent(true);
-                mobileMenu.classList.remove('mobile-open');
-            });
-        });
+        // ---------- ІНІЦІАЛІЗАЦІЯ ----------
+        renderChips();
+        updateMovies();
+
+        // ---------- СЛУХАЧІ ПОДІЙ ----------
 
         // Сортування
         sortSelect.addEventListener('change', (e) => {
             currentSort = e.target.value;
-            currentPage = 1;
-            loadContent(true);
+            updateMovies();
         });
 
-        // Пошук
+        // Пошук (з debounce для плавності)
         let searchTimeout;
         searchInput.addEventListener('input', (e) => {
             clearTimeout(searchTimeout);
             searchTimeout = setTimeout(() => {
                 searchQuery = e.target.value;
-                currentPage = 1;
-                loadContent(true);
-            }, 500);
+                updateMovies();
+            }, 300);
         });
 
-        // Мобільне меню
-        menuToggle.addEventListener('click', () => {
-            mobileMenu.classList.toggle('mobile-open');
-        });
-
-        // Закриття модалки
-        modalClose.addEventListener('click', () => {
-            modal.classList.remove('active');
-        });
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) modal.classList.remove('active');
+        // Навігація
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const nav = link.dataset.nav;
+                activeNav = nav;
+                setActiveNav(nav);
+                // Скидаємо жанр на "Усі" при зміні розділу? Можна залишити як є, але логічніше скинути
+                activeGenre = 'Усі';
+                renderChips();  // перемалювати чіпси з активним "Усі"
+                updateMovies();
+            });
         });
 
         // Іконка користувача
         userIcon.addEventListener('click', () => {
-            const favs = JSON.parse(localStorage.getItem('saysua_favorites')) || [];
-            alert(`👤 Улюблених фільмів: ${favs.length}`);
+            alert('👤 Вхід / Реєстрація — функція в розробці');
         });
 
         // Футер
-        footerAbout.addEventListener('click', () => alert('SAYS UA використовує TMDB API. Усі права на зображення належать їхнім власникам.'));
-        footerApi.addEventListener('click', () => alert('Використовується TMDB API. Документація: https://developers.themoviedb.org/3'));
-        footerSupport.addEventListener('click', () => alert('Напишіть нам: support@saysua.example'));
+        footerAbout.addEventListener('click', () => alert('ℹ️ SAYS UA — ваш монохромний кінотеатр. Про нас: мінімалізм та якість.'));
+        footerApi.addEventListener('click', () => alert('🔧 API документація з’явиться незабаром.'));
+        footerSupport.addEventListener('click', () => alert('📧 Підтримка: support@saysua.example'));
 
-        // Ініціалізація
-        loadGenres().then(() => loadContent(true));
+        // Початкова установка активного nav (home)
         setActiveNav('home');
-
-        // Нескінченна прокрутка
-        window.addEventListener('scroll', () => {
-            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500 && !isLoading && currentPage < totalPages) {
-                currentPage++;
-                loadContent(false);
-            }
-        });
     })();
 </script>
 </body>
