@@ -1,114 +1,603 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FANTASYAS Intro Logo</title>
-<style>
-  body, html {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    font-family: 'Manrope', sans-serif;
-    background-color: #ffffff;
-    overflow: hidden;
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>неоплеєр · чорно-білий</title>
+    <!-- Font Awesome for icons (solid style, чорно-білий настрій) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-  /* Інтро контейнер */
-  #intro {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #ffffff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-  }
+        body {
+            background: #111;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+        }
 
-  .logo {
-    font-size: 10vw;
-    font-weight: 800;
-    color: #000000;
-    text-transform: uppercase;
-    letter-spacing: 0.5vw;
-    font-stretch: condensed;
-    text-align: center;
+        /* головний контейнер плеєра — чорно-біла естетика */
+        .neo-player {
+            width: min(960px, 98vw);
+            background: #000;
+            border: 1px solid #333;
+            box-shadow: 0 20px 40px rgba(255,255,255,0.03), 0 0 0 1px #222 inset;
+            transition: box-shadow 0.2s;
+        }
 
-    /* Початкові значення для появи */
-    opacity: 0;
-    transform: scale(0.5);
+        .neo-player:hover {
+            box-shadow: 0 20px 50px rgba(255,255,255,0.06), 0 0 0 1px #555 inset;
+        }
 
-    /* Анімація появи → пульсації → зникнення */
-    animation: logoIntro 1.3s ease-in-out forwards;
-  }
+        .video-wrapper {
+            position: relative;
+            background: #0a0a0a;
+            cursor: pointer;
+        }
 
-  /* Анімація: появa → пульсація → зникнення */
-  @keyframes logoIntro {
-    0% {
-      opacity: 0;
-      transform: scale(0.5);
-    }
-    20% {
-      opacity: 1;
-      transform: scale(1.05); /* швидка поява */
-    }
-    50% {
-      opacity: 1;
-      transform: scale(1); /* стоїть */
-    }
-    65% {
-      transform: scale(1.1); /* перший пульс */
-    }
-    80% {
-      transform: scale(1); /* другий пульс */
-    }
-    100% {
-      opacity: 0;
-      transform: scale(0.5); /* плавне зникнення */
-    }
-  }
+        video {
+            display: block;
+            width: 100%;
+            height: auto;
+            background: #000;
+            border-bottom: 1px solid #2a2a2a;
+        }
 
-  @media (max-width: 400px) {
-    .logo {
-      font-size: 12vw;
-      letter-spacing: 0.3vw;
-    }
-  }
+        /* панель керування — мінімалізм, тільки білий/сірий/чорний */
+        .controls {
+            padding: 14px 18px;
+            background: #0f0f0f;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 15px;
+            border-top: 1px solid #2a2a2a;
+            color: #ddd;
+        }
 
-  /* Основний контент спочатку прихований */
-  #content {
-    opacity: 0;
-    transition: opacity 0.5s ease-in;
-  }
-</style>
+        .controls-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .controls-group.left {
+            flex: 2 1 260px;
+        }
+
+        .controls-group.center {
+            flex: 3 1 300px;
+            justify-content: center;
+        }
+
+        .controls-group.right {
+            flex: 1 1 200px;
+            justify-content: flex-end;
+        }
+
+        /* кнопки — тільки білі/сірі, без кольору */
+        .ctrl-btn {
+            background: transparent;
+            border: none;
+            color: #f0f0f0;
+            font-size: 1.4rem;
+            width: 40px;
+            height: 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.15s;
+            border: 1px solid transparent;
+        }
+
+        .ctrl-btn:hover {
+            background: #262626;
+            border-color: #666;
+            color: white;
+        }
+
+        .ctrl-btn:active {
+            background: #3a3a3a;
+            transform: scale(0.96);
+        }
+
+        .time-display {
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            background: #1a1a1a;
+            padding: 6px 12px;
+            border-radius: 40px;
+            letter-spacing: 1px;
+            border: 1px solid #333;
+            color: #ccc;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        /* прогрес бар — чорно-білий кастомний range */
+        .progress-bar {
+            flex: 1;
+            min-width: 140px;
+            height: 6px;
+            background: #2a2a2a;
+            border-radius: 12px;
+            cursor: pointer;
+            position: relative;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .progress-bar::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            background: white;
+            border-radius: 50%;
+            margin-top: -5px;
+            box-shadow: 0 0 6px #fff;
+            transition: 0.1s;
+            border: 2px solid #000;
+        }
+
+        .progress-bar::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            background: white;
+            border-radius: 50%;
+            border: 2px solid #000;
+            cursor: pointer;
+        }
+
+        .progress-bar::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(to right, #ccc 0%, #ccc var(--progress-percent, 0%), #2a2a2a var(--progress-percent, 0%));
+            border-radius: 12px;
+        }
+
+        .progress-bar::-moz-range-track {
+            width: 100%;
+            height: 6px;
+            background: #2a2a2a;
+            border-radius: 12px;
+        }
+
+        .progress-bar::-moz-range-progress {
+            height: 6px;
+            background: #ccc;
+            border-radius: 12px;
+        }
+
+        /* гучність — окремий тонкий повзунок */
+        .volume-slider {
+            width: 80px;
+            height: 4px;
+            background: #2a2a2a;
+            border-radius: 4px;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 12px;
+            height: 12px;
+            background: white;
+            border-radius: 50%;
+            border: 1px solid black;
+        }
+
+        .volume-slider::-moz-range-thumb {
+            width: 12px;
+            height: 12px;
+            background: white;
+            border-radius: 50%;
+            border: 1px solid black;
+        }
+
+        /* селект швидкості */
+        .speed-select {
+            background: #1a1a1a;
+            border: 1px solid #444;
+            color: white;
+            padding: 6px 8px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .speed-select option {
+            background: #1a1a1a;
+            color: white;
+        }
+
+        /* кнопка завантаження файлу */
+        .file-label {
+            background: #1a1a1a;
+            border: 1px solid #444;
+            color: #eee;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 400;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: 0.15s;
+            white-space: nowrap;
+        }
+
+        .file-label:hover {
+            background: #2a2a2a;
+            border-color: #777;
+            color: white;
+        }
+
+        .file-label i {
+            font-size: 1rem;
+        }
+
+        #file-input {
+            display: none;
+        }
+
+        /* маленькі дрібниці */
+        .divider {
+            width: 1px;
+            height: 26px;
+            background: #333;
+            margin: 0 5px;
+        }
+
+        /* стан muted / pip / fullscreen */
+        .ctrl-btn.muted i {
+            opacity: 0.6;
+        }
+
+        /* підказка (hotkeys) можна додати ненав'язливо */
+        .hotkey-hint {
+            color: #555;
+            font-size: 0.75rem;
+            border-bottom: 1px dashed #333;
+            margin-left: 8px;
+        }
+
+        @media (max-width: 700px) {
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .controls-group.right {
+                justify-content: flex-start;
+            }
+        }
+    </style>
 </head>
 <body>
+    <div class="neo-player">
+        <!-- відео обгортка -->
+        <div class="video-wrapper">
+            <video id="video" tabindex="-1" preload="metadata">
+                <!-- демо-відео Big Buck Bunny (public domain) -->
+                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
 
-  <!-- Інтро -->
-  <div id="intro">
-    <div class="logo">FANTASYAS</div>
-  </div>
+        <!-- панель керування (custom) -->
+        <div class="controls" id="controls">
+            <!-- ліва група: play, step, час -->
+            <div class="controls-group left">
+                <button class="ctrl-btn" id="play-pause" title="Відтворити / Пауза (пробіл)"><i class="fas fa-play"></i></button>
+                <button class="ctrl-btn" id="skip-back" title="-10 секунд (←)"><i class="fas fa-undo-alt"></i></button>
+                <button class="ctrl-btn" id="skip-forward" title="+10 секунд (→)"><i class="fas fa-redo-alt"></i></button>
+                <div class="time-display" id="time-display">00:00 / 00:00</div>
+            </div>
 
-  <!-- Основний контент -->
-  <div id="content">
-    <h1>Ласкаво просимо на сайт FANTASYAS!</h1>
-    <p>Тут буде ваш основний контент.</p>
-  </div>
+            <!-- центральна група: прогрес -->
+            <div class="controls-group center">
+                <input type="range" class="progress-bar" id="progress" min="0" max="100" value="0" step="0.1" aria-label="Прогрес відтворення">
+            </div>
 
-  <script>
-    // Показати основний контент після завершення інтро
-    const intro = document.getElementById('intro');
-    const content = document.getElementById('content');
-    const logo = document.querySelector('.logo');
+            <!-- права група: гучність, швидкість, повний екран, піп, файл -->
+            <div class="controls-group right">
+                <button class="ctrl-btn" id="mute-toggle" title="Вимкнути звук (M)"><i class="fas fa-volume-up"></i></button>
+                <input type="range" class="volume-slider" id="volume" min="0" max="1" step="0.05" value="1" aria-label="Гучність">
 
-    logo.addEventListener('animationend', () => {
-      intro.style.display = 'none';
-      content.style.opacity = 1;
-    });
-  </script>
+                <div class="divider"></div>
 
+                <select class="speed-select" id="playback-speed" title="Швидкість">
+                    <option value="0.5">0.5x</option>
+                    <option value="0.75">0.75x</option>
+                    <option value="1" selected>1x</option>
+                    <option value="1.25">1.25x</option>
+                    <option value="1.5">1.5x</option>
+                    <option value="2">2x</option>
+                </select>
+
+                <button class="ctrl-btn" id="pip-btn" title="Картинка в картинці (P)"><i class="fas fa-closed-captioning"></i></button>
+                <button class="ctrl-btn" id="fullscreen-btn" title="Повний екран (F)"><i class="fas fa-expand"></i></button>
+
+                <!-- завантаження локального файлу (крута фішка) -->
+                <label for="file-input" class="file-label" title="Відкрити відео з комп'ютера">
+                    <i class="fas fa-folder-open"></i> <span class="file-label-text">Файл</span>
+                </label>
+                <input type="file" id="file-input" accept="video/*">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // === ЕЛЕМЕНТИ ===
+            const video = document.getElementById('video');
+            const playBtn = document.getElementById('play-pause');
+            const skipBack = document.getElementById('skip-back');
+            const skipForward = document.getElementById('skip-forward');
+            const timeDisplay = document.getElementById('time-display');
+            const progress = document.getElementById('progress');
+            const volumeSlider = document.getElementById('volume');
+            const muteBtn = document.getElementById('mute-toggle');
+            const speedSelect = document.getElementById('playback-speed');
+            const pipBtn = document.getElementById('pip-btn');
+            const fullscreenBtn = document.getElementById('fullscreen-btn');
+            const fileInput = document.getElementById('file-input');
+            const videoWrapper = document.querySelector('.video-wrapper');
+            const playerContainer = document.querySelector('.neo-player');
+
+            // змінні для відстеження muted
+            let lastVolume = 1;
+
+            // === ДОПОМІЖНІ ФУНКЦІЇ ===
+            function formatTime(seconds) {
+                if (isNaN(seconds) || seconds < 0) seconds = 0;
+                const h = Math.floor(seconds / 3600);
+                const m = Math.floor((seconds % 3600) / 60);
+                const s = Math.floor(seconds % 60);
+                if (h > 0) {
+                    return `${h}:${m < 10 ? '0' + m : m}:${s < 10 ? '0' + s : s}`;
+                } else {
+                    return `${m < 10 ? '0' + m : m}:${s < 10 ? '0' + s : s}`;
+                }
+            }
+
+            function updateTimeDisplay() {
+                const current = video.currentTime || 0;
+                const duration = video.duration || 0;
+                timeDisplay.textContent = `${formatTime(current)} / ${formatTime(duration)}`;
+            }
+
+            function updateProgress() {
+                if (video.duration) {
+                    const percent = (video.currentTime / video.duration) * 100;
+                    progress.value = percent;
+                    // Для webkit visual (градієнт через CSS змінну)
+                    progress.style.setProperty('--progress-percent', percent + '%');
+                } else {
+                    progress.value = 0;
+                    progress.style.setProperty('--progress-percent', '0%');
+                }
+            }
+
+            function setVolumeIcon() {
+                if (video.muted || video.volume === 0) {
+                    muteBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+                } else if (video.volume < 0.5) {
+                    muteBtn.innerHTML = '<i class="fas fa-volume-down"></i>';
+                } else {
+                    muteBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+                }
+            }
+
+            // Синхронізація повзунка гучності
+            function syncVolume() {
+                if (video.muted) {
+                    volumeSlider.value = 0;
+                } else {
+                    volumeSlider.value = video.volume;
+                }
+                setVolumeIcon();
+            }
+
+            // === ВІДТВОРЕННЯ / ПАУЗА ===
+            function togglePlay() {
+                if (video.paused) {
+                    video.play().catch(e => console.log('Playback error:', e));
+                } else {
+                    video.pause();
+                }
+            }
+
+            video.addEventListener('play', () => {
+                playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+            });
+            video.addEventListener('pause', () => {
+                playBtn.innerHTML = '<i class="fas fa-play"></i>';
+            });
+
+            playBtn.addEventListener('click', togglePlay);
+
+            // === СКІПИ ===
+            skipBack.addEventListener('click', () => { video.currentTime = Math.max(0, video.currentTime - 10); });
+            skipForward.addEventListener('click', () => { video.currentTime = Math.min(video.duration, video.currentTime + 10); });
+
+            // === ЧАС ТА ПРОГРЕС ===
+            video.addEventListener('loadedmetadata', () => {
+                updateTimeDisplay();
+                updateProgress();
+            });
+            video.addEventListener('timeupdate', () => {
+                updateTimeDisplay();
+                updateProgress();
+            });
+
+            // ШУКАННЯ ПО ПРОГРЕСУ
+            progress.addEventListener('input', (e) => {
+                if (video.duration) {
+                    const newTime = (e.target.value / 100) * video.duration;
+                    video.currentTime = newTime;
+                    updateTimeDisplay();
+                }
+            });
+
+            // === ГУЧНІСТЬ І MUTE ===
+            volumeSlider.addEventListener('input', (e) => {
+                const val = parseFloat(e.target.value);
+                video.volume = val;
+                video.muted = (val === 0);
+                lastVolume = (val === 0 ? lastVolume : val);
+                setVolumeIcon();
+            });
+
+            muteBtn.addEventListener('click', () => {
+                if (video.muted || video.volume === 0) {
+                    video.muted = false;
+                    video.volume = lastVolume > 0 ? lastVolume : 0.5;
+                    volumeSlider.value = video.volume;
+                } else {
+                    lastVolume = video.volume;
+                    video.muted = true;
+                    video.volume = 0;
+                    volumeSlider.value = 0;
+                }
+                setVolumeIcon();
+            });
+
+            video.addEventListener('volumechange', syncVolume);
+            syncVolume(); // ініціалізація
+
+            // === ШВИДКІСТЬ ВІДТВОРЕННЯ ===
+            speedSelect.addEventListener('change', (e) => {
+                video.playbackRate = parseFloat(e.target.value);
+            });
+
+            // === PICTURE IN PICTURE (ЯКЩО ПІДТРИМУЄТЬСЯ) ===
+            pipBtn.addEventListener('click', async () => {
+                if (document.pictureInPictureEnabled) {
+                    try {
+                        if (video !== document.pictureInPictureElement) {
+                            await video.requestPictureInPicture();
+                        } else {
+                            await document.exitPictureInPicture();
+                        }
+                    } catch (err) {
+                        console.warn('PiP error:', err);
+                    }
+                } else {
+                    alert('Picture-in-Picture не підтримується браузером');
+                }
+            });
+
+            // === ПОВНИЙ ЕКРАН ===
+            fullscreenBtn.addEventListener('click', () => {
+                if (!document.fullscreenElement) {
+                    playerContainer.requestFullscreen().catch(err => console.log(err));
+                } else {
+                    document.exitFullscreen();
+                }
+            });
+
+            document.addEventListener('fullscreenchange', () => {
+                if (document.fullscreenElement) {
+                    fullscreenBtn.innerHTML = '<i class="fas fa-compress"></i>';
+                } else {
+                    fullscreenBtn.innerHTML = '<i class="fas fa-expand"></i>';
+                }
+            });
+
+            // === ЗАВАНТАЖЕННЯ ЛОКАЛЬНОГО ФАЙЛУ (КРУТА ФІШКА) ===
+            fileInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const url = URL.createObjectURL(file);
+                    // зупинити поточне відтворення, змінити джерело
+                    video.pause();
+                    video.src = url;
+                    video.load();
+                    video.play().catch(e => console.log('Autoplay might be blocked'));
+                    // звільнити попередній URL після завантаження метаданих
+                    video.onloadedmetadata = () => {
+                        URL.revokeObjectURL(url);
+                        video.onloadedmetadata = null;
+                    };
+                }
+                // скинути інпут, щоб можна було вибрати те саме відео знову
+                fileInput.value = '';
+            });
+
+            // === ГАРЯЧІ КЛАВІШІ (cool feature) ===
+            document.addEventListener('keydown', (e) => {
+                // Ігноруємо, якщо фокус на селекті/інпуті/файлі
+                if (e.target.matches('input, select, textarea, label')) return;
+
+                const key = e.key.toLowerCase();
+                switch (key) {
+                    case ' ':
+                        e.preventDefault();
+                        togglePlay();
+                        break;
+                    case 'arrowleft':
+                        e.preventDefault();
+                        video.currentTime = Math.max(0, video.currentTime - 10);
+                        break;
+                    case 'arrowright':
+                        e.preventDefault();
+                        video.currentTime = Math.min(video.duration, video.currentTime + 10);
+                        break;
+                    case 'arrowup':
+                        e.preventDefault();
+                        video.volume = Math.min(1, video.volume + 0.05);
+                        volumeSlider.value = video.volume;
+                        video.muted = false;
+                        syncVolume();
+                        break;
+                    case 'arrowdown':
+                        e.preventDefault();
+                        video.volume = Math.max(0, video.volume - 0.05);
+                        volumeSlider.value = video.volume;
+                        video.muted = (video.volume === 0);
+                        syncVolume();
+                        break;
+                    case 'm':
+                        e.preventDefault();
+                        muteBtn.click();
+                        break;
+                    case 'f':
+                        e.preventDefault();
+                        fullscreenBtn.click();
+                        break;
+                    case 'p':
+                        e.preventDefault();
+                        pipBtn.click();
+                        break;
+                    default: break;
+                }
+            });
+
+            // при кліку на відео — пауза/плей
+            video.addEventListener('click', togglePlay);
+
+            // оновлення прогресу при скролі (опціонально)
+            video.addEventListener('ended', () => {
+                playBtn.innerHTML = '<i class="fas fa-play"></i>';
+            });
+
+            // ініціалізація при завантаженні
+            updateTimeDisplay();
+            updateProgress();
+        })();
+    </script>
 </body>
 </html>
