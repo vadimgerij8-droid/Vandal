@@ -6,8 +6,7 @@
     <title>SAYS UA · живий кінотеатр</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* Стилі залишаються такими ж, як у попередній версії */
-        /* (тут вони скорочені для економії місця, але ви можете скопіювати повні стилі з минулого коду) */
+        /* Стилі (ті самі, що й раніше, для економії місця залишаю скорочено, але в робочому коді мають бути повні) */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background-color: #0a0a0a; color: #e5e5e5; font-family: 'Inter', sans-serif; }
         .app { max-width: 1440px; margin: 0 auto; padding: 0 16px; }
@@ -64,6 +63,7 @@
         }
         .no-results { grid-column: 1/-1; text-align: center; padding: 40px; color: #666; }
         .spinner { text-align: center; padding: 40px; font-size: 2rem; color: #666; }
+        .error-message { color: #ff6b6b; text-align: center; padding: 20px; font-size: 1.2rem; }
     </style>
 </head>
 <body>
@@ -92,8 +92,8 @@
         <div class="sort-control">
             <select id="sortSelect">
                 <option value="popular">Популярні</option>
-                <option value="rating">За рейтингом IMDb</option>
-                <option value="year">За роком (новіші)</option>
+                <option value="rating">За рейтингом</option>
+                <option value="year">Новинки</option>
             </select>
         </div>
     </div>
@@ -123,20 +123,27 @@
 
 <script>
     (function() {
-        // ⚠️ ВАШ КЛЮЧ TMDB (вставте сюди)
-        const TMDB_TOKEN = 'ваш_токен_v4'; // Отримайте на https://www.themoviedb.org/settings/api
+        // ⚠️ ВАШ КЛЮЧ TMDB (обов'язково вставте сюди)
+        // Отримайте токен на https://www.themoviedb.org/settings/api
+        const TMDB_TOKEN = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5ZjQyNjQ2ZTY2YzE1ZmM2MzRkOTUzZjE4YzE2YzMxMSIsIm5iZiI6MTc0MDIyMTI2Ny4wNTEsInN1YiI6IjY3YjlkOGIzYjQ5YjA2MDcyMzE3ZDRhYyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.2VvJk6GcAC0rYf7AS7H0BEPwSJETt_SQ74t7rBcV7Cg'; // замініть на ваш реальний токен
+
+        if (!TMDB_TOKEN || TMDB_TOKEN === 'ваш_токен_v4') {
+            document.getElementById('moviesGrid').innerHTML = '<div class="error-message">❌ Будь ласка, вставте дійсний токен TMDB у коді (рядок const TMDB_TOKEN).</div>';
+            return;
+        }
 
         const API_BASE = 'https://api.themoviedb.org/3';
         const IMG_BASE = 'https://image.tmdb.org/t/p/w500';
 
         // Стан
-        let activeGenre = null; // id жанру (число)
+        let activeGenre = null; // id жанру
         let currentSort = 'popular';
         let activeNav = 'home';
         let searchQuery = '';
-        let genresList = []; // [{id, name}]
+        let genresList = [];
         let currentPage = 1;
         let isLoading = false;
+        let totalPages = 1;
 
         // DOM
         const grid = document.getElementById('moviesGrid');
@@ -155,46 +162,56 @@
         const footerApi = document.getElementById('footerApi');
         const footerSupport = document.getElementById('footerSupport');
 
-        // Функції API
+        // Функції API з обробкою помилок
         async function fetchFromTMDB(endpoint, params = {}) {
             const url = new URL(API_BASE + endpoint);
             Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
-            const response = await fetch(url, {
-                headers: {
-                    'Authorization': `Bearer ${TMDB_TOKEN}`,
-                    'Content-Type': 'application/json;charset=utf-8'
+            
+            try {
+                const response = await fetch(url, {
+                    headers: {
+                        'Authorization': `Bearer ${TMDB_TOKEN}`,
+                        'Content-Type': 'application/json;charset=utf-8'
+                    }
+                });
+                
+                if (!response.ok) {
+                    let errorText = await response.text();
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}\n${errorText}`);
                 }
-            });
-            if (!response.ok) throw new Error(`TMDB помилка: ${response.status}`);
-            return response.json();
+                return await response.json();
+            } catch (error) {
+                console.error('Fetch error:', error);
+                throw error;
+            }
         }
 
-        // Завантаження жанрів (фільми + серіали)
+        // Завантаження жанрів
         async function loadGenres() {
             try {
                 const movieGenres = await fetchFromTMDB('/genre/movie/list');
                 const tvGenres = await fetchFromTMDB('/genre/tv/list');
                 const all = [...movieGenres.genres, ...tvGenres.genres];
-                // видаляємо дублікати за id
                 const unique = new Map(all.map(g => [g.id, g]));
                 genresList = Array.from(unique.values());
                 renderChips();
             } catch (e) {
                 console.error('Помилка завантаження жанрів', e);
+                chipsContainer.innerHTML = '<span class="chip active">Усі</span>';
             }
         }
 
         function renderChips() {
-            chipsContainer.innerHTML = '<span class="chip" data-genre-id="all">Усі</span>';
+            chipsContainer.innerHTML = '<span class="chip active" data-genre-id="all">Усі</span>';
             genresList.forEach(genre => {
                 const chip = document.createElement('span');
-                chip.className = `chip ${activeGenre === genre.id ? 'active' : ''}`;
+                chip.className = 'chip';
                 chip.textContent = genre.name;
                 chip.dataset.genreId = genre.id;
                 chip.addEventListener('click', () => {
-                    activeGenre = chip.dataset.genreId === 'all' ? null : parseInt(chip.dataset.genreId);
                     document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
                     chip.classList.add('active');
+                    activeGenre = chip.dataset.genreId === 'all' ? null : parseInt(chip.dataset.genreId);
                     currentPage = 1;
                     loadContent(true);
                 });
@@ -202,55 +219,55 @@
             });
         }
 
-        // Завантаження контенту залежно від стану
+        // Завантаження контенту
         async function loadContent(resetGrid = true) {
             if (isLoading) return;
-            isLoading = true;
             if (resetGrid) {
                 grid.innerHTML = '<div class="spinner"><i class="fas fa-spinner fa-spin"></i> Завантаження...</div>';
                 currentPage = 1;
             }
 
+            isLoading = true;
             try {
                 let endpoint = '';
                 let params = { page: currentPage };
 
-                // Визначаємо тип контенту
-                if (activeNav === 'movies') params.include_adult = false; // фільми
-                else if (activeNav === 'series') params.include_adult = false; // серіали
-                // Для home беремо популярні і фільми, і серіали? Але TMDB окремі endpoints.
-                // Спростимо: для home будемо показувати популярні фільми
+                // Визначаємо тип контенту та endpoint
                 if (activeNav === 'home' || activeNav === 'movies') {
                     if (currentSort === 'popular') endpoint = '/movie/popular';
                     else if (currentSort === 'rating') endpoint = '/movie/top_rated';
-                    else if (currentSort === 'year') endpoint = '/movie/now_playing'; // новинки
+                    else if (currentSort === 'year') endpoint = '/movie/now_playing';
                 } else if (activeNav === 'series') {
                     if (currentSort === 'popular') endpoint = '/tv/popular';
                     else if (currentSort === 'rating') endpoint = '/tv/top_rated';
                     else if (currentSort === 'year') endpoint = '/tv/on_the_air';
                 } else if (activeNav === 'collections') {
-                    // Добірки: наприклад, популярні за тиждень
                     endpoint = '/trending/all/week';
                 } else if (activeNav === 'ratings') {
-                    // Рейтинги: топ рейтингу
                     endpoint = '/movie/top_rated';
                 }
 
-                // Пошук має пріоритет
+                // Пошук перекриває все
                 if (searchQuery.trim()) {
-                    endpoint = '/search/movie'; // за замовчуванням фільми, можна розширити
+                    endpoint = '/search/multi';
                     params.query = searchQuery;
                 }
 
-                // Фільтр за жанром (тільки якщо endpoint підтримує)
+                // Додаємо фільтр за жанром (якщо вибрано)
                 if (activeGenre && !searchQuery) {
                     params.with_genres = activeGenre;
                 }
 
                 const data = await fetchFromTMDB(endpoint, params);
-                displayMovies(data.results);
+                totalPages = data.total_pages || 1;
+
+                if (resetGrid) {
+                    displayMovies(data.results);
+                } else {
+                    appendMovies(data.results);
+                }
             } catch (e) {
-                grid.innerHTML = `<div class="no-results">Помилка завантаження: ${e.message}</div>`;
+                grid.innerHTML = `<div class="error-message">❌ Помилка завантаження: ${e.message}</div>`;
             } finally {
                 isLoading = false;
             }
@@ -295,8 +312,54 @@
             });
             grid.innerHTML = html;
 
-            // Додаємо обробники кліків
+            // Обробники кліків
             document.querySelectorAll('.movie-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const id = card.dataset.id;
+                    const type = card.dataset.type;
+                    showDetails(id, type);
+                });
+            });
+        }
+
+        function appendMovies(items) {
+            if (!items || items.length === 0) return;
+            let html = '';
+            items.forEach(item => {
+                const title = item.title || item.name || 'Без назви';
+                const year = (item.release_date || item.first_air_date || '').slice(0, 4) || 'N/A';
+                const rating = item.vote_average ? item.vote_average.toFixed(1) : '—';
+                const poster = item.poster_path ? IMG_BASE + item.poster_path : null;
+                const mediaType = item.media_type || (item.title ? 'movie' : 'tv');
+
+                html += `
+                    <div class="movie-card" data-id="${item.id}" data-type="${mediaType}">
+                        <div class="card-poster">
+                            ${poster ? `<img src="${poster}" alt="${title}" loading="lazy">` : `<span>${title.slice(0,2)}</span>`}
+                            ${mediaType === 'tv' ? '<span class="card-badge"><i class="fas fa-tv"></i> Серіал</span>' : ''}
+                        </div>
+                        <div class="card-info">
+                            <div class="card-title">${title}</div>
+                            <div class="card-meta">
+                                <span class="card-year">${year}</span>
+                                <span class="card-imdb"><i class="fab fa-imdb"></i> ${rating}</span>
+                            </div>
+                            <div class="card-genres">
+                                ${item.genre_ids ? item.genre_ids.slice(0,2).map(id => {
+                                    const g = genresList.find(g => g.id === id);
+                                    return g ? `<span class="genre-tag">${g.name}</span>` : '';
+                                }).join('') : ''}
+                            </div>
+                            <div class="card-type">${mediaType === 'movie' ? 'Фільм' : 'Серіал'}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            grid.insertAdjacentHTML('beforeend', html);
+
+            // Додаємо обробники до нових карток
+            document.querySelectorAll('.movie-card:not([data-listener])').forEach(card => {
+                card.setAttribute('data-listener', 'true');
                 card.addEventListener('click', () => {
                     const id = card.dataset.id;
                     const type = card.dataset.type;
@@ -351,7 +414,6 @@
                 `;
 
                 document.getElementById('addToFavBtn')?.addEventListener('click', () => {
-                    // Логіка улюблених (з localStorage)
                     let favs = JSON.parse(localStorage.getItem('saysua_favorites')) || [];
                     if (!favs.includes(id)) {
                         favs.push(id);
@@ -363,7 +425,7 @@
                 });
 
             } catch (e) {
-                modalContent.innerHTML = `<div class="no-results">Помилка завантаження: ${e.message}</div>`;
+                modalContent.innerHTML = `<div class="error-message">Помилка: ${e.message}</div>`;
             }
         }
 
@@ -381,6 +443,8 @@
                 activeNav = link.dataset.nav;
                 setActiveNav(activeNav);
                 activeGenre = null;
+                searchQuery = '';
+                searchInput.value = '';
                 renderChips();
                 currentPage = 1;
                 loadContent(true);
@@ -395,7 +459,7 @@
             loadContent(true);
         });
 
-        // Пошук з debounce
+        // Пошук
         let searchTimeout;
         searchInput.addEventListener('input', (e) => {
             clearTimeout(searchTimeout);
@@ -434,9 +498,9 @@
         loadGenres().then(() => loadContent(true));
         setActiveNav('home');
 
-        // Пагінація при прокрутці (проста)
+        // Нескінченна прокрутка
         window.addEventListener('scroll', () => {
-            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500 && !isLoading) {
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500 && !isLoading && currentPage < totalPages) {
                 currentPage++;
                 loadContent(false);
             }
