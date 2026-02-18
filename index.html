@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>SAYS UA · аніме плеєр + Python parser</title>
+    <title>SAYS UA · аніме монохром</title>
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Google Fonts Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <!-- Plyr CSS -->
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
     <style>
-        /* ========== ЧОРНО-БІЛИЙ МІНІМАЛІЗМ ========== */
+        /* ========== ЧОРНО-БІЛИЙ МІНІМАЛІЗМ (БЕЗ ЗМІН) ========== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             background-color: #0b0b0b;
@@ -385,7 +387,7 @@
         .modal-content {
             background: #151515;
             width: 90%;
-            max-width: 900px;
+            max-width: 800px;
             border-radius: 30px;
             border: 1px solid #333;
             overflow: hidden;
@@ -417,7 +419,7 @@
             line-height: 1;
         }
         .close-modal:hover { color: #ffffff; }
-        .modal-body { padding: 24px; max-height: 70vh; overflow-y: auto; }
+        .modal-body { padding: 24px; }
         .player-container {
             background: #1a1a1a;
             border-radius: 20px;
@@ -432,7 +434,7 @@
             background-image: radial-gradient(circle at 30% 30%, #2a2a2a, #111);
             overflow: hidden;
         }
-        .player-container iframe, .player-container video {
+        .player-container iframe {
             width: 100%;
             height: 100%;
             border: none;
@@ -532,74 +534,23 @@
                 linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
             background-size: 40px 40px;
         }
-        .related-section {
-            margin-top: 20px;
-            border-top: 1px solid #333;
-            padding-top: 16px;
-        }
-        .related-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 12px;
-            color: #fff;
-        }
-        .related-grid {
-            display: flex;
-            gap: 12px;
-            overflow-x: auto;
-            padding-bottom: 8px;
-        }
-        .related-card {
-            flex: 0 0 120px;
-            background: #1e1e1e;
-            border-radius: 12px;
-            border: 1px solid #333;
+        /* Стилі для Plyr (додаткові, щоб вписати в дизайн) */
+        .plyr {
+            border-radius: 20px;
             overflow: hidden;
-            cursor: pointer;
-            transition: 0.2s;
         }
-        .related-card:hover {
-            border-color: #fff;
-            transform: translateY(-3px);
-        }
-        .related-poster {
-            aspect-ratio: 2/3;
-            background: #2a2a2a;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #777;
-            font-size: 1.5rem;
-            background-size: cover;
-            background-position: center;
-        }
-        .related-info {
-            padding: 8px;
-        }
-        .related-info h5 {
-            font-size: 0.8rem;
-            color: #ddd;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .related-info p {
-            font-size: 0.7rem;
-            color: #aaa;
-        }
-        .python-code {
+        .plyr--video {
             background: #1a1a1a;
-            border: 1px solid #333;
-            border-radius: 16px;
-            padding: 16px;
-            margin-top: 20px;
-            overflow-x: auto;
         }
-        .python-code pre {
-            color: #0f0;
-            font-family: 'Courier New', monospace;
-            font-size: 0.85rem;
-            white-space: pre-wrap;
+        .plyr__control {
+            color: #ffffff;
+        }
+        .plyr__control:hover {
+            background: #ffffff;
+            color: #000000;
+        }
+        .plyr--full-ui input[type=range] {
+            color: #ffffff;
         }
     </style>
 </head>
@@ -607,7 +558,7 @@
 <div class="app">
     <header class="header">
         <div class="header-top">
-            <div class="logo">SAYS UA · Jut.su плеєр + Python</div>
+            <div class="logo">SAYS UA · аніме</div>
             <div class="search-box">
                 <i class="fas fa-search"></i>
                 <input type="search" id="searchInput" placeholder="Пошук аніме..." aria-label="Пошук">
@@ -650,12 +601,11 @@
     </main>
 
     <footer class="footer">
-        <div>© 2025 SAYS UA — аніме плеєр на Jut.su</div>
+        <div>© 2025 SAYS UA — монохромний аніме-каталог</div>
         <div>
             <a id="footerAbout">Про нас</a>
-            <a id="footerApi">Jikan API</a>
+            <a id="footerApi">API (Jikan)</a>
             <a id="footerSupport">Підтримка</a>
-            <a id="showPythonCode">Python parser</a>
         </div>
     </footer>
 </div>
@@ -668,7 +618,6 @@
     <a data-nav="watchlist"><i class="fas fa-bookmark"></i><span>Моє</span></a>
 </div>
 
-<!-- Модальне вікно для аніме -->
 <div class="modal" id="videoModal">
     <div class="modal-content">
         <div class="modal-header">
@@ -678,27 +627,23 @@
         <div class="modal-body">
             <div class="player-container" id="playerContainer">
                 <i class="fas fa-play-circle" style="font-size: 5rem; color: #666; opacity: 0.6;"></i>
-                <button class="play-btn" id="playDefaultBtn"><i class="fas fa-play"></i> Дивитись 1 серію (embed)</button>
-                <div style="color:#aaa; font-size:0.85rem;">Завантаження з Jut.su (embed)</div>
+                <button class="play-btn" id="playDefaultBtn"><i class="fas fa-play"></i> Шукати в Google</button>
+                <div style="color:#aaa; font-size:0.85rem;">Натисніть, щоб знайти переклад</div>
+            </div>
+            <div class="sort-control" id="episodeSelector" style="margin-top:20px; display:none;">
+                <span>Епізод:</span>
+                <select id="episodeSelect"></select>
             </div>
             <div class="modal-details" id="modalDetails">
                 <p><strong>Рік:</strong> <span id="modalYear"></span></p>
                 <p><strong>Жанри:</strong> <span id="modalGenres"></span></p>
                 <p><strong>Рейтинг:</strong> <span id="modalImdb"></span>/10</p>
-                <p><strong>Тип:</strong> <span id="modalType"></span> <span class="ukr-badge">🇺🇦 субтитри?</span></p>
+                <p><strong>Тип:</strong> <span id="modalType"></span> <span class="ukr-badge">🇺🇦 українською?</span></p>
                 <p><strong>Серій / статус:</strong> <span id="modalEpisodes"></span></p>
                 
                 <div class="sources-list" id="sourcesList">
-                    <button class="source-btn" id="malBtn"><i class="fab fa-my-anime-list"></i> MyAnimeList</button>
-                    <button class="source-btn" id="googleBtn"><i class="fab fa-google"></i> Google</button>
-                    <button class="source-btn" id="jutsuSearchBtn"><i class="fas fa-search"></i> Пошук на Jut.su</button>
-                    <button class="source-btn" id="experimentalParserBtn"><i class="fas fa-flask"></i> Експериментальний парсер</button>
-                </div>
-
-                <!-- Блок пов'язаних тайтлів (сезони/приквели) -->
-                <div class="related-section" id="relatedSection" style="display: none;">
-                    <div class="related-title">Пов'язані тайтли</div>
-                    <div class="related-grid" id="relatedGrid"></div>
+                    <button class="source-btn" id="malSearchBtn"><i class="fab fa-my-anime-list"></i> MyAnimeList</button>
+                    <button class="source-btn" id="googleSearchBtn"><i class="fab fa-google"></i> Google</button>
                 </div>
                 
                 <button class="watchlist-btn" id="watchlistToggle"><i class="far fa-bookmark"></i> Додати до списку</button>
@@ -707,211 +652,15 @@
     </div>
 </div>
 
-<!-- Модальне вікно для Python коду -->
-<div class="modal" id="pythonModal">
-    <div class="modal-content" style="max-width: 800px;">
-        <div class="modal-header">
-            <h2>Python парсер для Jut.su</h2>
-            <button class="close-modal" id="closePythonModal">&times;</button>
-        </div>
-        <div class="modal-body">
-            <div class="python-code">
-                <pre>
-from __future__ import annotations
-from typing import Self, Iterable
-
-import requests
-import re
-import html
-import base64
-import os
-from multiprocessing.pool import ThreadPool
-
-class Utils:
-  @classmethod
-  def parse_anime(clazz, html:str, id:str, full:bool = False) -> Anime:
-    if "<div class=\"clear berrors\">" in html:
-      raise NameError("Anime with this id not found")
-    pic = re.findall("background: url\\('(.*?\\.jpg)'\\)", html)[0]
-    if full:
-      na = re.findall("\\<meta itemprop=\"name\" content=\"(.*?)\"\\>", html)[0]
-      orig = re.findall("\\<meta itemprop=\"alternateName\" content=\"(.*?)\"\\>", html)[0]
-    else:
-      na, orig = re.findall("class=\"tooltip_title_in_anime\"\\>(.*?)\\</a\\>\\<br\\>(.*?)\\</span\\>", html)[0]
-    name = Name(na, id, orig)
-    years = []
-    ys = []
-    for yy in Filter.available.years:
-      y = re.findall(f"href=\"/anime/{yy.id}/\"\\>(\\d+)", html)
-      if y:
-        years.append(int(y[0]))
-        ys.append(yy)
-    genres = []
-    for gg in Filter.available.genres:
-      g = re.findall(f"href=\"/anime/{gg.id}/\"\\>", html)
-      if g: genres.append(gg)
-    types = []
-    for tt in Filter.available.types:
-      t = re.findall(f"href=\"/anime/{tt.id}/\"\\>", html)
-      if t: types.append(tt)
-    info = Filter(genres = genres, types = types, years = ys)
-    if full:
-      dd = re.findall("(?ms)\\<p class=\"under_video uv_rounded_bottom the_hildi\" style=\"margin-bottom: 0; margin-top: 0;\"\\>(.*?)\\</p\\>", html)
-      if dd:
-        d = dd[0].replace("<b>", "").replace("</b>", "").replace("<br>", "\n")
-        desc = re.findall("(?ms)\\<span\\>(.*?)\\</?span", d)[0].strip()
-      else:
-        desc = ""
-
-      ongoing = "<a href=\"/anime/ongoing/\"" in html
-      age = int(re.findall("age_rating_(\\d+)", html)[0])
-
-      s = html.split("<div style=\"margin-top: 40px; margin-bottom: 25px; \">")[0]
-      s = s.split("<h1 class=\"header_video allanimevideo anime_padding_for_title\">")[1]
-      s = re.split("(?ms)\\</div>\\s*\\<div\\>(?:\\s*\\<br\\>)?", s, 1)[1].strip()
-      ss = s.split("<br>")
-
-      seasons = []
-      films = None
-      last = None
-      for ht in ss:
-        episodes = []
-        e = ht.split("</h2>", 1)[1] if "</h2>" in ht else ht
-        for i in re.findall(f"\\<a href=\"/({id}/.*?)\" class=\"short-btn \\w+ video the_hildi\"\\>(.*?)\\</a\\>", e):
-          episodes.append(Episode(title = i[1], id = i[0]))
-
-        if "films_title" in ht:
-          ti = re.findall("\\<h2 class=\".*?the-anime-season center films_title.*?\"\\>(.*?)\\</h2\\>", ht)[0]
-          films = Season(title = ti, episodes = episodes, name = None)
-        else:
-          if "the_invis" in ht:
-            title = re.findall("\\<h2 class=\"b-b-title the-anime-season.*?\"( title=\".*?\")?\\>(.*?)( \\(.*?\\))?\\</h2\\>", ht)[0]
-            href = re.findall(f"the_invis\"\\>\\<a href=\"/({id}/.*?)/\"", ht)[0]
-            if title[0]:
-              ori = title[0].split("\"")[1]
-              nn = Name(id = href, name = title[1], orig = ori)
-              ti = title[2][2:-1]
-            else:
-      }
-    )
-    n = html.unescape(r.text)
-    n = n.split("<!-- content -->")[1]
-    n = n.split("<!--end content -->")[0]
-    n = n.strip()
-    if "<div class=\"clear berrors\">" in n:
-      raise NameError("Episode with this id not found")
-
-    titl = re.findall("\\<span itemprop=\"name\"\\>\\<i\\>.*?\\</i\\>(.*?)\\</span\\>", n)[0]
-
-    if "video_plate_title" in n:
-      na = re.findall("\\<h2\\>(.*?)\\</h2\\>", n)[0]
-    else:
-      na = None
-    nn = Name(id = self._cache_name.id, name = na)
-
-    base = re.findall("Base64.decode\\( \"(.*)\" \\)", n)[0]
-    data = base64.b64decode(base).decode("utf-8")
-
-    dur = int(re.findall("this_video_duration = (\\d+)", data)[0])
-
-    oph = re.findall("video_music_intro = \"(.*?)\"", data)
-    if oph:
-      opl = oph[0]
-      opi = int(re.findall("video_intro_start = (\\d+)", data)[0])
-      opo = int(re.findall("video_intro_end = (\\d+)", data)[0])
-      op = Opening(opi, opo, opl)
-    else:
-      op = None
-
-    edh = re.findall("video_music_outro = \"(.*?)\"", data)
-    if edh:
-      edl = edh[0]
-      edi = int(re.findall("video_outro_start = (\\d+)", data)[0])
-      ed = Ending(edi, edl)
-    else:
-      ed = None
-
-    thum = re.findall("preload=\"none\" poster=\"(.*?)\"", n)[0]
-    prev = re.findall("previews=\"(.*?)\\|\\d+\\|\\d+\"", n)[0]
-
-    pl = []
-    for i in re.findall("\\<source src=\"(.*?)\" .*? label=\"(\\d+)p\" res=\"\\2\"", n):
-      link = i[0]
-      qual = int(i[1])
-      pl.append(Player(qual, link))
-
-    if self._cache_title is None:
-      self._cache_title = titl
-    self._cache_name = nn
-    self._cache_duration = dur
-    self._cache_opening = op
-    self._cache_ending = ed
-    self._cache_players = pl
-    self._cache_thumbnail = thum
-    self._cache_preview = prev
-
-class Opening:
-  def __init__(self, begin:int, end:int, link:str):
-    self.begin = begin
-    self.end = end
-    self.link = link
-
-class Ending:
-  def __init__(self, begin:int, link:str):
-    self.begin = begin
-    self.link = link
-
-class Player:
-  def __init__(self, quality:int, link:str):
-    self.quality = quality
-    self.link = link
-
-  def __repr__(self) -> str:
-    return f"{self.link} ({self.quality}p)"
-
-  def download(self, local:str|None = None) -> None:
-    if local is None:
-      local = self.link.split("?")[0].split("/")[-1]
-    ending = self.link.split("?")[0].split(".")[-1]
-    p = f"{local} ({self.quality}p).{ending}"
-    if os.path.exists(p):
-      Utils.log(f"Skipping episode, because file '{p}' exists", 1)
-      return
-    dl = p + ".jutsu-dl"
-    if os.path.exists(dl):
-      Utils.log(f"Resuming download of '{p}'", 1)
-      skip = os.stat(dl).st_size
-    else: skip = 0
-    with requests.get(
-      self.link, headers = {
-        "User-Agent": "Mozilla/5.0",
-        "Range": f"bytes={skip}-"
-      }, stream = True
-    ) as r:
-      if not skip:
-        Utils.log(f"Downloading episode to '{p}'...", 1)
-      size = int(r.headers["Content-Length"]) + skip
-      r.raise_for_status()
-      with open(dl, "ab") as f:
-        d = skip
-        for chunk in r.iter_content(chunk_size = 512 * 1024):
-          f.write(chunk)
-          d += len(chunk)
-          if not d % 1024 * 1024 * 10:
-            Utils.log(f"Progress: {100 * d // size}% with {d} bytes", 2)
-      os.rename(dl, p)
-                </pre>
-            </div>
-            <p style="color:#aaa; margin-top:10px;">Цей код призначений для серверного використання (Python). Для інтеграції з сайтом потрібен бекенд.</p>
-        </div>
-    </div>
-</div>
-
+<script src="https://cdn.jsdelivr.net/hls.js/latest/hls.js"></script>
+<script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
 <script>
     (function() {
-        // ========== JIKAN API (МЕТАДАНІ) + JUT.SU EMBED ==========
+        // ========== НОВА КОНФІГУРАЦІЯ: JIKAN API (АНІМЕ) ==========
         const JIKAN_BASE = 'https://api.jikan.moe/v4';
+        const CONSUMET_BASE = 'https://api.consumet.org/anime/gogoanime/';
         
+        // Жанри аніме (збережемо числові ID для фільтрації, але в демо використаємо назви)
         const ANIME_GENRES = [
             'Усі', 'Action', 'Adventure', 'Comedy', 'Drama', 'Fantasy', 
             'Horror', 'Romance', 'Sci-Fi', 'Slice of Life', 'Sports', 'Mystery'
@@ -921,11 +670,12 @@ class Player:
         let activeGenre = 'Усі';
         let currentSort = 'default';
         let activeNav = 'home';
-        let watchlist = JSON.parse(localStorage.getItem('saysua_jutsu_watchlist')) || [];
+        let searchQuery = '';
+        let watchlist = JSON.parse(localStorage.getItem('saysua_anime_watchlist')) || [];
         let currentAnimeId = null;
         let currentAnimeTitle = '';
-        let currentAnimeDetails = null;
-        let allAnimeData = [];
+        let currentAnimeYear = '';
+        let allAnimeData = []; // для клієнтського сортування
 
         // DOM
         const grid = document.getElementById('moviesGrid');
@@ -943,27 +693,14 @@ class Player:
         const modalType = document.getElementById('modalType');
         const modalEpisodes = document.getElementById('modalEpisodes');
         const playerContainer = document.getElementById('playerContainer');
+        const episodeSelector = document.getElementById('episodeSelector');
+        const episodeSelect = document.getElementById('episodeSelect');
         const playDefaultBtn = document.getElementById('playDefaultBtn');
         const closeModalBtn = document.getElementById('closeModalBtn');
         const watchlistToggle = document.getElementById('watchlistToggle');
         const sourcesList = document.getElementById('sourcesList');
-        const malBtn = document.getElementById('malBtn');
-        const googleBtn = document.getElementById('googleBtn');
-        const jutsuSearchBtn = document.getElementById('jutsuSearchBtn');
-        const experimentalParserBtn = document.getElementById('experimentalParserBtn');
-        const relatedSection = document.getElementById('relatedSection');
-        const relatedGrid = document.getElementById('relatedGrid');
-
-        // Python modal
-        const pythonModal = document.getElementById('pythonModal');
-        const closePythonModal = document.getElementById('closePythonModal');
-        document.getElementById('showPythonCode').addEventListener('click', () => {
-            pythonModal.classList.add('active');
-        });
-        closePythonModal.addEventListener('click', () => pythonModal.classList.remove('active'));
-        window.addEventListener('click', (e) => {
-            if (e.target === pythonModal) pythonModal.classList.remove('active');
-        });
+        const malSearchBtn = document.getElementById('malSearchBtn');
+        const googleSearchBtn = document.getElementById('googleSearchBtn');
 
         // ========== ФУНКЦІЇ JIKAN ==========
         async function fetchJikan(endpoint) {
@@ -978,53 +715,78 @@ class Player:
             }
         }
 
-        async function fetchJikanSingle(endpoint) {
-            try {
-                const url = `${JIKAN_BASE}${endpoint}`;
-                const response = await fetch(url);
-                const data = await response.json();
-                return data.data || null;
-            } catch (error) {
-                console.error('Jikan error:', error);
-                return null;
-            }
-        }
-
+        // Отримати топ аніме за типом (type: tv, movie, ova, special, ona)
         async function fetchTopAnime(type = '', page = 1) {
             let endpoint = `/top/anime?page=${page}`;
             if (type) endpoint += `&type=${type}`;
             return await fetchJikan(endpoint);
         }
 
+        // Пошук аніме
         async function searchAnime(query) {
             if (!query) return [];
             const endpoint = `/anime?q=${encodeURIComponent(query)}&order_by=score&sort=desc`;
             return await fetchJikan(endpoint);
         }
 
+        // Деталі аніме
         async function fetchAnimeDetails(id) {
-            return await fetchJikanSingle(`/anime/${id}`);
+            const endpoint = `/anime/${id}`;
+            try {
+                const url = `${JIKAN_BASE}${endpoint}`;
+                const response = await fetch(url);
+                const data = await response.json();
+                return data.data || null;
+            } catch (error) {
+                console.error('Details error:', error);
+                return null;
+            }
         }
 
-        async function fetchAnimeRelations(id) {
-            return await fetchJikanSingle(`/anime/${id}/relations`);
+        // ========== ФУНКЦІЇ CONSUMET (для стрімів) ==========
+        async function getStreamingId(title) {
+            try {
+                const res = await fetch(`${CONSUMET_BASE}${encodeURIComponent(title)}`);
+                const data = await res.json();
+                if (data.results && data.results.length) {
+                    return data.results[0].id;
+                }
+                return null;
+            } catch (error) {
+                console.error('Consumet search error:', error);
+                return null;
+            }
         }
 
-        // ========== ГЕНЕРАЦІЯ SLUG ДЛЯ JUT.SU ==========
-        function slugify(title) {
-            if (!title) return '';
-            const cyrMap = {
-                'а':'a','б':'b','в':'v','г':'g','д':'d','е':'e','ё':'e','ж':'zh','з':'z','и':'i','й':'y','к':'k','л':'l','м':'m','н':'n','о':'o','п':'p','р':'r','с':'s','т':'t','у':'u','ф':'f','х':'kh','ц':'ts','ч':'ch','ш':'sh','щ':'shch','ъ':'','ы':'y','ь':'','э':'e','ю':'yu','я':'ya',
-                'a':'a','b':'b','c':'c','d':'d','e':'e','f':'f','g':'g','h':'h','i':'i','j':'j','k':'k','l':'l','m':'m','n':'n','o':'o','p':'p','q':'q','r':'r','s':'s','t':'t','u':'u','v':'v','w':'w','x':'x','y':'y','z':'z'
-            };
-            let slug = title.toLowerCase().split('').map(ch => cyrMap[ch] || ch).join('');
-            slug = slug.replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-');
-            return slug;
+        async function getEpisodes(streamId) {
+            try {
+                const res = await fetch(`${CONSUMET_BASE}info/${streamId}`);
+                const data = await res.json();
+                return data.episodes || [];
+            } catch (error) {
+                console.error('Consumet info error:', error);
+                return [];
+            }
+        }
+
+        async function getStream(episodeId) {
+            try {
+                const res = await fetch(`${CONSUMET_BASE}watch/${episodeId}`);
+                const data = await res.json();
+                if (data.sources && data.sources.length) {
+                    // Віддаємо перевагу HD або default
+                    return data.sources.find(s => s.quality === '1080p' || s.quality === '720p' || s.quality === 'default') || data.sources[0];
+                }
+                return null;
+            } catch (error) {
+                console.error('Consumet watch error:', error);
+                return null;
+            }
         }
 
         // ========== РЕНДЕР КАРТОК ==========
         function renderMovies(animeArray) {
-            allAnimeData = animeArray;
+            allAnimeData = animeArray; // для сортування
 
             if (!animeArray.length) {
                 grid.innerHTML = `<div class="no-results">😕 Нічого не знайдено</div>`;
@@ -1036,10 +798,9 @@ class Player:
                 const title = a.title_ukrainian || a.title || a.title_english || 'Без назви';
                 const year = a.aired?.prop?.from?.year || a.aired?.from?.split('-')[0] || '—';
                 const score = a.score ? a.score.toFixed(1) : '?';
-                const type = a.type || 'ANIME';
+                const type = a.type || 'ANIME'; // TV, Movie, OVA тощо
                 const posterUrl = a.images?.jpg?.image_url || '';
                 const id = a.mal_id;
-                const episodes = a.episodes || '?';
 
                 const inWatchlist = watchlist.includes(id) ? 'fa-solid' : 'fa-regular';
 
@@ -1055,7 +816,7 @@ class Player:
                                 <span class="card-year">${year}</span>
                                 <span class="card-imdb"><i class="fas fa-star"></i> ${score}</span>
                             </div>
-                            <div class="card-type">${type} · ${episodes} сер.</div>
+                            <div class="card-type">${type} · ${a.episodes ? a.episodes + ' сер.' : '?'}</div>
                         </div>
                     </div>
                 `;
@@ -1076,13 +837,13 @@ class Player:
         async function openModal(id, type, title, year) {
             currentAnimeId = id;
             currentAnimeTitle = title;
+            currentAnimeYear = year;
 
             const details = await fetchAnimeDetails(id);
             if (!details) {
                 alert('Не вдалося завантажити деталі');
                 return;
             }
-            currentAnimeDetails = details;
 
             modalTitle.textContent = details.title_ukrainian || details.title || details.title_english;
             modalYear.textContent = details.aired?.prop?.from?.year || details.aired?.from?.split('-')[0] || year;
@@ -1091,77 +852,78 @@ class Player:
             modalType.textContent = details.type || 'Аніме';
             modalEpisodes.textContent = `${details.episodes || '?'} серій, статус: ${details.status || '—'}`;
 
-            // Скидаємо плеєр
-            playerContainer.innerHTML = `<i class="fas fa-play-circle" style="font-size: 5rem; color: #666; opacity: 0.6;"></i>`;
-
-            // Налаштовуємо кнопки
-            malBtn.onclick = () => {
+            // Налаштовуємо кнопки пошуку
+            malSearchBtn.onclick = () => {
                 window.open(`https://myanimelist.net/anime/${id}`, '_blank');
             };
-            googleBtn.onclick = () => {
+            googleSearchBtn.onclick = () => {
                 window.open(`https://www.google.com/search?q=${encodeURIComponent(title + ' аніме дивитися онлайн')}`, '_blank');
             };
-            jutsuSearchBtn.onclick = () => {
-                window.open(`https://jut.su/index.php?do=search&subaction=search&story=${encodeURIComponent(title)}`, '_blank');
-            };
 
-            // Кнопка відтворення – спроба вбудувати Jut.su плеєр
-            playDefaultBtn.onclick = () => {
-                const slug = slugify(details.title_english || details.title || title);
-                const embedUrl = `https://jut.su/embed/${slug}/`;
-                playerContainer.innerHTML = `<iframe src="${embedUrl}" frameborder="0" allowfullscreen></iframe>`;
-            };
+            // Спроба завантажити стрім
+            playerContainer.innerHTML = `<i class="fas fa-spinner fa-spin" style="font-size: 3rem; color: #666;"></i> Завантаження плеєра...`;
+            const streamId = await getStreamingId(details.title_english || details.title || title);
+            const episodes = await getEpisodes(streamId);
+            let plyrInstance = null;
 
-            // Експериментальний парсер (демонстрація)
-            experimentalParserBtn.onclick = async () => {
-                alert('Експериментальний парсер намагається отримати дані через проксі. Це може не працювати через CORS.');
-                // Тут можна додати код для парсингу через проксі, але це складно
-            };
+            if (streamId && episodes.length) {
+                playerContainer.innerHTML = `<video id="player" controls playsinline poster="${details.images?.jpg?.large_image_url || ''}"></video>`;
+                plyrInstance = new Plyr('#player', {
+                    controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'captions', 'settings', 'pip', 'airplay', 'fullscreen'],
+                    settings: ['captions', 'quality', 'speed'],
+                    quality: { default: 'default', options: ['1080p', '720p', '480p', '360p', 'default'] }
+                });
 
-            // Завантажуємо пов'язані тайтли (приквели/сиквели)
-            const relations = await fetchAnimeRelations(id);
-            if (relations && relations.length > 0) {
-                let relatedHtml = '';
-                for (let rel of relations) {
-                    if (rel.entry && rel.entry.length > 0) {
-                        for (let entry of rel.entry.slice(0, 5)) {
-                            const relDetails = await fetchAnimeDetails(entry.mal_id);
-                            if (relDetails) {
-                                const relPoster = relDetails.images?.jpg?.image_url || '';
-                                relatedHtml += `
-                                    <div class="related-card" data-id="${relDetails.mal_id}">
-                                        <div class="related-poster" style="${relPoster ? `background-image: url('${relPoster}'); background-size: cover;` : ''}">
-                                            ${!relPoster ? '<span>??</span>' : ''}
-                                        </div>
-                                        <div class="related-info">
-                                            <h5>${relDetails.title || 'Без назви'}</h5>
-                                            <p>${relDetails.type || ''}</p>
-                                        </div>
-                                    </div>
-                                `;
-                            }
-                        }
-                    }
-                }
-                if (relatedHtml) {
-                    relatedGrid.innerHTML = relatedHtml;
-                    relatedSection.style.display = 'block';
-                    document.querySelectorAll('.related-card').forEach(card => {
-                        card.addEventListener('click', () => {
-                            const rid = card.dataset.id;
-                            if (rid) {
-                                modal.classList.remove('active');
-                                openModal(parseInt(rid), '', '', '');
-                            }
-                        });
+                episodeSelector.style.display = episodes.length > 1 ? 'flex' : 'none';
+                if (episodes.length > 1) {
+                    episodeSelect.innerHTML = episodes.map(ep => `<option value="${ep.id}">${ep.title || `Епізод ${ep.number}`}</option>`).join('');
+                    episodeSelect.addEventListener('change', async (e) => {
+                        const epId = e.target.value;
+                        await loadStream(epId);
                     });
-                } else {
-                    relatedSection.style.display = 'none';
                 }
+
+                // Завантажуємо перший епізод
+                const firstEpId = episodes[0].id;
+                await loadStream(firstEpId);
             } else {
-                relatedSection.style.display = 'none';
+                // Fallback якщо стрім не знайдено
+                playerContainer.innerHTML = `
+                    <i class="fas fa-play-circle" style="font-size: 5rem; color: #666; opacity: 0.6;"></i>
+                    <button class="play-btn" id="playDefaultBtn"><i class="fas fa-play"></i> Шукати в Google</button>
+                    <div style="color:#aaa; font-size:0.85rem;">Натисніть, щоб знайти переклад</div>
+                `;
+                document.getElementById('playDefaultBtn').onclick = () => {
+                    window.open(`https://www.google.com/search?q=${encodeURIComponent(title + ' аніме дивитися онлайн з українським перекладом')}`, '_blank');
+                };
+                episodeSelector.style.display = 'none';
             }
 
+            async function loadStream(epId) {
+                const stream = await getStream(epId);
+                if (stream) {
+                    const video = document.getElementById('player');
+                    video.src = stream.url;
+                    if (stream.url.endsWith('.m3u8')) {
+                        if (Hls.isSupported()) {
+                            const hls = new Hls();
+                            hls.loadSource(stream.url);
+                            hls.attachMedia(video);
+                            hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                                video.play();
+                            });
+                        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                            video.play();
+                        }
+                    } else {
+                        video.play();
+                    }
+                } else {
+                    alert('Не вдалося завантажити стрім для цього епізоду');
+                }
+            }
+
+            // Оновлюємо кнопку списку перегляду
             if (watchlist.includes(id)) {
                 watchlistToggle.innerHTML = '<i class="fas fa-bookmark"></i> У списку';
                 watchlistToggle.classList.add('active');
@@ -1173,10 +935,12 @@ class Player:
             modal.classList.add('active');
         }
 
+        // Завантаження головної (топ аніме всіх типів)
         async function loadHome() {
-            const topAnime = await fetchTopAnime('', 1);
+            const topAnime = await fetchTopAnime('', 1); // всі типи
             renderMovies(topAnime);
 
+            // Тренди (перші 10)
             let trendHtml = '';
             topAnime.slice(0, 10).forEach(a => {
                 trendHtml += `
@@ -1203,16 +967,19 @@ class Player:
             renderChips();
         }
 
+        // Фільтр за типом (навігація)
         async function loadByType(type) {
             let animeType = '';
             if (type === 'movies') animeType = 'movie';
             else if (type === 'series') animeType = 'tv';
-            else if (type === 'ova') animeType = 'ova';
+            else if (type === 'ova') animeType = 'ova'; // також можна додати 'ona' але для простоти ova
+            else if (type === 'collections' || type === 'ratings') animeType = ''; // просто топ
             
             const data = await fetchTopAnime(animeType, 1);
             renderMovies(data);
         }
 
+        // Жанрові чипи
         function renderChips() {
             chipsContainer.innerHTML = '';
             ANIME_GENRES.forEach(genre => {
@@ -1223,8 +990,10 @@ class Player:
                 chip.addEventListener('click', () => {
                     activeGenre = genre;
                     renderChips();
+                    // Тут можна додати фільтрацію за жанром, але для демо просто перезавантажимо топ
                     if (genre === 'Усі') loadHome();
                     else {
+                        // Фільтрація за жанром через API (пошук з жанром)
                         searchByGenre(genre);
                     }
                 });
@@ -1233,9 +1002,7 @@ class Player:
         }
 
         async function searchByGenre(genre) {
-            const genreId = getGenreId(genre);
-            if (!genreId) return;
-            const endpoint = `/anime?genres=${genreId}&order_by=score&sort=desc`;
+            const endpoint = `/anime?genres=${getGenreId(genre)}&order_by=score&sort=desc`;
             const data = await fetchJikan(endpoint);
             renderMovies(data);
         }
@@ -1248,6 +1015,7 @@ class Player:
             return map[genreName] || '';
         }
 
+        // Сортування (клієнтське)
         function applySort() {
             if (!allAnimeData.length) return;
             let sorted = [...allAnimeData];
@@ -1263,6 +1031,7 @@ class Player:
             renderMovies(sorted);
         }
 
+        // Встановлення активної навігації
         function setActiveNav(targetNav) {
             navLinks.forEach(link => {
                 if (link.dataset.nav === targetNav) {
@@ -1281,18 +1050,22 @@ class Player:
             }
         }
 
-        async function showWatchlist() {
+        function showWatchlist() {
             if (watchlist.length === 0) {
                 grid.innerHTML = `<div class="no-results">Список перегляду порожній</div>`;
                 return;
             }
-            const animeList = await Promise.all(watchlist.slice(0, 20).map(id => fetchAnimeDetails(id)));
-            renderMovies(animeList.filter(a => a !== null));
+            // Завантажуємо кожен елемент із Jikan (обмежимо 20)
+            Promise.all(watchlist.slice(0, 20).map(id => fetchAnimeDetails(id)))
+                .then(results => {
+                    renderMovies(results.filter(r => r !== null));
+                });
         }
 
         // Ініціалізація
         loadHome();
 
+        // Пошук
         searchInput.addEventListener('input', (e) => {
             clearTimeout(window.searchTimeout);
             window.searchTimeout = setTimeout(async () => {
@@ -1306,11 +1079,13 @@ class Player:
             }, 500);
         });
 
+        // Сортування
         sortSelect.addEventListener('change', (e) => {
             currentSort = e.target.value;
             applySort();
         });
 
+        // Навігація
         navLinks.forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -1318,13 +1093,16 @@ class Player:
             });
         });
 
+        // Юзер іконка
         userIcon.addEventListener('click', () => alert('👤 Персональний кабінет (демо)'));
 
+        // Модальне вікно
         closeModalBtn.addEventListener('click', () => modal.classList.remove('active'));
         window.addEventListener('click', (e) => {
             if (e.target === modal) modal.classList.remove('active');
         });
 
+        // Перемикання списку перегляду
         watchlistToggle.addEventListener('click', () => {
             if (!currentAnimeId) return;
             const idx = watchlist.indexOf(currentAnimeId);
@@ -1337,10 +1115,11 @@ class Player:
                 watchlistToggle.innerHTML = '<i class="far fa-bookmark"></i> Додати до списку';
                 watchlistToggle.classList.remove('active');
             }
-            localStorage.setItem('saysua_jutsu_watchlist', JSON.stringify(watchlist));
+            localStorage.setItem('saysua_anime_watchlist', JSON.stringify(watchlist));
         });
 
-        document.getElementById('footerAbout').addEventListener('click', () => alert('Сайт для перегляду аніме через вбудований плеєр Jut.su. Використовує Jikan API для метаданих.'));
+        // Футер
+        document.getElementById('footerAbout').addEventListener('click', () => alert('Сайт для перегляду аніме в монохромному стилі. Використовує Jikan API та Consumet для стрімів.'));
         document.getElementById('footerApi').addEventListener('click', () => window.open('https://jikan.moe/', '_blank'));
         document.getElementById('footerSupport').addEventListener('click', () => alert('Підтримка: example@email.com'));
 
