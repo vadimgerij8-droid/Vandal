@@ -3,71 +3,373 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>SAYS UA · українські джерела</title>
+    <title>SAYS UA · монохром</title>
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Google Fonts Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <style>
-        /* ========== СТИЛІ (ідентичні попередній версії) ========== */
+        /* ========== ЧОРНО-БІЛИЙ МІНІМАЛІЗМ ========== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background-color: #0c0c0c; color: #f0f0f0; font-family: 'Inter', sans-serif; line-height: 1.5; -webkit-font-smoothing: antialiased; }
-        .app { max-width: 1440px; margin: 0 auto; padding: 0 20px; padding-bottom: 80px; }
-        .header { position: sticky; top: 0; z-index: 100; background: rgba(10, 10, 10, 0.8); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.05); padding: 16px 0 8px; margin-bottom: 20px; }
-        .header-top { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
-        .logo { font-size: 2rem; font-weight: 800; letter-spacing: -0.02em; background: linear-gradient(135deg, #fff, #f5c518); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-decoration: none; }
-        .search-box { display: flex; align-items: center; background: rgba(30, 30, 30, 0.7); border-radius: 40px; padding: 8px 18px; width: 300px; border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s; backdrop-filter: blur(4px); }
-        .search-box:focus-within { border-color: #f5c518; background: rgba(40, 40, 40, 0.9); box-shadow: 0 0 0 2px rgba(245, 197, 24, 0.2); }
-        .search-box i { color: #f5c518; margin-right: 10px; }
-        .search-box input { background: transparent; border: none; color: white; width: 100%; outline: none; font-size: 0.95rem; }
-        .search-box input::placeholder { color: #aaa; }
-        .user-icon { color: #f5c518; font-size: 2rem; cursor: pointer; transition: transform 0.2s; }
-        .user-icon:hover { transform: scale(1.05); }
-        .nav-links { display: flex; gap: 32px; font-weight: 500; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px; overflow-x: auto; white-space: nowrap; scrollbar-width: none; margin-top: 10px; }
+        body {
+            background-color: #0b0b0b;
+            color: #f0f0f0;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+        .app {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 0 20px;
+            padding-bottom: 80px;
+        }
+        /* Хедер — суворі лінії */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: #0a0a0a;
+            border-bottom: 1px solid #2a2a2a;
+            padding: 16px 0 8px;
+            margin-bottom: 20px;
+        }
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .logo {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: #ffffff;                 /* повністю білий */
+            text-decoration: none;
+        }
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: #1a1a1a;
+            border-radius: 40px;
+            padding: 8px 18px;
+            width: 300px;
+            border: 1px solid #333;
+            transition: border 0.2s;
+        }
+        .search-box:focus-within {
+            border-color: #ffffff;
+            background: #1f1f1f;
+        }
+        .search-box i {
+            color: #cccccc;
+            margin-right: 10px;
+        }
+        .search-box input {
+            background: transparent;
+            border: none;
+            color: white;
+            width: 100%;
+            outline: none;
+            font-size: 0.95rem;
+        }
+        .search-box input::placeholder {
+            color: #777;
+        }
+        .user-icon {
+            color: #ffffff;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .user-icon:hover {
+            opacity: 0.7;
+        }
+        /* Навігація — тільки нижня межа */
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            font-weight: 500;
+            border-bottom: 1px solid #222;
+            padding-bottom: 8px;
+            overflow-x: auto;
+            white-space: nowrap;
+            scrollbar-width: none;
+            margin-top: 10px;
+        }
         .nav-links::-webkit-scrollbar { display: none; }
-        .nav-links a { color: #aaa; text-decoration: none; font-size: 1rem; transition: color 0.2s; cursor: pointer; padding-bottom: 8px; border-bottom: 2px solid transparent; }
-        .nav-links a.active { color: #f5c518; border-bottom-color: #f5c518; }
+        .nav-links a {
+            color: #aaa;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.2s;
+            cursor: pointer;
+            padding-bottom: 8px;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-links a.active {
+            color: #ffffff;
+            border-bottom-color: #ffffff;
+        }
+
+        /* Тренди */
         .trending-section { margin: 30px 0 20px; }
-        .section-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
-        .section-title i { color: #f5c518; }
-        .trending-scroll { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 12px; }
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #ffffff;
+        }
+        .trending-scroll {
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            padding-bottom: 12px;
+        }
         .trending-scroll::-webkit-scrollbar { height: 6px; }
-        .trending-scroll::-webkit-scrollbar-thumb { background: #f5c518; border-radius: 10px; }
-        .trending-scroll::-webkit-scrollbar-track { background: #2a2a2a; }
-        .trend-card { flex: 0 0 160px; scroll-snap-align: start; background: #151515; border-radius: 20px; overflow: hidden; border: 1px solid #2a2a2a; transition: transform 0.2s; cursor: pointer; }
-        .trend-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(245,197,24,0.1); border-color: #f5c518; }
-        .trend-poster { aspect-ratio: 2 / 3; background: linear-gradient(145deg, #2a2a2a, #1a1a1a); display: flex; align-items: center; justify-content: center; color: #555; font-size: 2.5rem; }
-        .trend-poster span { opacity: 0.6; }
+        .trending-scroll::-webkit-scrollbar-thumb { background: #666; border-radius: 10px; }
+        .trending-scroll::-webkit-scrollbar-track { background: #1a1a1a; }
+        .trend-card {
+            flex: 0 0 160px;
+            scroll-snap-align: start;
+            background: #151515;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid #2a2a2a;
+            transition: transform 0.2s, border-color 0.2s;
+            cursor: pointer;
+        }
+        .trend-card:hover {
+            transform: translateY(-5px);
+            border-color: #ffffff;
+        }
+        .trend-poster {
+            aspect-ratio: 2 / 3;
+            background: #1e1e1e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #555;
+            font-size: 2.5rem;
+        }
         .trend-info { padding: 12px; }
-        .trend-info h4 { font-size: 0.9rem; font-weight: 600; color: white; margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .filter-section { margin: 28px 0 20px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; }
-        .genre-chips { display: flex; flex-wrap: wrap; gap: 10px; }
-        .chip { background: rgba(30,30,30,0.7); backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.05); color: #ccc; padding: 8px 18px; border-radius: 40px; font-size: 0.9rem; font-weight: 500; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
-        .chip:hover { background: #2a2a2a; border-color: #f5c518; color: white; }
-        .chip.active { background: #f5c518; color: black; border-color: #f5c518; font-weight: 600; }
-        .sort-control { display: flex; align-items: center; gap: 8px; color: #f5c518; }
-        .sort-control select { background: rgba(30,30,30,0.8); backdrop-filter: blur(4px); border: 1px solid #333; color: white; padding: 8px 28px 8px 14px; border-radius: 30px; font-size: 0.9rem; outline: none; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23f5c518' stroke-width='2'><polyline points='6 9 12 15 18 9'/></svg>"); background-repeat: no-repeat; background-position: right 8px center; }
-        .movies-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 24px 16px; margin: 32px 0 48px; }
-        .movie-card { background: #151515; border-radius: 20px; overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s; border: 1px solid #2a2a2a; display: flex; flex-direction: column; cursor: pointer; position: relative; }
-        .movie-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 20px 30px rgba(245,197,24,0.15); border-color: #f5c518; }
-        .card-poster { aspect-ratio: 2 / 3; background: linear-gradient(145deg, #2a2a2a, #1a1a1a); display: flex; align-items: center; justify-content: center; color: #555; font-size: 3rem; border-bottom: 1px solid #2a2a2a; position: relative; background-size: cover; background-position: center; }
+        .trend-info h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 6px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Фільтри — все в градаціях */
+        .filter-section {
+            margin: 28px 0 20px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+        .genre-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .chip {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            color: #ccc;
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .chip:hover {
+            background: #2a2a2a;
+            border-color: #ffffff;
+            color: white;
+        }
+        .chip.active {
+            background: #ffffff;
+            color: #000000;
+            border-color: #ffffff;
+            font-weight: 700;
+        }
+        .sort-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #ffffff;
+        }
+        .sort-control select {
+            background: #1a1a1a;
+            border: 1px solid #444;
+            color: white;
+            padding: 8px 28px 8px 14px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            outline: none;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2'><polyline points='6 9 12 15 18 9'/></svg>");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+        }
+
+        /* Сітка карток */
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 24px 16px;
+            margin: 32px 0 48px;
+        }
+        .movie-card {
+            background: #151515;
+            border-radius: 20px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s;
+            border: 1px solid #2a2a2a;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            position: relative;
+        }
+        .movie-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 30px rgba(255,255,255,0.05);
+            border-color: #ffffff;
+        }
+        .card-poster {
+            aspect-ratio: 2 / 3;
+            background: #1e1e1e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #555;
+            font-size: 3rem;
+            border-bottom: 1px solid #2a2a2a;
+            position: relative;
+            background-size: cover;
+            background-position: center;
+        }
         .card-poster span { opacity: 0.5; }
-        .card-badge { position: absolute; top: 10px; right: 10px; background: rgba(245,197,24,0.9); color: black; font-size: 0.7rem; font-weight: 700; padding: 4px 8px; border-radius: 30px; display: flex; align-items: center; gap: 4px; }
-        .watchlist-badge { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.7); color: #f5c518; font-size: 1rem; padding: 5px; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border: 1px solid #f5c518; opacity: 0; transition: opacity 0.2s; }
+        .watchlist-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #0a0a0a;
+            color: #ffffff;
+            font-size: 1rem;
+            padding: 5px;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #ffffff;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
         .movie-card:hover .watchlist-badge { opacity: 1; }
-        .card-info { padding: 14px 12px 12px; display: flex; flex-direction: column; gap: 8px; }
-        .card-title { font-weight: 700; font-size: 1rem; line-height: 1.3; color: white; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 42px; }
-        .card-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; font-size: 0.8rem; color: #aaa; }
-        .card-year { background: #1f1f1f; padding: 2px 10px; border-radius: 30px; }
-        .card-imdb { display: flex; align-items: center; gap: 4px; background: #2b2b2b; padding: 2px 8px; border-radius: 30px; color: #f5c518; font-weight: 600; }
-        .card-genres { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
-        .genre-tag { background: #1a1a1a; color: #bbb; font-size: 0.7rem; padding: 3px 10px; border-radius: 30px; border: 1px solid #2f2f2f; }
-        .card-type { font-size: 0.7rem; text-transform: uppercase; color: #f5c518; letter-spacing: 0.4px; margin-top: 6px; }
-        .no-results { grid-column: 1 / -1; text-align: center; padding: 60px; color: #666; font-size: 1.2rem; }
-        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(10,10,10,0.9); backdrop-filter: blur(12px); border-top: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-around; padding: 10px 0 20px; z-index: 200; display: none; }
-        .bottom-nav a { color: #aaa; font-size: 1.4rem; transition: color 0.2s; cursor: pointer; text-align: center; flex: 1; }
-        .bottom-nav a.active { color: #f5c518; }
-        .bottom-nav span { display: block; font-size: 0.7rem; margin-top: 4px; }
+        .card-info {
+            padding: 14px 12px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .card-title {
+            font-weight: 700;
+            font-size: 1rem;
+            line-height: 1.3;
+            color: white;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            min-height: 42px;
+        }
+        .card-meta {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 6px 8px;
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+        .card-year {
+            background: #1f1f1f;
+            padding: 2px 10px;
+            border-radius: 30px;
+            border: 1px solid #333;
+        }
+        .card-imdb {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: #1f1f1f;
+            padding: 2px 8px;
+            border-radius: 30px;
+            color: #dddddd;
+            font-weight: 600;
+            border: 1px solid #333;
+        }
+        .card-type {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: #cccccc;
+            letter-spacing: 0.4px;
+            margin-top: 6px;
+        }
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px;
+            color: #666;
+            font-size: 1.2rem;
+        }
+
+        /* Нижня навігація */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #0a0a0a;
+            border-top: 1px solid #2a2a2a;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0 20px;
+            z-index: 200;
+            display: none;
+        }
+        .bottom-nav a {
+            color: #aaa;
+            font-size: 1.4rem;
+            transition: color 0.2s;
+            cursor: pointer;
+            text-align: center;
+            flex: 1;
+        }
+        .bottom-nav a.active {
+            color: #ffffff;
+        }
+        .bottom-nav span {
+            display: block;
+            font-size: 0.7rem;
+            margin-top: 4px;
+        }
+
         @media (max-width: 700px) {
             .app { padding: 0 16px 70px; }
             .header-top .search-box { width: 100%; order: 3; }
@@ -76,32 +378,175 @@
             .trend-card { flex: 0 0 130px; }
             .movies-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
         }
-        /* Модальне вікно */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); backdrop-filter: blur(10px); z-index: 1000; align-items: center; justify-content: center; }
-        .modal.active { display: flex; animation: fadeIn 0.3s; }
+
+        /* Модальне вікно — чіткий чорно-білий стиль */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            backdrop-filter: blur(6px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal.active { display: flex; animation: fadeIn 0.2s; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .modal-content { background: #151515; width: 90%; max-width: 800px; border-radius: 30px; border: 1px solid #333; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.7); transform: scale(0.95); animation: scaleIn 0.3s forwards; }
+        .modal-content {
+            background: #151515;
+            width: 90%;
+            max-width: 800px;
+            border-radius: 30px;
+            border: 1px solid #333;
+            overflow: hidden;
+            box-shadow: 0 30px 60px rgba(255,255,255,0.05);
+            transform: scale(0.95);
+            animation: scaleIn 0.2s forwards;
+        }
         @keyframes scaleIn { to { transform: scale(1); } }
-        .modal-header { padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #2a2a2a; }
-        .modal-header h2 { font-size: 1.5rem; font-weight: 700; color: white; max-width: 80%; }
-        .close-modal { background: none; border: none; color: #aaa; font-size: 2.2rem; cursor: pointer; transition: color 0.2s; line-height: 1; }
-        .close-modal:hover { color: #f5c518; }
+        .modal-header {
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #2a2a2a;
+        }
+        .modal-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            max-width: 80%;
+        }
+        .close-modal {
+            background: none;
+            border: none;
+            color: #aaa;
+            font-size: 2.2rem;
+            cursor: pointer;
+            transition: color 0.2s;
+            line-height: 1;
+        }
+        .close-modal:hover { color: #ffffff; }
         .modal-body { padding: 24px; }
-        .player-container { background: #1a1a1a; border-radius: 20px; aspect-ratio: 16 / 9; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; border: 1px solid #333; margin-bottom: 20px; background-image: radial-gradient(circle at 30% 30%, #2a2a2a, #111); overflow: hidden; }
-        .player-container iframe { width: 100%; height: 100%; border: none; }
-        .play-btn { background: #f5c518; color: black; border: none; font-size: 1.2rem; font-weight: 700; padding: 14px 40px; border-radius: 50px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: transform 0.2s; box-shadow: 0 10px 20px rgba(245,197,24,0.3); margin: 10px 0; }
-        .play-btn:hover { background: #ffd966; transform: scale(1.03); }
+        .player-container {
+            background: #1a1a1a;
+            border-radius: 20px;
+            aspect-ratio: 16 / 9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            border: 1px solid #333;
+            margin-bottom: 20px;
+            background-image: radial-gradient(circle at 30% 30%, #2a2a2a, #111);
+            overflow: hidden;
+        }
+        .player-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .play-btn {
+            background: #ffffff;
+            color: #000000;
+            border: none;
+            font-size: 1.2rem;
+            font-weight: 700;
+            padding: 14px 40px;
+            border-radius: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: opacity 0.2s;
+            margin: 10px 0;
+        }
+        .play-btn:hover { opacity: 0.8; }
         .modal-details { color: #ccc; font-size: 0.95rem; line-height: 1.6; margin-top: 16px; }
-        .sources-list { display: flex; flex-wrap: wrap; gap: 10px; margin: 15px 0; }
-        .source-btn { background: #2a2a2a; border: 1px solid #444; color: #f5c518; padding: 8px 16px; border-radius: 40px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
-        .source-btn:hover { background: #f5c518; color: black; border-color: #f5c518; }
-        .watchlist-btn { background: transparent; border: 1px solid #f5c518; color: #f5c518; padding: 10px 20px; border-radius: 40px; font-weight: 600; cursor: pointer; transition: all 0.2s; margin-top: 10px; display: inline-flex; align-items: center; gap: 8px; }
-        .watchlist-btn:hover { background: #f5c518; color: black; }
-        .watchlist-btn.active { background: #f5c518; color: black; }
-        .ukr-badge { display: inline-block; background: #2b2b2b; color: #f5c518; padding: 4px 12px; border-radius: 30px; font-size: 0.8rem; font-weight: 600; margin-left: 10px; border: 1px solid #444; }
-        .footer { border-top: 1px solid #222; padding: 30px 0 40px; color: #666; font-size: 0.9rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
-        .footer a { color: #aaa; text-decoration: none; margin-right: 24px; cursor: pointer; transition: color 0.2s; }
-        .footer a:hover { color: #f5c518; }
+        .sources-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        .source-btn {
+            background: transparent;
+            border: 1px solid #555;
+            color: #ffffff;
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .source-btn:hover {
+            background: #ffffff;
+            color: #000000;
+            border-color: #ffffff;
+        }
+        .watchlist-btn {
+            background: transparent;
+            border: 1px solid #ffffff;
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .watchlist-btn:hover {
+            background: #ffffff;
+            color: #000000;
+        }
+        .watchlist-btn.active {
+            background: #ffffff;
+            color: #000000;
+        }
+        .ukr-badge {
+            display: inline-block;
+            background: #1f1f1f;
+            color: #dddddd;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 10px;
+            border: 1px solid #444;
+        }
+        .footer {
+            border-top: 1px solid #222;
+            padding: 30px 0 40px;
+            color: #777;
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .footer a {
+            color: #bbb;
+            text-decoration: none;
+            margin-right: 24px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .footer a:hover { color: #ffffff; }
+
+        /* Додаткова текстура — ледь помітна сітка для глибини */
+        .app {
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
     </style>
 </head>
 <body>
@@ -151,7 +596,7 @@
     </main>
 
     <footer class="footer">
-        <div>© 2025 SAYS UA — твій стильний кінотеатр</div>
+        <div>© 2025 SAYS UA — монохромний кінотеатр</div>
         <div>
             <a id="footerAbout">Про нас</a>
             <a id="footerApi">API</a>
@@ -176,9 +621,9 @@
         </div>
         <div class="modal-body">
             <div class="player-container" id="playerContainer">
-                <i class="fas fa-play-circle" style="font-size: 5rem; color: #f5c518; opacity: 0.6;"></i>
+                <i class="fas fa-play-circle" style="font-size: 5rem; color: #666; opacity: 0.6;"></i>
                 <button class="play-btn" id="playDefaultBtn"><i class="fas fa-play"></i> Дивитись</button>
-                <div style="color:#f5c518; font-size:0.85rem;">реклама відсутня · українською</div>
+                <div style="color:#aaa; font-size:0.85rem;">реклама відсутня · українською</div>
             </div>
             <div class="modal-details" id="modalDetails">
                 <p><strong>Рік:</strong> <span id="modalYear"></span></p>
@@ -186,7 +631,6 @@
                 <p><strong>Рейтинг IMDb:</strong> <span id="modalImdb"></span></p>
                 <p><strong>Тип:</strong> <span id="modalType"></span> <span class="ukr-badge">🇺🇦 Українською</span></p>
                 
-                <!-- Список знайдених джерел -->
                 <div class="sources-list" id="sourcesList"></div>
                 
                 <button class="watchlist-btn" id="watchlistToggle"><i class="far fa-bookmark"></i> Додати до списку</button>
@@ -202,22 +646,16 @@
         const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
         const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
         
-        // Проксі для обходу CORS (безкоштовний, але має ліміти)
         const PROXY_URL = 'https://api.allorigins.win/raw?url=';
 
-        // Список українських піратських ресурсів
         const UA_SOURCES = [
             {
                 name: 'UAKino',
                 domain: 'uakino.club',
                 searchUrl: (title, year) => `https://uakino.club/index.php?do=search&subaction=search&story=${encodeURIComponent(title)}`,
                 extractEmbed: (html) => {
-                    // Шукаємо перше посилання на фільм
                     const match = html.match(/<a href="(https:\/\/uakino\.club\/\d+-[^"]+\.html)"/);
-                    if (match) {
-                        // Повертаємо embed-версію (замінюємо .html на /embed/)
-                        return match[1].replace('.html', '/embed/');
-                    }
+                    if (match) return match[1].replace('.html', '/embed/');
                     return null;
                 }
             },
@@ -227,9 +665,7 @@
                 searchUrl: (title, year) => `https://kinogo.ec/index.php?do=search&subaction=search&story=${encodeURIComponent(title)}`,
                 extractEmbed: (html) => {
                     const match = html.match(/<a href="(https:\/\/kinogo\.ec\/\d+-[^"]+\.html)"/);
-                    if (match) {
-                        return match[1].replace('.html', '/embed/');
-                    }
+                    if (match) return match[1].replace('.html', '/embed/');
                     return null;
                 }
             },
@@ -238,11 +674,10 @@
                 domain: 'hdrezka.ag',
                 searchUrl: (title, year) => `https://hdrezka.ag/search/?q=${encodeURIComponent(title)}`,
                 extractEmbed: (html) => {
-                    // HDRezka має складнішу структуру, спрощено
                     const match = html.match(/data-id="(\d+)" data-type="([^"]+)"/);
                     if (match) {
                         const id = match[1];
-                        const type = match[2]; // 'film' або 'series'
+                        const type = match[2];
                         return `https://hdrezka.ag/embed/${type}/${id}/`;
                     }
                     return null;
@@ -250,7 +685,7 @@
             }
         ];
 
-        // ========== TMBD ФУНКЦІЇ ==========
+        // ========== TMDB ФУНКЦІЇ ==========
         async function fetchTMDB(endpoint, params = {}) {
             try {
                 const url = new URL(`${TMDB_BASE_URL}${endpoint}`);
@@ -279,7 +714,7 @@
             return data?.results || [];
         }
 
-        // ========== ФУНКЦІЇ ДЛЯ ПОШУКУ НА ПІРАТСЬКИХ САЙТАХ ==========
+        // ========== ПОШУК НА ПІРАТСЬКИХ САЙТАХ ==========
         async function fetchViaProxy(url) {
             try {
                 const response = await fetch(PROXY_URL + encodeURIComponent(url));
@@ -389,7 +824,6 @@
             currentMovieTitle = title;
             currentMovieYear = year;
 
-            // Завантажуємо деталі з TMDB (для метаданих)
             const tmdbData = await fetchMovieDetails(id, type);
             
             modalTitle.textContent = tmdbData.title || tmdbData.name || title;
@@ -398,11 +832,9 @@
             modalImdb.textContent = tmdbData.vote_average?.toFixed(1) || '—';
             modalType.textContent = type === 'tv' ? 'Серіал' : 'Фільм';
 
-            // Очищаємо плеєр і кнопки
-            playerContainer.innerHTML = `<i class="fas fa-play-circle" style="font-size: 5rem; color: #f5c518; opacity: 0.6;"></i>`;
+            playerContainer.innerHTML = `<i class="fas fa-play-circle" style="font-size: 5rem; color: #666; opacity: 0.6;"></i>`;
             sourcesList.innerHTML = '<i>Пошук джерел... <i class="fas fa-spinner fa-spin"></i></i>';
 
-            // Шукаємо джерела на піратських сайтах
             const embeds = await findAllEmbeds(title, year);
             
             if (embeds.length === 0) {
@@ -426,7 +858,6 @@
                 };
             }
 
-            // Кнопка списку перегляду
             if (watchlist.includes(id)) {
                 watchlistToggle.innerHTML = '<i class="fas fa-bookmark"></i> У списку';
                 watchlistToggle.classList.add('active');
@@ -438,21 +869,18 @@
             modal.classList.add('active');
         }
 
-        // ========== ЗАВАНТАЖЕННЯ ГОЛОВНОЇ ==========
         async function loadHome() {
             const popular = await fetchPopularMovies();
             renderMovies(popular.map(m => ({ ...m, media_type: 'movie' })));
 
-            // Тренди
-            const trending = popular.slice(0, 10);
             let trendHtml = '';
-            trending.forEach(m => {
+            popular.slice(0, 10).forEach(m => {
                 trendHtml += `
                     <div class="trend-card" data-id="${m.id}" data-type="movie" data-title="${m.title}" data-year="${(m.release_date || '').split('-')[0]}">
                         <div class="trend-poster"><span>${(m.title || '??').slice(0,2)}</span></div>
                         <div class="trend-info">
                             <h4>${m.title}</h4>
-                            <div class="trend-meta"><i class="fas fa-star"></i> ${m.vote_average?.toFixed(1)}</div>
+                            <div class="trend-meta" style="color:#aaa;"><i class="fas fa-star"></i> ${m.vote_average?.toFixed(1)}</div>
                         </div>
                     </div>
                 `;
@@ -481,13 +909,11 @@
                 chip.addEventListener('click', () => {
                     activeGenre = genre;
                     renderChips();
-                    // Фільтрація поки що заглушка
                 });
                 chipsContainer.appendChild(chip);
             });
         }
 
-        // ========== НАВІГАЦІЯ ==========
         function setActiveNav(targetNav) {
             navLinks.forEach(link => {
                 if (link.dataset.nav === targetNav) {
@@ -498,15 +924,11 @@
             });
             activeNav = targetNav;
             if (targetNav === 'home') loadHome();
-            else if (targetNav === 'watchlist') {
-                // TODO: показати збережені
-            }
         }
 
         // ========== ІНІЦІАЛІЗАЦІЯ ==========
         loadHome();
 
-        // Слухачі
         searchInput.addEventListener('input', (e) => {
             clearTimeout(window.searchTimeout);
             window.searchTimeout = setTimeout(async () => {
@@ -522,7 +944,6 @@
 
         sortSelect.addEventListener('change', (e) => {
             currentSort = e.target.value;
-            // Сортування поки що заглушка
         });
 
         navLinks.forEach(link => {
