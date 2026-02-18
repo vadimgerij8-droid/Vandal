@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>SAYS UA · каталог джерел</title>
+    <title>SAYS UA · каталог CloudStream</title>
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Google Fonts Inter -->
@@ -126,7 +126,7 @@
         }
         .sources-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 20px;
             margin-top: 16px;
         }
@@ -189,8 +189,43 @@
             color: #aaa;
             font-size: 1rem;
         }
+        .repo-info {
+            background: #111;
+            border: 1px solid #2a2a2a;
+            border-radius: 40px;
+            padding: 12px 20px;
+            margin-bottom: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+        .repo-url {
+            color: #ccc;
+            font-size: 0.9rem;
+            word-break: break-all;
+        }
+        .copy-btn {
+            background: transparent;
+            border: 1px solid #555;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .copy-btn:hover {
+            background: #ffffff;
+            color: #000;
+            border-color: #ffffff;
+        }
 
-        /* Фільтри та пошук (адаптовано для пошуку по плагінах) */
+        /* Фільтри та пошук */
         .filter-section {
             margin: 28px 0 20px;
             display: flex;
@@ -293,6 +328,7 @@
             .nav-links { display: none; }
             .bottom-nav { display: flex; }
             .sources-grid { grid-template-columns: 1fr; }
+            .repo-info { flex-direction: column; align-items: flex-start; }
         }
 
         .footer {
@@ -326,7 +362,7 @@
 <div class="app">
     <header class="header">
         <div class="header-top">
-            <div class="logo">SAYS UA · джерела</div>
+            <div class="logo">SAYS UA · CloudStream</div>
             <div class="search-box">
                 <i class="fas fa-search"></i>
                 <input type="search" id="searchInput" placeholder="Пошук плагінів..." aria-label="Пошук">
@@ -339,15 +375,21 @@
             <a data-nav="home" class="active">Усі джерела</a>
             <a data-nav="movies">Фільмові</a>
             <a data-nav="series">Серіальні</a>
-            <a data-nav="cartoons">Анімація</a>
+            <a data-nav="cartoons">Аніме</a>
             <a data-nav="collections">Добірки</a>
             <a data-nav="ratings">Топ</a>
         </div>
     </header>
 
+    <!-- Інформація про репозиторій -->
+    <div class="repo-info">
+        <span class="repo-url"><i class="fas fa-database"></i> Репозиторій: <strong>https://raw.githubusercontent.com/CakesTwix/cloudstream-extensions-uk/master/repo.json</strong></span>
+        <button class="copy-btn" id="copyRepoBtn"><i class="far fa-copy"></i> Копіювати URL</button>
+    </div>
+
     <!-- ОСНОВНИЙ КОНТЕНТ: список джерел з JSON -->
     <section class="sources-section">
-        <div class="section-title"><i class="fas fa-plug"></i> Доступні джерела (CloudStream)</div>
+        <div class="section-title"><i class="fas fa-plug"></i> Доступні розширення</div>
         <div class="filter-section">
             <div class="genre-chips" id="genreChips"></div>
             <div class="sort-control">
@@ -364,10 +406,10 @@
     </section>
 
     <footer class="footer">
-        <div>© 2025 SAYS UA — каталог розширень</div>
+        <div>© 2025 SAYS UA — каталог розширень CloudStream</div>
         <div>
             <a id="footerAbout">Про нас</a>
-            <a id="footerApi">API</a>
+            <a id="footerApi">JSON</a>
             <a id="footerSupport">Підтримка</a>
         </div>
     </footer>
@@ -389,7 +431,7 @@
         // ========== СТАН ==========
         let allPlugins = [];           // всі завантажені плагіни
         let filteredPlugins = [];       // відфільтровані/відсортовані
-        let activeFilter = 'Усі';       // активний фільтр (жанр/тип)
+        let activeFilter = 'Усі';       // активний фільтр (тип)
         let currentSort = 'default';    // поточне сортування
         let searchQuery = '';            // пошуковий запит
 
@@ -403,6 +445,7 @@
         const chipsContainer = document.getElementById('genreChips');
         const navLinks = document.querySelectorAll('#navLinks a, .bottom-nav a');
         const userIcon = document.getElementById('userIcon');
+        const copyBtn = document.getElementById('copyRepoBtn');
 
         // ========== ЗАВАНТАЖЕННЯ ТА РЕНДЕР ==========
         async function fetchPlugins() {
@@ -413,7 +456,7 @@
                 // Очікувана структура: { plugins: [ { name, url, version, description, type? } ] }
                 allPlugins = data.plugins || [];
                 
-                // Збираємо унікальні типи/жанри з плагінів (якщо є поле type, інакше дефолт)
+                // Збираємо унікальні типи/жанри з плагінів
                 const typeSet = new Set(['Усі']);
                 allPlugins.forEach(p => {
                     if (p.type) typeSet.add(p.type);
@@ -431,8 +474,8 @@
         function applyFiltersAndSort() {
             // 1. Фільтрація за пошуком та активним фільтром (тип)
             let filtered = allPlugins.filter(plugin => {
-                const matchesSearch = plugin.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                                      plugin.description?.toLowerCase().includes(searchQuery.toLowerCase());
+                const matchesSearch = (plugin.name || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                      (plugin.description || '').toLowerCase().includes(searchQuery.toLowerCase());
                 const matchesFilter = activeFilter === 'Усі' || plugin.type === activeFilter || 
                                      (activeFilter === 'Інше' && !plugin.type);
                 return matchesSearch && matchesFilter;
@@ -477,7 +520,7 @@
                         </div>
                         <div class="source-description">${description}</div>
                         <div class="source-link">
-                            <i class="fas fa-external-link-alt"></i> Відкрити джерело
+                            <i class="fas fa-external-link-alt"></i> Завантажити / Відкрити
                         </div>
                     </div>
                 `;
@@ -525,24 +568,34 @@
                 }
             });
             
-            // Імітуємо фільтрацію за типом при кліку на навігацію
-            if (targetNav === 'home') activeFilter = 'Усі';
-            else if (targetNav === 'movies') activeFilter = 'Фільм';
-            else if (targetNav === 'series') activeFilter = 'Серіал';
-            else if (targetNav === 'cartoons') activeFilter = 'Аніме';
-            else if (targetNav === 'collections') activeFilter = 'Добірка';
-            else if (targetNav === 'ratings') activeFilter = 'Рейтинг';
-            // Якщо такого типу немає, активний фільтр не зміниться — можна розширити логіку
+            // Встановлюємо фільтр відповідно до вибраного пункту меню
+            switch (targetNav) {
+                case 'home': activeFilter = 'Усі'; break;
+                case 'movies': activeFilter = 'Фільм'; break;
+                case 'series': activeFilter = 'Серіал'; break;
+                case 'cartoons': activeFilter = 'Аніме'; break;
+                case 'collections': activeFilter = 'Добірка'; break;
+                case 'ratings': activeFilter = 'Рейтинг'; break;
+                default: activeFilter = 'Усі';
+            }
             
             renderFilterChips(); // оновити підсвітку чіпів
             applyFiltersAndSort();
         }
 
-        // Клік по навігації
         navLinks.forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
                 setActiveNav(link.dataset.nav);
+            });
+        });
+
+        // Копіювання URL репозиторію
+        copyBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText(REPO_JSON_URL).then(() => {
+                alert('URL репозиторію скопійовано! Тепер ви можете додати його в CloudStream.');
+            }).catch(() => {
+                alert('Не вдалося скопіювати. Спробуйте вручну.');
             });
         });
 
