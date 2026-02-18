@@ -552,6 +552,25 @@
         .plyr--full-ui input[type=range] {
             color: #ffffff;
         }
+        .voiceover-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .voiceover-tab {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            color: #ccc;
+            padding: 8px 16px;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .voiceover-tab.active {
+            background: #ffffff;
+            color: #000000;
+            border-color: #ffffff;
+        }
     </style>
 </head>
 <body>
@@ -625,6 +644,11 @@
             <button class="close-modal" id="closeModalBtn">&times;</button>
         </div>
         <div class="modal-body">
+            <div class="voiceover-tabs" id="voiceoverTabs">
+                <button class="voiceover-tab active" data-lang="en">Англ/Sub (Consumet)</button>
+                <button class="voiceover-tab" data-lang="ru">Російська (AniLibria)</button>
+                <button class="voiceover-tab" data-lang="ua">Українська</button>
+            </div>
             <div class="player-container" id="playerContainer">
                 <i class="fas fa-play-circle" style="font-size: 5rem; color: #666; opacity: 0.6;"></i>
                 <button class="play-btn" id="playDefaultBtn"><i class="fas fa-play"></i> Шукати в Google</button>
@@ -659,6 +683,7 @@
         // ========== НОВА КОНФІГУРАЦІЯ: JIKAN API (АНІМЕ) ==========
         const JIKAN_BASE = 'https://api.jikan.moe/v4';
         const CONSUMET_BASE = 'https://api.consumet.org/anime/gogoanime/';
+        const ANILIBRIA_BASE = 'https://anilibria.top/api/v1/';
         
         // Жанри аніме (збережемо числові ID для фільтрації, але в демо використаємо назви)
         const ANIME_GENRES = [
@@ -676,6 +701,7 @@
         let currentAnimeTitle = '';
         let currentAnimeYear = '';
         let allAnimeData = []; // для клієнтського сортування
+        let currentPlyr = null;
 
         // DOM
         const grid = document.getElementById('moviesGrid');
@@ -701,6 +727,7 @@
         const sourcesList = document.getElementById('sourcesList');
         const malSearchBtn = document.getElementById('malSearchBtn');
         const googleSearchBtn = document.getElementById('googleSearchBtn');
+        const voiceoverTabs = document.getElementById('voiceoverTabs');
 
         // ========== ФУНКЦІЇ JIKAN ==========
         async function fetchJikan(endpoint) {
@@ -784,6 +811,32 @@
             }
         }
 
+        // ========== ФУНКЦІЇ ANILIBRIA ==========
+        async function getAniLibriaId(title) {
+            try {
+                const res = await fetch(`${ANILIBRIA_BASE}title/search?search=${encodeURIComponent(title)}`);
+                const data = await res.json();
+                if (data && data.length > 0) {
+                    return data[0].code || data[0].id;
+                }
+                return null;
+            } catch (error) {
+                console.error('AniLibria search error:', error);
+                return null;
+            }
+        }
+
+        async function getAniLibriaEpisodes(code) {
+            try {
+                const res = await fetch(`${ANILIBRIA_BASE}title?code=${code}&filter=player.playlist`);
+                const data = await res.json();
+                return data.player?.playlist || [];
+            } catch (error) {
+                console.error('AniLibria details error:', error);
+                return [];
+            }
+        }
+
         // ========== РЕНДЕР КАРТОК ==========
         function renderMovies(animeArray) {
             allAnimeData = animeArray; // для сортування
@@ -860,68 +913,18 @@
                 window.open(`https://www.google.com/search?q=${encodeURIComponent(title + ' аніме дивитися онлайн')}`, '_blank');
             };
 
-            // Спроба завантажити стрім
-            playerContainer.innerHTML = `<i class="fas fa-spinner fa-spin" style="font-size: 3rem; color: #666;"></i> Завантаження плеєра...`;
-            const streamId = await getStreamingId(details.title_english || details.title || title);
-            const episodes = await getEpisodes(streamId);
-            let plyrInstance = null;
-
-            if (streamId && episodes.length) {
-                playerContainer.innerHTML = `<video id="player" controls playsinline poster="${details.images?.jpg?.large_image_url || ''}"></video>`;
-                plyrInstance = new Plyr('#player', {
-                    controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'captions', 'settings', 'pip', 'airplay', 'fullscreen'],
-                    settings: ['captions', 'quality', 'speed'],
-                    quality: { default: 'default', options: ['1080p', '720p', '480p', '360p', 'default'] }
+            // Налаштовуємо вкладки озвучки
+            const tabButtons = voiceoverTabs.querySelectorAll('.voiceover-tab');
+            tabButtons.forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    tabButtons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    await loadPlayer(btn.dataset.lang, details);
                 });
+            });
 
-                episodeSelector.style.display = episodes.length > 1 ? 'flex' : 'none';
-                if (episodes.length > 1) {
-                    episodeSelect.innerHTML = episodes.map(ep => `<option value="${ep.id}">${ep.title || `Епізод ${ep.number}`}</option>`).join('');
-                    episodeSelect.addEventListener('change', async (e) => {
-                        const epId = e.target.value;
-                        await loadStream(epId);
-                    });
-                }
-
-                // Завантажуємо перший епізод
-                const firstEpId = episodes[0].id;
-                await loadStream(firstEpId);
-            } else {
-                // Fallback якщо стрім не знайдено
-                playerContainer.innerHTML = `
-                    <i class="fas fa-play-circle" style="font-size: 5rem; color: #666; opacity: 0.6;"></i>
-                    <button class="play-btn" id="playDefaultBtn"><i class="fas fa-play"></i> Шукати в Google</button>
-                    <div style="color:#aaa; font-size:0.85rem;">Натисніть, щоб знайти переклад</div>
-                `;
-                document.getElementById('playDefaultBtn').onclick = () => {
-                    window.open(`https://www.google.com/search?q=${encodeURIComponent(title + ' аніме дивитися онлайн з українським перекладом')}`, '_blank');
-                };
-                episodeSelector.style.display = 'none';
-            }
-
-            async function loadStream(epId) {
-                const stream = await getStream(epId);
-                if (stream) {
-                    const video = document.getElementById('player');
-                    video.src = stream.url;
-                    if (stream.url.endsWith('.m3u8')) {
-                        if (Hls.isSupported()) {
-                            const hls = new Hls();
-                            hls.loadSource(stream.url);
-                            hls.attachMedia(video);
-                            hls.on(Hls.Events.MANIFEST_PARSED, () => {
-                                video.play();
-                            });
-                        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                            video.play();
-                        }
-                    } else {
-                        video.play();
-                    }
-                } else {
-                    alert('Не вдалося завантажити стрім для цього епізоду');
-                }
-            }
+            // Спроба завантажити плеєр (початково англ/sub Consumet)
+            await loadPlayer('en', details);
 
             // Оновлюємо кнопку списку перегляду
             if (watchlist.includes(id)) {
@@ -933,6 +936,128 @@
             }
 
             modal.classList.add('active');
+        }
+
+        async function loadPlayer(lang, details) {
+            if (currentPlyr) {
+                currentPlyr.destroy();
+                currentPlyr = null;
+            }
+            playerContainer.innerHTML = `<i class="fas fa-spinner fa-spin" style="font-size: 3rem; color: #666;"></i> Завантаження плеєра...`;
+            episodeSelector.style.display = 'none';
+
+            if (lang === 'en') {
+                // Consumet (англ/sub)
+                const streamId = await getStreamingId(details.title_english || details.title || currentAnimeTitle);
+                const episodes = await getEpisodes(streamId);
+
+                if (streamId && episodes.length) {
+                    playerContainer.innerHTML = `<video id="player" controls playsinline poster="${details.images?.jpg?.large_image_url || ''}"></video>`;
+                    currentPlyr = new Plyr('#player', {
+                        controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'captions', 'settings', 'pip', 'airplay', 'fullscreen'],
+                        settings: ['captions', 'quality', 'speed'],
+                        quality: { default: 'default', options: ['1080p', '720p', '480p', '360p', 'default'] }
+                    });
+
+                    episodeSelector.style.display = episodes.length > 1 ? 'flex' : 'none';
+                    if (episodes.length > 1) {
+                        episodeSelect.innerHTML = episodes.map(ep => `<option value="${ep.id}">${ep.title || `Епізод ${ep.number}`}</option>`).join('');
+                        episodeSelect.addEventListener('change', async (e) => {
+                            const epId = e.target.value;
+                            await loadStream(epId, 'en');
+                        });
+                    }
+
+                    // Завантажуємо перший епізод
+                    const firstEpId = episodes[0].id;
+                    await loadStream(firstEpId, 'en');
+                } else {
+                    showFallback('Не знайдено стрімів на Consumet');
+                }
+            } else if (lang === 'ru') {
+                // AniLibria (російська озвучка)
+                const code = await getAniLibriaId(details.title_english || details.title || currentAnimeTitle);
+                const episodes = await getAniLibriaEpisodes(code);
+
+                if (code && episodes.length) {
+                    playerContainer.innerHTML = `<video id="player" controls playsinline poster="${details.images?.jpg?.large_image_url || ''}"></video>`;
+                    currentPlyr = new Plyr('#player', {
+                        controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'captions', 'settings', 'pip', 'airplay', 'fullscreen'],
+                        settings: ['captions', 'quality', 'speed'],
+                        quality: { default: 'default', options: ['1080p', '720p', '480p', '360p', 'default'] }
+                    });
+
+                    episodeSelector.style.display = episodes.length > 1 ? 'flex' : 'none';
+                    if (episodes.length > 1) {
+                        episodeSelect.innerHTML = episodes.map((ep, index) => `<option value="${index}">${ep.name || `Епізод ${index + 1}`}</option>`).join('');
+                        episodeSelect.addEventListener('change', async (e) => {
+                            const index = e.target.value;
+                            await loadStream(index, 'ru', episodes);
+                        });
+                    }
+
+                    // Завантажуємо перший епізод
+                    await loadStream(0, 'ru', episodes);
+                } else {
+                    showFallback('Не знайдено на AniLibria');
+                }
+            } else if (lang === 'ua') {
+                // Українська - fallback пошук
+                playerContainer.innerHTML = `
+                    <i class="fas fa-play-circle" style="font-size: 5rem; color: #666; opacity: 0.6;"></i>
+                    <button class="play-btn" onclick="window.open('https://www.google.com/search?q=${encodeURIComponent(currentAnimeTitle + ' аніме українською озвучкою дивитися онлайн')}', '_blank')"><i class="fas fa-play"></i> Шукати українською</button>
+                    <div style="color:#aaa; font-size:0.85rem;">AniTube / UFDub / AniHub</div>
+                `;
+            }
+        }
+
+        async function loadStream(id, lang, episodes = null) {
+            const video = document.getElementById('player');
+            let streamUrl;
+
+            if (lang === 'en') {
+                const stream = await getStream(id);
+                if (stream) {
+                    streamUrl = stream.url;
+                }
+            } else if (lang === 'ru') {
+                const ep = episodes[id];
+                streamUrl = ep.file || ep.hd || ep.sd || ep.hls || ep.player; // Залежно від формату AniLibria
+                if (streamUrl && streamUrl.startsWith('//')) {
+                    streamUrl = 'https:' + streamUrl;
+                }
+            }
+
+            if (streamUrl) {
+                video.src = streamUrl;
+                if (streamUrl.endsWith('.m3u8')) {
+                    if (Hls.isSupported()) {
+                        const hls = new Hls();
+                        hls.loadSource(streamUrl);
+                        hls.attachMedia(video);
+                        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                            video.play();
+                        });
+                    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                        video.play();
+                    }
+                } else {
+                    video.play();
+                }
+            } else {
+                alert('Не вдалося завантажити стрім');
+            }
+        }
+
+        function showFallback(message) {
+            playerContainer.innerHTML = `
+                <i class="fas fa-exclamation-triangle" style="font-size: 5rem; color: #666; opacity: 0.6;"></i>
+                <div style="color:#aaa; font-size:0.95rem;">${message}</div>
+                <button class="play-btn" id="playDefaultBtn"><i class="fas fa-play"></i> Шукати в Google</button>
+            `;
+            document.getElementById('playDefaultBtn').onclick = () => {
+                window.open(`https://www.google.com/search?q=${encodeURIComponent(currentAnimeTitle + ' аніме дивитися онлайн з українським перекладом')}`, '_blank');
+            };
         }
 
         // Завантаження головної (топ аніме всіх типів)
@@ -1097,9 +1222,15 @@
         userIcon.addEventListener('click', () => alert('👤 Персональний кабінет (демо)'));
 
         // Модальне вікно
-        closeModalBtn.addEventListener('click', () => modal.classList.remove('active'));
+        closeModalBtn.addEventListener('click', () => {
+            modal.classList.remove('active');
+            if (currentPlyr) currentPlyr.destroy();
+        });
         window.addEventListener('click', (e) => {
-            if (e.target === modal) modal.classList.remove('active');
+            if (e.target === modal) {
+                modal.classList.remove('active');
+                if (currentPlyr) currentPlyr.destroy();
+            }
         });
 
         // Перемикання списку перегляду
