@@ -11,7 +11,7 @@
     <!-- Plyr CSS -->
     <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
     <style>
-        /* ========== ЧОРНО-БІЛИЙ МІНІМАЛІЗМ (БЕЗ ЗМІН) ========== */
+        /* ========== ЧОРНО-БІЛИЙ МІНІМАЛІЗМ ========== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             background-color: #0b0b0b;
@@ -25,6 +25,10 @@
             margin: 0 auto;
             padding: 0 20px;
             padding-bottom: 80px;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 40px 40px;
         }
         .header {
             position: sticky;
@@ -420,6 +424,28 @@
         }
         .close-modal:hover { color: #ffffff; }
         .modal-body { padding: 24px; }
+        
+        /* === НОВІ СТИЛІ ДЛЯ ТОЧНОЇ ВІДПОВІДНОСТІ СКРІНШОТАМ === */
+        .player-header {
+            margin-bottom: 16px;
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 8px;
+        }
+        .player-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+        }
+        .player-subtitle {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #aaaaaa;
+            text-transform: uppercase;
+        }
         .player-container {
             background: #1a1a1a;
             border-radius: 20px;
@@ -433,6 +459,28 @@
             margin-bottom: 20px;
             background-image: radial-gradient(circle at 30% 30%, #2a2a2a, #111);
             overflow: hidden;
+            position: relative;
+        }
+        .player-fallback {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            text-align: center;
+            padding: 20px;
+        }
+        .fallback-message {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #dddddd;
+        }
+        .fallback-info {
+            font-size: 1.2rem;
+            color: #cccccc;
+            background: rgba(255,255,255,0.05);
+            padding: 8px 20px;
+            border-radius: 40px;
+            border: 1px solid #444;
         }
         .player-container iframe {
             width: 100%;
@@ -455,7 +503,32 @@
             margin: 10px 0;
         }
         .play-btn:hover { opacity: 0.8; }
-        .modal-details { color: #ccc; font-size: 0.95rem; line-height: 1.6; margin-top: 16px; }
+        .episode-info-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #1f1f1f;
+            padding: 12px 16px;
+            border-radius: 40px;
+            margin: 10px 0 20px;
+            border: 1px solid #333;
+            color: #cccccc;
+            font-weight: 500;
+        }
+        .episode-info-bar i {
+            color: #ffffff;
+            margin-right: 6px;
+        }
+        .modal-details { 
+            color: #ccc; 
+            font-size: 0.95rem; 
+            line-height: 1.6; 
+            margin-top: 16px; 
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 20px;
+            border: 1px solid #2a2a2a;
+        }
         .sources-list {
             display: flex;
             flex-wrap: wrap;
@@ -528,13 +601,6 @@
             transition: color 0.2s;
         }
         .footer a:hover { color: #ffffff; }
-        .app {
-            background-image: 
-                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-            background-size: 40px 40px;
-        }
-        /* Стилі для Plyr (додаткові, щоб вписати в дизайн) */
         .plyr {
             border-radius: 20px;
             overflow: hidden;
@@ -555,7 +621,8 @@
         .voiceover-tabs {
             display: flex;
             gap: 10px;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
         }
         .voiceover-tab {
             background: #1a1a1a;
@@ -565,6 +632,7 @@
             border-radius: 40px;
             cursor: pointer;
             transition: all 0.2s;
+            font-weight: 600;
         }
         .voiceover-tab.active {
             background: #ffffff;
@@ -644,25 +712,43 @@
             <button class="close-modal" id="closeModalBtn">&times;</button>
         </div>
         <div class="modal-body">
+            <!-- Вкладки озвучення (FanVoxUA для української) -->
             <div class="voiceover-tabs" id="voiceoverTabs">
                 <button class="voiceover-tab active" data-lang="en">Англ/Sub (Consumet)</button>
                 <button class="voiceover-tab" data-lang="ru">Російська (AniLibria)</button>
-                <button class="voiceover-tab" data-lang="ua">Українська</button>
+                <button class="voiceover-tab" data-lang="ua">FanVoxUA</button>
             </div>
+
+            <!-- Заголовок "Плеєр Трейлер" (як на скріншоті) -->
+            <div class="player-header">
+                <span class="player-title">Плеєр</span>
+                <span class="player-subtitle">Трейлер</span>
+            </div>
+
+            <!-- Контейнер плеєра -->
             <div class="player-container" id="playerContainer">
-                <i class="fas fa-play-circle" style="font-size: 5rem; color: #666; opacity: 0.6;"></i>
-                <button class="play-btn" id="playDefaultBtn"><i class="fas fa-play"></i> Шукати в Google</button>
-                <div style="color:#aaa; font-size:0.85rem;">Натисніть, щоб знайти переклад</div>
+                <!-- Заповнюється динамічно -->
             </div>
+
+            <!-- Інформація про серію (сезон, студія, серія) -->
+            <div class="episode-info-bar" id="episodeInfoBar">
+                <span><i class="fas fa-tag"></i> <span id="seasonInfo">1 сезон</span></span>
+                <span><i class="fas fa-microphone"></i> <span id="studioInfo">FanVoxUA</span></span>
+                <span><i class="fas fa-play-circle"></i> <span id="episodeInfo">1 серія</span></span>
+            </div>
+
+            <!-- Вибір епізоду (для багатосерійних) -->
             <div class="sort-control" id="episodeSelector" style="margin-top:20px; display:none;">
                 <span>Епізод:</span>
                 <select id="episodeSelect"></select>
             </div>
+
+            <!-- Деталі аніме (рік, жанри, рейтинг тощо) -->
             <div class="modal-details" id="modalDetails">
                 <p><strong>Рік:</strong> <span id="modalYear"></span></p>
                 <p><strong>Жанри:</strong> <span id="modalGenres"></span></p>
                 <p><strong>Рейтинг:</strong> <span id="modalImdb"></span>/10</p>
-                <p><strong>Тип:</strong> <span id="modalType"></span> <span class="ukr-badge">🇺🇦 українською?</span></p>
+                <p><strong>Тип:</strong> <span id="modalType"></span> <span class="ukr-badge">🇺🇦 FanVoxUA</span></p>
                 <p><strong>Серій / статус:</strong> <span id="modalEpisodes"></span></p>
                 
                 <div class="sources-list" id="sourcesList">
@@ -680,12 +766,11 @@
 <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
 <script>
     (function() {
-        // ========== НОВА КОНФІГУРАЦІЯ: JIKAN API (АНІМЕ) ==========
+        // ========== КОНФІГУРАЦІЯ ==========
         const JIKAN_BASE = 'https://api.jikan.moe/v4';
         const CONSUMET_BASE = 'https://api.consumet.org/anime/gogoanime/';
         const ANILIBRIA_BASE = 'https://anilibria.top/api/v1/';
         
-        // Жанри аніме (збережемо числові ID для фільтрації, але в демо використаємо назви)
         const ANIME_GENRES = [
             'Усі', 'Action', 'Adventure', 'Comedy', 'Drama', 'Fantasy', 
             'Horror', 'Romance', 'Sci-Fi', 'Slice of Life', 'Sports', 'Mystery'
@@ -700,7 +785,7 @@
         let currentAnimeId = null;
         let currentAnimeTitle = '';
         let currentAnimeYear = '';
-        let allAnimeData = []; // для клієнтського сортування
+        let allAnimeData = [];
         let currentPlyr = null;
 
         // DOM
@@ -721,13 +806,14 @@
         const playerContainer = document.getElementById('playerContainer');
         const episodeSelector = document.getElementById('episodeSelector');
         const episodeSelect = document.getElementById('episodeSelect');
-        const playDefaultBtn = document.getElementById('playDefaultBtn');
         const closeModalBtn = document.getElementById('closeModalBtn');
         const watchlistToggle = document.getElementById('watchlistToggle');
-        const sourcesList = document.getElementById('sourcesList');
         const malSearchBtn = document.getElementById('malSearchBtn');
         const googleSearchBtn = document.getElementById('googleSearchBtn');
         const voiceoverTabs = document.getElementById('voiceoverTabs');
+        const seasonInfo = document.getElementById('seasonInfo');
+        const studioInfo = document.getElementById('studioInfo');
+        const episodeInfo = document.getElementById('episodeInfo');
 
         // ========== ФУНКЦІЇ JIKAN ==========
         async function fetchJikan(endpoint) {
@@ -742,21 +828,18 @@
             }
         }
 
-        // Отримати топ аніме за типом (type: tv, movie, ova, special, ona)
         async function fetchTopAnime(type = '', page = 1) {
             let endpoint = `/top/anime?page=${page}`;
             if (type) endpoint += `&type=${type}`;
             return await fetchJikan(endpoint);
         }
 
-        // Пошук аніме
         async function searchAnime(query) {
             if (!query) return [];
             const endpoint = `/anime?q=${encodeURIComponent(query)}&order_by=score&sort=desc`;
             return await fetchJikan(endpoint);
         }
 
-        // Деталі аніме
         async function fetchAnimeDetails(id) {
             const endpoint = `/anime/${id}`;
             try {
@@ -770,7 +853,7 @@
             }
         }
 
-        // ========== ФУНКЦІЇ CONSUMET (для стрімів) ==========
+        // ========== CONSUMET ==========
         async function getStreamingId(title) {
             try {
                 const res = await fetch(`${CONSUMET_BASE}${encodeURIComponent(title)}`);
@@ -801,7 +884,6 @@
                 const res = await fetch(`${CONSUMET_BASE}watch/${episodeId}`);
                 const data = await res.json();
                 if (data.sources && data.sources.length) {
-                    // Віддаємо перевагу HD або default
                     return data.sources.find(s => s.quality === '1080p' || s.quality === '720p' || s.quality === 'default') || data.sources[0];
                 }
                 return null;
@@ -811,7 +893,7 @@
             }
         }
 
-        // ========== ФУНКЦІЇ ANILIBRIA ==========
+        // ========== ANILIBRIA ==========
         async function getAniLibriaId(title) {
             try {
                 const res = await fetch(`${ANILIBRIA_BASE}title/search?search=${encodeURIComponent(title)}`);
@@ -837,9 +919,9 @@
             }
         }
 
-        // ========== РЕНДЕР КАРТОК ==========
+        // ========== РЕНДЕР ==========
         function renderMovies(animeArray) {
-            allAnimeData = animeArray; // для сортування
+            allAnimeData = animeArray;
 
             if (!animeArray.length) {
                 grid.innerHTML = `<div class="no-results">😕 Нічого не знайдено</div>`;
@@ -851,10 +933,9 @@
                 const title = a.title_ukrainian || a.title || a.title_english || 'Без назви';
                 const year = a.aired?.prop?.from?.year || a.aired?.from?.split('-')[0] || '—';
                 const score = a.score ? a.score.toFixed(1) : '?';
-                const type = a.type || 'ANIME'; // TV, Movie, OVA тощо
+                const type = a.type || 'ANIME';
                 const posterUrl = a.images?.jpg?.image_url || '';
                 const id = a.mal_id;
-
                 const inWatchlist = watchlist.includes(id) ? 'fa-solid' : 'fa-regular';
 
                 html += `
@@ -905,28 +986,30 @@
             modalType.textContent = details.type || 'Аніме';
             modalEpisodes.textContent = `${details.episodes || '?'} серій, статус: ${details.status || '—'}`;
 
-            // Налаштовуємо кнопки пошуку
-            malSearchBtn.onclick = () => {
-                window.open(`https://myanimelist.net/anime/${id}`, '_blank');
-            };
-            googleSearchBtn.onclick = () => {
-                window.open(`https://www.google.com/search?q=${encodeURIComponent(title + ' аніме дивитися онлайн')}`, '_blank');
-            };
+            // Оновлюємо інформацію про серію (для прикладу завжди 1 сезон, 1 серія, FanVoxUA)
+            seasonInfo.textContent = '1 сезон';
+            studioInfo.textContent = 'FanVoxUA';
+            episodeInfo.textContent = '1 серія';
 
-            // Налаштовуємо вкладки озвучки
+            malSearchBtn.onclick = () => window.open(`https://myanimelist.net/anime/${id}`, '_blank');
+            googleSearchBtn.onclick = () => window.open(`https://www.google.com/search?q=${encodeURIComponent(title + ' аніме дивитися онлайн')}`, '_blank');
+
+            // Вкладки озвучення
             const tabButtons = voiceoverTabs.querySelectorAll('.voiceover-tab');
             tabButtons.forEach(btn => {
-                btn.addEventListener('click', async () => {
-                    tabButtons.forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    await loadPlayer(btn.dataset.lang, details);
-                });
+                btn.removeEventListener('click', voiceoverHandler);
+                btn.addEventListener('click', voiceoverHandler);
             });
 
-            // Спроба завантажити плеєр (початково англ/sub Consumet)
+            async function voiceoverHandler(e) {
+                tabButtons.forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                await loadPlayer(e.target.dataset.lang, details);
+            }
+
+            // Початково активна англійська
             await loadPlayer('en', details);
 
-            // Оновлюємо кнопку списку перегляду
             if (watchlist.includes(id)) {
                 watchlistToggle.innerHTML = '<i class="fas fa-bookmark"></i> У списку';
                 watchlistToggle.classList.add('active');
@@ -947,7 +1030,6 @@
             episodeSelector.style.display = 'none';
 
             if (lang === 'en') {
-                // Consumet (англ/sub)
                 const streamId = await getStreamingId(details.title_english || details.title || currentAnimeTitle);
                 const episodes = await getEpisodes(streamId);
 
@@ -962,20 +1044,16 @@
                     episodeSelector.style.display = episodes.length > 1 ? 'flex' : 'none';
                     if (episodes.length > 1) {
                         episodeSelect.innerHTML = episodes.map(ep => `<option value="${ep.id}">${ep.title || `Епізод ${ep.number}`}</option>`).join('');
-                        episodeSelect.addEventListener('change', async (e) => {
-                            const epId = e.target.value;
-                            await loadStream(epId, 'en');
-                        });
+                        episodeSelect.onchange = async (e) => {
+                            await loadStream(e.target.value, 'en');
+                        };
                     }
 
-                    // Завантажуємо перший епізод
-                    const firstEpId = episodes[0].id;
-                    await loadStream(firstEpId, 'en');
+                    await loadStream(episodes[0].id, 'en');
                 } else {
                     showFallback('Не знайдено стрімів на Consumet');
                 }
             } else if (lang === 'ru') {
-                // AniLibria (російська озвучка)
                 const code = await getAniLibriaId(details.title_english || details.title || currentAnimeTitle);
                 const episodes = await getAniLibriaEpisodes(code);
 
@@ -990,24 +1068,27 @@
                     episodeSelector.style.display = episodes.length > 1 ? 'flex' : 'none';
                     if (episodes.length > 1) {
                         episodeSelect.innerHTML = episodes.map((ep, index) => `<option value="${index}">${ep.name || `Епізод ${index + 1}`}</option>`).join('');
-                        episodeSelect.addEventListener('change', async (e) => {
-                            const index = e.target.value;
-                            await loadStream(index, 'ru', episodes);
-                        });
+                        episodeSelect.onchange = async (e) => {
+                            await loadStream(e.target.value, 'ru', episodes);
+                        };
                     }
 
-                    // Завантажуємо перший епізод
                     await loadStream(0, 'ru', episodes);
                 } else {
                     showFallback('Не знайдено на AniLibria');
                 }
             } else if (lang === 'ua') {
-                // Українська - fallback пошук
+                // FanVoxUA – пошук у Google з уточненням
                 playerContainer.innerHTML = `
-                    <i class="fas fa-play-circle" style="font-size: 5rem; color: #666; opacity: 0.6;"></i>
-                    <button class="play-btn" onclick="window.open('https://www.google.com/search?q=${encodeURIComponent(currentAnimeTitle + ' аніме українською озвучкою дивитися онлайн')}', '_blank')"><i class="fas fa-play"></i> Шукати українською</button>
-                    <div style="color:#aaa; font-size:0.85rem;">AniTube / UFDub / AniHub</div>
+                    <div class="player-fallback">
+                        <div class="fallback-message">Відео не працює?</div>
+                        <div class="fallback-info">1 сезон FanVoxUA 1 серія</div>
+                        <button class="play-btn" id="playDefaultBtn"><i class="fas fa-play"></i> Шукати українською</button>
+                    </div>
                 `;
+                document.getElementById('playDefaultBtn').onclick = () => {
+                    window.open(`https://www.google.com/search?q=${encodeURIComponent(currentAnimeTitle + ' аніме українською озвучкою FanVoxUA дивитися онлайн')}`, '_blank');
+                };
             }
         }
 
@@ -1017,12 +1098,10 @@
 
             if (lang === 'en') {
                 const stream = await getStream(id);
-                if (stream) {
-                    streamUrl = stream.url;
-                }
+                if (stream) streamUrl = stream.url;
             } else if (lang === 'ru') {
                 const ep = episodes[id];
-                streamUrl = ep.file || ep.hd || ep.sd || ep.hls || ep.player; // Залежно від формату AniLibria
+                streamUrl = ep.file || ep.hd || ep.sd || ep.hls || ep.player;
                 if (streamUrl && streamUrl.startsWith('//')) {
                     streamUrl = 'https:' + streamUrl;
                 }
@@ -1035,9 +1114,7 @@
                         const hls = new Hls();
                         hls.loadSource(streamUrl);
                         hls.attachMedia(video);
-                        hls.on(Hls.Events.MANIFEST_PARSED, () => {
-                            video.play();
-                        });
+                        hls.on(Hls.Events.MANIFEST_PARSED, () => video.play());
                     } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
                         video.play();
                     }
@@ -1051,21 +1128,21 @@
 
         function showFallback(message) {
             playerContainer.innerHTML = `
-                <i class="fas fa-exclamation-triangle" style="font-size: 5rem; color: #666; opacity: 0.6;"></i>
-                <div style="color:#aaa; font-size:0.95rem;">${message}</div>
-                <button class="play-btn" id="playDefaultBtn"><i class="fas fa-play"></i> Шукати в Google</button>
+                <div class="player-fallback">
+                    <div class="fallback-message">Відео не працює?</div>
+                    <div class="fallback-info">1 сезон FanVoxUA 1 серія</div>
+                    <button class="play-btn" id="playDefaultBtn"><i class="fas fa-play"></i> Шукати в Google</button>
+                </div>
             `;
             document.getElementById('playDefaultBtn').onclick = () => {
                 window.open(`https://www.google.com/search?q=${encodeURIComponent(currentAnimeTitle + ' аніме дивитися онлайн з українським перекладом')}`, '_blank');
             };
         }
 
-        // Завантаження головної (топ аніме всіх типів)
         async function loadHome() {
-            const topAnime = await fetchTopAnime('', 1); // всі типи
+            const topAnime = await fetchTopAnime('', 1);
             renderMovies(topAnime);
 
-            // Тренди (перші 10)
             let trendHtml = '';
             topAnime.slice(0, 10).forEach(a => {
                 trendHtml += `
@@ -1092,19 +1169,16 @@
             renderChips();
         }
 
-        // Фільтр за типом (навігація)
         async function loadByType(type) {
             let animeType = '';
             if (type === 'movies') animeType = 'movie';
             else if (type === 'series') animeType = 'tv';
-            else if (type === 'ova') animeType = 'ova'; // також можна додати 'ona' але для простоти ova
-            else if (type === 'collections' || type === 'ratings') animeType = ''; // просто топ
+            else if (type === 'ova') animeType = 'ova';
             
             const data = await fetchTopAnime(animeType, 1);
             renderMovies(data);
         }
 
-        // Жанрові чипи
         function renderChips() {
             chipsContainer.innerHTML = '';
             ANIME_GENRES.forEach(genre => {
@@ -1115,12 +1189,8 @@
                 chip.addEventListener('click', () => {
                     activeGenre = genre;
                     renderChips();
-                    // Тут можна додати фільтрацію за жанром, але для демо просто перезавантажимо топ
                     if (genre === 'Усі') loadHome();
-                    else {
-                        // Фільтрація за жанром через API (пошук з жанром)
-                        searchByGenre(genre);
-                    }
+                    else searchByGenre(genre);
                 });
                 chipsContainer.appendChild(chip);
             });
@@ -1140,7 +1210,6 @@
             return map[genreName] || '';
         }
 
-        // Сортування (клієнтське)
         function applySort() {
             if (!allAnimeData.length) return;
             let sorted = [...allAnimeData];
@@ -1156,23 +1225,17 @@
             renderMovies(sorted);
         }
 
-        // Встановлення активної навігації
         function setActiveNav(targetNav) {
             navLinks.forEach(link => {
-                if (link.dataset.nav === targetNav) {
-                    link.classList.add('active');
-                } else {
-                    link.classList.remove('active');
-                }
+                if (link.dataset.nav === targetNav) link.classList.add('active');
+                else link.classList.remove('active');
             });
             activeNav = targetNav;
 
             if (targetNav === 'home') loadHome();
             else if (targetNav === 'movies' || targetNav === 'series' || targetNav === 'ova' || targetNav === 'collections' || targetNav === 'ratings') {
                 loadByType(targetNav);
-            } else if (targetNav === 'watchlist') {
-                showWatchlist();
-            }
+            } else if (targetNav === 'watchlist') showWatchlist();
         }
 
         function showWatchlist() {
@@ -1180,17 +1243,13 @@
                 grid.innerHTML = `<div class="no-results">Список перегляду порожній</div>`;
                 return;
             }
-            // Завантажуємо кожен елемент із Jikan (обмежимо 20)
             Promise.all(watchlist.slice(0, 20).map(id => fetchAnimeDetails(id)))
-                .then(results => {
-                    renderMovies(results.filter(r => r !== null));
-                });
+                .then(results => renderMovies(results.filter(r => r !== null)));
         }
 
         // Ініціалізація
         loadHome();
 
-        // Пошук
         searchInput.addEventListener('input', (e) => {
             clearTimeout(window.searchTimeout);
             window.searchTimeout = setTimeout(async () => {
@@ -1204,13 +1263,11 @@
             }, 500);
         });
 
-        // Сортування
         sortSelect.addEventListener('change', (e) => {
             currentSort = e.target.value;
             applySort();
         });
 
-        // Навігація
         navLinks.forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -1218,10 +1275,8 @@
             });
         });
 
-        // Юзер іконка
         userIcon.addEventListener('click', () => alert('👤 Персональний кабінет (демо)'));
 
-        // Модальне вікно
         closeModalBtn.addEventListener('click', () => {
             modal.classList.remove('active');
             if (currentPlyr) currentPlyr.destroy();
@@ -1233,7 +1288,6 @@
             }
         });
 
-        // Перемикання списку перегляду
         watchlistToggle.addEventListener('click', () => {
             if (!currentAnimeId) return;
             const idx = watchlist.indexOf(currentAnimeId);
@@ -1249,7 +1303,6 @@
             localStorage.setItem('saysua_anime_watchlist', JSON.stringify(watchlist));
         });
 
-        // Футер
         document.getElementById('footerAbout').addEventListener('click', () => alert('Сайт для перегляду аніме в монохромному стилі. Використовує Jikan API та Consumet для стрімів.'));
         document.getElementById('footerApi').addEventListener('click', () => window.open('https://jikan.moe/', '_blank'));
         document.getElementById('footerSupport').addEventListener('click', () => alert('Підтримка: example@email.com'));
