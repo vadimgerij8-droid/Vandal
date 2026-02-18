@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>SAYS UA · монохром</title>
+    <title>SAYS UA · аніме монохром</title>
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Google Fonts Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <style>
-        /* ========== ЧОРНО-БІЛИЙ МІНІМАЛІЗМ ========== */
+        /* ========== ЧОРНО-БІЛИЙ МІНІМАЛІЗМ (БЕЗ ЗМІН) ========== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             background-color: #0b0b0b;
@@ -24,7 +24,6 @@
             padding: 0 20px;
             padding-bottom: 80px;
         }
-        /* Хедер — суворі лінії */
         .header {
             position: sticky;
             top: 0;
@@ -45,7 +44,7 @@
             font-size: 2rem;
             font-weight: 800;
             letter-spacing: -0.02em;
-            color: #ffffff;                 /* повністю білий */
+            color: #ffffff;
             text-decoration: none;
         }
         .search-box {
@@ -86,7 +85,6 @@
         .user-icon:hover {
             opacity: 0.7;
         }
-        /* Навігація — тільки нижня межа */
         .nav-links {
             display: flex;
             gap: 32px;
@@ -112,8 +110,6 @@
             color: #ffffff;
             border-bottom-color: #ffffff;
         }
-
-        /* Тренди */
         .trending-section { margin: 30px 0 20px; }
         .section-title {
             font-size: 1.5rem;
@@ -167,8 +163,6 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
-
-        /* Фільтри — все в градаціях */
         .filter-section {
             margin: 28px 0 20px;
             display: flex;
@@ -225,8 +219,6 @@
             background-repeat: no-repeat;
             background-position: right 8px center;
         }
-
-        /* Сітка карток */
         .movies-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -338,8 +330,6 @@
             color: #666;
             font-size: 1.2rem;
         }
-
-        /* Нижня навігація */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -369,7 +359,6 @@
             font-size: 0.7rem;
             margin-top: 4px;
         }
-
         @media (max-width: 700px) {
             .app { padding: 0 16px 70px; }
             .header-top .search-box { width: 100%; order: 3; }
@@ -378,8 +367,6 @@
             .trend-card { flex: 0 0 130px; }
             .movies-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
         }
-
-        /* Модальне вікно — чіткий чорно-білий стиль */
         .modal {
             display: none;
             position: fixed;
@@ -539,8 +526,6 @@
             transition: color 0.2s;
         }
         .footer a:hover { color: #ffffff; }
-
-        /* Додаткова текстура — ледь помітна сітка для глибини */
         .app {
             background-image: 
                 linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
@@ -553,10 +538,10 @@
 <div class="app">
     <header class="header">
         <div class="header-top">
-            <div class="logo">SAYS UA</div>
+            <div class="logo">SAYS UA · аніме</div>
             <div class="search-box">
                 <i class="fas fa-search"></i>
-                <input type="search" id="searchInput" placeholder="Пошук фільмів, серіалів..." aria-label="Пошук">
+                <input type="search" id="searchInput" placeholder="Пошук аніме..." aria-label="Пошук">
             </div>
             <div class="user-icon" id="userIcon">
                 <i class="far fa-user-circle"></i>
@@ -565,15 +550,15 @@
         <div class="nav-links" id="navLinks">
             <a data-nav="home" class="active">Головна</a>
             <a data-nav="movies">Фільми</a>
-            <a data-nav="series">Серіали</a>
-            <a data-nav="cartoons">Мультфільми</a>
+            <a data-nav="series">Серіали (TV)</a>
+            <a data-nav="ova">OVA/ONA</a>
             <a data-nav="collections">Добірки</a>
             <a data-nav="ratings">Рейтинги</a>
         </div>
     </header>
 
     <section class="trending-section" id="trendingSection">
-        <div class="section-title"><i class="fas fa-fire"></i> У тренді</div>
+        <div class="section-title"><i class="fas fa-fire"></i> Топ аніме</div>
         <div class="trending-scroll" id="trendingScroll"></div>
     </section>
 
@@ -583,7 +568,7 @@
             <span><i class="fas fa-sort"></i></span>
             <select id="sortSelect">
                 <option value="default">за замовчуванням</option>
-                <option value="rating">за рейтингом IMDb</option>
+                <option value="rating">за рейтингом</option>
                 <option value="year">за роком (новіші)</option>
             </select>
         </div>
@@ -596,10 +581,10 @@
     </main>
 
     <footer class="footer">
-        <div>© 2025 SAYS UA — монохромний кінотеатр</div>
+        <div>© 2025 SAYS UA — монохромний аніме-каталог</div>
         <div>
             <a id="footerAbout">Про нас</a>
-            <a id="footerApi">API</a>
+            <a id="footerApi">API (Jikan)</a>
             <a id="footerSupport">Підтримка</a>
         </div>
     </footer>
@@ -608,8 +593,8 @@
 <div class="bottom-nav">
     <a data-nav="home" class="active"><i class="fas fa-home"></i><span>Головна</span></a>
     <a data-nav="movies"><i class="fas fa-film"></i><span>Фільми</span></a>
-    <a data-nav="series"><i class="fas fa-tv"></i><span>Серіали</span></a>
-    <a data-nav="cartoons"><i class="fas fa-child"></i><span>Мульти</span></a>
+    <a data-nav="series"><i class="fas fa-tv"></i><span>TV</span></a>
+    <a data-nav="ova"><i class="fas fa-compact-disc"></i><span>OVA</span></a>
     <a data-nav="watchlist"><i class="fas fa-bookmark"></i><span>Моє</span></a>
 </div>
 
@@ -622,16 +607,20 @@
         <div class="modal-body">
             <div class="player-container" id="playerContainer">
                 <i class="fas fa-play-circle" style="font-size: 5rem; color: #666; opacity: 0.6;"></i>
-                <button class="play-btn" id="playDefaultBtn"><i class="fas fa-play"></i> Дивитись</button>
-                <div style="color:#aaa; font-size:0.85rem;">реклама відсутня · українською</div>
+                <button class="play-btn" id="playDefaultBtn"><i class="fas fa-play"></i> Шукати в Google</button>
+                <div style="color:#aaa; font-size:0.85rem;">Натисніть, щоб знайти переклад</div>
             </div>
             <div class="modal-details" id="modalDetails">
                 <p><strong>Рік:</strong> <span id="modalYear"></span></p>
                 <p><strong>Жанри:</strong> <span id="modalGenres"></span></p>
-                <p><strong>Рейтинг IMDb:</strong> <span id="modalImdb"></span></p>
-                <p><strong>Тип:</strong> <span id="modalType"></span> <span class="ukr-badge">🇺🇦 Українською</span></p>
+                <p><strong>Рейтинг:</strong> <span id="modalImdb"></span>/10</p>
+                <p><strong>Тип:</strong> <span id="modalType"></span> <span class="ukr-badge">🇺🇦 українською?</span></p>
+                <p><strong>Серій / статус:</strong> <span id="modalEpisodes"></span></p>
                 
-                <div class="sources-list" id="sourcesList"></div>
+                <div class="sources-list" id="sourcesList">
+                    <button class="source-btn" id="malSearchBtn"><i class="fab fa-my-anime-list"></i> MyAnimeList</button>
+                    <button class="source-btn" id="googleSearchBtn"><i class="fab fa-google"></i> Google</button>
+                </div>
                 
                 <button class="watchlist-btn" id="watchlistToggle"><i class="far fa-bookmark"></i> Додати до списку</button>
             </div>
@@ -641,112 +630,25 @@
 
 <script>
     (function() {
-        // ========== КОНФІГУРАЦІЯ ==========
-        const TMDB_API_KEY = 'ВАШ_КЛЮЧ_TMDB';  // ⚠️ Вставте сюди ваш ключ
-        const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
-        const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
+        // ========== НОВА КОНФІГУРАЦІЯ: JIKAN API (АНІМЕ) ==========
+        const JIKAN_BASE = 'https://api.jikan.moe/v4';
         
-        const PROXY_URL = 'https://api.allorigins.win/raw?url=';
-
-        const UA_SOURCES = [
-            {
-                name: 'UAKino',
-                domain: 'uakino.club',
-                searchUrl: (title, year) => `https://uakino.club/index.php?do=search&subaction=search&story=${encodeURIComponent(title)}`,
-                extractEmbed: (html) => {
-                    const match = html.match(/<a href="(https:\/\/uakino\.club\/\d+-[^"]+\.html)"/);
-                    if (match) return match[1].replace('.html', '/embed/');
-                    return null;
-                }
-            },
-            {
-                name: 'Kinogo',
-                domain: 'kinogo.ec',
-                searchUrl: (title, year) => `https://kinogo.ec/index.php?do=search&subaction=search&story=${encodeURIComponent(title)}`,
-                extractEmbed: (html) => {
-                    const match = html.match(/<a href="(https:\/\/kinogo\.ec\/\d+-[^"]+\.html)"/);
-                    if (match) return match[1].replace('.html', '/embed/');
-                    return null;
-                }
-            },
-            {
-                name: 'HDRezka',
-                domain: 'hdrezka.ag',
-                searchUrl: (title, year) => `https://hdrezka.ag/search/?q=${encodeURIComponent(title)}`,
-                extractEmbed: (html) => {
-                    const match = html.match(/data-id="(\d+)" data-type="([^"]+)"/);
-                    if (match) {
-                        const id = match[1];
-                        const type = match[2];
-                        return `https://hdrezka.ag/embed/${type}/${id}/`;
-                    }
-                    return null;
-                }
-            }
+        // Жанри аніме (збережемо числові ID для фільтрації, але в демо використаємо назви)
+        const ANIME_GENRES = [
+            'Усі', 'Action', 'Adventure', 'Comedy', 'Drama', 'Fantasy', 
+            'Horror', 'Romance', 'Sci-Fi', 'Slice of Life', 'Sports', 'Mystery'
         ];
 
-        // ========== TMDB ФУНКЦІЇ ==========
-        async function fetchTMDB(endpoint, params = {}) {
-            try {
-                const url = new URL(`${TMDB_BASE_URL}${endpoint}`);
-                url.searchParams.append('api_key', TMDB_API_KEY);
-                url.searchParams.append('language', 'uk-UA');
-                Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
-                const response = await fetch(url);
-                return await response.json();
-            } catch (error) {
-                console.error('TMDB error:', error);
-                return null;
-            }
-        }
-
-        async function fetchPopularMovies() {
-            const data = await fetchTMDB('/movie/popular', { page: 1 });
-            return data?.results || [];
-        }
-
-        async function fetchMovieDetails(id, type) {
-            return await fetchTMDB(`/${type}/${id}`, { append_to_response: 'videos,credits' });
-        }
-
-        async function searchMulti(query) {
-            const data = await fetchTMDB('/search/multi', { query });
-            return data?.results || [];
-        }
-
-        // ========== ПОШУК НА ПІРАТСЬКИХ САЙТАХ ==========
-        async function fetchViaProxy(url) {
-            try {
-                const response = await fetch(PROXY_URL + encodeURIComponent(url));
-                return await response.text();
-            } catch (error) {
-                console.warn('Proxy error:', error);
-                return '';
-            }
-        }
-
-        async function findEmbedUrl(source, title, year) {
-            const searchUrl = source.searchUrl(title, year);
-            const html = await fetchViaProxy(searchUrl);
-            return source.extractEmbed(html);
-        }
-
-        async function findAllEmbeds(title, year) {
-            const promises = UA_SOURCES.map(async src => {
-                const embed = await findEmbedUrl(src, title, year);
-                return embed ? { name: src.name, url: embed } : null;
-            });
-            const results = await Promise.all(promises);
-            return results.filter(r => r !== null);
-        }
-
-        // ========== СТАН ==========
+        // Стан
         let activeGenre = 'Усі';
         let currentSort = 'default';
         let activeNav = 'home';
         let searchQuery = '';
-        let watchlist = JSON.parse(localStorage.getItem('saysua_watchlist')) || [];
-        let allGenres = ['Усі', 'Драма', 'Комедія', 'Екшн', 'Фантастика', 'Жахи', 'Трилер', 'Детектив', 'Пригоди', 'Анімація'];
+        let watchlist = JSON.parse(localStorage.getItem('saysua_anime_watchlist')) || [];
+        let currentAnimeId = null;
+        let currentAnimeTitle = '';
+        let currentAnimeYear = '';
+        let allAnimeData = []; // для клієнтського сортування
 
         // DOM
         const grid = document.getElementById('moviesGrid');
@@ -762,46 +664,89 @@
         const modalGenres = document.getElementById('modalGenres');
         const modalImdb = document.getElementById('modalImdb');
         const modalType = document.getElementById('modalType');
+        const modalEpisodes = document.getElementById('modalEpisodes');
         const playerContainer = document.getElementById('playerContainer');
         const playDefaultBtn = document.getElementById('playDefaultBtn');
         const closeModalBtn = document.getElementById('closeModalBtn');
         const watchlistToggle = document.getElementById('watchlistToggle');
         const sourcesList = document.getElementById('sourcesList');
+        const malSearchBtn = document.getElementById('malSearchBtn');
+        const googleSearchBtn = document.getElementById('googleSearchBtn');
 
-        let currentMovieId = null;
-        let currentMovieTitle = '';
-        let currentMovieYear = '';
+        // ========== ФУНКЦІЇ JIKAN ==========
+        async function fetchJikan(endpoint) {
+            try {
+                const url = `${JIKAN_BASE}${endpoint}`;
+                const response = await fetch(url);
+                const data = await response.json();
+                return data.data || [];
+            } catch (error) {
+                console.error('Jikan error:', error);
+                return [];
+            }
+        }
 
-        // ========== РЕНДЕР ==========
-        function renderMovies(moviesArray) {
-            if (!moviesArray.length) {
+        // Отримати топ аніме за типом (type: tv, movie, ova, special, ona)
+        async function fetchTopAnime(type = '', page = 1) {
+            let endpoint = `/top/anime?page=${page}`;
+            if (type) endpoint += `&type=${type}`;
+            return await fetchJikan(endpoint);
+        }
+
+        // Пошук аніме
+        async function searchAnime(query) {
+            if (!query) return [];
+            const endpoint = `/anime?q=${encodeURIComponent(query)}&order_by=score&sort=desc`;
+            return await fetchJikan(endpoint);
+        }
+
+        // Деталі аніме
+        async function fetchAnimeDetails(id) {
+            const endpoint = `/anime/${id}`;
+            try {
+                const url = `${JIKAN_BASE}${endpoint}`;
+                const response = await fetch(url);
+                const data = await response.json();
+                return data.data || null;
+            } catch (error) {
+                console.error('Details error:', error);
+                return null;
+            }
+        }
+
+        // ========== РЕНДЕР КАРТОК ==========
+        function renderMovies(animeArray) {
+            allAnimeData = animeArray; // для сортування
+
+            if (!animeArray.length) {
                 grid.innerHTML = `<div class="no-results">😕 Нічого не знайдено</div>`;
                 return;
             }
 
             let html = '';
-            moviesArray.forEach(m => {
-                const posterPath = m.poster_path ? `${IMAGE_BASE_URL}${m.poster_path}` : null;
-                const posterLetters = (m.title || m.name || '??').slice(0, 2).toUpperCase();
-                const year = (m.release_date || m.first_air_date || '').split('-')[0] || '—';
-                const imdb = m.vote_average ? m.vote_average.toFixed(1) : '—';
-                const type = m.media_type === 'tv' ? 'series' : (m.media_type === 'movie' ? 'movie' : 'movie');
-                const typeLabel = type === 'series' ? 'серіал' : (type === 'movie' ? 'фільм' : 'мультфільм');
-                const inWatchlist = watchlist.includes(m.id) ? 'fa-solid' : 'fa-regular';
+            animeArray.forEach(a => {
+                const title = a.title_ukrainian || a.title || a.title_english || 'Без назви';
+                const year = a.aired?.prop?.from?.year || a.aired?.from?.split('-')[0] || '—';
+                const score = a.score ? a.score.toFixed(1) : '?';
+                const type = a.type || 'ANIME'; // TV, Movie, OVA тощо
+                const posterUrl = a.images?.jpg?.image_url || '';
+                const id = a.mal_id;
+
+                const inWatchlist = watchlist.includes(id) ? 'fa-solid' : 'fa-regular';
 
                 html += `
-                    <div class="movie-card" data-id="${m.id}" data-type="${type}" data-title="${m.title || m.name}" data-year="${year}">
-                        <div class="card-poster" style="${posterPath ? `background-image: url('${posterPath}')` : ''}">
-                            ${!posterPath ? `<span>${posterLetters}</span>` : ''}
+                    <div class="movie-card" data-id="${id}" data-type="${type}" data-title="${title}" data-year="${year}">
+                        <div class="card-poster" style="${posterUrl ? `background-image: url('${posterUrl}')` : ''}">
+                            ${!posterUrl ? `<span>${title.slice(0,2)}</span>` : ''}
                             <div class="watchlist-badge"><i class="${inWatchlist} fa-bookmark"></i></div>
                         </div>
                         <div class="card-info">
-                            <div class="card-title">${m.title || m.name}</div>
+                            <div class="card-title">${title}</div>
                             <div class="card-meta">
                                 <span class="card-year">${year}</span>
-                                <span class="card-imdb"><i class="fab fa-imdb"></i> ${imdb}</span>
+                                <span class="card-imdb"><i class="fas fa-star"></i> ${score}</span>
                             </div>
-                            <div class="card-type">${typeLabel} · українською</div>
+                            <div class="card-type">${type} · ${a.episodes ? a.episodes + ' сер.' : '?'}</div>
                         </div>
                     </div>
                 `;
@@ -820,44 +765,37 @@
         }
 
         async function openModal(id, type, title, year) {
-            currentMovieId = id;
-            currentMovieTitle = title;
-            currentMovieYear = year;
+            currentAnimeId = id;
+            currentAnimeTitle = title;
+            currentAnimeYear = year;
 
-            const tmdbData = await fetchMovieDetails(id, type);
-            
-            modalTitle.textContent = tmdbData.title || tmdbData.name || title;
-            modalYear.textContent = (tmdbData.release_date || tmdbData.first_air_date || '').split('-')[0] || year;
-            modalGenres.textContent = tmdbData.genres?.map(g => g.name).join(', ') || '—';
-            modalImdb.textContent = tmdbData.vote_average?.toFixed(1) || '—';
-            modalType.textContent = type === 'tv' ? 'Серіал' : 'Фільм';
-
-            playerContainer.innerHTML = `<i class="fas fa-play-circle" style="font-size: 5rem; color: #666; opacity: 0.6;"></i>`;
-            sourcesList.innerHTML = '<i>Пошук джерел... <i class="fas fa-spinner fa-spin"></i></i>';
-
-            const embeds = await findAllEmbeds(title, year);
-            
-            if (embeds.length === 0) {
-                sourcesList.innerHTML = '<i>Джерел не знайдено</i>';
-                playDefaultBtn.onclick = () => alert('На жаль, не вдалося знайти жодного джерела для перегляду.');
-            } else {
-                sourcesList.innerHTML = '';
-                embeds.forEach(embed => {
-                    const btn = document.createElement('button');
-                    btn.className = 'source-btn';
-                    btn.textContent = embed.name;
-                    btn.onclick = () => {
-                        playerContainer.innerHTML = `<iframe src="${embed.url}" allowfullscreen></iframe>`;
-                    };
-                    sourcesList.appendChild(btn);
-                });
-                playDefaultBtn.onclick = () => {
-                    if (embeds[0]) {
-                        playerContainer.innerHTML = `<iframe src="${embeds[0].url}" allowfullscreen></iframe>`;
-                    }
-                };
+            const details = await fetchAnimeDetails(id);
+            if (!details) {
+                alert('Не вдалося завантажити деталі');
+                return;
             }
 
+            modalTitle.textContent = details.title_ukrainian || details.title || details.title_english;
+            modalYear.textContent = details.aired?.prop?.from?.year || details.aired?.from?.split('-')[0] || year;
+            modalGenres.textContent = details.genres?.map(g => g.name).join(', ') || '—';
+            modalImdb.textContent = details.score?.toFixed(1) || '?';
+            modalType.textContent = details.type || 'Аніме';
+            modalEpisodes.textContent = `${details.episodes || '?'} серій, статус: ${details.status || '—'}`;
+
+            playerContainer.innerHTML = `<i class="fas fa-play-circle" style="font-size: 5rem; color: #666; opacity: 0.6;"></i>`;
+
+            // Налаштовуємо кнопки пошуку
+            malSearchBtn.onclick = () => {
+                window.open(`https://myanimelist.net/anime/${id}`, '_blank');
+            };
+            googleSearchBtn.onclick = () => {
+                window.open(`https://www.google.com/search?q=${encodeURIComponent(title + ' аніме дивитися онлайн')}`, '_blank');
+            };
+            playDefaultBtn.onclick = () => {
+                window.open(`https://www.google.com/search?q=${encodeURIComponent(title + ' аніме дивитися онлайн з українським перекладом')}`, '_blank');
+            };
+
+            // Оновлюємо кнопку списку перегляду
             if (watchlist.includes(id)) {
                 watchlistToggle.innerHTML = '<i class="fas fa-bookmark"></i> У списку';
                 watchlistToggle.classList.add('active');
@@ -869,18 +807,20 @@
             modal.classList.add('active');
         }
 
+        // Завантаження головної (топ аніме всіх типів)
         async function loadHome() {
-            const popular = await fetchPopularMovies();
-            renderMovies(popular.map(m => ({ ...m, media_type: 'movie' })));
+            const topAnime = await fetchTopAnime('', 1); // всі типи
+            renderMovies(topAnime);
 
+            // Тренди (перші 10)
             let trendHtml = '';
-            popular.slice(0, 10).forEach(m => {
+            topAnime.slice(0, 10).forEach(a => {
                 trendHtml += `
-                    <div class="trend-card" data-id="${m.id}" data-type="movie" data-title="${m.title}" data-year="${(m.release_date || '').split('-')[0]}">
-                        <div class="trend-poster"><span>${(m.title || '??').slice(0,2)}</span></div>
+                    <div class="trend-card" data-id="${a.mal_id}" data-type="${a.type}" data-title="${a.title}" data-year="${a.aired?.prop?.from?.year || ''}">
+                        <div class="trend-poster"><span>${(a.title || '??').slice(0,2)}</span></div>
                         <div class="trend-info">
-                            <h4>${m.title}</h4>
-                            <div class="trend-meta" style="color:#aaa;"><i class="fas fa-star"></i> ${m.vote_average?.toFixed(1)}</div>
+                            <h4>${a.title}</h4>
+                            <div class="trend-meta" style="color:#aaa;"><i class="fas fa-star"></i> ${a.score?.toFixed(1) || '?'}</div>
                         </div>
                     </div>
                 `;
@@ -899,9 +839,22 @@
             renderChips();
         }
 
+        // Фільтр за типом (навігація)
+        async function loadByType(type) {
+            let animeType = '';
+            if (type === 'movies') animeType = 'movie';
+            else if (type === 'series') animeType = 'tv';
+            else if (type === 'ova') animeType = 'ova'; // також можна додати 'ona' але для простоти ova
+            else if (type === 'collections' || type === 'ratings') animeType = ''; // просто топ
+            
+            const data = await fetchTopAnime(animeType, 1);
+            renderMovies(data);
+        }
+
+        // Жанрові чипи
         function renderChips() {
             chipsContainer.innerHTML = '';
-            allGenres.forEach(genre => {
+            ANIME_GENRES.forEach(genre => {
                 const chip = document.createElement('span');
                 chip.className = `chip ${activeGenre === genre ? 'active' : ''}`;
                 chip.textContent = genre;
@@ -909,11 +862,48 @@
                 chip.addEventListener('click', () => {
                     activeGenre = genre;
                     renderChips();
+                    // Тут можна додати фільтрацію за жанром, але для демо просто перезавантажимо топ
+                    if (genre === 'Усі') loadHome();
+                    else {
+                        // Фільтрація за жанром через API (пошук з жанром)
+                        searchByGenre(genre);
+                    }
                 });
                 chipsContainer.appendChild(chip);
             });
         }
 
+        async function searchByGenre(genre) {
+            const endpoint = `/anime?genres=${getGenreId(genre)}&order_by=score&sort=desc`;
+            const data = await fetchJikan(endpoint);
+            renderMovies(data);
+        }
+
+        function getGenreId(genreName) {
+            const map = {
+                'Action': 1, 'Adventure': 2, 'Comedy': 4, 'Drama': 8, 'Fantasy': 10,
+                'Horror': 14, 'Romance': 22, 'Sci-Fi': 24, 'Slice of Life': 36, 'Sports': 30, 'Mystery': 7
+            };
+            return map[genreName] || '';
+        }
+
+        // Сортування (клієнтське)
+        function applySort() {
+            if (!allAnimeData.length) return;
+            let sorted = [...allAnimeData];
+            if (currentSort === 'rating') {
+                sorted.sort((a, b) => (b.score || 0) - (a.score || 0));
+            } else if (currentSort === 'year') {
+                sorted.sort((a, b) => {
+                    const ay = a.aired?.prop?.from?.year || a.aired?.from?.split('-')[0] || 0;
+                    const by = b.aired?.prop?.from?.year || b.aired?.from?.split('-')[0] || 0;
+                    return by - ay;
+                });
+            }
+            renderMovies(sorted);
+        }
+
+        // Встановлення активної навігації
         function setActiveNav(targetNav) {
             navLinks.forEach(link => {
                 if (link.dataset.nav === targetNav) {
@@ -923,18 +913,37 @@
                 }
             });
             activeNav = targetNav;
+
             if (targetNav === 'home') loadHome();
+            else if (targetNav === 'movies' || targetNav === 'series' || targetNav === 'ova' || targetNav === 'collections' || targetNav === 'ratings') {
+                loadByType(targetNav);
+            } else if (targetNav === 'watchlist') {
+                showWatchlist();
+            }
         }
 
-        // ========== ІНІЦІАЛІЗАЦІЯ ==========
+        function showWatchlist() {
+            if (watchlist.length === 0) {
+                grid.innerHTML = `<div class="no-results">Список перегляду порожній</div>`;
+                return;
+            }
+            // Завантажуємо кожен елемент із Jikan (обмежимо 20)
+            Promise.all(watchlist.slice(0, 20).map(id => fetchAnimeDetails(id)))
+                .then(results => {
+                    renderMovies(results.filter(r => r !== null));
+                });
+        }
+
+        // Ініціалізація
         loadHome();
 
+        // Пошук
         searchInput.addEventListener('input', (e) => {
             clearTimeout(window.searchTimeout);
             window.searchTimeout = setTimeout(async () => {
                 const query = e.target.value.trim();
                 if (query.length > 2) {
-                    const results = await searchMulti(query);
+                    const results = await searchAnime(query);
                     renderMovies(results);
                 } else if (query.length === 0) {
                     loadHome();
@@ -942,10 +951,13 @@
             }, 500);
         });
 
+        // Сортування
         sortSelect.addEventListener('change', (e) => {
             currentSort = e.target.value;
+            applySort();
         });
 
+        // Навігація
         navLinks.forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -953,18 +965,21 @@
             });
         });
 
-        userIcon.addEventListener('click', () => alert('👤 Особистий кабінет (демо)'));
+        // Юзер іконка
+        userIcon.addEventListener('click', () => alert('👤 Персональний кабінет (демо)'));
 
+        // Модальне вікно
         closeModalBtn.addEventListener('click', () => modal.classList.remove('active'));
         window.addEventListener('click', (e) => {
             if (e.target === modal) modal.classList.remove('active');
         });
 
+        // Перемикання списку перегляду
         watchlistToggle.addEventListener('click', () => {
-            if (!currentMovieId) return;
-            const idx = watchlist.indexOf(currentMovieId);
+            if (!currentAnimeId) return;
+            const idx = watchlist.indexOf(currentAnimeId);
             if (idx === -1) {
-                watchlist.push(currentMovieId);
+                watchlist.push(currentAnimeId);
                 watchlistToggle.innerHTML = '<i class="fas fa-bookmark"></i> У списку';
                 watchlistToggle.classList.add('active');
             } else {
@@ -972,8 +987,13 @@
                 watchlistToggle.innerHTML = '<i class="far fa-bookmark"></i> Додати до списку';
                 watchlistToggle.classList.remove('active');
             }
-            localStorage.setItem('saysua_watchlist', JSON.stringify(watchlist));
+            localStorage.setItem('saysua_anime_watchlist', JSON.stringify(watchlist));
         });
+
+        // Футер
+        document.getElementById('footerAbout').addEventListener('click', () => alert('Сайт для перегляду аніме в монохромному стилі. Використовує Jikan API.'));
+        document.getElementById('footerApi').addEventListener('click', () => window.open('https://jikan.moe/', '_blank'));
+        document.getElementById('footerSupport').addEventListener('click', () => alert('Підтримка: example@email.com'));
 
         setActiveNav('home');
     })();
