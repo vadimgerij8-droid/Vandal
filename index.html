@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>SAYS UA · монохром</title>
+    <title>SAYS UA · каталог джерел</title>
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Google Fonts Inter -->
@@ -24,7 +24,6 @@
             padding: 0 20px;
             padding-bottom: 80px;
         }
-        /* Хедер — суворі лінії */
         .header {
             position: sticky;
             top: 0;
@@ -45,7 +44,7 @@
             font-size: 2rem;
             font-weight: 800;
             letter-spacing: -0.02em;
-            color: #ffffff;                 /* повністю білий */
+            color: #ffffff;
             text-decoration: none;
         }
         .search-box {
@@ -86,7 +85,6 @@
         .user-icon:hover {
             opacity: 0.7;
         }
-        /* Навігація — тільки нижня межа */
         .nav-links {
             display: flex;
             gap: 32px;
@@ -113,62 +111,86 @@
             border-bottom-color: #ffffff;
         }
 
-        /* Тренди */
-        .trending-section { margin: 30px 0 20px; }
+        /* ОСНОВНИЙ БЛОК: ДЖЕРЕЛА З JSON */
+        .sources-section {
+            margin: 30px 0;
+        }
         .section-title {
             font-size: 1.5rem;
             font-weight: 700;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
             gap: 10px;
             color: #ffffff;
         }
-        .trending-scroll {
-            display: flex;
-            gap: 16px;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            padding-bottom: 12px;
+        .sources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 20px;
+            margin-top: 16px;
         }
-        .trending-scroll::-webkit-scrollbar { height: 6px; }
-        .trending-scroll::-webkit-scrollbar-thumb { background: #666; border-radius: 10px; }
-        .trending-scroll::-webkit-scrollbar-track { background: #1a1a1a; }
-        .trend-card {
-            flex: 0 0 160px;
-            scroll-snap-align: start;
+        .source-card {
             background: #151515;
-            border-radius: 20px;
-            overflow: hidden;
             border: 1px solid #2a2a2a;
-            transition: transform 0.2s, border-color 0.2s;
+            border-radius: 24px;
+            padding: 22px 18px;
+            transition: border-color 0.2s, transform 0.2s;
             cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
-        .trend-card:hover {
-            transform: translateY(-5px);
+        .source-card:hover {
             border-color: #ffffff;
+            transform: translateY(-6px);
         }
-        .trend-poster {
-            aspect-ratio: 2 / 3;
-            background: #1e1e1e;
+        .source-name {
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: white;
+            line-height: 1.3;
+        }
+        .source-meta {
+            color: #aaa;
+            font-size: 0.85rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .source-badge {
+            background: #1f1f1f;
+            border: 1px solid #333;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            color: #ccc;
+        }
+        .source-description {
+            color: #aaa;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin: 4px 0 8px;
+            flex-grow: 1;
+        }
+        .source-link {
+            margin-top: 12px;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 0.95rem;
             display: flex;
             align-items: center;
-            justify-content: center;
-            color: #555;
-            font-size: 2.5rem;
+            gap: 8px;
+            border-top: 1px solid #2a2a2a;
+            padding-top: 14px;
+            font-weight: 500;
         }
-        .trend-info { padding: 12px; }
-        .trend-info h4 {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: white;
-            margin-bottom: 6px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+        .source-link i {
+            color: #aaa;
+            font-size: 1rem;
         }
 
-        /* Фільтри — все в градаціях */
+        /* Фільтри та пошук (адаптовано для пошуку по плагінах) */
         .filter-section {
             margin: 28px 0 20px;
             display: flex;
@@ -226,111 +248,6 @@
             background-position: right 8px center;
         }
 
-        /* Сітка карток */
-        .movies-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 24px 16px;
-            margin: 32px 0 48px;
-        }
-        .movie-card {
-            background: #151515;
-            border-radius: 20px;
-            overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s;
-            border: 1px solid #2a2a2a;
-            display: flex;
-            flex-direction: column;
-            cursor: pointer;
-            position: relative;
-        }
-        .movie-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 20px 30px rgba(255,255,255,0.05);
-            border-color: #ffffff;
-        }
-        .card-poster {
-            aspect-ratio: 2 / 3;
-            background: #1e1e1e;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #555;
-            font-size: 3rem;
-            border-bottom: 1px solid #2a2a2a;
-            position: relative;
-            background-size: cover;
-            background-position: center;
-        }
-        .card-poster span { opacity: 0.5; }
-        .watchlist-badge {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: #0a0a0a;
-            color: #ffffff;
-            font-size: 1rem;
-            padding: 5px;
-            border-radius: 50%;
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid #ffffff;
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-        .movie-card:hover .watchlist-badge { opacity: 1; }
-        .card-info {
-            padding: 14px 12px 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        .card-title {
-            font-weight: 700;
-            font-size: 1rem;
-            line-height: 1.3;
-            color: white;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            min-height: 42px;
-        }
-        .card-meta {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 6px 8px;
-            font-size: 0.8rem;
-            color: #aaa;
-        }
-        .card-year {
-            background: #1f1f1f;
-            padding: 2px 10px;
-            border-radius: 30px;
-            border: 1px solid #333;
-        }
-        .card-imdb {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            background: #1f1f1f;
-            padding: 2px 8px;
-            border-radius: 30px;
-            color: #dddddd;
-            font-weight: 600;
-            border: 1px solid #333;
-        }
-        .card-type {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            color: #cccccc;
-            letter-spacing: 0.4px;
-            margin-top: 6px;
-        }
         .no-results {
             grid-column: 1 / -1;
             text-align: center;
@@ -375,152 +292,9 @@
             .header-top .search-box { width: 100%; order: 3; }
             .nav-links { display: none; }
             .bottom-nav { display: flex; }
-            .trend-card { flex: 0 0 130px; }
-            .movies-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+            .sources-grid { grid-template-columns: 1fr; }
         }
 
-        /* Модальне вікно — чіткий чорно-білий стиль */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.95);
-            backdrop-filter: blur(6px);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-        .modal.active { display: flex; animation: fadeIn 0.2s; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .modal-content {
-            background: #151515;
-            width: 90%;
-            max-width: 800px;
-            border-radius: 30px;
-            border: 1px solid #333;
-            overflow: hidden;
-            box-shadow: 0 30px 60px rgba(255,255,255,0.05);
-            transform: scale(0.95);
-            animation: scaleIn 0.2s forwards;
-        }
-        @keyframes scaleIn { to { transform: scale(1); } }
-        .modal-header {
-            padding: 20px 24px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 1px solid #2a2a2a;
-        }
-        .modal-header h2 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: white;
-            max-width: 80%;
-        }
-        .close-modal {
-            background: none;
-            border: none;
-            color: #aaa;
-            font-size: 2.2rem;
-            cursor: pointer;
-            transition: color 0.2s;
-            line-height: 1;
-        }
-        .close-modal:hover { color: #ffffff; }
-        .modal-body { padding: 24px; }
-        .player-container {
-            background: #1a1a1a;
-            border-radius: 20px;
-            aspect-ratio: 16 / 9;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 20px;
-            border: 1px solid #333;
-            margin-bottom: 20px;
-            background-image: radial-gradient(circle at 30% 30%, #2a2a2a, #111);
-            overflow: hidden;
-        }
-        .player-container iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-        .play-btn {
-            background: #ffffff;
-            color: #000000;
-            border: none;
-            font-size: 1.2rem;
-            font-weight: 700;
-            padding: 14px 40px;
-            border-radius: 50px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            transition: opacity 0.2s;
-            margin: 10px 0;
-        }
-        .play-btn:hover { opacity: 0.8; }
-        .modal-details { color: #ccc; font-size: 0.95rem; line-height: 1.6; margin-top: 16px; }
-        .sources-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin: 15px 0;
-        }
-        .source-btn {
-            background: transparent;
-            border: 1px solid #555;
-            color: #ffffff;
-            padding: 8px 16px;
-            border-radius: 40px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .source-btn:hover {
-            background: #ffffff;
-            color: #000000;
-            border-color: #ffffff;
-        }
-        .watchlist-btn {
-            background: transparent;
-            border: 1px solid #ffffff;
-            color: #ffffff;
-            padding: 10px 20px;
-            border-radius: 40px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            margin-top: 10px;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .watchlist-btn:hover {
-            background: #ffffff;
-            color: #000000;
-        }
-        .watchlist-btn.active {
-            background: #ffffff;
-            color: #000000;
-        }
-        .ukr-badge {
-            display: inline-block;
-            background: #1f1f1f;
-            color: #dddddd;
-            padding: 4px 12px;
-            border-radius: 30px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-left: 10px;
-            border: 1px solid #444;
-        }
         .footer {
             border-top: 1px solid #222;
             padding: 30px 0 40px;
@@ -540,7 +314,6 @@
         }
         .footer a:hover { color: #ffffff; }
 
-        /* Додаткова текстура — ледь помітна сітка для глибини */
         .app {
             background-image: 
                 linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
@@ -553,50 +326,45 @@
 <div class="app">
     <header class="header">
         <div class="header-top">
-            <div class="logo">SAYS UA</div>
+            <div class="logo">SAYS UA · джерела</div>
             <div class="search-box">
                 <i class="fas fa-search"></i>
-                <input type="search" id="searchInput" placeholder="Пошук фільмів, серіалів..." aria-label="Пошук">
+                <input type="search" id="searchInput" placeholder="Пошук плагінів..." aria-label="Пошук">
             </div>
             <div class="user-icon" id="userIcon">
                 <i class="far fa-user-circle"></i>
             </div>
         </div>
         <div class="nav-links" id="navLinks">
-            <a data-nav="home" class="active">Головна</a>
-            <a data-nav="movies">Фільми</a>
-            <a data-nav="series">Серіали</a>
-            <a data-nav="cartoons">Мультфільми</a>
+            <a data-nav="home" class="active">Усі джерела</a>
+            <a data-nav="movies">Фільмові</a>
+            <a data-nav="series">Серіальні</a>
+            <a data-nav="cartoons">Анімація</a>
             <a data-nav="collections">Добірки</a>
-            <a data-nav="ratings">Рейтинги</a>
+            <a data-nav="ratings">Топ</a>
         </div>
     </header>
 
-    <section class="trending-section" id="trendingSection">
-        <div class="section-title"><i class="fas fa-fire"></i> У тренді</div>
-        <div class="trending-scroll" id="trendingScroll"></div>
+    <!-- ОСНОВНИЙ КОНТЕНТ: список джерел з JSON -->
+    <section class="sources-section">
+        <div class="section-title"><i class="fas fa-plug"></i> Доступні джерела (CloudStream)</div>
+        <div class="filter-section">
+            <div class="genre-chips" id="genreChips"></div>
+            <div class="sort-control">
+                <span><i class="fas fa-sort"></i></span>
+                <select id="sortSelect">
+                    <option value="default">за назвою</option>
+                    <option value="version">за версією</option>
+                </select>
+            </div>
+        </div>
+        <div class="sources-grid" id="sourcesGrid">
+            <div class="no-results">Завантаження списку джерел...</div>
+        </div>
     </section>
 
-    <div class="filter-section">
-        <div class="genre-chips" id="genreChips"></div>
-        <div class="sort-control">
-            <span><i class="fas fa-sort"></i></span>
-            <select id="sortSelect">
-                <option value="default">за замовчуванням</option>
-                <option value="rating">за рейтингом IMDb</option>
-                <option value="year">за роком (новіші)</option>
-            </select>
-        </div>
-    </div>
-
-    <main>
-        <div class="movies-grid" id="moviesGrid">
-            <div class="no-results">Завантаження...</div>
-        </div>
-    </main>
-
     <footer class="footer">
-        <div>© 2025 SAYS UA — монохромний кінотеатр</div>
+        <div>© 2025 SAYS UA — каталог розширень</div>
         <div>
             <a id="footerAbout">Про нас</a>
             <a id="footerApi">API</a>
@@ -610,310 +378,144 @@
     <a data-nav="movies"><i class="fas fa-film"></i><span>Фільми</span></a>
     <a data-nav="series"><i class="fas fa-tv"></i><span>Серіали</span></a>
     <a data-nav="cartoons"><i class="fas fa-child"></i><span>Мульти</span></a>
-    <a data-nav="watchlist"><i class="fas fa-bookmark"></i><span>Моє</span></a>
-</div>
-
-<div class="modal" id="videoModal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2 id="modalTitle">Назва</h2>
-            <button class="close-modal" id="closeModalBtn">&times;</button>
-        </div>
-        <div class="modal-body">
-            <div class="player-container" id="playerContainer">
-                <i class="fas fa-play-circle" style="font-size: 5rem; color: #666; opacity: 0.6;"></i>
-                <button class="play-btn" id="playDefaultBtn"><i class="fas fa-play"></i> Дивитись</button>
-                <div style="color:#aaa; font-size:0.85rem;">реклама відсутня · українською</div>
-            </div>
-            <div class="modal-details" id="modalDetails">
-                <p><strong>Рік:</strong> <span id="modalYear"></span></p>
-                <p><strong>Жанри:</strong> <span id="modalGenres"></span></p>
-                <p><strong>Рейтинг IMDb:</strong> <span id="modalImdb"></span></p>
-                <p><strong>Тип:</strong> <span id="modalType"></span> <span class="ukr-badge">🇺🇦 Українською</span></p>
-                
-                <div class="sources-list" id="sourcesList"></div>
-                
-                <button class="watchlist-btn" id="watchlistToggle"><i class="far fa-bookmark"></i> Додати до списку</button>
-            </div>
-        </div>
-    </div>
+    <a data-nav="watchlist"><i class="fas fa-bookmark"></i><span>Обрані</span></a>
 </div>
 
 <script>
     (function() {
-        // ========== КОНФІГУРАЦІЯ ==========
-        const TMDB_API_KEY = 'ВАШ_КЛЮЧ_TMDB';  // ⚠️ Вставте сюди ваш ключ
-        const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
-        const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
-        
-        const PROXY_URL = 'https://api.allorigins.win/raw?url=';
-
-        const UA_SOURCES = [
-            {
-                name: 'UAKino',
-                domain: 'uakino.club',
-                searchUrl: (title, year) => `https://uakino.club/index.php?do=search&subaction=search&story=${encodeURIComponent(title)}`,
-                extractEmbed: (html) => {
-                    const match = html.match(/<a href="(https:\/\/uakino\.club\/\d+-[^"]+\.html)"/);
-                    if (match) return match[1].replace('.html', '/embed/');
-                    return null;
-                }
-            },
-            {
-                name: 'Kinogo',
-                domain: 'kinogo.ec',
-                searchUrl: (title, year) => `https://kinogo.ec/index.php?do=search&subaction=search&story=${encodeURIComponent(title)}`,
-                extractEmbed: (html) => {
-                    const match = html.match(/<a href="(https:\/\/kinogo\.ec\/\d+-[^"]+\.html)"/);
-                    if (match) return match[1].replace('.html', '/embed/');
-                    return null;
-                }
-            },
-            {
-                name: 'HDRezka',
-                domain: 'hdrezka.ag',
-                searchUrl: (title, year) => `https://hdrezka.ag/search/?q=${encodeURIComponent(title)}`,
-                extractEmbed: (html) => {
-                    const match = html.match(/data-id="(\d+)" data-type="([^"]+)"/);
-                    if (match) {
-                        const id = match[1];
-                        const type = match[2];
-                        return `https://hdrezka.ag/embed/${type}/${id}/`;
-                    }
-                    return null;
-                }
-            }
-        ];
-
-        // ========== TMDB ФУНКЦІЇ ==========
-        async function fetchTMDB(endpoint, params = {}) {
-            try {
-                const url = new URL(`${TMDB_BASE_URL}${endpoint}`);
-                url.searchParams.append('api_key', TMDB_API_KEY);
-                url.searchParams.append('language', 'uk-UA');
-                Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
-                const response = await fetch(url);
-                return await response.json();
-            } catch (error) {
-                console.error('TMDB error:', error);
-                return null;
-            }
-        }
-
-        async function fetchPopularMovies() {
-            const data = await fetchTMDB('/movie/popular', { page: 1 });
-            return data?.results || [];
-        }
-
-        async function fetchMovieDetails(id, type) {
-            return await fetchTMDB(`/${type}/${id}`, { append_to_response: 'videos,credits' });
-        }
-
-        async function searchMulti(query) {
-            const data = await fetchTMDB('/search/multi', { query });
-            return data?.results || [];
-        }
-
-        // ========== ПОШУК НА ПІРАТСЬКИХ САЙТАХ ==========
-        async function fetchViaProxy(url) {
-            try {
-                const response = await fetch(PROXY_URL + encodeURIComponent(url));
-                return await response.text();
-            } catch (error) {
-                console.warn('Proxy error:', error);
-                return '';
-            }
-        }
-
-        async function findEmbedUrl(source, title, year) {
-            const searchUrl = source.searchUrl(title, year);
-            const html = await fetchViaProxy(searchUrl);
-            return source.extractEmbed(html);
-        }
-
-        async function findAllEmbeds(title, year) {
-            const promises = UA_SOURCES.map(async src => {
-                const embed = await findEmbedUrl(src, title, year);
-                return embed ? { name: src.name, url: embed } : null;
-            });
-            const results = await Promise.all(promises);
-            return results.filter(r => r !== null);
-        }
+        // ========== ЄДИНЕ ДЖЕРЕЛО ДАНИХ ==========
+        const REPO_JSON_URL = 'https://raw.githubusercontent.com/CakesTwix/cloudstream-extensions-uk/master/repo.json';
 
         // ========== СТАН ==========
-        let activeGenre = 'Усі';
-        let currentSort = 'default';
-        let activeNav = 'home';
-        let searchQuery = '';
-        let watchlist = JSON.parse(localStorage.getItem('saysua_watchlist')) || [];
-        let allGenres = ['Усі', 'Драма', 'Комедія', 'Екшн', 'Фантастика', 'Жахи', 'Трилер', 'Детектив', 'Пригоди', 'Анімація'];
+        let allPlugins = [];           // всі завантажені плагіни
+        let filteredPlugins = [];       // відфільтровані/відсортовані
+        let activeFilter = 'Усі';       // активний фільтр (жанр/тип)
+        let currentSort = 'default';    // поточне сортування
+        let searchQuery = '';            // пошуковий запит
 
-        // DOM
-        const grid = document.getElementById('moviesGrid');
-        const chipsContainer = document.getElementById('genreChips');
-        const sortSelect = document.getElementById('sortSelect');
+        // Динамічний список фільтрів (буде зібраний з даних)
+        let availableFilters = ['Усі'];
+
+        // DOM елементи
+        const sourcesGrid = document.getElementById('sourcesGrid');
         const searchInput = document.getElementById('searchInput');
+        const sortSelect = document.getElementById('sortSelect');
+        const chipsContainer = document.getElementById('genreChips');
         const navLinks = document.querySelectorAll('#navLinks a, .bottom-nav a');
         const userIcon = document.getElementById('userIcon');
-        const trendingScroll = document.getElementById('trendingScroll');
-        const modal = document.getElementById('videoModal');
-        const modalTitle = document.getElementById('modalTitle');
-        const modalYear = document.getElementById('modalYear');
-        const modalGenres = document.getElementById('modalGenres');
-        const modalImdb = document.getElementById('modalImdb');
-        const modalType = document.getElementById('modalType');
-        const playerContainer = document.getElementById('playerContainer');
-        const playDefaultBtn = document.getElementById('playDefaultBtn');
-        const closeModalBtn = document.getElementById('closeModalBtn');
-        const watchlistToggle = document.getElementById('watchlistToggle');
-        const sourcesList = document.getElementById('sourcesList');
 
-        let currentMovieId = null;
-        let currentMovieTitle = '';
-        let currentMovieYear = '';
+        // ========== ЗАВАНТАЖЕННЯ ТА РЕНДЕР ==========
+        async function fetchPlugins() {
+            try {
+                const response = await fetch(REPO_JSON_URL);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                const data = await response.json();
+                // Очікувана структура: { plugins: [ { name, url, version, description, type? } ] }
+                allPlugins = data.plugins || [];
+                
+                // Збираємо унікальні типи/жанри з плагінів (якщо є поле type, інакше дефолт)
+                const typeSet = new Set(['Усі']);
+                allPlugins.forEach(p => {
+                    if (p.type) typeSet.add(p.type);
+                    else typeSet.add('Інше');
+                });
+                availableFilters = Array.from(typeSet);
+                
+                applyFiltersAndSort();
+            } catch (error) {
+                console.error('Помилка завантаження:', error);
+                sourcesGrid.innerHTML = `<div class="no-results">❌ Не вдалося завантажити джерела. Перевірте посилання або спробуйте пізніше.</div>`;
+            }
+        }
 
-        // ========== РЕНДЕР ==========
-        function renderMovies(moviesArray) {
-            if (!moviesArray.length) {
-                grid.innerHTML = `<div class="no-results">😕 Нічого не знайдено</div>`;
+        function applyFiltersAndSort() {
+            // 1. Фільтрація за пошуком та активним фільтром (тип)
+            let filtered = allPlugins.filter(plugin => {
+                const matchesSearch = plugin.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                      plugin.description?.toLowerCase().includes(searchQuery.toLowerCase());
+                const matchesFilter = activeFilter === 'Усі' || plugin.type === activeFilter || 
+                                     (activeFilter === 'Інше' && !plugin.type);
+                return matchesSearch && matchesFilter;
+            });
+
+            // 2. Сортування
+            if (currentSort === 'version') {
+                filtered.sort((a, b) => {
+                    const verA = a.version || '0';
+                    const verB = b.version || '0';
+                    return verB.localeCompare(verA, undefined, { numeric: true }); // за спаданням версії
+                });
+            } else {
+                // за замовчуванням за назвою
+                filtered.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+            }
+
+            filteredPlugins = filtered;
+            renderSources();
+        }
+
+        function renderSources() {
+            if (!filteredPlugins.length) {
+                sourcesGrid.innerHTML = `<div class="no-results">😕 Нічого не знайдено</div>`;
                 return;
             }
 
             let html = '';
-            moviesArray.forEach(m => {
-                const posterPath = m.poster_path ? `${IMAGE_BASE_URL}${m.poster_path}` : null;
-                const posterLetters = (m.title || m.name || '??').slice(0, 2).toUpperCase();
-                const year = (m.release_date || m.first_air_date || '').split('-')[0] || '—';
-                const imdb = m.vote_average ? m.vote_average.toFixed(1) : '—';
-                const type = m.media_type === 'tv' ? 'series' : (m.media_type === 'movie' ? 'movie' : 'movie');
-                const typeLabel = type === 'series' ? 'серіал' : (type === 'movie' ? 'фільм' : 'мультфільм');
-                const inWatchlist = watchlist.includes(m.id) ? 'fa-solid' : 'fa-regular';
-
+            filteredPlugins.forEach(plugin => {
+                const name = plugin.name || 'Без назви';
+                const url = plugin.url || '#';
+                const version = plugin.version || '—';
+                const description = plugin.description || 'Розширення для CloudStream';
+                const type = plugin.type || 'Інше';
+                
                 html += `
-                    <div class="movie-card" data-id="${m.id}" data-type="${type}" data-title="${m.title || m.name}" data-year="${year}">
-                        <div class="card-poster" style="${posterPath ? `background-image: url('${posterPath}')` : ''}">
-                            ${!posterPath ? `<span>${posterLetters}</span>` : ''}
-                            <div class="watchlist-badge"><i class="${inWatchlist} fa-bookmark"></i></div>
+                    <div class="source-card" onclick="window.open('${url}', '_blank')">
+                        <div class="source-name">${name}</div>
+                        <div class="source-meta">
+                            <span class="source-badge">версія ${version}</span>
+                            <span class="source-badge">${type}</span>
                         </div>
-                        <div class="card-info">
-                            <div class="card-title">${m.title || m.name}</div>
-                            <div class="card-meta">
-                                <span class="card-year">${year}</span>
-                                <span class="card-imdb"><i class="fab fa-imdb"></i> ${imdb}</span>
-                            </div>
-                            <div class="card-type">${typeLabel} · українською</div>
+                        <div class="source-description">${description}</div>
+                        <div class="source-link">
+                            <i class="fas fa-external-link-alt"></i> Відкрити джерело
                         </div>
                     </div>
                 `;
             });
-            grid.innerHTML = html;
-
-            document.querySelectorAll('.movie-card').forEach(card => {
-                card.addEventListener('click', () => {
-                    const id = parseInt(card.dataset.id);
-                    const type = card.dataset.type;
-                    const title = card.dataset.title;
-                    const year = card.dataset.year;
-                    openModal(id, type, title, year);
-                });
-            });
+            sourcesGrid.innerHTML = html;
         }
 
-        async function openModal(id, type, title, year) {
-            currentMovieId = id;
-            currentMovieTitle = title;
-            currentMovieYear = year;
-
-            const tmdbData = await fetchMovieDetails(id, type);
-            
-            modalTitle.textContent = tmdbData.title || tmdbData.name || title;
-            modalYear.textContent = (tmdbData.release_date || tmdbData.first_air_date || '').split('-')[0] || year;
-            modalGenres.textContent = tmdbData.genres?.map(g => g.name).join(', ') || '—';
-            modalImdb.textContent = tmdbData.vote_average?.toFixed(1) || '—';
-            modalType.textContent = type === 'tv' ? 'Серіал' : 'Фільм';
-
-            playerContainer.innerHTML = `<i class="fas fa-play-circle" style="font-size: 5rem; color: #666; opacity: 0.6;"></i>`;
-            sourcesList.innerHTML = '<i>Пошук джерел... <i class="fas fa-spinner fa-spin"></i></i>';
-
-            const embeds = await findAllEmbeds(title, year);
-            
-            if (embeds.length === 0) {
-                sourcesList.innerHTML = '<i>Джерел не знайдено</i>';
-                playDefaultBtn.onclick = () => alert('На жаль, не вдалося знайти жодного джерела для перегляду.');
-            } else {
-                sourcesList.innerHTML = '';
-                embeds.forEach(embed => {
-                    const btn = document.createElement('button');
-                    btn.className = 'source-btn';
-                    btn.textContent = embed.name;
-                    btn.onclick = () => {
-                        playerContainer.innerHTML = `<iframe src="${embed.url}" allowfullscreen></iframe>`;
-                    };
-                    sourcesList.appendChild(btn);
-                });
-                playDefaultBtn.onclick = () => {
-                    if (embeds[0]) {
-                        playerContainer.innerHTML = `<iframe src="${embeds[0].url}" allowfullscreen></iframe>`;
-                    }
-                };
-            }
-
-            if (watchlist.includes(id)) {
-                watchlistToggle.innerHTML = '<i class="fas fa-bookmark"></i> У списку';
-                watchlistToggle.classList.add('active');
-            } else {
-                watchlistToggle.innerHTML = '<i class="far fa-bookmark"></i> Додати до списку';
-                watchlistToggle.classList.remove('active');
-            }
-
-            modal.classList.add('active');
-        }
-
-        async function loadHome() {
-            const popular = await fetchPopularMovies();
-            renderMovies(popular.map(m => ({ ...m, media_type: 'movie' })));
-
-            let trendHtml = '';
-            popular.slice(0, 10).forEach(m => {
-                trendHtml += `
-                    <div class="trend-card" data-id="${m.id}" data-type="movie" data-title="${m.title}" data-year="${(m.release_date || '').split('-')[0]}">
-                        <div class="trend-poster"><span>${(m.title || '??').slice(0,2)}</span></div>
-                        <div class="trend-info">
-                            <h4>${m.title}</h4>
-                            <div class="trend-meta" style="color:#aaa;"><i class="fas fa-star"></i> ${m.vote_average?.toFixed(1)}</div>
-                        </div>
-                    </div>
-                `;
-            });
-            trendingScroll.innerHTML = trendHtml;
-            document.querySelectorAll('.trend-card').forEach(card => {
-                card.addEventListener('click', () => {
-                    const id = parseInt(card.dataset.id);
-                    const type = card.dataset.type;
-                    const title = card.dataset.title;
-                    const year = card.dataset.year;
-                    openModal(id, type, title, year);
-                });
-            });
-
-            renderChips();
-        }
-
-        function renderChips() {
+        function renderFilterChips() {
             chipsContainer.innerHTML = '';
-            allGenres.forEach(genre => {
+            availableFilters.forEach(filter => {
                 const chip = document.createElement('span');
-                chip.className = `chip ${activeGenre === genre ? 'active' : ''}`;
-                chip.textContent = genre;
-                chip.dataset.genre = genre;
+                chip.className = `chip ${activeFilter === filter ? 'active' : ''}`;
+                chip.textContent = filter;
+                chip.dataset.filter = filter;
                 chip.addEventListener('click', () => {
-                    activeGenre = genre;
-                    renderChips();
+                    activeFilter = filter;
+                    renderFilterChips();
+                    applyFiltersAndSort();
                 });
                 chipsContainer.appendChild(chip);
             });
         }
 
+        // ========== ОНОВЛЕННЯ ПОШУКУ ТА СОРТУВАННЯ ==========
+        searchInput.addEventListener('input', (e) => {
+            clearTimeout(window.searchTimeout);
+            window.searchTimeout = setTimeout(() => {
+                searchQuery = e.target.value.trim();
+                applyFiltersAndSort();
+            }, 300);
+        });
+
+        sortSelect.addEventListener('change', (e) => {
+            currentSort = e.target.value;
+            applyFiltersAndSort();
+        });
+
+        // ========== НАВІГАЦІЯ ==========
         function setActiveNav(targetNav) {
             navLinks.forEach(link => {
                 if (link.dataset.nav === targetNav) {
@@ -922,30 +524,21 @@
                     link.classList.remove('active');
                 }
             });
-            activeNav = targetNav;
-            if (targetNav === 'home') loadHome();
+            
+            // Імітуємо фільтрацію за типом при кліку на навігацію
+            if (targetNav === 'home') activeFilter = 'Усі';
+            else if (targetNav === 'movies') activeFilter = 'Фільм';
+            else if (targetNav === 'series') activeFilter = 'Серіал';
+            else if (targetNav === 'cartoons') activeFilter = 'Аніме';
+            else if (targetNav === 'collections') activeFilter = 'Добірка';
+            else if (targetNav === 'ratings') activeFilter = 'Рейтинг';
+            // Якщо такого типу немає, активний фільтр не зміниться — можна розширити логіку
+            
+            renderFilterChips(); // оновити підсвітку чіпів
+            applyFiltersAndSort();
         }
 
-        // ========== ІНІЦІАЛІЗАЦІЯ ==========
-        loadHome();
-
-        searchInput.addEventListener('input', (e) => {
-            clearTimeout(window.searchTimeout);
-            window.searchTimeout = setTimeout(async () => {
-                const query = e.target.value.trim();
-                if (query.length > 2) {
-                    const results = await searchMulti(query);
-                    renderMovies(results);
-                } else if (query.length === 0) {
-                    loadHome();
-                }
-            }, 500);
-        });
-
-        sortSelect.addEventListener('change', (e) => {
-            currentSort = e.target.value;
-        });
-
+        // Клік по навігації
         navLinks.forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -953,29 +546,19 @@
             });
         });
 
-        userIcon.addEventListener('click', () => alert('👤 Особистий кабінет (демо)'));
+        // Іконка користувача (демо)
+        userIcon.addEventListener('click', () => alert('👤 Розділ користувача (демо-режим)'));
 
-        closeModalBtn.addEventListener('click', () => modal.classList.remove('active'));
-        window.addEventListener('click', (e) => {
-            if (e.target === modal) modal.classList.remove('active');
+        // Футер (заглушки)
+        document.getElementById('footerAbout')?.addEventListener('click', () => alert('Про нас — каталог українських джерел для CloudStream.'));
+        document.getElementById('footerApi')?.addEventListener('click', () => alert('Дані завантажуються з репозиторію: ' + REPO_JSON_URL));
+        document.getElementById('footerSupport')?.addEventListener('click', () => alert('Підтримка: напишіть нам у Telegram (демо).'));
+
+        // ========== ІНІЦІАЛІЗАЦІЯ ==========
+        fetchPlugins().then(() => {
+            renderFilterChips();
+            setActiveNav('home'); // активуємо головну
         });
-
-        watchlistToggle.addEventListener('click', () => {
-            if (!currentMovieId) return;
-            const idx = watchlist.indexOf(currentMovieId);
-            if (idx === -1) {
-                watchlist.push(currentMovieId);
-                watchlistToggle.innerHTML = '<i class="fas fa-bookmark"></i> У списку';
-                watchlistToggle.classList.add('active');
-            } else {
-                watchlist.splice(idx, 1);
-                watchlistToggle.innerHTML = '<i class="far fa-bookmark"></i> Додати до списку';
-                watchlistToggle.classList.remove('active');
-            }
-            localStorage.setItem('saysua_watchlist', JSON.stringify(watchlist));
-        });
-
-        setActiveNav('home');
     })();
 </script>
 </body>
