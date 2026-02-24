@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes"/>
-  <title>FANTASYAS TV · Яскравий оранжевий</title>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <title>FANTASYAS · Підписки</title>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
   <style>
     /* ========== ГЛОБАЛЬНІ СТИЛІ ========== */
     * {
@@ -16,75 +16,141 @@
     }
 
     :root {
-      --bg: #0f0f0f;
-      --surface: #1d1d1d;
-      --surface-variant: #2a2a2a;
-      --border: #3a3a3a;
+      --bg: #ffffff;
+      --surface: #f5f5f5;
+      --card: #ffffff;
+      --border: #e0e0e0;
+      --text-primary: #212121;
+      --text-secondary: #424242;
+      --text-tertiary: #757575;
+      --accent: #333333;
+      --accent-hover: #555555;
+      --accent-light: #bdbdbd;
+      --danger: #9e9e9e;
+      --danger-hover: #7a7a7a;
+      --warning: #bdbdbd;
+      --success: #757575;
+      --shadow-sm: 0 3px 14px rgba(0,0,0,0.05);
+      --shadow-md: 0 8px 32px rgba(0,0,0,0.07);
+      --shadow-lg: 0 16px 52px rgba(0,0,0,0.10);
+      --transition: 0.28s cubic-bezier(0.22, 0.61, 0.36, 1);
+      --transition-slow: 0.62s cubic-bezier(0.16, 1, 0.3, 1);
+      --radius-sm: 14px;
+      --radius-md: 22px;
+      --radius-lg: 30px;
+      --sidebar-width: 280px;
+      --header-height: 64px;
+    }
+
+    body.dark {
+      --bg: #121212;
+      --surface: #1e1e1e;
+      --card: #2d2d2d;
+      --border: #424242;
       --text-primary: #ffffff;
-      --text-secondary: #aaaaaa;
-      --text-tertiary: #6c6c70;
-      --accent: #ff6b00;          /* Яскравий оранжевий */
-      --accent-hover: #ff8c33;
-      --danger: #cf6679;
-      --success: #4caf50;
-      --warning: #f5a623;
-      --shadow-sm: 0 4px 8px rgba(0,0,0,0.6);
-      --shadow-md: 0 8px 24px rgba(0,0,0,0.8);
-      --shadow-lg: 0 12px 32px rgba(0,0,0,0.9);
-      --radius-sm: 16px;
-      --radius-md: 24px;
-      --radius-lg: 32px;
-      --sidebar-width: 350px;
-      --header-height: 80px;
+      --text-secondary: #e0e0e0;
+      --text-tertiary: #bdbdbd;
+      --accent: #cccccc;
+      --accent-hover: #ffffff;
+      --accent-light: #aaaaaa;
+      --danger: #b0b0b0;
+      --danger-hover: #8a8a8a;
+      --warning: #bdbdbd;
+      --success: #9e9e9e;
+      --shadow-sm: 0 3px 16px rgba(0,0,0,0.50);
+      --shadow-md: 0 8px 36px rgba(0,0,0,0.60);
+      --shadow-lg: 0 16px 60px rgba(0,0,0,0.70);
     }
 
     body {
       background: var(--bg);
       color: var(--text-primary);
       min-height: 100vh;
-      font-size: 18px;
-      line-height: 1.5;
-      font-weight: 600;           /* жирний базовий шрифт */
+      overflow-x: hidden;
+      transition: background var(--transition-slow), color var(--transition-slow);
+      font-size: 16px;
+      line-height: 1.6;
     }
 
-    /* Жирні заголовки */
-    h1, h2, h3, h4, .logo, .top-bar-title, .nav-item, .btn {
-      font-weight: 800;
+    /* ========== АНІМАЦІЇ ========== */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
-    /* Фокусний стан (пульт) */
+    @keyframes slideIn {
+      from { transform: translateX(-40px); opacity: 0; filter: blur(4px); }
+      to { transform: translateX(0); opacity: 1; filter: blur(0); }
+    }
+
+    @keyframes scaleIn {
+      from { transform: scale(0.94); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes pulse-soft {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(51,51,51,0.3); }
+      50% { transform: scale(1.03); box-shadow: 0 0 0 16px rgba(51,51,51,0); }
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -1400px 0; }
+      100% { background-position: 1400px 0; }
+    }
+
+    @keyframes gentleGlow {
+      0% { box-shadow: 0 0 0 0 var(--accent-light); }
+      70% { box-shadow: 0 0 18px 4px var(--accent); }
+      100% { box-shadow: 0 0 0 0 var(--accent-light); }
+    }
+
+    @keyframes likePop {
+      0% { transform: scale(0); opacity: 0; }
+      50% { transform: scale(1.3); opacity: 1; }
+      100% { transform: scale(1); opacity: 0; }
+    }
+
+    @keyframes ripple {
+      0% { transform: scale(0, 0); opacity: 0.5; }
+      100% { transform: scale(24, 24); opacity: 0; }
+    }
+
+    /* ========== ФОКУС ========== */
     .focused {
-      transform: scale(1.05);
-      box-shadow: 0 0 0 4px var(--bg), 0 0 0 8px var(--accent);
-      background-color: var(--surface-variant);
-      z-index: 10;
-      position: relative;
-      transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.1s;
-      outline: none;
+      outline: none !important;
+      box-shadow: 0 0 0 4px rgba(51,51,51,0.22), 0 0 32px rgba(51,51,51,0.14) !important;
+      transform: scale(1.02);
+      transition: all 0.28s cubic-bezier(0.22, 0.61, 0.36, 1);
+      z-index: 100;
+      animation: pulse-soft 2s infinite, gentleGlow 2.5s infinite;
     }
 
-    /* Стрілочка-курсор */
-    #tvCursor {
-      position: fixed;
-      width: 48px;
-      height: 48px;
-      background: transparent;
+    /* ========== САЙДБАР ========== */
+    .sidebar-backdrop {
       display: none;
-      z-index: 10000;
-      pointer-events: none;
-      transition: all 0.15s ease;
-      filter: drop-shadow(0 8px 12px rgba(0,0,0,0.5));
-      color: var(--accent);
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      backdrop-filter: blur(6px);
+      z-index: 999;
+      opacity: 0;
+      transition: opacity 0.4s ease;
     }
-    #tvCursor svg {
-      width: 100%;
-      height: 100%;
-      fill: currentColor;
-      stroke: white;
-      stroke-width: 1.5;
+    .sidebar-backdrop.active {
+      display: block;
+      opacity: 1;
     }
 
-    /* Бокове меню */
+    .app {
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
     .sidebar {
       width: var(--sidebar-width);
       background: var(--surface);
@@ -93,241 +159,146 @@
       flex-direction: column;
       padding: 20px 0;
       overflow-y: auto;
-      transition: transform 0.3s ease;
+      transition: transform var(--transition-slow), box-shadow var(--transition-slow);
       z-index: 1000;
+      animation: slideIn 0.5s ease-out;
     }
 
     .sidebar-header {
-      padding: 0 24px 24px;
+      padding: 0 20px 20px;
       border-bottom: 1px solid var(--border);
     }
 
     .logo {
-      font-size: 2.4rem;
-      letter-spacing: -0.5px;
+      font-size: 1.9rem;
+      font-weight: 800;
+      letter-spacing: -0.6px;
       color: var(--accent);
+      transition: color var(--transition), transform 0.3s;
+    }
+    .logo:hover {
+      color: var(--accent-hover);
+      transform: scale(1.02);
     }
 
     .nav-item {
       display: flex;
       align-items: center;
-      gap: 18px;
-      padding: 18px 24px;
-      margin: 8px 16px;
+      gap: 14px;
+      padding: 12px 20px;
+      margin: 4px 8px;
       border-radius: var(--radius-md);
       color: var(--text-secondary);
-      font-size: 1.4rem;
+      transition: all var(--transition);
       cursor: pointer;
+      font-weight: 500;
+    }
+    .nav-item:hover {
+      background: var(--card);
+      color: var(--text-primary);
+      transform: translateX(8px) scale(1.02);
+      box-shadow: var(--shadow-sm);
     }
     .nav-item.active {
       background: var(--accent);
-      color: var(--bg);
+      color: white;
+      box-shadow: var(--shadow-md);
+      animation: gentleGlow 2.2s infinite;
     }
     .nav-item .icon {
-      width: 32px;
-      height: 32px;
+      width: 24px;
+      height: 24px;
       stroke: currentColor;
       stroke-width: 1.8;
       fill: none;
+      transition: transform 0.25s ease;
+    }
+    .nav-item:hover .icon {
+      transform: scale(1.15) rotate(2deg);
     }
     .nav-item .badge {
       margin-left: auto;
-      background: var(--accent);
-      color: var(--bg);
-      padding: 4px 12px;
-      border-radius: 40px;
-      font-size: 1rem;
+      background: var(--accent-light);
+      color: white;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      animation: pulse-soft 2s infinite;
     }
 
-    /* Головна область */
+    /* ========== ГОЛОВНА ========== */
     .main {
       flex: 1;
       display: flex;
       flex-direction: column;
       overflow: hidden;
       background: var(--bg);
+      animation: fadeIn 0.6s ease-out;
     }
 
     .top-bar {
       height: var(--header-height);
-      background: rgba(15,15,15,0.95);
-      backdrop-filter: blur(10px);
+      background: var(--surface);
       border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
-      padding: 0 32px;
-      gap: 24px;
+      padding: 0 20px;
+      gap: 16px;
+      position: relative;
     }
 
     .menu-toggle {
       display: none;
-      width: 40px;
-      height: 30px;
+      width: 28px;
+      height: 20px;
       flex-direction: column;
       justify-content: space-between;
       cursor: pointer;
+      position: relative;
+      z-index: 1001;
     }
     .menu-toggle span {
-      height: 4px;
+      height: 2px;
       width: 100%;
       background: var(--text-primary);
-      border-radius: 4px;
+      border-radius: 2px;
+      transition: transform 0.35s ease, opacity 0.25s ease, background 0.25s;
     }
+    .menu-toggle:hover span {
+      background: var(--accent);
+    }
+    .menu-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(6px, 5px); }
+    .menu-toggle.active span:nth-child(2) { opacity: 0; }
+    .menu-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(6px, -5px); }
 
     .top-bar-title {
-      font-size: 2.2rem;
-      font-weight: 800;
-      flex: 1;
-    }
-
-    /* Перемикач мов */
-    .lang-switcher {
-      display: flex;
-      gap: 12px;
-    }
-    .lang-btn {
-      background: transparent;
-      border: 2px solid var(--border);
-      color: var(--text-secondary);
-      font-size: 1.2rem;
-      font-weight: 800;
-      padding: 8px 16px;
-      border-radius: 40px;
-      cursor: pointer;
-    }
-    .lang-btn.active {
-      background: var(--accent);
-      border-color: var(--accent);
-      color: var(--bg);
+      font-size: 1.45rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent), var(--accent-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .content {
       flex: 1;
-      overflow-y: auto;
-      padding: 32px;
+      overflow-y: auto !important;
+      padding: 24px;
       scroll-behavior: smooth;
+      height: 100%;
+      max-height: 100%;
+      outline: none;
     }
 
     .section {
       display: none;
+      animation: fadeIn 0.6s ease-out;
     }
     .section.active {
       display: block;
     }
 
-    /* Сітка для постів (замість стрічки) */
-    .feed {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-      gap: 32px;
-      padding: 20px 0;
-    }
-
-    .card, .post {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 24px;
-      box-shadow: var(--shadow-sm);
-    }
-
-    .post {
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-    }
-
-    .post-content {
-      font-size: 1.2rem;
-      line-height: 1.5;
-      margin-bottom: 20px;
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      font-weight: 600;
-    }
-
-    .post-author {
-      font-size: 1.2rem;
-      font-weight: 800;
-      cursor: pointer;
-    }
-    .post-meta {
-      font-size: 1rem;
-      color: var(--text-tertiary);
-    }
-
-    /* Інпути (великі) */
-    .input {
-      width: 100%;
-      padding: 18px 22px;
-      border-radius: var(--radius-md);
-      border: 2px solid transparent;
-      background: var(--surface-variant);
-      color: var(--text-primary);
-      font-size: 1.3rem;
-      font-weight: 600;
-      outline: none;
-    }
-    .input.focused {
-      border-color: var(--accent);
-      background: var(--surface);
-      transform: scale(1.02);
-      box-shadow: var(--shadow-md);
-    }
-
-    .btn {
-      padding: 16px 28px;
-      border-radius: var(--radius-md);
-      background: var(--surface-variant);
-      border: none;
-      color: var(--text-primary);
-      font-size: 1.2rem;
-      font-weight: 800;
-      cursor: pointer;
-      transition: background 0.1s;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-    .btn-primary {
-      background: var(--accent);
-      color: var(--bg);
-    }
-    .btn-primary.focused {
-      background: var(--accent-hover);
-    }
-
-    /* Список чатів */
-    .chat-item {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      padding: 18px;
-      border-radius: var(--radius-md);
-      background: var(--surface);
-      border: 1px solid var(--border);
-      margin-bottom: 12px;
-      cursor: pointer;
-    }
-    .chat-item.focused {
-      background: var(--surface-variant);
-      transform: scale(1.02);
-      box-shadow: 0 0 0 4px var(--accent);
-    }
-
-    .avatar {
-      width: 64px;
-      height: 64px;
-      border-radius: 50%;
-      background-size: cover;
-      background-position: center;
-      border: 2px solid var(--border);
-    }
-    .avatar.small { width: 48px; height: 48px; }
-    .avatar.large { width: 96px; height: 96px; }
-
-    /* Адаптивність */
     @media (max-width: 768px) {
       .sidebar {
         position: fixed;
@@ -335,42 +306,1147 @@
         top: 0;
         bottom: 0;
         transform: translateX(-100%);
+        box-shadow: var(--shadow-lg);
       }
-      .sidebar.open { transform: translateX(0); }
-      .menu-toggle { display: flex; }
-      .feed { grid-template-columns: 1fr; }
+      .sidebar.open {
+        transform: translateX(0);
+      }
+      .menu-toggle {
+        display: flex;
+      }
     }
 
-    /* Модальні вікна */
+    /* ========== КАРТКИ ========== */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow var(--transition-slow), transform var(--transition-slow), border-color var(--transition);
+      animation: scaleIn 0.5s ease-out;
+    }
+    .card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-8px) scale(1.01);
+      border-color: var(--accent);
+    }
+
+    /* ========== АВАТАРИ ========== */
+    .avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--surface);
+      background-size: cover;
+      background-position: center;
+      border: 2px solid var(--border);
+      cursor: pointer;
+      transition: border-color var(--transition), transform 0.3s ease, box-shadow 0.3s;
+    }
+    .avatar:hover {
+      border-color: var(--accent);
+      transform: scale(1.1);
+      box-shadow: 0 0 0 4px rgba(51,51,51,0.1);
+    }
+    .avatar.small {
+      width: 32px;
+      height: 32px;
+    }
+    .avatar.large {
+      width: 80px;
+      height: 80px;
+    }
+
+    .online-indicator {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      background: var(--success);
+      border-radius: 50%;
+      border: 2px solid var(--card);
+      margin-left: 8px;
+      animation: pulse-soft 1.8s infinite;
+    }
+
+    /* ========== КНОПКИ ========== */
+    .btn {
+      padding: 10px 18px;
+      border-radius: var(--radius-md);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 5px;
+      height: 5px;
+      background: rgba(51,51,51,0.4);
+      opacity: 0;
+      border-radius: 100%;
+      transform: scale(1, 1) translate(-50%);
+      transform-origin: 50% 50%;
+    }
+    .btn:active::after {
+      animation: ripple 0.4s ease-out;
+    }
+    .btn:hover, .btn.focused {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 8px 22px rgba(51,51,51,0.25);
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+    .btn-primary:hover, .btn-primary.focused {
+      background: var(--accent-hover);
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 8px 24px rgba(51,51,51,0.3);
+    }
+    .btn-danger {
+      background: var(--danger);
+      color: white;
+      border-color: var(--danger);
+    }
+    .btn-danger:hover {
+      background: var(--danger-hover);
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 6px 20px rgba(51,51,51,0.25);
+    }
+    .btn-icon {
+      padding: 10px;
+    }
+    .btn-follow {
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      padding: 4px 12px;
+      font-size: 0.85rem;
+      border-radius: 20px;
+      margin-left: 8px;
+      transition: all 0.25s;
+    }
+    .btn-follow:hover {
+      background: var(--accent);
+      color: white;
+      transform: scale(1.08);
+    }
+    .btn-follow.following {
+      background: var(--accent);
+      color: white;
+    }
+
+    /* ========== ПОЛЯ ВВЕДЕННЯ ========== */
+    .input {
+      width: 100%;
+      padding: 14px 18px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-primary);
+      font-size: 1rem;
+      outline: none;
+      transition: border-color var(--transition), box-shadow var(--transition), transform 0.2s;
+    }
+    .input:focus, .input.focused {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(51,51,51,0.15);
+      transform: scale(1.01);
+    }
+
+    /* ========== ВИБІР ФАЙЛУ ========== */
+    .file-input-wrapper {
+      position: relative;
+      display: inline-block;
+      width: 100%;
+    }
+    .file-input-wrapper input[type="file"] {
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+      z-index: 2;
+    }
+    .file-input-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 12px;
+      background: var(--surface);
+      border: 1px dashed var(--border);
+      border-radius: var(--radius-md);
+      color: var(--text-secondary);
+      transition: all var(--transition);
+    }
+    .file-input-button:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: scale(1.03);
+      background: var(--card);
+    }
+    .file-preview {
+      margin-top: 8px;
+      max-width: 100%;
+      max-height: 200px;
+      border-radius: var(--radius-sm);
+      object-fit: cover;
+      display: none;
+      animation: scaleIn 0.4s ease-out;
+    }
+    .file-preview.show {
+      display: block;
+    }
+
+    /* ========== СТРІЧКА ПОСТІВ ========== */
+    .feed {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .post {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 16px 16px 12px;
+      box-shadow: var(--shadow-sm);
+      transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+      animation: fadeIn 0.6s ease-out;
+      position: relative;
+    }
+    .post:hover, .post.focused {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-8px) scale(1.015);
+      border-color: var(--accent);
+    }
+
+    .post-header {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .post-header .avatar {
+      width: 42px;
+      height: 42px;
+    }
+    .post-author-info {
+      flex: 1;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+    }
+    .post-author {
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-block;
+      margin-right: 6px;
+      transition: color 0.25s, transform 0.2s;
+    }
+    .post-author:hover {
+      color: var(--accent);
+      transform: translateX(3px);
+      text-decoration: underline;
+    }
+    .post-meta {
+      color: var(--text-tertiary);
+      font-size: 0.85rem;
+    }
+    .post-time {
+      color: var(--text-tertiary);
+      font-size: 0.75rem;
+      margin-left: auto;
+    }
+
+    .post-actions {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      display: flex;
+      gap: 8px;
+    }
+    .post-actions button {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 1.2rem;
+      padding: 4px;
+      border-radius: 50%;
+      transition: background 0.25s, transform 0.3s;
+    }
+    .post-actions button:hover, .post-actions button.focused {
+      background: var(--surface);
+      transform: rotate(90deg) scale(1.1);
+    }
+
+    .post-content {
+      margin-bottom: 14px;
+      white-space: pre-wrap;
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    .hashtag {
+      color: var(--accent);
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-block;
+      margin-right: 4px;
+      transition: all 0.25s;
+    }
+    .hashtag:hover {
+      color: var(--accent-hover);
+      transform: translateY(-3px) scale(1.05);
+    }
+
+    .post-media {
+      width: 100%;
+      border-radius: var(--radius-md);
+      margin: 10px 0;
+      cursor: pointer;
+      max-height: 500px;
+      object-fit: cover;
+      transition: transform 0.4s ease, box-shadow 0.4s;
+    }
+    .post-media:hover {
+      transform: scale(1.04);
+      box-shadow: var(--shadow-md);
+    }
+
+    .post-footer {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      padding-top: 8px;
+      border-top: 1px solid var(--border);
+      align-items: center;
+    }
+    .post-footer button {
+      background: none;
+      border: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-secondary);
+      font-weight: 600;
+      cursor: pointer;
+      transition: color 0.25s, transform 0.25s;
+      font-size: 0.9rem;
+    }
+    .post-footer button:hover, .post-footer button.focused {
+      color: var(--accent);
+      transform: scale(1.15);
+    }
+    .post-footer button.liked {
+      color: var(--danger);
+    }
+    .post-footer button.liked svg {
+      fill: var(--danger);
+      animation: pulse-soft 0.6s;
+    }
+    .post-footer button.saved {
+      color: var(--accent);
+    }
+    .post-footer button.saved svg {
+      fill: var(--accent);
+    }
+
+    .like-btn {
+      transition: transform 0.2s ease, color 0.2s ease;
+    }
+    .like-btn.active {
+      color: #ff2d55;
+      animation: likePop 0.3s ease;
+    }
+
+    .bookmark-btn {
+      transition: transform 0.2s ease, color 0.2s ease;
+    }
+    .bookmark-btn.active {
+      color: #007bff;
+      transform: scale(1.2);
+    }
+
+    .view-count {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--text-tertiary);
+      font-size: 0.9rem;
+      margin-left: auto;
+    }
+
+    .follow-btn-post {
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s;
+      margin-left: 8px;
+    }
+    .follow-btn-post:hover {
+      background: var(--accent);
+      color: white;
+      transform: scale(1.08);
+    }
+    .follow-btn-post.following {
+      background: var(--accent);
+      color: white;
+    }
+
+    /* ========== КОМЕНТАРІ ========== */
+    .comments-section {
+      margin-top: 16px;
+      border-top: 1px solid var(--border);
+      padding-top: 16px;
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    .comment {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+      animation: slideIn 0.4s ease-out;
+    }
+    .comment-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background-size: cover;
+      background-position: center;
+      flex-shrink: 0;
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+    .comment-avatar:hover {
+      transform: scale(1.15);
+      box-shadow: 0 0 0 3px var(--accent-light);
+    }
+    .comment-content {
+      flex: 1;
+      background: var(--surface);
+      padding: 8px 12px;
+      border-radius: var(--radius-md);
+      transition: transform 0.25s, background 0.25s;
+    }
+    .comment-content:hover {
+      transform: translateX(6px);
+      background: var(--card);
+    }
+    .comment-author {
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: inline-block;
+      margin-right: 8px;
+      transition: color 0.25s;
+    }
+    .comment-author:hover {
+      color: var(--accent);
+    }
+    .comment-text {
+      font-size: 0.95rem;
+      word-break: break-word;
+    }
+    .comment-time {
+      font-size: 0.75rem;
+      color: var(--text-tertiary);
+      margin-top: 4px;
+    }
+    .comment-form {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+      align-items: center;
+    }
+    .comment-input {
+      flex: 1;
+      padding: 10px 14px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-primary);
+      transition: border-color 0.25s, box-shadow 0.25s;
+    }
+    .comment-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(51,51,51,0.1);
+    }
+
+    /* ========== УНІВЕРСАЛЬНИЙ ЕМОДЖІ-ПІКЕР ========== */
+    .emoji-trigger {
+      background: none;
+      border: none;
+      font-size: 1.8rem;
+      cursor: pointer;
+      padding: 12px;
+      color: var(--text-secondary);
+      border-radius: 50%;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s ease, background 0.2s ease, color 0.2s;
+      touch-action: manipulation;
+      min-width: 52px;
+      min-height: 52px;
+    }
+    .emoji-trigger:hover {
+      transform: scale(1.1);
+      background: var(--surface);
+      color: var(--accent);
+    }
+    .emoji-trigger:active {
+      transform: scale(0.9);
+    }
+
+    #globalEmojiPicker {
+      position: fixed;
+      left: 50%;
+      bottom: max(80px, env(safe-area-inset-bottom) + 20px);
+      transform: translateX(-50%) translateY(20px);
+      width: 92%;
+      max-width: 380px;
+      max-height: 45vh;
+      overflow-y: auto;
+      background: var(--card);
+      border-radius: 32px;
+      padding: 16px 12px;
+      display: none;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 8px;
+      box-shadow: var(--shadow-lg), 0 10px 30px rgba(0,0,0,0.3);
+      z-index: 2000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
+      border: 1px solid var(--border);
+    }
+    #globalEmojiPicker.active {
+      display: grid;
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+    }
+    #globalEmojiPicker button {
+      font-size: 32px;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      padding: 10px 4px;
+      border-radius: 24px;
+      transition: transform 0.15s ease, background 0.2s ease;
+      text-align: center;
+      line-height: 1;
+      min-width: 52px;
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #globalEmojiPicker button:hover {
+      transform: scale(1.25);
+      background: var(--surface);
+    }
+    #globalEmojiPicker button:active {
+      transform: scale(0.9);
+      background: var(--border);
+    }
+
+    body.dark #globalEmojiPicker {
+      background: #2a2a2a;
+      border-color: #444;
+    }
+    body.dark #globalEmojiPicker button:hover {
+      background: #3a3a3a;
+    }
+
+    @media (max-width: 400px) {
+      #globalEmojiPicker {
+        grid-template-columns: repeat(5, 1fr);
+        max-width: 300px;
+        max-height: 40vh;
+        bottom: 70px;
+      }
+      #globalEmojiPicker button {
+        font-size: 28px;
+        min-width: 48px;
+        min-height: 48px;
+      }
+    }
+    @media (min-width: 768px) {
+      #globalEmojiPicker {
+        max-width: 450px;
+        grid-template-columns: repeat(7, 1fr);
+        bottom: 100px;
+      }
+    }
+    @media (min-width: 1024px) {
+      #globalEmojiPicker {
+        left: auto;
+        right: 20px;
+        bottom: auto;
+        top: 100%;
+        transform: translateY(10px) scale(0.95);
+        width: 350px;
+      }
+      #globalEmojiPicker.active {
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* ========== ЧАТИ ========== */
+    .chat-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .chat-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px;
+      border-radius: var(--radius-md);
+      background: var(--card);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all 0.25s;
+      animation: slideIn 0.4s ease-out;
+    }
+    .chat-item:hover, .chat-item.focused {
+      background: var(--surface);
+      transform: translateX(8px) scale(1.02);
+      border-color: var(--accent);
+      box-shadow: var(--shadow-sm);
+    }
+    .chat-item.unread {
+      border-left: 3px solid var(--accent);
+    }
+    .chat-info {
+      flex: 1;
+    }
+    .chat-name {
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .chat-last {
+      color: var(--text-tertiary);
+      font-size: 0.9rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .chat-time {
+      color: var(--text-tertiary);
+      font-size: 0.8rem;
+    }
+    .chat-badge {
+      background: var(--accent);
+      color: white;
+      border-radius: 50%;
+      min-width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 600;
+      animation: pulse-soft 1.8s infinite;
+    }
+    .chat-window {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      background: var(--card);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      animation: scaleIn 0.4s ease-out;
+    }
+    .chat-header {
+      padding: 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .chat-messages {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .message-wrapper {
+      display: flex;
+      flex-direction: column;
+      animation: fadeIn 0.4s ease-out;
+    }
+    .message-wrapper.sent {
+      align-items: flex-end;
+    }
+    .message-wrapper.received {
+      align-items: flex-start;
+    }
+    .message-bubble {
+      max-width: 70%;
+      padding: 10px 14px;
+      border-radius: 20px;
+      word-break: break-word;
+      position: relative;
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+    .message-bubble:hover {
+      transform: scale(1.03);
+      box-shadow: var(--shadow-sm);
+    }
+    .message-bubble.sent {
+      background: var(--accent);
+      color: white;
+      border-bottom-right-radius: 4px;
+    }
+    .message-bubble.received {
+      background: var(--surface);
+      color: var(--text-primary);
+      border-bottom-left-radius: 4px;
+    }
+    .message-sender {
+      font-weight: 600;
+      font-size: 0.85rem;
+      margin-bottom: 2px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .message-sender-avatar {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background-size: cover;
+      transition: transform 0.25s;
+    }
+    .message-sender-avatar:hover {
+      transform: scale(1.3);
+    }
+    .message-time {
+      font-size: 0.7rem;
+      color: var(--text-tertiary);
+      margin-top: 2px;
+      text-align: right;
+    }
+    .date-divider {
+      text-align: center;
+      margin: 16px 0;
+      font-size: 0.8rem;
+      color: var(--text-tertiary);
+      position: relative;
+    }
+    .date-divider::before,
+    .date-divider::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 30%;
+      height: 1px;
+      background: var(--border);
+    }
+    .date-divider::before {
+      left: 0;
+    }
+    .date-divider::after {
+      right: 0;
+    }
+    .typing-indicator {
+      color: var(--text-tertiary);
+      font-size: 0.9rem;
+      padding: 4px 8px;
+      font-style: italic;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      animation: pulse-soft 1.5s infinite;
+    }
+    .chat-input-area {
+      display: flex;
+      padding: 12px;
+      border-top: 1px solid var(--border);
+      gap: 8px;
+      align-items: center;
+    }
+    .chat-input-area input {
+      flex: 1;
+    }
+
+    /* ========== ПРОФІЛЬ ========== */
+    .profile-header {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      align-items: flex-start;
+    }
+    .profile-stats {
+      display: flex;
+      gap: 24px;
+      margin: 16px 0;
+    }
+    .profile-stats span {
+      cursor: pointer;
+      transition: all 0.25s;
+      padding: 4px 8px;
+      border-radius: var(--radius-sm);
+    }
+    .profile-stats span:hover {
+      background: var(--surface);
+      transform: translateY(-4px) scale(1.05);
+      color: var(--accent);
+    }
+    .profile-tabs {
+      display: flex;
+      gap: 8px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+      margin-bottom: 20px;
+    }
+    .profile-tab {
+      padding: 8px 16px;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--text-secondary);
+      transition: all 0.25s;
+    }
+    .profile-tab:hover {
+      background: var(--surface);
+      transform: translateY(-4px);
+    }
+    .profile-tab.active, .profile-tab.focused {
+      background: var(--accent);
+      color: white;
+      box-shadow: var(--shadow-sm);
+      animation: gentleGlow 2.2s infinite;
+    }
+    .profile-menu {
+      position: relative;
+      display: inline-block;
+      margin-left: auto;
+    }
+    .profile-menu-btn {
+      background: none;
+      border: none;
+      font-size: 1.8rem;
+      cursor: pointer;
+      padding: 0 8px;
+      color: var(--text-secondary);
+      transition: transform 0.3s;
+    }
+    .profile-menu-btn:hover {
+      transform: rotate(90deg) scale(1.1);
+      color: var(--accent);
+    }
+    .profile-menu-dropdown {
+      position: absolute;
+      right: 0;
+      top: 100%;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      min-width: 200px;
+      box-shadow: var(--shadow-lg);
+      z-index: 100;
+      display: none;
+      animation: scaleIn 0.3s ease-out;
+    }
+    .profile-menu-dropdown.show {
+      display: block;
+    }
+    .profile-menu-item {
+      padding: 12px 16px;
+      cursor: pointer;
+      transition: all 0.25s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .profile-menu-item:hover {
+      background: var(--surface);
+      transform: translateX(8px);
+    }
+
+    /* ========== ХЕШТЕГИ ========== */
+    .hashtag-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .hashtag-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all 0.25s;
+      animation: slideIn 0.4s ease-out;
+    }
+    .hashtag-item:hover {
+      background: var(--surface);
+      transform: translateX(8px) scale(1.02);
+      border-color: var(--accent);
+    }
+    .hashtag-name {
+      font-weight: 600;
+      color: var(--accent);
+    }
+    .hashtag-count {
+      color: var(--text-tertiary);
+    }
+
+    /* ========== МОДАЛКИ ========== */
     .modal {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.8);
+      background: rgba(0,0,0,0.45);
       backdrop-filter: blur(8px);
       display: none;
       align-items: center;
       justify-content: center;
       z-index: 2000;
+      animation: fadeIn 0.4s ease-out;
     }
-    .modal.active { display: flex; }
+    .modal.active {
+      display: flex;
+    }
     .modal-content {
-      background: var(--surface);
+      background: var(--card);
       border-radius: var(--radius-lg);
-      padding: 32px;
-      max-width: 600px;
+      padding: 24px;
+      max-width: 480px;
       width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: scaleIn 0.4s ease-out;
+      box-shadow: var(--shadow-lg);
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .modal-close {
+      font-size: 2rem;
+      line-height: 1;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+    .modal-close:hover {
+      transform: rotate(90deg) scale(1.1);
+      color: var(--accent);
     }
 
-    /* Інші дрібні стилі (збережено з оригіналу, адаптовано) */
-    .file-input-button { background: var(--surface-variant); border: 2px dashed var(--border); padding: 16px; border-radius: var(--radius-md); text-align: center; }
-    .hashtag-item { background: var(--surface); padding: 16px; border-radius: var(--radius-md); }
-    .online-indicator { background: var(--success); width: 16px; height: 16px; border-radius: 50%; display: inline-block; margin-left: 8px; }
+    /* ========== TOAST ========== */
     #toast {
-      position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-      background: var(--accent); color: var(--bg); padding: 16px 32px; border-radius: 40px;
-      font-weight: 800; box-shadow: var(--shadow-lg); z-index: 3000; opacity: 0; transition: opacity 0.3s;
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--accent);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 40px;
+      font-weight: 500;
+      box-shadow: var(--shadow-lg);
+      z-index: 3000;
+      opacity: 0;
+      transition: opacity 0.4s;
+      pointer-events: none;
+      animation: slideIn 0.4s;
     }
-    #toast.show { opacity: 1; }
+    #toast.show {
+      opacity: 1;
+    }
+
+    /* ========== СКЕЛЕТОН ========== */
+    .skeleton {
+      background: linear-gradient(90deg, var(--surface) 25%, var(--card) 50%, var(--surface) 75%);
+      background-size: 220% 100%;
+      animation: shimmer 2.2s infinite;
+      border-radius: var(--radius-md);
+    }
+
+    /* ========== КОЛЬОРОВІ ДОПОМІЖНІ КЛАСИ ========== */
+    .text-danger { color: var(--danger); }
+    .text-warning { color: var(--warning); }
+    .text-success { color: var(--success); }
+    .text-accent { color: var(--accent); }
+
+    /* ========== АНІМАЦІЯ ЛАЙКА ПРИ DOUBLE TAP ========== */
+    .heart-overlay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 5rem;
+      color: #ff2d55;
+      pointer-events: none;
+      z-index: 10;
+      animation: likePop 1s ease-out forwards;
+    }
+
+    /* ========== TV-ОПТИМІЗАЦІЯ ========== */
+    :focus-visible {
+      outline: 4px solid var(--accent) !important;
+      outline-offset: 4px;
+      box-shadow: 0 0 0 8px rgba(51, 51, 51, 0.2);
+      transition: outline 0.1s ease;
+    }
+
+    @media (hover: none) {
+      .nav-item:hover,
+      .card:hover,
+      .post:hover,
+      .btn:hover,
+      .avatar:hover,
+      .hashtag:hover {
+        transform: none !important;
+        box-shadow: none !important;
+        background: inherit !important;
+      }
+      .nav-item.active,
+      .btn:active {
+        background: var(--accent);
+        color: white;
+      }
+    }
+
+    /* ========== ДОДАТКОВІ АНІМАЦІЇ ========== */
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+      100% { transform: translateY(0px); }
+    }
+    .float-animation {
+      animation: float 4.5s ease-in-out infinite;
+    }
+
+    @keyframes glow {
+      0% { box-shadow: 0 0 6px var(--accent); }
+      50% { box-shadow: 0 0 26px var(--accent); }
+      100% { box-shadow: 0 0 6px var(--accent); }
+    }
+    .glow-animation {
+      animation: glow 2.5s ease-in-out infinite;
+    }
+
+    /* ========== ФІЛЬТРИ КОНТЕНТУ ========== */
+    .feed-header {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .filter-btn.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+    .active-filter {
+      background: var(--accent);
+      color: white;
+      padding: 6px 14px;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      animation: fadeIn 0.3s ease-out;
+      box-shadow: var(--shadow-sm);
+    }
+    .active-filter button {
+      background: transparent;
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-size: 1.2rem;
+      line-height: 1;
+      padding: 0 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s;
+    }
+    .active-filter button:hover {
+      transform: scale(1.2);
+    }
+    #filterModal .modal-body {
+      max-height: 400px;
+      overflow-y: auto;
+      padding: 8px 4px;
+    }
+    .filter-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+      border-radius: var(--radius-sm);
+    }
+    .filter-item:hover {
+      background: var(--surface);
+      transform: translateX(6px);
+    }
+    .filter-item .tag {
+      font-weight: 600;
+      color: var(--accent);
+    }
+    .filter-item .count {
+      color: var(--text-tertiary);
+      font-size: 0.9rem;
+    }
+    #clearFilterBtn {
+      width: 100%;
+      margin-top: 12px;
+    }
   </style>
 </head>
 <body>
@@ -382,28 +1458,28 @@
       <div class="logo">FANTASYAS</div>
     </div>
     <nav class="nav">
-      <div class="nav-item active" data-section="home" tabindex="0" data-i18n="navHome">
+      <div class="nav-item active" data-section="home" tabindex="0">
         <svg class="icon" viewBox="0 0 24 24"><path d="M3 10l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
         Головна
       </div>
-      <div class="nav-item" data-section="search" tabindex="0" data-i18n="navSearch">
+      <div class="nav-item" data-section="search" tabindex="0">
         <svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         Пошук
       </div>
-      <div class="nav-item" data-section="hashtags" tabindex="0" data-i18n="navHashtags">
+      <div class="nav-item" data-section="hashtags" tabindex="0">
         <svg class="icon" viewBox="0 0 24 24"><path d="M4 9h16M4 15h16M10 3L8 21M16 3l-2 18"/></svg>
         Хештеги
       </div>
-      <div class="nav-item" data-section="profile" tabindex="0" data-i18n="navProfile">
+      <div class="nav-item" data-section="profile" tabindex="0">
         <svg class="icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         Профіль
       </div>
-      <div class="nav-item" data-section="chats" tabindex="0" data-i18n="navChats">
+      <div class="nav-item" data-section="chats" tabindex="0">
         <svg class="icon" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         Чати
         <span class="badge" id="unreadBadge" style="display:none;">0</span>
       </div>
-      <div class="nav-item" data-section="settings" tabindex="0" data-i18n="navSettings">
+      <div class="nav-item" data-section="settings" tabindex="0">
         <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H5.78a1.65 1.65 0 0 0-1.51 1 1.65 1.65 0 0 0 .33 1.82l.07.07A10 10 0 0 0 12 17.66a10 10 0 0 0 6.26-2.26z"/></svg>
         Налаштування
       </div>
@@ -416,63 +1492,74 @@
         <span></span><span></span><span></span>
       </div>
       <div class="top-bar-title" id="pageTitle">Головна</div>
-      <div class="lang-switcher">
-        <button class="lang-btn" data-lang="uk" id="lang-uk">🇺🇦 Укр</button>
-        <button class="lang-btn" data-lang="ru" id="lang-ru">🇷🇺 Рус</button>
-        <button class="lang-btn" data-lang="en" id="lang-en">🇬🇧 Eng</button>
-      </div>
     </div>
 
     <div class="content" id="content">
-      <!-- Головна -->
       <div id="home" class="section active">
         <div class="card" id="authBox">
           <div id="loginForm">
-            <input type="text" id="loginNickname" class="input" placeholder="Псевдонім (без @)" autocomplete="off" tabindex="0" data-i18n-placeholder="loginPlaceholder"/>
-            <input type="password" id="loginPassword" class="input" placeholder="Пароль" tabindex="0" data-i18n-placeholder="passwordPlaceholder"/>
-            <button class="btn btn-primary" id="loginBtn" style="width:100%; margin-top:12px;" tabindex="0" data-i18n="loginBtn">Увійти</button>
+            <input type="text" id="loginNickname" class="input" placeholder="Псевдонім (без @)" autocomplete="off" tabindex="0"/>
+            <input type="password" id="loginPassword" class="input" placeholder="Пароль" tabindex="0"/>
+            <button class="btn btn-primary" id="loginBtn" style="width:100%; margin-top:12px;" tabindex="0">Увійти</button>
             <div style="display:flex; gap:10px; margin-top:15px;">
-              <button class="btn" id="googleLoginBtn" style="flex:1;" tabindex="0" data-i18n="googleBtn">Google</button>
-              <button class="btn" id="appleLoginBtn" style="flex:1;" tabindex="0" data-i18n="appleBtn">Apple</button>
+              <button class="btn" id="googleLoginBtn" style="flex:1;" tabindex="0">Google</button>
+              <button class="btn" id="appleLoginBtn" style="flex:1;" tabindex="0">Apple</button>
             </div>
-            <p style="margin-top:18px;"><span data-i18n="noAccount">Немає акаунта?</span> <span id="toRegister" style="color:var(--accent);cursor:pointer;" tabindex="0" data-i18n="registerLink">Зареєструватися</span></p>
-            <p><a href="#" id="forgotPassword" style="color:var(--accent);" tabindex="0" data-i18n="forgotPassword">Забули пароль?</a></p>
+            <p style="margin-top:18px;">Немає акаунта? <span id="toRegister" style="color:var(--accent);cursor:pointer;" tabindex="0">Зареєструватися</span></p>
+            <p><a href="#" id="forgotPassword" style="color:var(--accent);" tabindex="0">Забули пароль?</a></p>
           </div>
           <div id="registerForm" style="display:none;">
-            <input type="text" id="registerNickname" class="input" placeholder="Псевдонім (без @)" tabindex="0" data-i18n-placeholder="loginPlaceholder"/>
-            <input type="password" id="registerPassword" class="input" placeholder="Пароль" tabindex="0" data-i18n-placeholder="passwordPlaceholder"/>
-            <button class="btn btn-primary" id="registerBtn" style="width:100%; margin-top:12px;" tabindex="0" data-i18n="registerBtn">Зареєструватися</button>
-            <p style="margin-top:18px;"><span data-i18n="haveAccount">Вже є акаунт?</span> <span id="toLogin" style="color:var(--accent);cursor:pointer;" tabindex="0" data-i18n="loginLink">Увійти</span></p>
+            <input type="text" id="registerNickname" class="input" placeholder="Псевдонім (без @)" tabindex="0"/>
+            <input type="password" id="registerPassword" class="input" placeholder="Пароль" tabindex="0"/>
+            <button class="btn btn-primary" id="registerBtn" style="width:100%; margin-top:12px;" tabindex="0">Зареєструватися</button>
+            <p style="margin-top:18px;">Вже є акаунт? <span id="toLogin" style="color:var(--accent);cursor:pointer;" tabindex="0">Увійти</span></p>
           </div>
         </div>
 
         <div class="card" id="newPostBox" style="display:none;">
-          <textarea id="postText" class="input" placeholder="Що нового? #хештег" rows="3" tabindex="0" data-i18n-placeholder="newPostPlaceholder"></textarea>
-          <div class="file-input-wrapper" style="margin:16px 0;">
-            <input type="file" id="postMedia" accept="image/*,video/*">
-            <div class="file-input-button" id="postMediaLabel" data-i18n="chooseMedia">Обрати фото/відео</div>
+          <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 10px;">
+            <textarea id="postText" class="input" placeholder="Що нового? #хештег" rows="3" style="flex:1;" tabindex="0"></textarea>
+            <button class="emoji-trigger" data-target="postText" tabindex="0">😊</button>
           </div>
-          <img id="postMediaPreview" class="file-preview" style="display:none; max-width:100%; margin-top:8px;" />
-          <button class="btn btn-primary" id="addPost" style="margin-top:12px;" tabindex="0" data-i18n="publishBtn">Опублікувати</button>
+          
+          <div class="file-input-wrapper">
+            <input type="file" id="postMedia" accept="image/*,video/*">
+            <div class="file-input-button">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2.18"/><circle cx="7.5" cy="7.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              <span id="postMediaLabel">Обрати фото/відео</span>
+            </div>
+          </div>
+          <img id="postMediaPreview" class="file-preview" />
+          
+          <button class="btn btn-primary" id="addPost" style="margin-top:12px;" tabindex="0">Опублікувати</button>
         </div>
 
-        <div class="feed-header" style="display:flex; gap:10px; margin-bottom:20px;">
-          <button class="btn" id="feedNewBtn" tabindex="0" data-i18n="newBtn">Нові</button>
-          <button class="btn" id="feedPopularBtn" tabindex="0" data-i18n="popularBtn">Популярні</button>
+        <!-- Кнопки фільтрів (Reddit-like) -->
+        <div class="feed-header">
+          <button class="btn filter-btn" data-filter="popular" id="filterPopular" tabindex="0">Популярні</button>
+          <button class="btn filter-btn" data-filter="new" id="filterNew" tabindex="0">Нові</button>
+          <button class="btn filter-btn" data-filter="commented" id="filterCommented" tabindex="0">Коментовані</button>
+          <button class="btn filter-btn" data-filter="liked" id="filterLiked" tabindex="0">Вподобані</button>
+          <button class="btn filter-btn" data-filter="following" id="filterFollowing" tabindex="0">Підписки</button>
+          <button class="btn filter-btn" data-filter="tag" id="filterTagBtn" tabindex="0"># Тег</button>
+          <div id="activeFilter" class="active-filter"></div>
         </div>
 
         <div class="feed" id="feed"></div>
         <div class="feed-end-sentinel" id="feedSentinel"></div>
+        <div id="skeletonContainer" style="display:none;">
+          <div class="skeleton" style="height:200px; margin-bottom:20px;"></div>
+          <div class="skeleton" style="height:200px;"></div>
+        </div>
       </div>
 
-      <!-- Інші секції (скорочено для лаконічності, але в оригіналі вони повні) -->
       <div id="search" class="section">
-        <input type="text" id="searchInput" class="input" placeholder="Пошук за @id, ім'ям або #хештегом..." tabindex="0" data-i18n-placeholder="searchPlaceholder"/>
+        <input type="text" id="searchInput" class="input" placeholder="Пошук за @id, ім'ям або #хештегом..." tabindex="0"/>
         <div class="user-list" id="userList" style="margin-top:20px;"></div>
       </div>
 
       <div id="hashtags" class="section">
-        <h2 data-i18n="popularHashtags">Популярні хештеги</h2>
+        <h2 style="margin-bottom:16px;">Популярні хештеги</h2>
         <div class="hashtag-list" id="hashtagList"></div>
       </div>
 
@@ -483,8 +1570,8 @@
       </div>
 
       <div id="chats" class="section">
-        <div class="chat-search-container">
-          <input type="text" id="chatSearchInput" class="input" placeholder="Пошук користувачів..." tabindex="0" data-i18n-placeholder="searchUsersPlaceholder">
+        <div class="chat-search-container" style="padding: 0 0 12px 0;">
+          <input type="text" id="chatSearchInput" class="input" placeholder="Пошук користувачів..." tabindex="0">
           <div id="chatSearchResults" class="user-list" style="margin-top:10px; display:none;"></div>
         </div>
         <div class="chat-list" id="chatList"></div>
@@ -497,43 +1584,163 @@
             </div>
             <span id="onlineIndicator" class="online-indicator" style="display:none;"></span>
           </div>
-          <div class="chat-messages" id="chatMessages" style="height:300px; overflow-y:auto;"></div>
-          <div class="chat-input-area" style="display:flex; gap:8px; margin-top:12px;">
-            <input type="text" id="chatText" class="input" placeholder="Напишіть повідомлення..." tabindex="0" data-i18n-placeholder="messagePlaceholder"/>
-            <button class="btn btn-primary btn-icon" id="sendMessage" tabindex="0" data-i18n="sendBtn">Надіслати</button>
+          <div class="chat-messages" id="chatMessages"></div>
+          <div class="typing-indicator" id="typingIndicator" style="display:none;">
+            <span></span> друкує...
+          </div>
+          <div class="chat-input-area">
+            <input type="text" id="chatText" class="input" placeholder="Напишіть повідомлення..." tabindex="0"/>
+            <button class="emoji-trigger" data-target="chatText" tabindex="0">😊</button>
+            <button class="btn btn-primary btn-icon" id="sendMessage" tabindex="0">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
           </div>
         </div>
       </div>
 
       <div id="settings" class="section card">
-        <h2 data-i18n="settingsTitle">Налаштування</h2>
-        <button class="btn" id="toggleTheme" style="margin:18px 0;" tabindex="0" data-i18n="themeBtn">Тема</button>
-        <button class="btn" id="privacyPolicyBtn" style="margin:18px 0;" tabindex="0" data-i18n="privacyBtn">Політика конфіденційності</button>
-        <button class="btn" id="logoutBtn" style="margin-top:20px;" tabindex="0" data-i18n="logoutBtn">Вийти</button>
+        <h2>Налаштування</h2>
+        <button class="btn" id="toggleTheme" style="margin:18px 0;" tabindex="0">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/></svg>
+          Тема
+        </button>
+        <button class="btn" id="privacyPolicyBtn" style="margin:18px 0;" tabindex="0">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Політика конфіденційності
+        </button>
+        <button class="btn" id="logoutBtn" style="margin-top:20px;" tabindex="0">Вийти</button>
       </div>
     </div>
   </main>
 </div>
 
-<!-- Модалки (скорочено) -->
+<!-- Універсальний емоджі-пікер -->
+<div id="globalEmojiPicker"></div>
+
+<!-- Модалки -->
+<div class="modal" id="editProfileModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Редагувати профіль</h3>
+      <span class="modal-close" id="closeModal" tabindex="0">&times;</span>
+    </div>
+    <input type="text" id="editNickname" class="input" placeholder="Псевдонім" tabindex="0"/>
+    <textarea id="editBio" class="input" placeholder="Про себе" rows="4" style="margin:14px 0;" tabindex="0"></textarea>
+    <div class="file-input-wrapper" style="margin:14px 0;">
+      <input type="file" id="editAvatar" accept="image/*">
+      <div class="file-input-button">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2.18"/><circle cx="7.5" cy="7.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        <span id="editAvatarLabel">Обрати аватар</span>
+      </div>
+    </div>
+    <img id="editAvatarPreview" class="file-preview" />
+    <button class="btn btn-primary" id="saveProfileEdit" tabindex="0">Зберегти</button>
+  </div>
+</div>
+
+<div class="modal" id="editPostModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Редагувати пост</h3>
+      <span class="modal-close" id="closeEditPostModal" tabindex="0">&times;</span>
+    </div>
+    <textarea id="editPostText" class="input" placeholder="Текст посту" rows="4" tabindex="0"></textarea>
+    <div class="file-input-wrapper" style="margin:14px 0;">
+      <input type="file" id="editPostMedia" accept="image/*,video/*">
+      <div class="file-input-button">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2.18"/><circle cx="7.5" cy="7.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        <span id="editPostMediaLabel">Змінити медіа</span>
+      </div>
+    </div>
+    <img id="editPostMediaPreview" class="file-preview" />
+    <button class="btn btn-primary" id="savePostEdit" tabindex="0">Зберегти</button>
+    <button class="btn btn-danger" id="deletePostBtn" style="margin-top:10px;" tabindex="0">Видалити пост</button>
+  </div>
+</div>
+
+<div class="modal" id="followersModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Підписники</h3>
+      <span class="modal-close" id="closeFollowersModal" tabindex="0">&times;</span>
+    </div>
+    <div id="followersList" class="user-list" style="max-height: 400px; overflow-y: auto;"></div>
+  </div>
+</div>
+
+<div class="modal" id="followingModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Підписки</h3>
+      <span class="modal-close" id="closeFollowingModal" tabindex="0">&times;</span>
+    </div>
+    <div id="followingList" class="user-list" style="max-height: 400px; overflow-y: auto;"></div>
+  </div>
+</div>
+
 <div class="modal" id="privacyPolicyModal">
   <div class="modal-content">
     <div class="modal-header">
-      <h3 data-i18n="privacyTitle">Політика конфіденційності</h3>
+      <h3>Політика конфіденційності</h3>
       <span class="modal-close" id="closePrivacyModal" tabindex="0">&times;</span>
     </div>
-    <div style="max-height: 60vh; overflow-y: auto;">
-      <p data-i18n="privacyText1">Текст політики...</p>
+    <div style="max-height: 60vh; overflow-y: auto; padding-right: 10px; text-align: left;">
+      <p><strong>Останнє оновлення:</strong> 19 лютого 2026</p>
+      <h4>1. Які дані ми збираємо</h4>
+      <p>Ми збираємо мінімально необхідну інформацію для роботи сервісу:</p>
+      <ul>
+        <li>Облікові дані (псевдонім, електронна пошта, пароль у зашифрованому вигляді).</li>
+        <li>Інформація профілю (аватар, біографія), яку ви надаєте добровільно.</li>
+        <li>Ваші публікації, коментарі, вподобання, збережені пости.</li>
+        <li>Дані про взаємодію (підписки, повідомлення в чатах).</li>
+        <li>Технічні дані: IP-адреса, тип пристрою, час активності.</li>
+      </ul>
+      <h4>2. Як ми використовуємо ваші дані</h4>
+      <p>Ваші дані використовуються виключно для:</p>
+      <ul>
+        <li>Надання функціоналу соціальної мережі (публікація постів, чати, підписки).</li>
+        <li>Персоналізації контенту (стрічка новин, рекомендації).</li>
+        <li>Забезпечення безпеки та запобігання шахрайству.</li>
+        <li>Комунікації з вами (сповіщення, відновлення пароля).</li>
+      </ul>
+      <h4>3. Передача даних третім особам</h4>
+      <p>Ми не продаємо ваші дані. Інформація може бути передана лише у випадках:</p>
+      <ul>
+        <li>За вашого явного дозволу.</li>
+        <li>Для виконання вимог законодавства.</li>
+        <li>Технічним партнерам (Firebase, Google Cloud) для забезпечення роботи сервісу.</li>
+      </ul>
+      <h4>4. Ваші права</h4>
+      <p>Ви можете в будь-який час:</p>
+      <ul>
+        <li>Переглянути та редагувати свої дані в налаштуваннях профілю.</li>
+        <li>Видалити свій акаунт (зверніться до підтримки).</li>
+        <li>Заблокувати інших користувачів.</li>
+      </ul>
+      <h4>5. Безпека</h4>
+      <p>Ми використовуємо сучасні методи шифрування (HTTPS, хешування паролів) та регулярно оновлюємо системи безпеки. Однак жоден метод передачі даних через Інтернет не є 100% безпечним.</p>
+      <h4>6. Зміни в політиці</h4>
+      <p>Про будь-які зміни ми повідомимо на цій сторінці. Рекомендуємо періодично переглядати політику.</p>
+      <p><strong>Контакти:</strong> Якщо у вас виникли питання, напишіть нам на privacy@fantasyas.com.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Модальне вікно вибору фільтра за тегом -->
+<div class="modal" id="filterModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Оберіть тему</h3>
+      <button class="close-modal" id="closeFilterModal">&times;</button>
+    </div>
+    <div class="modal-body" id="filterList" style="max-height: 400px; overflow-y: auto;"></div>
+    <div class="modal-footer">
+      <button class="btn" id="clearFilterBtn">Скинути фільтр</button>
     </div>
   </div>
 </div>
 
 <div id="toast"></div>
-<div id="tvCursor">
-  <svg viewBox="0 0 32 32">
-    <polygon points="2,2 30,16 2,30 8,16 2,2" fill="currentColor" stroke="white" stroke-width="2"/>
-  </svg>
-</div>
 
 <script type="module">
   // ================= Firebase імпорти =================
@@ -556,144 +1763,7 @@
   const db = getFirestore(app);
   const storage = getStorage(app);
 
-  // ================= Локалізація =================
-  const i18n = {
-    uk: {
-      navHome: 'Головна',
-      navSearch: 'Пошук',
-      navHashtags: 'Хештеги',
-      navProfile: 'Профіль',
-      navChats: 'Чати',
-      navSettings: 'Налаштування',
-      loginPlaceholder: 'Псевдонім (без @)',
-      passwordPlaceholder: 'Пароль',
-      loginBtn: 'Увійти',
-      googleBtn: 'Google',
-      appleBtn: 'Apple',
-      noAccount: 'Немає акаунта?',
-      registerLink: 'Зареєструватися',
-      forgotPassword: 'Забули пароль?',
-      registerBtn: 'Зареєструватися',
-      haveAccount: 'Вже є акаунт?',
-      loginLink: 'Увійти',
-      newPostPlaceholder: 'Що нового? #хештег',
-      chooseMedia: 'Обрати фото/відео',
-      publishBtn: 'Опублікувати',
-      newBtn: 'Нові',
-      popularBtn: 'Популярні',
-      searchPlaceholder: 'Пошук за @id, ім\'ям або #хештегом...',
-      popularHashtags: 'Популярні хештеги',
-      searchUsersPlaceholder: 'Пошук користувачів...',
-      messagePlaceholder: 'Напишіть повідомлення...',
-      sendBtn: 'Надіслати',
-      settingsTitle: 'Налаштування',
-      themeBtn: 'Тема',
-      privacyBtn: 'Політика конфіденційності',
-      logoutBtn: 'Вийти',
-      privacyTitle: 'Політика конфіденційності',
-      privacyText1: 'Текст політики...',
-    },
-    ru: {
-      navHome: 'Главная',
-      navSearch: 'Поиск',
-      navHashtags: 'Хештеги',
-      navProfile: 'Профиль',
-      navChats: 'Чаты',
-      navSettings: 'Настройки',
-      loginPlaceholder: 'Псевдоним (без @)',
-      passwordPlaceholder: 'Пароль',
-      loginBtn: 'Войти',
-      googleBtn: 'Google',
-      appleBtn: 'Apple',
-      noAccount: 'Нет аккаунта?',
-      registerLink: 'Зарегистрироваться',
-      forgotPassword: 'Забыли пароль?',
-      registerBtn: 'Зарегистрироваться',
-      haveAccount: 'Уже есть аккаунт?',
-      loginLink: 'Войти',
-      newPostPlaceholder: 'Что нового? #хештег',
-      chooseMedia: 'Выбрать фото/видео',
-      publishBtn: 'Опубликовать',
-      newBtn: 'Новые',
-      popularBtn: 'Популярные',
-      searchPlaceholder: 'Поиск по @id, имени или #хештегу...',
-      popularHashtags: 'Популярные хештеги',
-      searchUsersPlaceholder: 'Поиск пользователей...',
-      messagePlaceholder: 'Напишите сообщение...',
-      sendBtn: 'Отправить',
-      settingsTitle: 'Настройки',
-      themeBtn: 'Тема',
-      privacyBtn: 'Политика конфиденциальности',
-      logoutBtn: 'Выйти',
-      privacyTitle: 'Политика конфиденциальности',
-      privacyText1: 'Текст политики...',
-    },
-    en: {
-      navHome: 'Home',
-      navSearch: 'Search',
-      navHashtags: 'Hashtags',
-      navProfile: 'Profile',
-      navChats: 'Chats',
-      navSettings: 'Settings',
-      loginPlaceholder: 'Nickname (without @)',
-      passwordPlaceholder: 'Password',
-      loginBtn: 'Login',
-      googleBtn: 'Google',
-      appleBtn: 'Apple',
-      noAccount: 'No account?',
-      registerLink: 'Register',
-      forgotPassword: 'Forgot password?',
-      registerBtn: 'Register',
-      haveAccount: 'Already have an account?',
-      loginLink: 'Login',
-      newPostPlaceholder: 'What\'s new? #hashtag',
-      chooseMedia: 'Choose photo/video',
-      publishBtn: 'Publish',
-      newBtn: 'New',
-      popularBtn: 'Popular',
-      searchPlaceholder: 'Search by @id, name or #hashtag...',
-      popularHashtags: 'Popular hashtags',
-      searchUsersPlaceholder: 'Search users...',
-      messagePlaceholder: 'Write a message...',
-      sendBtn: 'Send',
-      settingsTitle: 'Settings',
-      themeBtn: 'Theme',
-      privacyBtn: 'Privacy Policy',
-      logoutBtn: 'Logout',
-      privacyTitle: 'Privacy Policy',
-      privacyText1: 'Privacy policy text...',
-    }
-  };
-
-  let currentLang = localStorage.getItem('lang') || 'uk';
-
-  function setLanguage(lang) {
-    currentLang = lang;
-    localStorage.setItem('lang', lang);
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-      const key = el.getAttribute('data-i18n');
-      if (i18n[lang][key]) {
-        el.innerText = i18n[lang][key];
-      }
-    });
-    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-      const key = el.getAttribute('data-i18n-placeholder');
-      if (i18n[lang][key]) {
-        el.placeholder = i18n[lang][key];
-      }
-    });
-    // Оновити активну кнопку мови
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.lang === lang);
-    });
-  }
-
-  document.querySelectorAll('.lang-btn').forEach(btn => {
-    btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
-  });
-  setLanguage(currentLang);
-
-  // ================= Інші глобальні змінні (з оригіналу) =================
+  // ================= Глобальні змінні =================
   let currentUser = null;
   let currentUserFollowing = [];
   let currentChatPartner = null;
@@ -701,6 +1771,7 @@
   let currentChatId = null;
   let currentProfileUid = null;
   let currentEditingPost = null;
+
   let unsubscribeFeed = null;
   let unsubscribeChat = null;
   let unsubscribeChatList = null;
@@ -708,235 +1779,21 @@
   let unsubscribeOnlineStatus = null;
   let unsubscribeFollowing = null;
   let lastOnlineInterval = null;
+
   let unreadCount = 0;
-  let currentFeedType = 'new';
+  // Поточний тип фільтра (popular, new, commented, liked, following, tag)
+  let currentFilterType = 'popular';
+  let currentFilterHashtag = null;
   let lastVisible = null;
   let loading = false;
   let hasMore = true;
+
   const viewedPosts = new Set();
 
-  // ================= TV Навігація (покращена) =================
-  let cachedFocusableElements = [];
-  let lastDOMUpdate = 0;
-  let lastFocusedElement = null;
-  let tvCursorEnabled = true; // завжди ввімкнено для TV
-
-  function getFocusableElements() {
-    const activeModal = document.querySelector('.modal.active');
-    let container = activeModal || document;
-    const baseSelector = `
-      button, input, textarea, select, a[href], 
-      [tabindex]:not([tabindex="-1"]), 
-      .nav-item, .post, .chat-item, .profile-tab, 
-      .hashtag-item, .modal-close, .emoji-button, 
-      .btn, .file-input-button, .post-actions button,
-      .comment-author, .post-author, .avatar, .hashtag,
-      .follow-btn-post, .profile-menu-btn, .profile-menu-item
-    `;
-    const elements = Array.from(container.querySelectorAll(baseSelector));
-    return elements.filter(el => {
-      const style = window.getComputedStyle(el);
-      return style.display !== 'none' && style.visibility !== 'hidden' && el.offsetParent !== null && !el.disabled;
-    });
-  }
-
-  function updateFocusableCache() {
-    cachedFocusableElements = getFocusableElements();
-    lastDOMUpdate = Date.now();
-  }
-
-  function getCenter(el) {
-    const rect = el.getBoundingClientRect();
-    return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
-  }
-
-  function findClosestElement(currentEl, direction) {
-    if (!currentEl) return null;
-    const currentCenter = getCenter(currentEl);
-    const candidates = cachedFocusableElements.filter(el => el !== currentEl);
-    if (candidates.length === 0) return null;
-
-    const dirMap = {
-      'ArrowUp': { dx: 0, dy: -1 },
-      'ArrowDown': { dx: 0, dy: 1 },
-      'ArrowLeft': { dx: -1, dy: 0 },
-      'ArrowRight': { dx: 1, dy: 0 }
-    };
-    const dir = dirMap[direction];
-    if (!dir) return null;
-
-    let best = null;
-    let bestScore = Infinity;
-
-    candidates.forEach(candidate => {
-      const candidateCenter = getCenter(candidate);
-      const dx = candidateCenter.x - currentCenter.x;
-      const dy = candidateCenter.y - currentCenter.y;
-      const dot = dx * dir.dx + dy * dir.dy;
-      if (dot <= 0) return;
-      const length = Math.sqrt(dx * dx + dy * dy);
-      const cosAngle = dot / length;
-      if (cosAngle < 0.5) return;
-      const score = length / cosAngle;
-      if (score < bestScore) {
-        bestScore = score;
-        best = candidate;
-      }
-    });
-    return best;
-  }
-
-  function setFocusOnElement(el) {
-    if (!el) return;
-    document.querySelectorAll('.focused').forEach(e => e.classList.remove('focused'));
-    el.classList.add('focused');
-    el.focus({ preventScroll: true });
-    el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-    lastFocusedElement = el;
-    updateTVCursor();
-  }
-
-  function closeAllPopups() {
-    document.querySelectorAll('.emoji-picker').forEach(p => p.style.display = 'none');
-    document.querySelectorAll('.profile-menu-dropdown.show').forEach(d => d.classList.remove('show'));
-  }
-
-  function handleKeyDown(e) {
-    const arrowKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
-    const isArrow = arrowKeys.includes(e.key);
-    const isEnter = e.key === 'Enter';
-    const isBack = e.key === 'Escape' || e.key === 'Back' || e.code === 'Escape';
-
-    if (!isArrow && !isEnter && !isBack) return;
-
-    if (Date.now() - lastDOMUpdate > 100) updateFocusableCache();
-
-    const activeEl = document.activeElement;
-    const isInput = activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA' || activeEl.isContentEditable);
-
-    if (isInput && (isArrow || isEnter)) return; // дозволити редагування
-
-    if (isBack) {
-      e.preventDefault();
-      // Закрити модалки, емоджі, меню
-      const openEmoji = document.querySelector('.emoji-picker[style*="display: grid"]');
-      if (openEmoji) {
-        openEmoji.style.display = 'none';
-        if (lastFocusedElement) setFocusOnElement(lastFocusedElement);
-        return;
-      }
-      const openDropdown = document.querySelector('.profile-menu-dropdown.show');
-      if (openDropdown) {
-        openDropdown.classList.remove('show');
-        const menuBtn = document.querySelector('.profile-menu-btn');
-        if (menuBtn) setFocusOnElement(menuBtn);
-        return;
-      }
-      const activeModal = document.querySelector('.modal.active');
-      if (activeModal) {
-        activeModal.classList.remove('active');
-        setTimeout(() => {
-          updateFocusableCache();
-          if (lastFocusedElement) setFocusOnElement(lastFocusedElement);
-          else if (cachedFocusableElements[0]) setFocusOnElement(cachedFocusableElements[0]);
-        }, 50);
-        return;
-      }
-      const chatWindow = document.getElementById('chatWindow');
-      if (chatWindow && chatWindow.style.display === 'flex') {
-        chatWindow.style.display = 'none';
-        setTimeout(() => {
-          updateFocusableCache();
-          const firstChat = document.querySelector('.chat-item');
-          if (firstChat) setFocusOnElement(firstChat);
-        }, 50);
-        return;
-      }
-      // На головну
-      const homeNav = document.querySelector('[data-section="home"]');
-      if (homeNav && !document.getElementById('home').classList.contains('active')) {
-        homeNav.click();
-      }
-      return;
-    }
-
-    if (isEnter) {
-      if (isInput) return;
-      const focused = document.querySelector('.focused') || activeEl;
-      if (focused) {
-        e.preventDefault();
-        focused.click();
-      } else {
-        e.preventDefault();
-        if (cachedFocusableElements[0]) setFocusOnElement(cachedFocusableElements[0]);
-      }
-      return;
-    }
-
-    if (isArrow) {
-      if (isInput) return;
-      e.preventDefault();
-      let current = document.querySelector('.focused') || activeEl;
-      if (!current) {
-        if (cachedFocusableElements[0]) setFocusOnElement(cachedFocusableElements[0]);
-        return;
-      }
-      const emojiPicker = current.closest('.emoji-picker');
-      if (emojiPicker && emojiPicker.style.display === 'grid') {
-        const emojiButtons = Array.from(emojiPicker.querySelectorAll('button'));
-        const currentIndex = emojiButtons.indexOf(current);
-        if (currentIndex !== -1) {
-          let nextIndex;
-          const cols = 8;
-          if (e.key === 'ArrowRight') nextIndex = currentIndex + 1;
-          else if (e.key === 'ArrowLeft') nextIndex = currentIndex - 1;
-          else if (e.key === 'ArrowDown') nextIndex = currentIndex + cols;
-          else if (e.key === 'ArrowUp') nextIndex = currentIndex - cols;
-          if (nextIndex >= 0 && nextIndex < emojiButtons.length) {
-            setFocusOnElement(emojiButtons[nextIndex]);
-          }
-          return;
-        }
-      }
-      const next = findClosestElement(current, e.key);
-      if (next) setFocusOnElement(next);
-    }
-  }
-
-  document.addEventListener('keydown', handleKeyDown);
-
-  function updateTVCursor() {
-    const cursor = document.getElementById('tvCursor');
-    if (!cursor) return;
-    if (!tvCursorEnabled) {
-      cursor.style.display = 'none';
-      return;
-    }
-    const focusedEl = document.querySelector('.focused');
-    if (!focusedEl) {
-      cursor.style.display = 'none';
-      return;
-    }
-    const rect = focusedEl.getBoundingClientRect();
-    cursor.style.display = 'block';
-    cursor.style.left = (rect.left - 20) + 'px';
-    cursor.style.top = (rect.top + rect.height/2 - 24) + 'px';
-  }
-
-  const observer = new MutationObserver(updateFocusableCache);
-  observer.observe(document.body, { childList: true, subtree: true, attributes: true });
-
-  window.addEventListener('load', () => {
-    setTimeout(() => {
-      updateFocusableCache();
-      const first = cachedFocusableElements[0];
-      if (first) setFocusOnElement(first);
-    }, 500);
-  });
-
-  // ================= Допоміжні функції (з оригіналу) =================
+  // ================= Допоміжні функції =================
   const showToast = (msg) => {
     const toast = document.getElementById('toast');
+    if (!toast) return;
     toast.textContent = msg;
     toast.classList.add('show');
     setTimeout(() => toast.classList.remove('show'), 3000);
@@ -946,59 +1803,2024 @@
 
   const updateUnreadBadge = () => {
     const badge = document.getElementById('unreadBadge');
-    if (badge) {
-      if (unreadCount > 0) {
-        badge.textContent = unreadCount > 99 ? '99+' : unreadCount;
-        badge.style.display = 'inline-block';
+    if (!badge) return;
+    if (unreadCount > 0) {
+      badge.textContent = unreadCount > 99 ? '99+' : unreadCount;
+      badge.style.display = 'inline-block';
+    } else {
+      badge.style.display = 'none';
+    }
+  };
+
+  const cleanupListeners = () => {
+    if (unsubscribeFeed) { unsubscribeFeed(); unsubscribeFeed = null; }
+    if (unsubscribeChat) { unsubscribeChat(); unsubscribeChat = null; }
+    if (unsubscribeChatList) { unsubscribeChatList(); unsubscribeChatList = null; }
+    if (unsubscribeTyping) { unsubscribeTyping(); unsubscribeTyping = null; }
+    if (unsubscribeOnlineStatus) { unsubscribeOnlineStatus(); unsubscribeOnlineStatus = null; }
+    if (unsubscribeFollowing) { unsubscribeFollowing(); unsubscribeFollowing = null; }
+    if (lastOnlineInterval) { clearInterval(lastOnlineInterval); lastOnlineInterval = null; }
+  };
+
+  // ================= Функції для скарг, мюту, блокування =================
+  async function reportUser(targetUid, reason = '') {
+    if (!currentUser) return;
+    try {
+      await addDoc(collection(db, "reports"), {
+        reportedUserId: targetUid,
+        reporterId: currentUser.uid,
+        reason: reason || 'Без причини',
+        timestamp: serverTimestamp()
+      });
+      showToast('Скаргу надіслано');
+    } catch (e) {
+      showToast('Помилка: ' + e.message);
+    }
+  }
+
+  async function muteUser(targetUid) {
+    if (!currentUser) return;
+    const userRef = doc(db, "users", currentUser.uid);
+    try {
+      await updateDoc(userRef, {
+        mutedUsers: arrayUnion(targetUid)
+      });
+      showToast('Користувача замучено');
+    } catch (e) {
+      showToast('Помилка: ' + e.message);
+    }
+  }
+
+  async function unmuteUser(targetUid) {
+    if (!currentUser) return;
+    const userRef = doc(db, "users", currentUser.uid);
+    try {
+      await updateDoc(userRef, {
+        mutedUsers: arrayRemove(targetUid)
+      });
+      showToast('Користувача розмучено');
+    } catch (e) {
+      showToast('Помилка: ' + e.message);
+    }
+  }
+
+  async function blockUser(targetUid) {
+    if (!currentUser) return;
+    const userRef = doc(db, "users", currentUser.uid);
+    try {
+      await updateDoc(userRef, {
+        blockedUsers: arrayUnion(targetUid)
+      });
+      showToast('Користувача заблоковано');
+    } catch (e) {
+      showToast('Помилка: ' + e.message);
+    }
+  }
+
+  async function unblockUser(targetUid) {
+    if (!currentUser) return;
+    const userRef = doc(db, "users", currentUser.uid);
+    try {
+      await updateDoc(userRef, {
+        blockedUsers: arrayRemove(targetUid)
+      });
+      showToast('Користувача розблоковано');
+    } catch (e) {
+      showToast('Помилка: ' + e.message);
+    }
+  }
+
+  // ================= УНІВЕРСАЛЬНИЙ ЕМОДЖІ-ПІКЕР =================
+  (function setupGlobalEmojiPicker() {
+    const emojiList = ['😀','😃','😄','😁','😆','😅','😂','🤣','😊','😇','🙂','🙃','😉','😌','😍','🥰','😘','😗','😙','😚','😋','😛','😝','😜','🤪','🤨','🧐','🤓','😎','🥸','🤩','🥳','😏','😒','😞','😔','😟','😕','🙁','☹️','😣','😖','😫','😩','🥺','😢','😭','😤','😠','😡','🤬','🤯','😳','🥵','🥶','😱','😨','😰','😥','😓','🤗','🤔','🤭','🤫','🤥','😶','😐','😑','😬','🙄','😯','😦','😧','😮','😲','🥱','😴','🤤','😪','😵','🤐','🥴','🤢','🤮','🤧','😷','🤒','🤕','🤑','🤠','😈','👿','👹','👺','🤡','💩','👻','💀','☠️','👽','👾','🤖','🎃','😺','😸','😹','😻','😼','😽','🙀','😿','😾'];
+    const picker = document.getElementById('globalEmojiPicker');
+    if (!picker) return;
+
+    // Заповнюємо емоджі
+    picker.innerHTML = '';
+    emojiList.forEach(emoji => {
+      const btn = document.createElement('button');
+      btn.textContent = emoji;
+      btn.type = 'button';
+      btn.tabIndex = 0;
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const targetId = picker.dataset.targetInput;
+        if (!targetId) return;
+        const input = document.getElementById(targetId);
+        if (!input) return;
+        const start = input.selectionStart;
+        const end = input.selectionEnd;
+        input.value = input.value.substring(0, start) + emoji + input.value.substring(end);
+        input.focus();
+        input.selectionStart = input.selectionEnd = start + emoji.length;
+        picker.classList.remove('active');
+        picker.dataset.targetInput = '';
+      });
+      picker.appendChild(btn);
+    });
+
+    // Відкриття пікера при кліку на .emoji-trigger
+    document.addEventListener('click', (e) => {
+      const trigger = e.target.closest('.emoji-trigger');
+      if (trigger) {
+        e.preventDefault();
+        const targetId = trigger.dataset.target;
+        if (!targetId) return;
+        // Закриваємо інші пікери (якщо є)
+        picker.classList.remove('active');
+        // Встановлюємо позицію
+        const rect = trigger.getBoundingClientRect();
+        const spaceAbove = rect.top;
+        const spaceBelow = window.innerHeight - rect.bottom;
+        picker.style.bottom = spaceAbove > 300 ? 'auto' : '20px';
+        picker.style.top = spaceBelow > 300 ? 'auto' : '20px';
+        picker.style.left = '50%';
+        picker.style.transform = 'translateX(-50%)';
+        picker.dataset.targetInput = targetId;
+        picker.classList.add('active');
       } else {
-        badge.style.display = 'none';
+        // Закриваємо при кліку поза пікером
+        if (!picker.contains(e.target)) {
+          picker.classList.remove('active');
+          picker.dataset.targetInput = '';
+        }
+      }
+    });
+  })();
+
+  // ================= НАВІГАЦІЯ ПО РОЗДІЛАХ =================
+  const sections = ['home','search','hashtags','profile','chats','settings'];
+  const navItems = document.querySelectorAll('.nav-item');
+  navItems.forEach((item) => {
+    item.addEventListener('click', async () => {
+      const section = item.dataset.section;
+      navItems.forEach(n => n.classList.remove('active'));
+      item.classList.add('active');
+      sections.forEach(s => document.getElementById(s).classList.remove('active'));
+      const sectionEl = document.getElementById(section);
+      if (sectionEl) sectionEl.classList.add('active');
+      document.getElementById('pageTitle').textContent = item.textContent.trim();
+      
+      cleanupListeners();
+      
+      if (section === 'home' && currentUser) {
+        resetPagination();
+      }
+      if (section === 'search' && currentUser) {
+        await loadSearchUsers();
+      }
+      if (section === 'hashtags' && currentUser) {
+        await loadHashtags();
+      }
+      if (section === 'chats' && currentUser) {
+        document.getElementById('chatWindow').style.display = 'none';
+        await loadChatList();
+        document.getElementById('chatSearchResults').style.display = 'none';
+        document.getElementById('chatSearchInput').value = '';
+      }
+      if (section === 'profile' && currentUser) {
+        await viewProfile(currentUser.uid);
+      }
+      // settings не потребує завантаження
+      
+      closeSidebar();
+    });
+  });
+
+  const sidebar = document.getElementById('sidebar');
+  const menuToggle = document.getElementById('menuToggle');
+  const backdrop = document.getElementById('sidebarBackdrop');
+
+  function openSidebar() {
+    sidebar.classList.add('open');
+    menuToggle.classList.add('active');
+    backdrop.classList.add('active');
+  }
+
+  function closeSidebar() {
+    sidebar.classList.remove('open');
+    menuToggle.classList.remove('active');
+    backdrop.classList.remove('active');
+  }
+
+  menuToggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (sidebar.classList.contains('open')) {
+      closeSidebar();
+    } else {
+      openSidebar();
+    }
+  });
+
+  backdrop.addEventListener('click', closeSidebar);
+
+  // ================= Кастомний вибір файлу =================
+  function setupFileInput(inputId, labelId, previewId) {
+    const input = document.getElementById(inputId);
+    const label = document.getElementById(labelId);
+    const preview = document.getElementById(previewId);
+    if (!input || !label) return;
+
+    input.addEventListener('change', function() {
+      if (this.files && this.files[0]) {
+        const file = this.files[0];
+        label.textContent = file.name.length > 30 ? file.name.substring(0,30)+'…' : file.name;
+        
+        if (preview) {
+          if (file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              preview.src = e.target.result;
+              preview.classList.add('show');
+            };
+            reader.readAsDataURL(file);
+          } else if (file.type.startsWith('video/')) {
+            preview.src = '';
+            preview.classList.remove('show');
+          }
+        }
+      } else {
+        label.textContent = inputId.includes('Avatar') ? 'Обрати аватар' : 'Обрати фото/відео';
+        if (preview) preview.classList.remove('show');
+      }
+    });
+  }
+
+  // ================= Функції для хештегів =================
+  function extractHashtags(text) {
+    const regex = /#(\w+)/g;
+    const matches = text.match(regex);
+    return matches ? matches.map(tag => tag.toLowerCase()) : [];
+  }
+
+  async function loadHashtags() {
+    const list = document.getElementById('hashtagList');
+    if (!list) return;
+    list.innerHTML = '<div class="skeleton" style="height:60px;"></div>';
+
+    try {
+      const postsSnap = await getDocs(collection(db, "posts"));
+      const tagCount = new Map();
+      postsSnap.forEach(doc => {
+        const tags = doc.data().hashtags || [];
+        tags.forEach(tag => {
+          tagCount.set(tag, (tagCount.get(tag) || 0) + 1);
+        });
+      });
+
+      const sortedTags = Array.from(tagCount.entries()).sort((a, b) => b[1] - a[1]).slice(0, 20);
+      
+      list.innerHTML = '';
+      if (sortedTags.length === 0) {
+        list.innerHTML = '<p style="text-align:center; padding:20px;">Поки немає хештегів</p>';
+        return;
+      }
+
+      sortedTags.forEach(([tag, count]) => {
+        const div = document.createElement('div');
+        div.className = 'hashtag-item';
+        div.tabIndex = 0;
+        div.innerHTML = `
+          <span class="hashtag-name">${tag}</span>
+          <span class="hashtag-count">${count} постів</span>
+        `;
+        div.onclick = () => searchHashtag(tag);
+        list.appendChild(div);
+      });
+    } catch (e) {
+      console.error('Error loading hashtags:', e);
+      list.innerHTML = '<p style="text-align:center; padding:20px;">Помилка завантаження</p>';
+    }
+  }
+
+  function searchHashtag(tag) {
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+      searchInput.value = '#' + tag;
+      document.querySelector('[data-section="search"]').click();
+      loadSearchUsers();
+    }
+  }
+
+  // ================= ФУНКЦІЇ ДЛЯ ФІЛЬТРІВ =================
+  async function loadFilterHashtags() {
+    const list = document.getElementById('filterList');
+    if (!list) return;
+    list.innerHTML = '<div class="skeleton" style="height:60px;"></div>';
+
+    try {
+      const postsSnap = await getDocs(collection(db, "posts"));
+      const tagCount = new Map();
+      postsSnap.forEach(doc => {
+        const tags = doc.data().hashtags || [];
+        tags.forEach(tag => {
+          tagCount.set(tag, (tagCount.get(tag) || 0) + 1);
+        });
+      });
+
+      const sortedTags = Array.from(tagCount.entries()).sort((a, b) => b[1] - a[1]).slice(0, 30);
+      
+      list.innerHTML = '';
+      if (sortedTags.length === 0) {
+        list.innerHTML = '<p style="text-align:center; padding:20px;">Немає хештегів</p>';
+        return;
+      }
+
+      sortedTags.forEach(([tag, count]) => {
+        const div = document.createElement('div');
+        div.className = 'filter-item';
+        div.tabIndex = 0;
+        div.innerHTML = `
+          <span class="tag">#${tag}</span>
+          <span class="count">${count} постів</span>
+        `;
+        div.onclick = () => applyTagFilter(tag);
+        list.appendChild(div);
+      });
+    } catch (e) {
+      console.error('Error loading filter hashtags:', e);
+      list.innerHTML = '<p style="text-align:center; padding:20px;">Помилка завантаження</p>';
+    }
+  }
+
+  function applyTagFilter(tag) {
+    currentFilterType = 'tag';
+    currentFilterHashtag = tag;
+    document.getElementById('filterModal').classList.remove('active');
+    
+    const activeDiv = document.getElementById('activeFilter');
+    activeDiv.innerHTML = `#${tag} <button id="clearFilterChip">✕</button>`;
+    document.getElementById('clearFilterChip').onclick = clearFilter;
+    
+    resetPagination();
+  }
+
+  function clearFilter() {
+    currentFilterHashtag = null;
+    currentFilterType = 'popular'; // повертаємо популярні
+    document.getElementById('activeFilter').innerHTML = '';
+    // Оновлюємо активний клас кнопок
+    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+    const popularBtn = document.getElementById('filterPopular');
+    if (popularBtn) popularBtn.classList.add('active');
+    resetPagination();
+  }
+
+  // Обробники кнопок фільтрів
+  document.getElementById('filterPopular').addEventListener('click', () => {
+    currentFilterType = 'popular';
+    currentFilterHashtag = null;
+    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+    document.getElementById('filterPopular').classList.add('active');
+    document.getElementById('activeFilter').innerHTML = '';
+    resetPagination();
+  });
+  document.getElementById('filterNew').addEventListener('click', () => {
+    currentFilterType = 'new';
+    currentFilterHashtag = null;
+    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+    document.getElementById('filterNew').classList.add('active');
+    document.getElementById('activeFilter').innerHTML = '';
+    resetPagination();
+  });
+  document.getElementById('filterCommented').addEventListener('click', () => {
+    currentFilterType = 'commented';
+    currentFilterHashtag = null;
+    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+    document.getElementById('filterCommented').classList.add('active');
+    document.getElementById('activeFilter').innerHTML = '';
+    resetPagination();
+  });
+  document.getElementById('filterLiked').addEventListener('click', () => {
+    currentFilterType = 'liked';
+    currentFilterHashtag = null;
+    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+    document.getElementById('filterLiked').classList.add('active');
+    document.getElementById('activeFilter').innerHTML = '';
+    resetPagination();
+  });
+  document.getElementById('filterFollowing').addEventListener('click', () => {
+    currentFilterType = 'following';
+    currentFilterHashtag = null;
+    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+    document.getElementById('filterFollowing').classList.add('active');
+    document.getElementById('activeFilter').innerHTML = '';
+    resetPagination();
+  });
+  document.getElementById('filterTagBtn').addEventListener('click', async () => {
+    await loadFilterHashtags();
+    document.getElementById('filterModal').classList.add('active');
+  });
+  document.getElementById('closeFilterModal').onclick = () => {
+    document.getElementById('filterModal').classList.remove('active');
+  };
+  document.getElementById('clearFilterBtn').onclick = clearFilter;
+
+  // ================= АВТОРИЗАЦІЯ =================
+  document.getElementById('toRegister').onclick = () => {
+    document.getElementById('loginForm').style.display = 'none';
+    document.getElementById('registerForm').style.display = 'block';
+  };
+  document.getElementById('toLogin').onclick = () => {
+    document.getElementById('registerForm').style.display = 'none';
+    document.getElementById('loginForm').style.display = 'block';
+  };
+
+  document.getElementById('registerBtn').onclick = async () => {
+    const nickname = document.getElementById('registerNickname').value.trim();
+    const password = document.getElementById('registerPassword').value.trim();
+    if (!nickname) return alert('Введіть псевдонім');
+    if (password.length < 6) return alert('Мінімум 6 символів');
+    
+    const userId = `@${nickname.toLowerCase()}`;
+    const q = query(collection(db, "users"), where("userId", "==", userId));
+    const snap = await getDocs(q);
+    if (!snap.empty) return alert('Цей ID вже зайнятий');
+    
+    try {
+      const safeNick = nickname.toLowerCase().replace(/[^a-z0-9]/g, '');
+      const randomSuffix = Math.floor(Math.random() * 10000);
+      const email = `${safeNick}_${randomSuffix}@fantasyas.local`;
+      
+      const cred = await createUserWithEmailAndPassword(auth, email, password);
+      
+      await setDoc(doc(db, "users", cred.user.uid), {
+        nickname,
+        userId,
+        nickname_lower: nickname.toLowerCase(),
+        bio: '',
+        avatar: '',
+        posts: [],
+        likedPosts: [],
+        savedPosts: [],
+        followers: [],
+        following: [],
+        mutedUsers: [],
+        blockedUsers: [],
+        createdAt: serverTimestamp(),
+        lastOnline: serverTimestamp(),
+        email: email
+      });
+      
+      showToast('Реєстрація успішна');
+      document.getElementById('toLogin').click();
+    } catch (e) { showToast(e.message); }
+  };
+
+  document.getElementById('loginBtn').onclick = async () => {
+    const nickname = document.getElementById('loginNickname').value.trim();
+    const password = document.getElementById('loginPassword').value.trim();
+    if (!nickname || !password) return alert('Заповніть поля');
+    try {
+      const userId = `@${nickname.toLowerCase()}`;
+      const q = query(collection(db, "users"), where("userId", "==", userId));
+      const snap = await getDocs(q);
+      if (snap.empty) return alert('Користувача не знайдено');
+      
+      const userDoc = snap.docs[0];
+      const userData = userDoc.data();
+      const email = userData.email;
+      
+      if (!email) {
+        return alert('Для цього акаунту не встановлено email. Увійдіть через Google або Apple, або створіть новий акаунт.');
+      }
+      
+      await signInWithEmailAndPassword(auth, email, password);
+      showToast('Ласкаво просимо!');
+    } catch (err) {
+      alert('Невірний псевдонім або пароль');
+    }
+  };
+
+  // Google Login
+  document.getElementById('googleLoginBtn').onclick = async () => {
+    const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: 'select_account' });
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      const userDoc = await getDoc(doc(db, "users", user.uid));
+      if (!userDoc.exists()) {
+        const nickname = user.displayName || user.email?.split('@')[0] || 'user';
+        let userId = `@${nickname.toLowerCase()}`;
+        const q = query(collection(db, "users"), where("userId", "==", userId));
+        const snap = await getDocs(q);
+        if (!snap.empty) userId = `@${nickname.toLowerCase()}${Math.floor(Math.random()*1000)}`;
+        await setDoc(doc(db, "users", user.uid), {
+          nickname,
+          userId,
+          nickname_lower: nickname.toLowerCase(),
+          bio: '',
+          avatar: user.photoURL || '',
+          posts: [],
+          likedPosts: [],
+          savedPosts: [],
+          followers: [],
+          following: [],
+          mutedUsers: [],
+          blockedUsers: [],
+          createdAt: serverTimestamp(),
+          lastOnline: serverTimestamp(),
+          email: user.email
+        });
+      }
+      showToast('Вхід через Google успішний');
+    } catch (error) {
+      console.error('Google login error:', error);
+      if (error.code === 'auth/popup-blocked') {
+        showToast('Будь ласка, дозвольте спливаючі вікна для цього сайту, щоб увійти через Google.');
+      } else if (error.code === 'auth/operation-not-allowed') {
+        showToast('Вхід через Google не налаштовано в Firebase. Перевірте консоль Firebase.');
+      } else {
+        showToast('Помилка входу: ' + error.message);
       }
     }
   };
 
-  // ... (тут мають бути всі інші функції з оригінального скрипта: авторизація, пости, чати, тощо)
-  // Оскільки вони займають багато місця, але в оригіналі вони вже є, ми їх залишаємо.
-  // Для компактності відповіді я не буду копіювати їх повністю, але припускаємо, що вони тут присутні.
-  // У реальному коді потрібно вставити весь JS з оригіналу після цього рядка.
-  // Нижче наведено скорочений варіант із ключовими моментами.
+  document.getElementById('appleLoginBtn').onclick = async () => {
+    const provider = new OAuthProvider('apple.com');
+    provider.addScope('email');
+    provider.addScope('name');
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      const userDoc = await getDoc(doc(db, "users", user.uid));
+      if (!userDoc.exists()) {
+        const nickname = user.displayName || user.email?.split('@')[0] || 'user';
+        let userId = `@${nickname.toLowerCase()}`;
+        const q = query(collection(db, "users"), where("userId", "==", userId));
+        const snap = await getDocs(q);
+        if (!snap.empty) userId = `@${nickname.toLowerCase()}${Math.floor(Math.random()*1000)}`;
+        await setDoc(doc(db, "users", user.uid), {
+          nickname,
+          userId,
+          nickname_lower: nickname.toLowerCase(),
+          bio: '',
+          avatar: user.photoURL || '',
+          posts: [],
+          likedPosts: [],
+          savedPosts: [],
+          followers: [],
+          following: [],
+          mutedUsers: [],
+          blockedUsers: [],
+          createdAt: serverTimestamp(),
+          lastOnline: serverTimestamp(),
+          email: user.email
+        });
+      }
+      showToast('Вхід через Apple успішний');
+    } catch (error) {
+      showToast('Помилка: ' + error.message);
+    }
+  };
 
-  // ================= Копіюємо решту функцій з оригінального коду =================
-  // (reportUser, muteUser, blockUser, навігація по розділах, setupEmojiPicker, setupFileInput, loadHashtags, авторизація, onAuthStateChanged, loadMorePosts, renderPosts, toggleFollow, loadChatList, openChat, sendMessage тощо)
-  // В оригіналі вони є, тому їх можна просто вставити сюди.
-  // Для економії місця я не дублюю їх, але в фінальному коді вони мають бути.
+  document.getElementById('forgotPassword').onclick = async (e) => {
+    e.preventDefault();
+    const nickname = prompt('Введіть ваш псевдонім (без @)');
+    if (!nickname) return;
+    
+    const userId = `@${nickname.toLowerCase()}`;
+    const q = query(collection(db, "users"), where("userId", "==", userId));
+    const snap = await getDocs(q);
+    if (snap.empty) return alert('Користувача не знайдено');
+    
+    const userData = snap.docs[0].data();
+    const email = userData.email;
+    if (!email) return alert('Для цього акаунту не вказано email. Увійдіть через Google/Apple або створіть новий акаунт.');
+    
+    try {
+      await sendPasswordResetEmail(auth, email);
+      showToast('Лист для скидання пароля відправлено');
+    } catch (err) {
+      showToast('Помилка: ' + err.message);
+    }
+  };
 
-  // Наприклад, додамо базову ініціалізацію:
   onAuthStateChanged(auth, (user) => {
+    cleanupListeners();
+    
     if (user) {
       currentUser = user;
-      document.getElementById('authBox').style.display = 'none';
-      document.getElementById('newPostBox').style.display = 'block';
-      // ... інші дії
+      currentProfileUid = user.uid;
+      const authBox = document.getElementById('authBox');
+      if (authBox) authBox.style.display = 'none';
+      const newPostBox = document.getElementById('newPostBox');
+      if (newPostBox) newPostBox.style.display = 'block';
+      
+      lastOnlineInterval = setInterval(() => {
+        updateDoc(doc(db, "users", currentUser.uid), { lastOnline: serverTimestamp() }).catch(console.error);
+      }, 30000);
+      
+      const userRef = doc(db, "users", currentUser.uid);
+      unsubscribeFollowing = onSnapshot(userRef, (docSnap) => {
+        if (docSnap.exists()) {
+          currentUserFollowing = docSnap.data().following || [];
+          document.querySelectorAll('.follow-btn-post').forEach(btn => {
+            const targetUid = btn.dataset.uid;
+            if (targetUid) {
+              const isFollowing = currentUserFollowing.includes(targetUid);
+              btn.textContent = isFollowing ? 'Відписатися' : 'Підписатися';
+              btn.classList.toggle('following', isFollowing);
+            }
+          });
+        }
+      }, (error) => {
+        console.error('Error in following snapshot:', error);
+      });
+      
+      resetPagination();
+      loadMyProfile();
+      
+      const q = query(collection(db, "chats"), where("participants", "array-contains", currentUser.uid));
+      unsubscribeChatList = onSnapshot(q, (snapshot) => {
+        let totalUnread = 0;
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          if (data.unread && data.unread[currentUser.uid]) {
+            totalUnread += data.unread[currentUser.uid];
+          }
+        });
+        unreadCount = totalUnread;
+        updateUnreadBadge();
+        if (document.getElementById('chats')?.classList.contains('active')) {
+          loadChatList();
+        }
+      }, (error) => {
+        console.error('Chat list snapshot error:', error);
+        alert('Помилка в реальному часі (список чатів):\n' + error.message + '\nКод: ' + error.code);
+        showToast('Помилка оновлення списку чатів. Перевірте індекси Firestore.');
+      });
+
+      setupFileInput('postMedia', 'postMediaLabel', 'postMediaPreview');
+      setupFileInput('editAvatar', 'editAvatarLabel', 'editAvatarPreview');
+      setupFileInput('editPostMedia', 'editPostMediaLabel', 'editPostMediaPreview');
     } else {
       currentUser = null;
-      document.getElementById('authBox').style.display = 'block';
-      document.getElementById('newPostBox').style.display = 'none';
+      currentUserFollowing = [];
+      const authBox = document.getElementById('authBox');
+      if (authBox) authBox.style.display = 'block';
+      const newPostBox = document.getElementById('newPostBox');
+      if (newPostBox) newPostBox.style.display = 'none';
+      unreadCount = 0;
+      updateUnreadBadge();
     }
   });
 
-  // Кнопки меню
-  document.querySelectorAll('.nav-item').forEach(item => {
-    item.addEventListener('click', () => {
-      const section = item.dataset.section;
-      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-      item.classList.add('active');
-      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-      document.getElementById(section).classList.add('active');
-      document.getElementById('pageTitle').innerText = item.innerText;
-      // ... закриття сайдбару тощо
-      setTimeout(updateFocusableCache, 200);
+  // ================= Стрічка з фільтрами =================
+  function resetPagination() {
+    lastVisible = null;
+    hasMore = true;
+    const feed = document.getElementById('feed');
+    if (feed) feed.innerHTML = '';
+    loadMorePosts();
+  }
+
+  document.getElementById('addPost').onclick = async () => {
+    if (!currentUser) return alert('Увійдіть');
+    const text = document.getElementById('postText').value.trim();
+    const file = document.getElementById('postMedia').files[0];
+    if (!text && !file) return alert('Додайте текст або медіа');
+    try {
+      let mediaUrl = '', mediaType = '';
+      if (file) {
+        const storageRef = ref(storage, `posts/${currentUser.uid}/${Date.now()}_${file.name}`);
+        await uploadBytes(storageRef, file);
+        mediaUrl = await getDownloadURL(storageRef);
+        mediaType = file.type.split('/')[0];
+      }
+      const userSnap = await getDoc(doc(db, "users", currentUser.uid));
+      const userData = userSnap.data();
+      
+      const hashtags = extractHashtags(text);
+      
+      const postDoc = await addDoc(collection(db, "posts"), {
+        author: currentUser.uid,
+        authorType: 'user',
+        authorName: userData.nickname,
+        authorUserId: userData.userId,
+        authorAvatar: userData.avatar || '',
+        text,
+        mediaUrl,
+        mediaType,
+        createdAt: serverTimestamp(),
+        likes: [],
+        likesCount: 0,
+        commentsCount: 0,
+        saves: [],
+        views: 0,
+        hashtags: hashtags,
+        popularity: 0
+      });
+      await updateDoc(doc(db, "users", currentUser.uid), { posts: arrayUnion(postDoc.id) });
+      document.getElementById('postText').value = '';
+      document.getElementById('postMedia').value = '';
+      document.getElementById('postMediaLabel').textContent = 'Обрати фото/відео';
+      document.getElementById('postMediaPreview').classList.remove('show');
+      showToast('Пост опубліковано!');
+    } catch (e) { showToast(e.message); }
+  };
+
+  // ================= ОНОВЛЕНА ФУНКЦІЯ ЗАВАНТАЖЕННЯ ПОСТІВ (З ФІЛЬТРАМИ) =================
+  async function loadMorePosts() {
+    if (!currentUser || loading || !hasMore) return;
+    loading = true;
+    const skeleton = document.getElementById('skeletonContainer');
+    if (skeleton) skeleton.style.display = 'block';
+    
+    try {
+      let baseQuery;
+      if (currentFilterHashtag) {
+        baseQuery = query(collection(db, "posts"), where("hashtags", "array-contains", currentFilterHashtag));
+      } else {
+        baseQuery = collection(db, "posts");
+      }
+
+      let orderField, orderDir;
+      switch (currentFilterType) {
+        case 'popular':
+          orderField = 'popularity';
+          orderDir = 'desc';
+          break;
+        case 'new':
+          orderField = 'createdAt';
+          orderDir = 'desc';
+          break;
+        case 'commented':
+          orderField = 'commentsCount';
+          orderDir = 'desc';
+          break;
+        case 'liked':
+          orderField = 'likesCount';
+          orderDir = 'desc';
+          break;
+        case 'following':
+          // Складний випадок: пости тільки від підписок
+          if (currentUserFollowing.length === 0) {
+            // Немає підписок – показати порожню стрічку
+            hasMore = false;
+            loading = false;
+            if (skeleton) skeleton.style.display = 'none';
+            return;
+          }
+          // Обмежуємо першими 10 підписками (Firestore `in` максимум 10)
+          const followSlice = currentUserFollowing.slice(0, 10);
+          baseQuery = query(collection(db, "posts"), where("author", "in", followSlice));
+          orderField = 'createdAt';
+          orderDir = 'desc';
+          break;
+        default:
+          orderField = 'popularity';
+          orderDir = 'desc';
+      }
+
+      let q;
+      if (currentFilterType === 'following') {
+        // Для following ми вже додали where, тепер додаємо сортування та ліміт
+        q = query(baseQuery, orderBy(orderField, orderDir), limit(10));
+      } else {
+        q = query(baseQuery, orderBy(orderField, orderDir), orderBy('createdAt', 'desc'), limit(10));
+      }
+      if (lastVisible) q = query(q, startAfter(lastVisible));
+      
+      const snapshot = await getDocs(q);
+      if (snapshot.empty) { hasMore = false; return; }
+      
+      lastVisible = snapshot.docs[snapshot.docs.length - 1];
+      renderPosts(snapshot.docs);
+    } catch (e) {
+      console.error("Помилка завантаження постів:", e);
+      alert('Помилка завантаження постів:\n' + e.message + '\nКод: ' + e.code);
+      showToast("Помилка завантаження. Перевірте індекси Firestore.");
+    } finally {
+      if (skeleton) skeleton.style.display = 'none';
+      loading = false;
+    }
+  }
+
+  async function loadComments(postId, container) {
+    const q = query(collection(db, `posts/${postId}/comments`), orderBy("createdAt", "asc"));
+    const snapshot = await getDocs(q);
+    container.innerHTML = '';
+    snapshot.forEach(doc => {
+      const comment = doc.data();
+      const commentEl = document.createElement('div');
+      commentEl.className = 'comment';
+      commentEl.innerHTML = `
+        <div class="comment-avatar" style="background-image:url(${comment.authorAvatar || ''})" data-uid="${comment.author}"></div>
+        <div class="comment-content">
+          <div>
+            <span class="comment-author" data-uid="${comment.author}">${comment.authorName}</span>
+            <span class="comment-time">${new Date(comment.createdAt?.seconds * 1000).toLocaleString()}</span>
+          </div>
+          <div class="comment-text">${comment.text}</div>
+        </div>
+      `;
+      container.appendChild(commentEl);
     });
+  }
+
+  async function addComment(postId, text) {
+    if (!currentUser || !text.trim()) return;
+    const userSnap = await getDoc(doc(db, "users", currentUser.uid));
+    const user = userSnap.data();
+    const commentRef = collection(db, `posts/${postId}/comments`);
+    await addDoc(commentRef, {
+      author: currentUser.uid,
+      authorName: user.nickname,
+      authorAvatar: user.avatar || '',
+      text: text.trim(),
+      createdAt: serverTimestamp()
+    });
+    await updateDoc(doc(db, "posts", postId), { 
+      commentsCount: increment(1),
+      popularity: increment(2)
+    });
+  }
+
+  async function incrementPostView(postId) {
+    if (!currentUser) return;
+    if (viewedPosts.has(postId)) return;
+    viewedPosts.add(postId);
+    try {
+      await updateDoc(doc(db, "posts", postId), { 
+        views: increment(1),
+        popularity: increment(1)
+      });
+    } catch (e) {
+      console.warn("Не вдалося оновити перегляди:", e);
+    }
+  }
+
+  function renderPosts(docs, container = null) {
+    const feed = container || document.getElementById('feed');
+    if (!feed) return;
+    docs.forEach(docSnap => {
+      const post = { id: docSnap.id, ...docSnap.data() };
+      const liked = post.likes?.includes(currentUser?.uid) || false;
+      const saved = post.saves?.includes(currentUser?.uid) || false;
+      const postTime = post.createdAt ? new Date(post.createdAt.seconds * 1000).toLocaleString() : '';
+      const isAuthor = currentUser && post.author === currentUser.uid;
+      const isFollowing = currentUserFollowing.includes(post.author);
+      
+      const postEl = document.createElement('div');
+      postEl.className = 'post';
+      postEl.dataset.postId = post.id;
+      postEl.tabIndex = 0;
+      
+      let actionsHtml = '';
+      if (isAuthor) {
+        actionsHtml = `
+          <div class="post-actions">
+            <button class="edit-post-btn" title="Редагувати пост" tabindex="0">⋯</button>
+          </div>
+        `;
+      }
+      
+      let contentHtml = post.text || '';
+      const hashtagRegex = /#(\w+)/g;
+      contentHtml = contentHtml.replace(hashtagRegex, '<span class="hashtag" data-tag="$1">#$1</span>');
+      
+      const followButtonHtml = !isAuthor && currentUser ? 
+        `<button class="follow-btn-post ${isFollowing ? 'following' : ''}" data-uid="${post.author}" tabindex="0">${isFollowing ? 'Відписатися' : 'Підписатися'}</button>` : '';
+      
+      postEl.innerHTML = `
+        ${actionsHtml}
+        <div class="post-header">
+          <div class="avatar" style="background-image:url(${post.authorAvatar || ''})" data-uid="${post.author}" tabindex="0"></div>
+          <div class="post-author-info">
+            <div>
+              <span class="post-author" data-uid="${post.author}" tabindex="0">${post.authorName || 'Невідомо'}</span>
+              <span class="post-meta">${post.authorUserId || ''}</span>
+              ${followButtonHtml}
+            </div>
+            <div class="post-time">${postTime}</div>
+          </div>
+        </div>
+        <div class="post-content">${contentHtml}</div>
+        ${post.mediaUrl ? (post.mediaType==='image' ? `<img src="${post.mediaUrl}" class="post-media" loading="lazy" tabindex="0">` : `<video src="${post.mediaUrl}" controls class="post-media" tabindex="0"></video>`) : ''}
+        <div class="post-footer">
+          <button class="like-btn ${liked ? 'liked' : ''}" data-post-id="${post.id}" tabindex="0">
+            <svg viewBox="0 0 24 24" width="20" height="20"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            <span>${post.likesCount || 0}</span>
+          </button>
+          <button class="comment-toggle-btn" data-post-id="${post.id}" tabindex="0">
+            <svg viewBox="0 0 24 24" width="20" height="20"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <span>${post.commentsCount || 0}</span>
+          </button>
+          <button class="save-btn ${saved ? 'saved' : ''}" data-post-id="${post.id}" tabindex="0">
+            <svg viewBox="0 0 24 24" width="20" height="20"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          </button>
+          <span class="view-count" title="Перегляди">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="2"/><path d="M22 12c-2.667 4.667-6 7-10 7s-7.333-2.333-10-7c2.667-4.667 6-7 10-7s7.333 2.333 10 7z"/></svg>
+            ${post.views || 0}
+          </span>
+        </div>
+        <div class="comments-section" id="comments-${post.id}" style="display: none;">
+          <div class="comments-list" id="comments-list-${post.id}"></div>
+          <div class="comment-form">
+            <input type="text" id="comment-input-${post.id}" class="comment-input" placeholder="Напишіть коментар..." tabindex="0">
+            <button class="emoji-trigger" data-target="comment-input-${post.id}" tabindex="0">😊</button>
+            <button class="btn btn-primary btn-icon" id="submit-comment-${post.id}" tabindex="0">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+          </div>
+        </div>
+      `;
+      feed.appendChild(postEl);
+
+      incrementPostView(post.id);
+
+      const followBtn = postEl.querySelector('.follow-btn-post');
+      if (followBtn) {
+        followBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const targetUid = followBtn.dataset.uid;
+          toggleFollow(targetUid, followBtn);
+        });
+      }
+
+      if (isAuthor) {
+        postEl.querySelector('.edit-post-btn').onclick = () => openEditPostModal(post);
+      }
+
+      postEl.querySelectorAll('.hashtag').forEach(span => {
+        span.onclick = (e) => {
+          e.stopPropagation();
+          const tag = span.dataset.tag;
+          searchHashtag(tag);
+        };
+      });
+
+      const toggleBtn = postEl.querySelector('.comment-toggle-btn');
+      const commentsSection = postEl.querySelector('.comments-section');
+      toggleBtn.onclick = async () => {
+        if (commentsSection.style.display === 'none') {
+          commentsSection.style.display = 'block';
+          const commentsList = document.getElementById(`comments-list-${post.id}`);
+          if (commentsList) await loadComments(post.id, commentsList);
+        } else {
+          commentsSection.style.display = 'none';
+        }
+      };
+
+      const submitBtn = document.getElementById(`submit-comment-${post.id}`);
+      if (submitBtn) {
+        submitBtn.onclick = async () => {
+          const commentInput = document.getElementById(`comment-input-${post.id}`);
+          const text = commentInput.value.trim();
+          if (!text) return;
+          try {
+            await addComment(post.id, text);
+            commentInput.value = '';
+            const commentsList = document.getElementById(`comments-list-${post.id}`);
+            if (commentsList) await loadComments(post.id, commentsList);
+            const countSpan = toggleBtn.querySelector('span');
+            if (countSpan) countSpan.textContent = parseInt(countSpan.textContent) + 1;
+            showToast('Коментар додано');
+          } catch (error) {
+            console.error('Error adding comment:', error);
+            showToast('Помилка: ' + error.message);
+          }
+        };
+      }
+    });
+  }
+
+  async function toggleFollow(targetUid, buttonElement) {
+    if (!currentUser) return;
+    
+    const wasFollowing = currentUserFollowing.includes(targetUid);
+    const newFollowingState = !wasFollowing;
+    
+    if (newFollowingState) {
+      currentUserFollowing.push(targetUid);
+    } else {
+      currentUserFollowing = currentUserFollowing.filter(id => id !== targetUid);
+    }
+    
+    if (buttonElement) {
+      buttonElement.textContent = newFollowingState ? 'Відписатися' : 'Підписатися';
+      buttonElement.classList.toggle('following', newFollowingState);
+    }
+    
+    try {
+      const myRef = doc(db, "users", currentUser.uid);
+      const targetRef = doc(db, "users", targetUid);
+      
+      if (wasFollowing) {
+        await updateDoc(myRef, { following: arrayRemove(targetUid) });
+        await updateDoc(targetRef, { followers: arrayRemove(currentUser.uid) });
+      } else {
+        await updateDoc(myRef, { following: arrayUnion(targetUid) });
+        await updateDoc(targetRef, { followers: arrayUnion(currentUser.uid) });
+        vibrate(30);
+      }
+    } catch (error) {
+      console.error('Follow error:', error);
+      if (newFollowingState) {
+        currentUserFollowing = currentUserFollowing.filter(id => id !== targetUid);
+      } else {
+        currentUserFollowing.push(targetUid);
+      }
+      if (buttonElement) {
+        buttonElement.textContent = wasFollowing ? 'Відписатися' : 'Підписатися';
+        buttonElement.classList.toggle('following', wasFollowing);
+      }
+      if (error.code === 'permission-denied') {
+        showToast('Помилка: недостатньо прав. Перевірте правила безпеки Firestore.');
+      } else {
+        showToast('Помилка: ' + (error.message || 'Невідома помилка'));
+      }
+    }
+  }
+
+  function openEditPostModal(post) {
+    currentEditingPost = post;
+    document.getElementById('editPostText').value = post.text || '';
+    document.getElementById('editPostMedia').value = '';
+    document.getElementById('editPostMediaLabel').textContent = 'Змінити медіа';
+    const preview = document.getElementById('editPostMediaPreview');
+    preview.classList.remove('show');
+    if (post.mediaUrl) {
+      if (post.mediaType === 'image') {
+        preview.src = post.mediaUrl;
+        preview.classList.add('show');
+      }
+    }
+    document.getElementById('editPostModal').classList.add('active');
+  }
+
+  document.getElementById('closeEditPostModal').onclick = () => {
+    document.getElementById('editPostModal').classList.remove('active');
+    currentEditingPost = null;
+  };
+
+  document.getElementById('savePostEdit').onclick = async () => {
+    if (!currentEditingPost || !currentUser) return;
+    const newText = document.getElementById('editPostText').value.trim();
+    const file = document.getElementById('editPostMedia').files[0];
+    try {
+      const postRef = doc(db, "posts", currentEditingPost.id);
+      let updateData = { text: newText };
+      updateData.hashtags = extractHashtags(newText);
+      if (file) {
+        if (currentEditingPost.mediaUrl) {
+          try {
+            const oldMediaRef = ref(storage, currentEditingPost.mediaUrl);
+            await deleteObject(oldMediaRef);
+          } catch (e) {}
+        }
+        const storageRef = ref(storage, `posts/${currentUser.uid}/${Date.now()}_${file.name}`);
+        await uploadBytes(storageRef, file);
+        const mediaUrl = await getDownloadURL(storageRef);
+        const mediaType = file.type.split('/')[0];
+        updateData.mediaUrl = mediaUrl;
+        updateData.mediaType = mediaType;
+      }
+      await updateDoc(postRef, updateData);
+      showToast('Пост оновлено');
+      document.getElementById('editPostModal').classList.remove('active');
+    } catch (e) {
+      showToast('Помилка: ' + e.message);
+    }
+  };
+
+  document.getElementById('deletePostBtn').onclick = async () => {
+    if (!currentEditingPost || !currentUser) return;
+    if (!confirm('Видалити пост?')) return;
+    try {
+      if (currentEditingPost.mediaUrl) {
+        try {
+          const mediaRef = ref(storage, currentEditingPost.mediaUrl);
+          await deleteObject(mediaRef);
+        } catch (e) {}
+      }
+      await deleteDoc(doc(db, "posts", currentEditingPost.id));
+      await updateDoc(doc(db, "users", currentUser.uid), { posts: arrayRemove(currentEditingPost.id) });
+      showToast('Пост видалено');
+      document.getElementById('editPostModal').classList.remove('active');
+    } catch (e) {
+      showToast('Помилка: ' + e.message);
+    }
+  };
+
+  async function loadSearchUsers() {
+    if (!currentUser) return;
+    const val = document.getElementById('searchInput').value.trim().toLowerCase();
+    const userList = document.getElementById('userList');
+    if (!val) { userList.innerHTML = ''; return; }
+
+    if (val.startsWith('#')) {
+      const tag = val.substring(1);
+      const q = query(collection(db, "posts"), where("hashtags", "array-contains", tag));
+      const snapshot = await getDocs(q);
+      userList.innerHTML = '<h3 style="margin-bottom:12px;">Пости з тегом</h3>';
+      if (snapshot.empty) {
+        userList.innerHTML += '<p>Немає постів з цим тегом</p>';
+      } else {
+        const feedDiv = document.createElement('div');
+        feedDiv.className = 'feed';
+        userList.appendChild(feedDiv);
+        renderPosts(snapshot.docs, feedDiv);
+      }
+      return;
+    }
+    
+    const mySnap = await getDoc(doc(db, "users", currentUser.uid));
+    const myFollowing = mySnap.data().following || [];
+    
+    const q1 = query(collection(db, "users"), where("userId", ">=", val.startsWith('@') ? val : `@${val}`), where("userId", "<=", (val.startsWith('@') ? val : `@${val}`) + '\uf8ff'));
+    const q2 = query(collection(db, "users"), where("nickname_lower", ">=", val), where("nickname_lower", "<=", val + '\uf8ff'));
+    
+    const [snap1, snap2] = await Promise.all([getDocs(q1), getDocs(q2)]);
+    const usersMap = new Map();
+    snap1.forEach(d => usersMap.set(d.id, d.data()));
+    snap2.forEach(d => usersMap.set(d.id, d.data()));
+    
+    userList.innerHTML = '';
+    usersMap.forEach((data, uid) => {
+      if (uid === currentUser.uid) return;
+      const isFollowing = myFollowing.includes(uid);
+      const div = document.createElement('div');
+      div.className = 'chat-item';
+      div.tabIndex = 0;
+      div.innerHTML = `
+        <div class="avatar small" style="background-image:url(${data.avatar || ''})" tabindex="0"></div>
+        <div class="chat-info">
+          <div class="chat-name">${data.nickname}</div>
+          <div class="chat-last">${data.userId}</div>
+        </div>
+        <button class="btn follow-btn" tabindex="0">${isFollowing ? 'Відписатися' : 'Підписатися'}</button>
+      `;
+      const followBtn = div.querySelector('.follow-btn');
+      followBtn.onclick = async (e) => {
+        e.stopPropagation();
+        await toggleFollow(uid, followBtn);
+      };
+      div.onclick = () => viewProfile(uid);
+      userList.appendChild(div);
+    });
+  }
+  document.getElementById('searchInput').addEventListener('input', loadSearchUsers);
+
+  async function loadMyProfile() {
+    if (!currentUser) return;
+    const snap = await getDoc(doc(db, "users", currentUser.uid));
+    if (snap.exists()) renderProfile(snap.data(), currentUser.uid, true);
+  }
+
+  function viewProfile(uid) {
+    currentProfileUid = uid;
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    const profileNav = document.querySelector('[data-section="profile"]');
+    if (profileNav) profileNav.classList.add('active');
+    sections.forEach(s => document.getElementById(s).classList.remove('active'));
+    const profileSection = document.getElementById('profile');
+    if (profileSection) profileSection.classList.add('active');
+    document.getElementById('pageTitle').textContent = 'Профіль';
+    
+    if (uid === currentUser?.uid) {
+      loadMyProfile();
+    } else {
+      loadUserProfile(uid);
+    }
+    
+    closeSidebar();
+  }
+
+  async function loadUserProfile(uid) {
+    if (!currentUser) return;
+    const snap = await getDoc(doc(db, "users", uid));
+    if (snap.exists()) renderProfile(snap.data(), uid, uid === currentUser.uid);
+  }
+
+  function renderProfile(data, uid, isOwn) {
+    const header = document.getElementById('profileHeader');
+    if (!header) return;
+
+    if (!isOwn && currentUser && data.blockedUsers?.includes(currentUser.uid)) {
+      header.innerHTML = `
+        <div class="avatar large" style="background-image:url(${data.avatar || ''})" data-uid="${uid}" tabindex="0"></div>
+        <div>
+          <h2>${data.nickname}</h2>
+          <p class="text-danger">Цей користувач вас заблокував</p>
+        </div>
+      `;
+      return;
+    }
+
+    const isFollowing = !isOwn && currentUser ? (data.followers?.includes(currentUser.uid) || false) : false;
+
+    header.innerHTML = `
+      <div class="avatar large" style="background-image:url(${data.avatar || ''})" data-uid="${uid}" tabindex="0"></div>
+      <div style="flex:1">
+        <h2>${data.nickname}</h2>
+        <div class="user-id">${data.userId}</div>
+        <p>${data.bio || ''}</p>
+        <div class="profile-stats">
+          <span id="followersCount" data-uid="${uid}">${data.followers?.length || 0} підписників</span>
+          <span id="followingCount" data-uid="${uid}">${data.following?.length || 0} підписок</span>
+          <span>${data.posts?.length || 0} постів</span>
+        </div>
+        ${!isOwn && currentUser ? `
+          <div style="display:flex; gap:10px; margin-top:10px; align-items:center;">
+            <button class="btn" id="profileFollowBtn" tabindex="0">${isFollowing ? 'Відписатися' : 'Підписатися'}</button>
+            <button class="btn" id="profileMessageBtn" tabindex="0">Написати</button>
+          </div>
+        ` : ''}
+        ${isOwn ? '<button class="btn" id="editProfileBtn" tabindex="0">Редагувати</button>' : ''}
+      </div>
+      ${!isOwn && currentUser ? `
+        <div class="profile-menu">
+          <button class="profile-menu-btn" id="profileMenuBtn" tabindex="0">⋯</button>
+          <div class="profile-menu-dropdown" id="profileMenuDropdown">
+            <div class="profile-menu-item" id="reportUserBtn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.5 6.5L21 9l-5 4 2 7-6-4-6 4 2-7-5-4 6.5-.5L12 2z"/></svg>
+              Поскаржитися
+            </div>
+            <div class="profile-menu-item" id="muteUserBtn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10h3l4-4v12l-4-4H3v-4z"/><line x1="18" y1="7" x2="22" y2="11"/><line x1="18" y1="11" x2="22" y2="7"/></svg>
+              Замутити в чатах
+            </div>
+            <div class="profile-menu-item" id="blockUserBtn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+              Заблокувати
+            </div>
+          </div>
+        </div>
+      ` : ''}
+    `;
+
+    const followersCount = document.getElementById('followersCount');
+    if (followersCount) {
+      followersCount.style.cursor = 'pointer';
+      followersCount.onclick = () => openFollowersList(uid);
+    }
+    const followingCount = document.getElementById('followingCount');
+    if (followingCount) {
+      followingCount.style.cursor = 'pointer';
+      followingCount.onclick = () => openFollowingList(uid);
+    }
+
+    if (!isOwn && currentUser) {
+      const profileFollowBtn = document.getElementById('profileFollowBtn');
+      if (profileFollowBtn) {
+        profileFollowBtn.onclick = async () => {
+          await toggleFollow(uid, profileFollowBtn);
+        };
+      }
+      const profileMessageBtn = document.getElementById('profileMessageBtn');
+      if (profileMessageBtn) {
+        profileMessageBtn.onclick = () => {
+          openChat(data.nickname, uid, data.userId);
+        };
+      }
+
+      const menuBtn = document.getElementById('profileMenuBtn');
+      const dropdown = document.getElementById('profileMenuDropdown');
+      if (menuBtn && dropdown) {
+        menuBtn.onclick = (e) => {
+          e.stopPropagation();
+          dropdown.classList.toggle('show');
+        };
+        document.addEventListener('click', (e) => {
+          if (!menuBtn.contains(e.target)) {
+            dropdown.classList.remove('show');
+          }
+        });
+
+        document.getElementById('reportUserBtn').onclick = async () => {
+          dropdown.classList.remove('show');
+          const reason = prompt('Опишіть причину скарги (необов\'язково)');
+          await reportUser(uid, reason);
+        };
+        document.getElementById('muteUserBtn').onclick = async () => {
+          dropdown.classList.remove('show');
+          const userRef = doc(db, "users", currentUser.uid);
+          const snap = await getDoc(userRef);
+          const muted = snap.data().mutedUsers || [];
+          if (muted.includes(uid)) {
+            await unmuteUser(uid);
+          } else {
+            await muteUser(uid);
+          }
+        };
+        document.getElementById('blockUserBtn').onclick = async () => {
+          dropdown.classList.remove('show');
+          const userRef = doc(db, "users", currentUser.uid);
+          const snap = await getDoc(userRef);
+          const blocked = snap.data().blockedUsers || [];
+          if (blocked.includes(uid)) {
+            await unblockUser(uid);
+          } else {
+            await blockUser(uid);
+          }
+          loadUserProfile(uid);
+        };
+      }
+    }
+    if (isOwn) {
+      const editProfileBtn = document.getElementById('editProfileBtn');
+      if (editProfileBtn) {
+        editProfileBtn.onclick = () => {
+          document.getElementById('editNickname').value = data.nickname;
+          document.getElementById('editBio').value = data.bio || '';
+          document.getElementById('editAvatar').value = '';
+          document.getElementById('editAvatarLabel').textContent = 'Обрати аватар';
+          document.getElementById('editAvatarPreview').classList.remove('show');
+          document.getElementById('editProfileModal').classList.add('active');
+        };
+      }
+    }
+    
+    const tabs = document.getElementById('profileTabs');
+    if (tabs) {
+      tabs.innerHTML = `
+        <div class="profile-tab active" data-tab="posts" tabindex="0">Пости</div>
+        <div class="profile-tab" data-tab="likes" tabindex="0">Лайки</div>
+        <div class="profile-tab" data-tab="media" tabindex="0">Медіа</div>
+        <div class="profile-tab" data-tab="saved" tabindex="0">Збережене</div>
+      `;
+      document.querySelectorAll('.profile-tab').forEach(tab => {
+        tab.onclick = () => {
+          document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          loadProfileFeed(uid, tab.dataset.tab);
+        };
+      });
+    }
+    loadProfileFeed(uid, 'posts');
+  }
+
+  async function openFollowersList(uid) {
+    const modal = document.getElementById('followersModal');
+    const list = document.getElementById('followersList');
+    if (!modal || !list) return;
+    list.innerHTML = '<div class="skeleton" style="height:60px;"></div>';
+    modal.classList.add('active');
+    
+    const userSnap = await getDoc(doc(db, "users", uid));
+    const followersIds = userSnap.data().followers || [];
+    const followers = [];
+    for (const id of followersIds) {
+      const snap = await getDoc(doc(db, "users", id));
+      if (snap.exists()) followers.push({ id, ...snap.data() });
+    }
+    
+    list.innerHTML = '';
+    if (followers.length === 0) {
+      list.innerHTML = '<p style="text-align:center; padding:20px;">Немає підписників</p>';
+    } else {
+      followers.forEach(user => {
+        const div = document.createElement('div');
+        div.className = 'chat-item';
+        div.tabIndex = 0;
+        div.innerHTML = `
+          <div class="avatar small" style="background-image:url(${user.avatar || ''})" data-uid="${user.id}" tabindex="0"></div>
+          <div class="chat-info">
+            <div class="chat-name">${user.nickname}</div>
+            <div class="chat-last">${user.userId}</div>
+          </div>
+        `;
+        div.onclick = () => {
+          viewProfile(user.id);
+          modal.classList.remove('active');
+        };
+        list.appendChild(div);
+      });
+    }
+  }
+
+  async function openFollowingList(uid) {
+    const modal = document.getElementById('followingModal');
+    const list = document.getElementById('followingList');
+    if (!modal || !list) return;
+    list.innerHTML = '<div class="skeleton" style="height:60px;"></div>';
+    modal.classList.add('active');
+    
+    const userSnap = await getDoc(doc(db, "users", uid));
+    const followingIds = userSnap.data().following || [];
+    const following = [];
+    for (const id of followingIds) {
+      const snap = await getDoc(doc(db, "users", id));
+      if (snap.exists()) following.push({ id, ...snap.data() });
+    }
+    
+    list.innerHTML = '';
+    if (following.length === 0) {
+      list.innerHTML = '<p style="text-align:center; padding:20px;">Ні на кого не підписаний</p>';
+    } else {
+      following.forEach(user => {
+        const div = document.createElement('div');
+        div.className = 'chat-item';
+        div.tabIndex = 0;
+        div.innerHTML = `
+          <div class="avatar small" style="background-image:url(${user.avatar || ''})" data-uid="${user.id}" tabindex="0"></div>
+          <div class="chat-info">
+            <div class="chat-name">${user.nickname}</div>
+            <div class="chat-last">${user.userId}</div>
+          </div>
+        `;
+        div.onclick = () => {
+          viewProfile(user.id);
+          modal.classList.remove('active');
+        };
+        list.appendChild(div);
+      });
+    }
+  }
+
+  document.getElementById('closeFollowersModal').onclick = () => {
+    document.getElementById('followersModal').classList.remove('active');
+  };
+  document.getElementById('closeFollowingModal').onclick = () => {
+    document.getElementById('followingModal').classList.remove('active');
+  };
+
+  async function loadProfileFeed(uid, tab) {
+    if (!currentUser) return;
+    const feed = document.getElementById('profileFeed');
+    if (!feed) return;
+    feed.innerHTML = '';
+    let posts = [];
+    const userSnap = await getDoc(doc(db, "users", uid));
+    const userData = userSnap.data();
+    
+    if (tab === 'posts') {
+      const postIds = userData.posts || [];
+      for (const id of postIds.slice(0, 20)) {
+        const postSnap = await getDoc(doc(db, "posts", id));
+        if (postSnap.exists()) posts.push({ id, ...postSnap.data() });
+      }
+    } else if (tab === 'likes') {
+      const likedIds = userData.likedPosts || [];
+      for (const id of likedIds.slice(0, 20)) {
+        const postSnap = await getDoc(doc(db, "posts", id));
+        if (postSnap.exists()) posts.push({ id, ...postSnap.data() });
+      }
+    } else if (tab === 'media') {
+      const q = query(collection(db, "posts"), where("author", "==", uid), where("mediaUrl", "!=", ""));
+      const snap = await getDocs(q);
+      snap.forEach(d => posts.push({ id: d.id, ...d.data() }));
+    } else if (tab === 'saved') {
+      const savedIds = userData.savedPosts || [];
+      for (const id of savedIds.slice(0, 20)) {
+        const postSnap = await getDoc(doc(db, "posts", id));
+        if (postSnap.exists()) posts.push({ id, ...postSnap.data() });
+      }
+    }
+    
+    posts.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+    
+    posts.forEach(post => {
+      const div = document.createElement('div');
+      div.className = 'post';
+      div.tabIndex = 0;
+      div.innerHTML = `<div class="post-content">${post.text || ''}</div>`;
+      feed.appendChild(div);
+    });
+  }
+
+  document.getElementById('closeModal').onclick = () => {
+    document.getElementById('editProfileModal').classList.remove('active');
+  };
+
+  document.getElementById('saveProfileEdit').onclick = async () => {
+    if (!currentUser) return;
+    const nickname = document.getElementById('editNickname').value.trim();
+    const bio = document.getElementById('editBio').value.trim();
+    const avatarFile = document.getElementById('editAvatar').files[0];
+    if (!nickname) return alert('Псевдонім обов’язковий');
+    
+    const newUserId = `@${nickname.toLowerCase()}`;
+    const q = query(collection(db, "users"), where("userId", "==", newUserId));
+    const snap = await getDocs(q);
+    if (!snap.empty && snap.docs[0].id !== currentUser.uid) return alert('Цей ID вже зайнятий');
+    
+    try {
+      let avatarUrl;
+      if (avatarFile) {
+        const storageRef = ref(storage, `avatars/${currentUser.uid}/${Date.now()}_${avatarFile.name}`);
+        await uploadBytes(storageRef, avatarFile);
+        avatarUrl = await getDownloadURL(storageRef);
+      }
+      
+      const updateData = { 
+        nickname, 
+        userId: newUserId, 
+        nickname_lower: nickname.toLowerCase(), 
+        bio 
+      };
+      if (avatarUrl) updateData.avatar = avatarUrl;
+      
+      await updateDoc(doc(db, "users", currentUser.uid), updateData);
+      loadMyProfile();
+      document.getElementById('editProfileModal').classList.remove('active');
+      showToast('Профіль оновлено');
+    } catch (e) {
+      showToast('Помилка: ' + e.message);
+    }
+  };
+
+  const getChatId = (uid1, uid2) => [uid1, uid2].sort().join('_');
+
+  async function loadChatList() {
+    if (!currentUser) return;
+    const list = document.getElementById('chatList');
+    if (!list) return;
+    list.innerHTML = '';
+
+    try {
+      const q = query(collection(db, "chats"), where("participants", "array-contains", currentUser.uid));
+      const snapshot = await getDocs(q);
+
+      if (snapshot.empty) {
+        list.innerHTML = '<p style="text-align:center; padding:20px;">Немає чатів</p>';
+        return;
+      }
+
+      const chatItems = [];
+      for (const docSnap of snapshot.docs) {
+        const chat = docSnap.data();
+        const otherUid = chat.participants.find(uid => uid !== currentUser.uid);
+        if (!otherUid) continue;
+
+        const userSnap = await getDoc(doc(db, "users", otherUid));
+        const user = userSnap.data();
+        if (!user) continue;
+
+        const unread = chat.unread?.[currentUser.uid] || 0;
+        const lastMsg = chat.lastMessage || '';
+        const updatedAt = chat.updatedAt?.seconds || 0;
+        const time = updatedAt ? new Date(updatedAt * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
+        const lastOnline = user.lastOnline?.seconds || 0;
+        const isOnline = (Date.now() / 1000 - lastOnline) < 60;
+
+        chatItems.push({
+          chatId: docSnap.id,
+          otherUid,
+          user,
+          unread,
+          lastMsg,
+          time,
+          isOnline,
+          updatedAt
+        });
+      }
+
+      chatItems.sort((a, b) => b.updatedAt - a.updatedAt);
+
+      if (chatItems.length === 0) {
+        list.innerHTML = '<p style="text-align:center; padding:20px;">Немає чатів</p>';
+        return;
+      }
+
+      chatItems.forEach(item => {
+        const div = document.createElement('div');
+        div.className = `chat-item ${item.unread > 0 ? 'unread' : ''}`;
+        div.dataset.chatId = item.chatId;
+        div.dataset.otherUid = item.otherUid;
+        div.tabIndex = 0;
+        div.innerHTML = `
+          <div class="avatar small" style="background-image:url(${item.user.avatar || ''})" tabindex="0"></div>
+          <div class="chat-info">
+            <div class="chat-name">${item.user.nickname} ${item.isOnline ? '<span class="online-indicator" style="display:inline-block;"></span>' : ''}</div>
+            <div class="chat-last">${item.lastMsg}</div>
+          </div>
+          <div class="chat-time">${item.time}</div>
+          ${item.unread > 0 ? `<div class="chat-badge">${item.unread}</div>` : ''}
+        `;
+        div.onclick = () => openChatFromList(item.chatId, item.otherUid, item.user.nickname, item.user.userId, item.user.avatar);
+        list.appendChild(div);
+      });
+    } catch (error) {
+      console.error('Error loading chat list:', error);
+      alert('Помилка завантаження списку чатів:\n' + (error.message || 'Невідома помилка') + '\nКод: ' + (error.code || 'N/A'));
+      showToast('Помилка завантаження списку чатів.');
+    }
+  }
+
+  async function openChatFromList(chatId, otherUid, otherName, otherUserId, otherAvatar) {
+    if (!currentUser) return;
+    currentChatPartner = otherUid;
+    currentChatPartnerName = otherName;
+    currentChatId = chatId;
+    
+    const chatWindow = document.getElementById('chatWindow');
+    if (chatWindow) chatWindow.style.display = 'flex';
+    const chatName = document.getElementById('chatName');
+    if (chatName) chatName.textContent = otherName;
+    const chatUserId = document.getElementById('chatUserId');
+    if (chatUserId) chatUserId.textContent = otherUserId || '';
+    const chatAvatar = document.getElementById('chatAvatar');
+    if (chatAvatar) chatAvatar.style.backgroundImage = `url(${otherAvatar || ''})`;
+    
+    const chatRef = doc(db, "chats", chatId);
+    await updateDoc(chatRef, { [`unread.${currentUser.uid}`]: 0 }).catch(console.error);
+    
+    setTimeout(() => {
+      subscribeToChat(chatId).catch(err => {
+        console.error('Error subscribing to chat:', err);
+        showToast('Помилка завантаження повідомлень');
+      });
+    }, 100);
+    
+    if (unsubscribeOnlineStatus) unsubscribeOnlineStatus();
+    unsubscribeOnlineStatus = onSnapshot(doc(db, "users", otherUid), (snap) => {
+      const lastOnline = snap.data()?.lastOnline?.seconds || 0;
+      const isOnline = (Date.now()/1000 - lastOnline) < 60;
+      const indicator = document.getElementById('onlineIndicator');
+      if (indicator) indicator.style.display = isOnline ? 'inline-block' : 'none';
+    }, (error) => {
+      console.error('Online status error:', error);
+    });
+    
+    setTimeout(() => { document.getElementById('chatText').focus(); }, 200);
+  }
+
+  function openChat(otherName, otherUid, otherUserId) {
+    if (!currentUser) return;
+    currentChatPartner = otherUid;
+    currentChatPartnerName = otherName;
+    
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    const chatsNav = document.querySelector('[data-section="chats"]');
+    if (chatsNav) chatsNav.classList.add('active');
+    sections.forEach(s => document.getElementById(s).classList.remove('active'));
+    const chatsSection = document.getElementById('chats');
+    if (chatsSection) chatsSection.classList.add('active');
+    document.getElementById('pageTitle').textContent = 'Чати';
+    
+    const chatWindow = document.getElementById('chatWindow');
+    if (chatWindow) chatWindow.style.display = 'flex';
+    const chatName = document.getElementById('chatName');
+    if (chatName) chatName.textContent = otherName;
+    const chatUserId = document.getElementById('chatUserId');
+    if (chatUserId) chatUserId.textContent = otherUserId || '';
+    
+    getDoc(doc(db, "users", otherUid)).then(snap => {
+      if (snap.exists()) {
+        const chatAvatar = document.getElementById('chatAvatar');
+        if (chatAvatar) chatAvatar.style.backgroundImage = `url(${snap.data().avatar || ''})`;
+        const lastOnline = snap.data().lastOnline?.seconds || 0;
+        const isOnline = (Date.now()/1000 - lastOnline) < 60;
+        const indicator = document.getElementById('onlineIndicator');
+        if (indicator) indicator.style.display = isOnline ? 'inline-block' : 'none';
+      }
+    }).catch(console.error);
+    
+    if (unsubscribeOnlineStatus) unsubscribeOnlineStatus();
+    unsubscribeOnlineStatus = onSnapshot(doc(db, "users", otherUid), (snap) => {
+      const lastOnline = snap.data()?.lastOnline?.seconds || 0;
+      const isOnline = (Date.now()/1000 - lastOnline) < 60;
+      const indicator = document.getElementById('onlineIndicator');
+      if (indicator) indicator.style.display = isOnline ? 'inline-block' : 'none';
+    }, (error) => {
+      console.error('Online status error:', error);
+    });
+    
+    const chatId = getChatId(currentUser.uid, otherUid);
+    currentChatId = chatId;
+    const chatRef = doc(db, "chats", chatId);
+    getDoc(chatRef).then(async (docSnap) => {
+      try {
+        if (!docSnap.exists()) {
+          await setDoc(chatRef, {
+            participants: [currentUser.uid, otherUid],
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp(),
+            lastMessage: '',
+            unread: { [currentUser.uid]: 0, [otherUid]: 0 }
+          });
+        } else {
+          await updateDoc(chatRef, { [`unread.${currentUser.uid}`]: 0 });
+        }
+        setTimeout(() => {
+          subscribeToChat(chatId).catch(err => {
+            console.error('Error subscribing to chat:', err);
+            showToast('Помилка завантаження повідомлень');
+          });
+        }, 100);
+        loadChatList();
+      } catch (error) {
+        console.error('Error opening chat:', error);
+        alert('Помилка відкриття чату:\n' + error.message);
+        showToast('Помилка відкриття чату');
+      }
+    }).catch(error => {
+      console.error('Error getting chat doc:', error);
+      alert('Помилка доступу до чату:\n' + error.message);
+      showToast('Помилка доступу до чату');
+    });
+    
+    setTimeout(() => { document.getElementById('chatText').focus(); }, 200);
+  }
+
+  function formatMessageTime(timestamp) {
+    if (!timestamp) return '';
+    const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp.seconds * 1000);
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+
+  function formatMessageDate(timestamp) {
+    if (!timestamp) return '';
+    const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp.seconds * 1000);
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    
+    if (date.toDateString() === today.toDateString()) return 'Сьогодні';
+    if (date.toDateString() === yesterday.toDateString()) return 'Вчора';
+    return date.toLocaleDateString();
+  }
+
+  async function subscribeToChat(chatId) {
+    if (!currentUser) throw new Error('No current user');
+    if (unsubscribeChat) unsubscribeChat();
+    if (unsubscribeTyping) unsubscribeTyping();
+
+    const messagesContainer = document.getElementById('chatMessages');
+    if (!messagesContainer) {
+      throw new Error('chatMessages container not found');
+    }
+
+    const otherUserSnap = await getDoc(doc(db, "users", currentChatPartner));
+    const otherUser = otherUserSnap.data();
+
+    const q = query(collection(db, `chats/${chatId}/messages`), orderBy("createdAt"));
+    let lastDate = '';
+    unsubscribeChat = onSnapshot(q, (snap) => {
+      messagesContainer.innerHTML = '';
+      snap.forEach(doc => {
+        const msg = doc.data();
+        const msgDate = formatMessageDate(msg.createdAt);
+        if (msgDate !== lastDate) {
+          lastDate = msgDate;
+          const divider = document.createElement('div');
+          divider.className = 'date-divider';
+          divider.textContent = msgDate;
+          messagesContainer.appendChild(divider);
+        }
+
+        const wrapper = document.createElement('div');
+        wrapper.className = `message-wrapper ${msg.from === currentUser.uid ? 'sent' : 'received'}`;
+
+        const bubble = document.createElement('div');
+        bubble.className = `message-bubble ${msg.from === currentUser.uid ? 'sent' : 'received'}`;
+
+        if (msg.from !== currentUser.uid) {
+          const senderDiv = document.createElement('div');
+          senderDiv.className = 'message-sender';
+          senderDiv.innerHTML = `
+            <div class="message-sender-avatar" style="background-image:url(${otherUser?.avatar || ''})"></div>
+            <span>${currentChatPartnerName}</span>
+          `;
+          bubble.appendChild(senderDiv);
+        }
+
+        const textDiv = document.createElement('div');
+        textDiv.textContent = msg.text;
+        bubble.appendChild(textDiv);
+
+        const timeDiv = document.createElement('div');
+        timeDiv.className = 'message-time';
+        timeDiv.textContent = formatMessageTime(msg.createdAt);
+        bubble.appendChild(timeDiv);
+
+        wrapper.appendChild(bubble);
+        messagesContainer.appendChild(wrapper);
+      });
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }, (error) => {
+      console.error('Error in messages snapshot:', error);
+      alert('Помилка отримання повідомлень:\n' + error.message);
+      showToast('Помилка отримання повідомлень');
+    });
+    
+    if (currentChatPartner) {
+      const typingRef = doc(db, `chats/${chatId}/typing/${currentChatPartner}`);
+      unsubscribeTyping = onSnapshot(typingRef, (docSnap) => {
+        const indicator = document.getElementById('typingIndicator');
+        if (indicator) {
+          if (docSnap.exists() && docSnap.data().isTyping) {
+            indicator.style.display = 'flex';
+          } else {
+            indicator.style.display = 'none';
+          }
+        }
+      }, (error) => {
+        console.error('Typing indicator error:', error);
+      });
+    }
+  }
+
+  document.getElementById('chatText').addEventListener('input', () => {
+    if (!currentUser || !currentChatPartner || !currentChatId) return;
+    const typingRef = doc(db, `chats/${currentChatId}/typing/${currentUser.uid}`);
+    setDoc(typingRef, { isTyping: true }, { merge: true }).catch(console.error);
+    clearTimeout(window.typingTimeout);
+    window.typingTimeout = setTimeout(() => setDoc(typingRef, { isTyping: false }, { merge: true }).catch(console.error), 2000);
   });
 
-  // Приклад локалізації для динамічних елементів (оновлюється при зміні мови)
-  window.setLanguage = setLanguage; // для доступу ззовні
+  document.getElementById('sendMessage').onclick = async () => {
+    const text = document.getElementById('chatText').value.trim();
+    if (!text || !currentUser || !currentChatPartner || !currentChatId) return;
+    const chatRef = doc(db, "chats", currentChatId);
+    const messageRef = collection(db, `chats/${currentChatId}/messages`);
+    try {
+      await addDoc(messageRef, { from: currentUser.uid, text, createdAt: serverTimestamp() });
+      await updateDoc(chatRef, {
+        lastMessage: text,
+        updatedAt: serverTimestamp(),
+        [`unread.${currentChatPartner}`]: increment(1)
+      });
+      document.getElementById('chatText').value = '';
+      
+      const typingRef = doc(db, `chats/${currentChatId}/typing/${currentUser.uid}`);
+      await setDoc(typingRef, { isTyping: false }, { merge: true });
+    } catch (error) {
+      console.error('Send message error:', error);
+      alert('Помилка відправлення повідомлення:\n' + error.message);
+    }
+  };
 
-  console.log('TV-додаток завантажено!');
+  document.getElementById('chatText').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      document.getElementById('sendMessage').click();
+    }
+  });
+
+  let searchTimeout;
+  document.getElementById('chatSearchInput').addEventListener('input', (e) => {
+    clearTimeout(searchTimeout);
+    const val = e.target.value.trim();
+    if (!val) {
+      document.getElementById('chatSearchResults').style.display = 'none';
+      return;
+    }
+    searchTimeout = setTimeout(() => searchUsersForChat(val), 300);
+  });
+
+  async function searchUsersForChat(queryText) {
+    if (!currentUser) return;
+    const val = queryText.toLowerCase();
+    const resultsContainer = document.getElementById('chatSearchResults');
+    if (!resultsContainer) return;
+    resultsContainer.innerHTML = '';
+    
+    const q1 = query(collection(db, "users"), where("userId", ">=", val.startsWith('@') ? val : `@${val}`), where("userId", "<=", (val.startsWith('@') ? val : `@${val}`) + '\uf8ff'));
+    const q2 = query(collection(db, "users"), where("nickname_lower", ">=", val), where("nickname_lower", "<=", val + '\uf8ff'));
+    
+    const [snap1, snap2] = await Promise.all([getDocs(q1), getDocs(q2)]);
+    const usersMap = new Map();
+    snap1.forEach(d => usersMap.set(d.id, d.data()));
+    snap2.forEach(d => usersMap.set(d.id, d.data()));
+    
+    if (usersMap.size === 0) {
+      resultsContainer.style.display = 'none';
+      return;
+    }
+    
+    resultsContainer.style.display = 'block';
+    usersMap.forEach((data, uid) => {
+      if (uid === currentUser.uid) return;
+      const div = document.createElement('div');
+      div.className = 'chat-item';
+      div.tabIndex = 0;
+      div.innerHTML = `
+        <div class="avatar small" style="background-image:url(${data.avatar || ''})" tabindex="0"></div>
+        <div class="chat-info">
+          <div class="chat-name">${data.nickname}</div>
+          <div class="chat-last">${data.userId}</div>
+        </div>
+        <button class="btn" tabindex="0">Написати</button>
+      `;
+      div.onclick = () => {
+        openChat(data.nickname, uid, data.userId);
+        resultsContainer.style.display = 'none';
+        document.getElementById('chatSearchInput').value = '';
+      };
+      const btn = div.querySelector('button');
+      if (btn) {
+        btn.onclick = (e) => {
+          e.stopPropagation();
+          openChat(data.nickname, uid, data.userId);
+          resultsContainer.style.display = 'none';
+          document.getElementById('chatSearchInput').value = '';
+        };
+      }
+      resultsContainer.appendChild(div);
+    });
+  }
+
+  document.getElementById('toggleTheme').onclick = () => {
+    document.body.classList.toggle('dark');
+    localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+  };
+  if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark');
+
+  document.getElementById('privacyPolicyBtn').onclick = () => {
+    document.getElementById('privacyPolicyModal').classList.add('active');
+  };
+  document.getElementById('closePrivacyModal').onclick = () => {
+    document.getElementById('privacyPolicyModal').classList.remove('active');
+  };
+
+  document.getElementById('logoutBtn').onclick = () => {
+    cleanupListeners();
+    signOut(auth);
+  };
+
+  const sentinel = document.getElementById('feedSentinel');
+  if (sentinel) {
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) loadMorePosts();
+    }, { threshold: 0.5 });
+    observer.observe(sentinel);
+  }
+
+  // ================= DOUBLE TAP LIKE (TIKTOK) =================
+  document.addEventListener('dblclick', (e) => {
+    const post = e.target.closest('.post');
+    if (!post) return;
+    const likeBtn = post.querySelector('.like-btn');
+    if (!likeBtn) return;
+    // Імітуємо клік по кнопці лайка
+    likeBtn.click();
+    // Показуємо анімацію
+    const heart = document.createElement('div');
+    heart.className = 'heart-overlay';
+    heart.textContent = '❤️';
+    post.style.position = 'relative';
+    post.appendChild(heart);
+    setTimeout(() => heart.remove(), 1000);
+  });
+
+  // ================= ОНОВЛЕНИЙ ГЛОБАЛЬНИЙ ОБРОБНИК КЛІКІВ (ЛАЙКИ ТА ІНШЕ) =================
+  document.addEventListener('click', async (e) => {
+    if (!currentUser) return;
+    const target = e.target.closest('button');
+    if (!target) return;
+    
+    if (target.classList.contains('like-btn')) {
+      const postId = target.dataset.postId;
+      const liked = target.classList.contains('liked');
+      const countSpan = target.querySelector('span');
+      const oldCount = parseInt(countSpan.textContent);
+      target.classList.toggle('liked');
+      countSpan.textContent = liked ? oldCount - 1 : oldCount + 1;
+      try {
+        const postRef = doc(db, "posts", postId);
+        if (liked) {
+          await updateDoc(postRef, { 
+            likes: arrayRemove(currentUser.uid), 
+            likesCount: increment(-1),
+            popularity: increment(-3)
+          });
+          await updateDoc(doc(db, "users", currentUser.uid), { likedPosts: arrayRemove(postId) });
+        } else {
+          await updateDoc(postRef, { 
+            likes: arrayUnion(currentUser.uid), 
+            likesCount: increment(1),
+            popularity: increment(3)
+          });
+          await updateDoc(doc(db, "users", currentUser.uid), { likedPosts: arrayUnion(postId) });
+          vibrate(30);
+        }
+      } catch {
+        target.classList.toggle('liked');
+        countSpan.textContent = oldCount;
+      }
+    }
+    
+    if (target.classList.contains('save-btn')) {
+      const postId = target.dataset.postId;
+      const saved = target.classList.contains('saved');
+      target.classList.toggle('saved');
+      try {
+        const userRef = doc(db, "users", currentUser.uid);
+        const postRef = doc(db, "posts", postId);
+        if (saved) {
+          await updateDoc(userRef, { savedPosts: arrayRemove(postId) });
+          await updateDoc(postRef, { saves: arrayRemove(currentUser.uid) });
+        } else {
+          await updateDoc(userRef, { savedPosts: arrayUnion(postId) });
+          await updateDoc(postRef, { saves: arrayUnion(currentUser.uid) });
+        }
+      } catch { target.classList.toggle('saved'); }
+    }
+  });
+
+  document.addEventListener('click', (e) => {
+    const uidElement = e.target.closest('[data-uid]');
+    if (uidElement) {
+      const uid = uidElement.dataset.uid;
+      viewProfile(uid);
+    }
+  });
 </script>
 </body>
 </html>
