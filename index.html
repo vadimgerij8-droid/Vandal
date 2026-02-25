@@ -2,95 +2,129 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FANTASYAS — сучасна заставка</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>FANTASYAS — реальний космос</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;700;900&display=swap" rel="stylesheet">
-
     <style>
-        * { margin:0; padding:0; box-sizing:border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Inter', system-ui, sans-serif;
-            background:#fff;
-            min-height:100vh;
-            overflow:hidden;
+            background: #000; /* чорний фон для всього */
+            min-height: 100vh;
+            color: #fff;
         }
 
         .splash {
-            position:fixed;
-            inset:0;
-            background:#ffffff;
-            z-index:9999;
-            display:grid;
-            place-items:center;
-            transition:opacity 0.9s cubic-bezier(0.23,1,0.32,1);
-            opacity:1;
+            position: fixed;
+            inset: 0;
+            background: #000; /* чорне тло під canvas */
+            z-index: 9999;
+            display: grid;
+            place-items: center;
+            transition: opacity 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            opacity: 1;
         }
 
         #canvas {
-            position:absolute;
-            inset:0;
-            width:100%;
-            height:100%;
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+            background-color: #000; /* чорне тло */
         }
 
         .splash-text {
-            position:relative;
-            z-index:10;
-            font-size: clamp(2.2rem, 11vw, 5.8rem);          /* суттєво менший */
-            font-weight:900;
-            letter-spacing:-0.05em;
-            line-height:0.85;
-            text-transform:uppercase;
-            color:#000;
-            user-select:none;
-            opacity:0;
-            transform:translateY(0.25em);
-            animation:
-                textEnter 1.8s cubic-bezier(0.16,1,0.3,1) forwards 0.3s,
-                textBreathe 4.8s ease-in-out 2.2s infinite alternate;
-            text-shadow:0 0 0 rgba(0,0,0,0);
+            position: relative;
+            z-index: 10;
+            font-size: clamp(2rem, 10vw, 5rem); /* зменшений вдвічі відносно гігантського */
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            text-transform: uppercase;
+            color: #fff; /* білий текст на чорному */
+            text-align: center;
+            user-select: none;
+            opacity: 0;
+            transform: scale(0.7) translateY(30px);
+            filter: blur(10px);
+            animation: 
+                cosmicAppear 0.7s cubic-bezier(0.2, 0.9, 0.3, 1) forwards,
+                cosmicPulse 0.9s ease-in-out 0.7s forwards,
+                fadeOut 0.5s ease-in 1.6s forwards; /* загальна довжина ~2.1s */
+            white-space: nowrap;
+            padding: 0 0.3rem;
+            text-shadow: 0 0 20px rgba(255,255,255,0.4);
         }
 
-        @keyframes textEnter {
-            to {
-                opacity:1;
-                transform:translateY(0);
-                text-shadow:0 0 35px rgba(0,0,0,0.07), 0 0 70px rgba(0,0,0,0.04);
+        @keyframes cosmicAppear {
+            0% { opacity: 0; transform: scale(0.7) translateY(30px); filter: blur(10px); }
+            60% { opacity: 1; transform: scale(1.05) translateY(0); filter: blur(2px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); text-shadow: 0 0 35px rgba(255,255,255,0.6); }
+        }
+
+        @keyframes cosmicPulse {
+            0% { transform: scale(1); text-shadow: 0 0 35px rgba(255,255,255,0.6); }
+            50% { transform: scale(1.08); text-shadow: 0 0 70px rgba(255,255,255,0.9); }
+            100% { transform: scale(1); text-shadow: 0 0 35px rgba(255,255,255,0.6); }
+        }
+
+        @keyframes fadeOut {
+            to { opacity: 0; transform: scale(0.95); filter: blur(4px); }
+        }
+
+        /* адаптація для мобільних */
+        @media (max-width: 600px) {
+            .splash-text {
+                white-space: normal;
+                font-size: clamp(1.8rem, 8vw, 3.5rem);
             }
         }
 
-        @keyframes textBreathe {
-            from { text-shadow:0 0 20px rgba(0,0,0,0.05); transform:scale(1); }
-            to   { text-shadow:0 0 55px rgba(0,0,0,0.12), 0 0 110px rgba(0,0,0,0.06); transform:scale(1.015); }
+        /* прихований сплеш */
+        .splash.hidden {
+            opacity: 0;
         }
 
-        .splash.hidden { opacity:0; }
-
+        /* контент сайту (темна тема) */
         .main-content {
-            display:none;
-            padding:clamp(3rem,8vw,6rem) 1.5rem;
-            max-width:1000px;
-            margin:0 auto;
-            color:#111;
+            display: none;
+            padding: 2.5rem 1.5rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            color: #eee;
+            background: #000;
+            min-height: 100vh;
         }
 
         .main-content h1 {
-            font-size:clamp(2.5rem,7vw,4.8rem);
-            font-weight:900;
-            letter-spacing:-0.03em;
+            font-size: 3.2rem;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            border-bottom: 2px solid #fff;
+            display: inline-block;
+            padding-bottom: 0.3rem;
+            margin-bottom: 1.8rem;
         }
 
         .main-content p {
-            font-size:1.2rem;
-            font-weight:300;
-            line-height:1.65;
-            max-width:680px;
+            font-size: 1.3rem;
+            font-weight: 300;
+            line-height: 1.6;
+            max-width: 700px;
+            opacity: 0.9;
         }
 
-        @media (max-width:500px) {
-            .splash-text { font-size:clamp(2rem,9.5vw,4rem); letter-spacing:-0.04em; }
+        .divider {
+            margin: 2.5rem 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #fff, transparent);
         }
     </style>
 </head>
@@ -103,124 +137,221 @@
 
     <div id="main-content" class="main-content">
         <h1>FANTASYAS</h1>
-        <p>Простір, де тиша говорить голосніше за слова. Чорно-білий космос деталей і спокою.</p>
+        <p>Реальний космос у мінімалізмі. Чорно-біла безкінечність, де кожна зірка — це ідея. Анімація триває 2 секунди, після чого ви потрапляєте у всесвіт сайту.</p>
+        <div class="divider"></div>
+        <p>✧ Адаптовано під будь-які екрани. Ласкаво просимо. ✧</p>
     </div>
 
     <script>
-        (() => {
-            const splash  = document.getElementById('splash');
-            const content = document.getElementById('main-content');
-            const canvas  = document.getElementById('canvas');
-            const ctx     = canvas.getContext('2d', {alpha:false});
+        (function() {
+            const splash = document.getElementById('splash');
+            const mainContent = document.getElementById('main-content');
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d', { alpha: false }); // непрозорий для продуктивності
 
-            let w, h, t = 0, raf, active = true;
-            let stars = [], nebulae = [];
+            let width, height;
+            let stars = [];
+            let nebulas = [];
+            let galaxy = { angle: 0, speed: 0.0005 };
+            let time = 0;
+            let animationFrame = null;
+            let isActive = true;
 
-            function resize() {
-                w = canvas.width = window.innerWidth;
-                h = canvas.height = window.innerHeight;
-                init();
-            }
+            // --- Функція ініціалізації космосу ---
+            function initCosmos(w, h) {
+                if (!w || !h) return;
 
-            function init() {
+                // Зірки: багато, різного розміру, з мерехтінням
                 stars = [];
-                for (let i = 0; i < 180; i++) {
+                for (let i = 0; i < 400; i++) {
                     stars.push({
                         x: Math.random() * w,
                         y: Math.random() * h,
-                        r: 0.4 + Math.random() * 1.8,
-                        opacity: 0.1 + Math.random() * 0.4,
-                        phase: Math.random() * 80,
-                        speed: 0.02 + Math.random() * 0.06
+                        radius: 0.5 + Math.random() * 2.5,
+                        baseX: Math.random() * w,
+                        baseY: Math.random() * h,
+                        speedX: (Math.random() - 0.5) * 0.02,
+                        speedY: (Math.random() - 0.5) * 0.02,
+                        brightness: 0.3 + Math.random() * 0.8,
+                        twinkleSpeed: 2 + Math.random() * 5,
+                        phase: Math.random() * Math.PI * 2,
+                        layer: Math.random() > 0.7 ? 'near' : 'far' // для ефекту глибини
                     });
                 }
 
-                nebulae = [
-                    {x:w*0.3, y:h*0.4, r:220, intensity:0.018, phase:0},
-                    {x:w*0.75, y:h*0.65, r:280, intensity:0.014, phase:40}
+                // Туманності (розмиті плями)
+                nebulas = [
+                    { x: w * 0.2, y: h * 0.3, radius: 200, intensity: 0.12, dx: 0.01, dy: 0.005 },
+                    { x: w * 0.7, y: h * 0.6, radius: 280, intensity: 0.09, dx: -0.008, dy: 0.01 },
+                    { x: w * 0.5, y: h * 0.8, radius: 230, intensity: 0.06, dx: 0.005, dy: -0.007 },
+                    { x: w * 0.9, y: h * 0.2, radius: 180, intensity: 0.04, dx: -0.006, dy: -0.004 }
                 ];
             }
 
-            function update() {
-                t += 0.004;
+            // --- Оновлення позицій для руху ---
+            function updateCosmos() {
+                time += 0.005; // для мерехтіння
 
-                stars.forEach(s => {
-                    s.x += Math.sin(t * s.speed + s.phase) * 0.3;
-                    s.y += Math.cos(t * s.speed * 1.4 + s.phase) * 0.25;
+                // рух зірок (дуже повільний дрейф)
+                for (let s of stars) {
+                    s.x += s.speedX;
+                    s.y += s.speedY;
 
-                    if (s.x < -50) s.x = w + 50;
-                    if (s.x > w + 50) s.x = -50;
-                    if (s.y < -50) s.y = h + 50;
-                    if (s.y > h + 50) s.y = -50;
-                });
+                    // зациклення
+                    if (s.x > width + 50) s.x = -50;
+                    else if (s.x < -50) s.x = width + 50;
+                    if (s.y > height + 50) s.y = -50;
+                    else if (s.y < -50) s.y = height + 50;
+                }
 
-                nebulae.forEach(n => n.phase += 0.008);
+                // рух туманностей (повільне переміщення)
+                for (let n of nebulas) {
+                    n.x += n.dx;
+                    n.y += n.dy;
+                    // м'яке зациклення
+                    if (n.x > width + 200) n.x = -200;
+                    else if (n.x < -200) n.x = width + 200;
+                    if (n.y > height + 200) n.y = -200;
+                    else if (n.y < -200) n.y = height + 200;
+                }
+
+                // обертання галактики (уявної)
+                galaxy.angle += galaxy.speed;
             }
 
-            function draw() {
-                ctx.fillStyle = '#ffffff';
-                ctx.fillRect(0,0,w,h);
+            // --- Малювання всього космосу ---
+            function drawCosmos() {
+                ctx.fillStyle = '#000000';
+                ctx.fillRect(0, 0, width, height);
 
-                // туманності (м'які градієнти)
+                // 1. Туманності (дуже м'які, з розмиттям)
                 ctx.save();
-                ctx.globalCompositeOperation = 'multiply';
-                nebulae.forEach(n => {
-                    const grad = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r);
-                    grad.addColorStop(0, `rgba(0,0,0,${n.intensity * (0.8 + 0.2*Math.sin(t*1.5 + n.phase))})`);
-                    grad.addColorStop(0.6, `rgba(0,0,0,${n.intensity*0.3})`);
-                    grad.addColorStop(1, 'rgba(0,0,0,0)');
-                    ctx.fillStyle = grad;
+                ctx.filter = 'blur(35px)';
+                for (let n of nebulas) {
+                    const gradient = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.radius);
+                    gradient.addColorStop(0, `rgba(255, 255, 255, ${n.intensity})`);
+                    gradient.addColorStop(0.6, `rgba(255, 255, 255, ${n.intensity * 0.4})`);
+                    gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+                    ctx.fillStyle = gradient;
                     ctx.beginPath();
-                    ctx.arc(n.x, n.y, n.r, 0, Math.PI*2);
+                    ctx.arc(n.x, n.y, n.radius, 0, Math.PI * 2);
                     ctx.fill();
-                });
+                }
                 ctx.restore();
 
-                // зірки / космічний пил
-                stars.forEach(s => {
-                    const pulse = 0.6 + 0.4 * Math.sin(t * 3 + s.phase);
-                    ctx.globalAlpha = s.opacity * pulse;
+                // 2. Галактика (спіральний натяк) — малюємо як еліптичне скупчення з градієнтом
+                ctx.save();
+                ctx.translate(width * 0.45 + Math.sin(galaxy.angle * 2) * 10, height * 0.35 + Math.cos(galaxy.angle) * 8);
+                ctx.rotate(galaxy.angle * 0.8);
+                ctx.scale(1.2, 0.6);
+                const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, 300);
+                grad.addColorStop(0, 'rgba(255, 255, 255, 0.12)');
+                grad.addColorStop(0.4, 'rgba(255, 255, 255, 0.05)');
+                grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+                ctx.fillStyle = grad;
+                ctx.beginPath();
+                ctx.arc(0, 0, 280, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+
+                // 3. Зірки (з мерехтінням)
+                for (let s of stars) {
+                    // мерехтіння: синусоїдальна зміна яскравості
+                    const twinkle = 0.6 + 0.4 * Math.sin(time * s.twinkleSpeed + s.phase);
+                    const opacity = s.brightness * twinkle;
+
                     ctx.beginPath();
-                    ctx.arc(s.x, s.y, s.r * (0.9 + 0.2*pulse), 0, Math.PI*2);
-                    ctx.fillStyle = '#000000';
+                    ctx.arc(s.x, s.y, s.radius * (0.9 + 0.2 * Math.sin(time * 3 + s.phase)), 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
                     ctx.fill();
-                });
-                ctx.globalAlpha = 1;
 
-                // легкий віньєт по краях
-                const vig = ctx.createRadialGradient(w/2,h/2,0, w/2,h/2, Math.max(w,h)*0.75);
-                vig.addColorStop(0, 'rgba(0,0,0,0)');
-                vig.addColorStop(1, 'rgba(0,0,0,0.035)');
-                ctx.fillStyle = vig;
-                ctx.fillRect(0,0,w,h);
+                    // іноді додаємо невелике сяйво для яскравих зірок
+                    if (s.radius > 2.0 && s.layer === 'near') {
+                        ctx.shadowColor = 'rgba(255, 255, 255, 0.4)';
+                        ctx.shadowBlur = 8;
+                        ctx.fill();
+                        ctx.shadowBlur = 0;
+                    }
+                }
+
+                // 4. Дуже дрібні далекі зірки (шум)
+                ctx.save();
+                ctx.globalAlpha = 0.15;
+                for (let i = 0; i < 60; i++) {
+                    ctx.fillStyle = '#fff';
+                    ctx.fillRect(Math.random() * width, Math.random() * height, 0.8, 0.8);
+                }
+                ctx.restore();
+
+                // 5. Легке віньєтування по краях (для глибини)
+                const vignette = ctx.createRadialGradient(width/2, height/2, 0, width/2, height/2, Math.max(width, height)*0.7);
+                vignette.addColorStop(0, 'rgba(0,0,0,0)');
+                vignette.addColorStop(1, 'rgba(0,0,0,0.2)');
+                ctx.fillStyle = vignette;
+                ctx.fillRect(0, 0, width, height);
             }
 
-            function loop() {
-                if (!active) return;
-                update();
-                draw();
-                raf = requestAnimationFrame(loop);
+            // --- Анімаційний цикл ---
+            function animate() {
+                if (!isActive) return;
+                updateCosmos();
+                drawCosmos();
+                animationFrame = requestAnimationFrame(animate);
             }
 
-            function hide() {
-                active = false;
-                cancelAnimationFrame(raf);
+            // --- Зміна розміру ---
+            function resizeCanvas() {
+                width = window.innerWidth;
+                height = window.innerHeight;
+                canvas.width = width;
+                canvas.height = height;
+                initCosmos(width, height);
+            }
+
+            // --- Приховування заставки через 2.1 секунди ---
+            function hideSplash() {
+                isActive = false;
+                if (animationFrame) {
+                    cancelAnimationFrame(animationFrame);
+                    animationFrame = null;
+                }
+
                 splash.classList.add('hidden');
-                splash.addEventListener('transitionend', () => {
-                    splash.style.display = 'none';
-                    content.style.display = 'block';
-                }, {once:true});
-                setTimeout(() => { content.style.display = 'block'; }, 1200);
+
+                splash.addEventListener('transitionend', function onTransitionEnd(e) {
+                    if (e.propertyName === 'opacity') {
+                        splash.style.display = 'none';
+                        mainContent.style.display = 'block';
+                        splash.removeEventListener('transitionend', onTransitionEnd);
+                    }
+                });
+
+                // резервний таймер
+                setTimeout(() => {
+                    if (splash.style.display !== 'none') {
+                        splash.style.display = 'none';
+                        mainContent.style.display = 'block';
+                    }
+                }, 1000);
             }
 
-            window.addEventListener('resize', resize);
-            window.addEventListener('load', () => setTimeout(hide, 2200)); // довше, щоб оцінити красу
+            // --- Запуск ---
+            window.addEventListener('resize', resizeCanvas);
+            window.addEventListener('load', () => {
+                resizeCanvas();
+                isActive = true;
+                animate();
+                // Чекаємо ~2.1 секунди (анімація тексту триває 2.1s) і ховаємо
+                setTimeout(hideSplash, 2100);
+            });
 
-            resize();
-            init();
-            loop();
-
-            if (document.readyState === 'complete') setTimeout(hide, 1400);
+            // Якщо сторінка вже завантажена (кеш)
+            if (document.readyState === 'complete') {
+                resizeCanvas();
+                isActive = true;
+                animate();
+                setTimeout(hideSplash, 2100);
+            }
         })();
     </script>
 </body>
