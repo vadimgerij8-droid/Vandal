@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Fantasyas</title>
+  <title>FANTASYAS</title>
   <style>
     * {
       margin: 0;
@@ -13,131 +13,136 @@
 
     body {
       background: #000;
-      overflow-x: hidden;
-      font-family: 'Segoe UI', system-ui, sans-serif;
+      color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      overflow: hidden; /* на час splash */
     }
 
-    /* ─── Splash Screen ─── */
+    /* Splash екран */
     #splash {
       position: fixed;
       inset: 0;
-      background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+      background: #000;
       z-index: 9999;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      transition: opacity 1.2s ease 0.8s, visibility 0s linear 2s;
+      transition: opacity 1.2s ease 0.6s;
+      pointer-events: none;
     }
 
     #splash.hidden {
       opacity: 0;
-      visibility: hidden;
+      pointer-events: none;
     }
 
-    /* Космічний фон з легкими частинками/зірками */
-    .stars {
-      position: absolute;
-      inset: 0;
-      background: 
-        /* Дрібні зірки */
-        radial-gradient(white, rgba(255,255,255,0) 2px) repeat,
-        radial-gradient(white, rgba(255,255,255,0) 1.5px) repeat;
-      background-size: 200px 200px, 150px 150px;
-      opacity: 0.7;
-      animation: twinkle 20s infinite alternate ease-in-out;
-    }
-
-    @keyframes twinkle {
-      0%,100% { opacity: 0.6; }
-      50%     { opacity: 0.9; }
-    }
-
-    /* Легке сяйво туманності (nebula vibe) */
-    .nebula {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, 
-        rgba(80, 0, 150, 0.12) 0%, 
-        rgba(0, 100, 200, 0.08) 40%, 
-        rgba(200, 0, 150, 0.06) 100%);
-      filter: blur(80px);
-      animation: nebula-drift 60s infinite linear;
-    }
-
-    @keyframes nebula-drift {
-      0%   { transform: translate(0, 0) scale(1.1); }
-      50%  { transform: translate(8%, 5%) scale(1.05); }
-      100% { transform: translate(-5%, -3%) scale(1.1); }
-    }
-
-    /* Головний текст Fantasyas */
-    .fantasy-text {
+    /* Логотип/текст FANTASYAS */
+    .logo-container {
       position: relative;
-      font-size: 9vw;           /* адаптивно великий */
-      font-weight: 900;
-      color: #ffffff;
-      letter-spacing: 0.4em;
-      text-transform: uppercase;
-      text-shadow: 
-        0 0 20px rgba(255,255,255,0.8),
-        0 0 60px rgba(180,100,255,0.6),
-        0 0 100px rgba(100,0,200,0.4);
-      opacity: 0;
-      transform: scale(0.7);
-      animation: entrance 3.2s forwards cubic-bezier(0.22, 1, 0.36, 1);
+      text-align: center;
     }
 
-    @keyframes entrance {
+    .fantasyas {
+      font-size: clamp(4rem, 18vw, 12rem); /* адаптивно великий */
+      font-weight: 900;
+      letter-spacing: 0.15em;
+      color: #ffffff;
+      text-transform: uppercase;
+      opacity: 0;
+      transform: scale(0.92);
+      filter: blur(4px);
+      animation: appear 2.8s forwards cubic-bezier(0.25, 0.8, 0.25, 1);
+      text-shadow: 0 0 30px rgba(255,255,255,0.25);
+    }
+
+    @keyframes appear {
       0% {
         opacity: 0;
-        transform: scale(0.6) translateY(40px);
-        filter: blur(12px);
+        transform: scale(0.88) translateY(20px);
+        filter: blur(8px);
       }
-      30% {
-        opacity: 0.4;
-        filter: blur(6px);
+      40% {
+        opacity: 0.3;
+        filter: blur(3px);
       }
-      60% {
+      70% {
         opacity: 1;
-        transform: scale(1.05) translateY(0);
+        transform: scale(1.02) translateY(0);
         filter: blur(0);
       }
-      80% {
-        transform: scale(0.98);
+      85% {
+        transform: scale(0.99);
       }
       100% {
         opacity: 1;
         transform: scale(1);
+        filter: blur(0);
       }
     }
 
-    /* Додаткове сяйво навколо тексту (pulse) */
-    .fantasy-text::after {
-      content: "Fantasyas";
+    /* Легке пульсуюче сяйво (subtle, не кольорове) */
+    .fantasyas::after {
+      content: "FANTASYAS";
       position: absolute;
       inset: 0;
       color: transparent;
-      background: linear-gradient(90deg, #fff, #d0b0ff, #fff);
+      background: linear-gradient(90deg, #fff 0%, #ddd 50%, #fff 100%);
       -webkit-background-clip: text;
       background-clip: text;
-      opacity: 0.6;
-      animation: glow-pulse 4s infinite alternate ease-in-out;
+      opacity: 0.15;
+      animation: subtle-glow 5s infinite alternate ease-in-out;
     }
 
-    @keyframes glow-pulse {
-      0%,100% { opacity: 0.4; filter: blur(2px); }
-      50%     { opacity: 0.9; filter: blur(0); }
+    @keyframes subtle-glow {
+      0%,100% { opacity: 0.08; }
+      50%     { opacity: 0.25; }
     }
 
-    /* Контент сайту (після splash) */
+    /* Дрібні зірки / шум для космічного відчуття (дуже легке, монохромне) */
+    .stars {
+      position: absolute;
+      inset: 0;
+      background: 
+        radial-gradient(white 1px, transparent 1px) repeat,
+        radial-gradient(white 0.8px, transparent 0.8px) repeat;
+      background-size: 60px 60px, 40px 40px;
+      opacity: 0.07;
+      animation: twinkle 25s infinite alternate;
+    }
+
+    @keyframes twinkle {
+      0%,100% { opacity: 0.05; }
+      50%     { opacity: 0.12; }
+    }
+
+    /* Основний контент (після splash) */
     main {
       height: 100vh;
-      background: #111;
-      color: white;
+      background: #000;
+      color: #fff;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 3rem;
+      font-size: 2.5rem;
+    }
+
+    /* Статус бар іконки (як на скріні) — опціонально */
+    .status-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 44px;
+      background: transparent;
+      color: #fff;
+      font-size: 0.9rem;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 20px;
+      align-items: center;
+      z-index: 10000;
+      pointer-events: none;
     }
   </style>
 </head>
@@ -146,21 +151,30 @@
   <!-- Splash екран -->
   <div id="splash">
     <div class="stars"></div>
-    <div class="nebula"></div>
-    <h1 class="fantasy-text">Fantasyas</h1>
+    <div class="logo-container">
+      <div class="fantasyas">FANTASYAS</div>
+    </div>
+  </div>
+
+  <!-- Імітація статус-бару (як на твоєму скріні) -->
+  <div class="status-bar">
+    <span>16:57</span>
+    <span>||| Wi-Fi 100%</span>
   </div>
 
   <!-- Основний контент сайту -->
   <main>
-    <p>Вітаю! Це вже основна сторінка після анімованого входу 🌌</p>
+    <p>Вітаю! Це вже основна сторінка після splash 🌑</p>
   </main>
 
   <script>
-    // Зникає splash через 4 секунди (або можна прив'язати до window.load)
+    // Зникає splash після анімації (приблизно 3.5–4 секунди)
     window.addEventListener('load', () => {
       setTimeout(() => {
         document.getElementById('splash').classList.add('hidden');
-      }, 3800); // трохи довше, щоб анімація дограла
+        // Якщо хочеш — можна додати overflow: auto; до body
+        document.body.style.overflow = 'auto';
+      }, 3800);
     });
   </script>
 
