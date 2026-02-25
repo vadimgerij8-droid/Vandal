@@ -1,182 +1,66 @@
-<!DOCTYPE html>
-<html lang="uk">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>FANTASYAS</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+<!-- Заставка -->
+<div id="loader" style="position:fixed;top:0;left:0;width:100%;height:100%;background:#fff;display:flex;justify-content:center;align-items:center;flex-direction:column;z-index:9999;overflow:hidden;">
+  <!-- Зірки -->
+  <div class="stars"></div>
+  <!-- Анімований текст -->
+  <h1 id="loader-text" style="font-family:sans-serif;font-size:2rem;color:black;letter-spacing:0.2em;opacity:0;">FANTASYAS</h1>
+</div>
+
+<!-- Контент сайту -->
+<div id="content" style="display:none;">
+  <!-- Тут твій сайт -->
+</div>
+
+<style>
+  /* Анімація тексту */
+  @keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  #loader-text {
+    animation: fadeIn 2s ease forwards;
+  }
+
+  /* Зірки як фон */
+  .stars {
+    position:absolute;
+    width:200%;
+    height:200%;
+    background: transparent;
+    background-image: radial-gradient(circle, black 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: moveStars 10s linear infinite;
+    top: -50%;
+    left: -50%;
+    z-index:0;
+  }
+
+  @keyframes moveStars {
+    from { transform: translate(0,0); }
+    to { transform: translate(-100px,-100px); }
+  }
+
+  /* Мобільна адаптація */
+  @media(max-width:768px) {
+    #loader-text {
+      font-size:1.5rem;
+      letter-spacing:0.1em;
     }
+  }
+</style>
 
-    body {
-      background: #000;
-      color: #fff;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      overflow: hidden; /* на час splash */
-    }
+<script>
+  window.addEventListener('load', () => {
+    const loader = document.getElementById('loader');
+    const content = document.getElementById('content');
+    
+    loader.style.transition = 'opacity 0.8s';
+    loader.style.opacity = 0;
 
-    /* Splash екран */
-    #splash {
-      position: fixed;
-      inset: 0;
-      background: #000;
-      z-index: 9999;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      transition: opacity 1.2s ease 0.6s;
-      pointer-events: none;
-    }
-
-    #splash.hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    /* Логотип/текст FANTASYAS */
-    .logo-container {
-      position: relative;
-      text-align: center;
-    }
-
-    .fantasyas {
-      font-size: clamp(4rem, 18vw, 12rem); /* адаптивно великий */
-      font-weight: 900;
-      letter-spacing: 0.15em;
-      color: #ffffff;
-      text-transform: uppercase;
-      opacity: 0;
-      transform: scale(0.92);
-      filter: blur(4px);
-      animation: appear 2.8s forwards cubic-bezier(0.25, 0.8, 0.25, 1);
-      text-shadow: 0 0 30px rgba(255,255,255,0.25);
-    }
-
-    @keyframes appear {
-      0% {
-        opacity: 0;
-        transform: scale(0.88) translateY(20px);
-        filter: blur(8px);
-      }
-      40% {
-        opacity: 0.3;
-        filter: blur(3px);
-      }
-      70% {
-        opacity: 1;
-        transform: scale(1.02) translateY(0);
-        filter: blur(0);
-      }
-      85% {
-        transform: scale(0.99);
-      }
-      100% {
-        opacity: 1;
-        transform: scale(1);
-        filter: blur(0);
-      }
-    }
-
-    /* Легке пульсуюче сяйво (subtle, не кольорове) */
-    .fantasyas::after {
-      content: "FANTASYAS";
-      position: absolute;
-      inset: 0;
-      color: transparent;
-      background: linear-gradient(90deg, #fff 0%, #ddd 50%, #fff 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      opacity: 0.15;
-      animation: subtle-glow 5s infinite alternate ease-in-out;
-    }
-
-    @keyframes subtle-glow {
-      0%,100% { opacity: 0.08; }
-      50%     { opacity: 0.25; }
-    }
-
-    /* Дрібні зірки / шум для космічного відчуття (дуже легке, монохромне) */
-    .stars {
-      position: absolute;
-      inset: 0;
-      background: 
-        radial-gradient(white 1px, transparent 1px) repeat,
-        radial-gradient(white 0.8px, transparent 0.8px) repeat;
-      background-size: 60px 60px, 40px 40px;
-      opacity: 0.07;
-      animation: twinkle 25s infinite alternate;
-    }
-
-    @keyframes twinkle {
-      0%,100% { opacity: 0.05; }
-      50%     { opacity: 0.12; }
-    }
-
-    /* Основний контент (після splash) */
-    main {
-      height: 100vh;
-      background: #000;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2.5rem;
-    }
-
-    /* Статус бар іконки (як на скріні) — опціонально */
-    .status-bar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 44px;
-      background: transparent;
-      color: #fff;
-      font-size: 0.9rem;
-      display: flex;
-      justify-content: space-between;
-      padding: 0 20px;
-      align-items: center;
-      z-index: 10000;
-      pointer-events: none;
-    }
-  </style>
-</head>
-<body>
-
-  <!-- Splash екран -->
-  <div id="splash">
-    <div class="stars"></div>
-    <div class="logo-container">
-      <div class="fantasyas">FANTASYAS</div>
-    </div>
-  </div>
-
-  <!-- Імітація статус-бару (як на твоєму скріні) -->
-  <div class="status-bar">
-    <span>16:57</span>
-    <span>||| Wi-Fi 100%</span>
-  </div>
-
-  <!-- Основний контент сайту -->
-  <main>
-    <p>Вітаю! Це вже основна сторінка після splash 🌑</p>
-  </main>
-
-  <script>
-    // Зникає splash після анімації (приблизно 3.5–4 секунди)
-    window.addEventListener('load', () => {
-      setTimeout(() => {
-        document.getElementById('splash').classList.add('hidden');
-        // Якщо хочеш — можна додати overflow: auto; до body
-        document.body.style.overflow = 'auto';
-      }, 3800);
-    });
-  </script>
-
-</body>
-</html>
+    setTimeout(() => {
+      loader.style.display = 'none';
+      content.style.display = 'block';
+    }, 800);
+  });
+</script>
