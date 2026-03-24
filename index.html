@@ -2,10 +2,12 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>H4CK3R T3RM1N4L [MATRIX EDITION]</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>MONOCHROME | Перукарня у чорно-білому стилі</title>
+    <!-- Google Fonts + Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* Чорно-білий стиль – без зеленого, лише білий на чорному */
         * {
             margin: 0;
             padding: 0;
@@ -13,686 +15,653 @@
         }
 
         body {
-            background: #000;
-            color: #fff;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 16px;
-            line-height: 1.4;
-            height: 100vh;
-            width: 100vw;
-            overflow: hidden;
-            position: relative;
-        }
-
-        /* Canvas для падаючого коду (білі символи) */
-        #matrix-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            pointer-events: none; /* пропускати кліки до терміналу */
-            opacity: 0.25; /* легкий ефект, щоб не заважати читанню */
-        }
-
-        /* Контейнер терміналу – поверх canvas */
-        .terminal-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 2;
-            display: flex;
-            flex-direction: column;
-            padding: 20px 25px;
-            background: rgba(0, 0, 0, 0.85); /* напівпрозорий чорний для читабельності */
-            backdrop-filter: blur(1px);
-            overflow: hidden;
-            box-shadow: inset 0 0 50px rgba(255, 255, 255, 0.03);
-        }
-
-        /* Область виведення */
-        #output {
-            flex: 1;
-            overflow-y: auto;
-            overflow-x: hidden;
-            word-wrap: break-word;
-            white-space: pre-wrap;
-            font-size: 1rem;
-            margin-bottom: 10px;
+            background-color: #000000;
+            color: #f0f0f0;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.5;
             scroll-behavior: smooth;
-            text-shadow: 0 0 3px rgba(255, 255, 255, 0.3);
-            display: flex;
-            flex-direction: column;
         }
 
-        /* Рядок введення */
-        .input-line {
+        /* Чорно-біла палітра – виключно відтінки сірого, білого, чорного */
+        :root {
+            --black: #000000;
+            --dark-charcoal: #0a0a0a;
+            --gray-900: #111111;
+            --gray-800: #1a1a1a;
+            --gray-700: #2a2a2a;
+            --gray-500: #5a5a5a;
+            --gray-300: #aaaaaa;
+            --white: #ffffff;
+            --border-light: #2a2a2a;
+            --accent-glow: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Typography */
+        h1, h2, h3, .logo, .nav-links a, .btn, .price-card h4 {
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-left: 4px solid var(--white);
+            padding-left: 1rem;
+        }
+
+        .section-subtitle {
+            color: var(--gray-300);
+            font-size: 1rem;
+            margin-top: -1.5rem;
+            margin-bottom: 3rem;
+            font-weight: 300;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        section {
+            padding: 5rem 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        /* Header & Navigation */
+        header {
+            position: sticky;
+            top: 0;
+            background: rgba(0, 0, 0, 0.92);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-light);
+            z-index: 1000;
+            padding: 0.8rem 0;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            text-transform: uppercase;
+            text-decoration: none;
+            color: var(--white);
+            background: linear-gradient(135deg, #fff 30%, #aaa 80%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .logo span {
+            color: var(--white);
+            background: none;
+            -webkit-background-clip: unset;
+            background-clip: unset;
+            font-weight: 300;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #e0e0e0;
+            font-weight: 500;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            transition: 0.2s ease;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-links a:hover {
+            color: var(--white);
+            border-bottom: 1px solid var(--white);
+            padding-bottom: 4px;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            font-size: 1.8rem;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            background: var(--white);
+            color: var(--black);
+            padding: 0.9rem 2rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-decoration: none;
+            transition: 0.25s;
+            border: 1px solid var(--white);
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--white);
+            border: 1px solid var(--white);
+        }
+
+        .btn-outline:hover {
+            background: var(--white);
+            color: var(--black);
+        }
+
+        .btn-dark {
+            background: var(--black);
+            color: var(--white);
+            border: 1px solid var(--white);
+        }
+
+        .btn-dark:hover {
+            background: var(--white);
+            color: var(--black);
+        }
+
+        /* Hero */
+        .hero {
+            min-height: 90vh;
             display: flex;
             align-items: center;
-            border-top: 1px solid #333;
-            padding-top: 10px;
-            margin-top: 5px;
-            font-size: 1.1rem;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1585747860714-2ba2eae9e5e5?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80&grayscale') center/cover no-repeat;
+            background-blend-mode: overlay;
+            background-size: cover;
+            border-bottom: 1px solid var(--border-light);
         }
-
-        .prompt {
-            color: #fff;
-            margin-right: 10px;
-            font-weight: bold;
-            white-space: nowrap;
+        .hero-content {
+            max-width: 700px;
         }
-
-        #command-input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            outline: none;
-            color: #fff;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 1.1rem;
-            caret-color: #fff;
-            caret-shape: block;
+        .hero h1 {
+            font-size: 4rem;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            font-weight: 800;
+            text-transform: uppercase;
         }
-
-        #command-input::placeholder {
-            color: #444;
+        .hero .highlight {
+            font-weight: 400;
             font-style: italic;
-        }
-
-        /* Стилі для повідомлень */
-        .access-granted {
-            color: #fff;
-            font-weight: bold;
-            text-transform: uppercase;
-            animation: flicker 0.8s infinite alternate;
-            border-left: 3px solid #fff;
-            padding-left: 10px;
-            margin: 8px 0;
-        }
-
-        .access-denied {
-            color: #aaa;
-            font-weight: bold;
-            text-transform: uppercase;
-            border-left: 3px solid #666;
-            padding-left: 10px;
-            margin: 8px 0;
-            opacity: 0.9;
-        }
-
-        /* Анімація мерехтіння */
-        @keyframes flicker {
-            0% { opacity: 0.8; text-shadow: 0 0 5px #fff; }
-            100% { opacity: 1; text-shadow: 0 0 15px #fff; }
-        }
-
-        /* Повідомлення про помилки */
-        .error {
+            font-family: 'Cormorant Garamond', serif;
             color: #ccc;
-            border-left: 2px solid #666;
-            padding-left: 8px;
+        }
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: #ddd;
         }
 
-        /* Рядки, що друкуються */
-        .line {
-            margin: 2px 0;
-            border-bottom: 1px dotted #222;
-            padding-bottom: 2px;
+        /* About Grid */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+        .about-text p {
+            margin-bottom: 1.5rem;
+            color: #cfcfcf;
+        }
+        .about-img img {
+            width: 100%;
+            filter: grayscale(100%);
+            border-radius: 12px;
+            box-shadow: 0 20px 30px -15px rgba(0,0,0,0.5);
+            transition: transform 0.4s ease;
+        }
+        .about-img img:hover {
+            transform: scale(1.02);
         }
 
-        /* Адаптація для мобільних */
-        @media (max-width: 600px) {
-            .terminal-container {
-                padding: 10px 12px;
+        /* Services Cards */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 2rem;
+        }
+        .service-card {
+            background: var(--gray-900);
+            padding: 2rem 1.5rem;
+            text-align: center;
+            border: 1px solid var(--border-light);
+            transition: all 0.25s;
+        }
+        .service-card:hover {
+            border-color: var(--white);
+            background: var(--gray-800);
+            transform: translateY(-5px);
+        }
+        .service-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--white);
+        }
+        .service-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .service-card p {
+            color: var(--gray-300);
+            font-size: 0.9rem;
+        }
+
+        /* Price List */
+        .price-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.8rem;
+        }
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding: 1rem 0;
+            border-bottom: 1px dashed var(--gray-700);
+        }
+        .price-item .service-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        .price-item .price-value {
+            font-weight: 800;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+        }
+        .price-category {
+            margin-bottom: 2rem;
+        }
+        .price-category h3 {
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+            border-left: 3px solid white;
+            padding-left: 1rem;
+        }
+
+        /* Gallery */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        .gallery-item {
+            overflow: hidden;
+            aspect-ratio: 1 / 1;
+            border-radius: 8px;
+            border: 1px solid var(--gray-800);
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%);
+            transition: transform 0.5s ease, filter 0.3s;
+        }
+        .gallery-item img:hover {
+            transform: scale(1.07);
+            filter: grayscale(0%);
+        }
+
+        /* Contact & Form */
+        .contact-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+        }
+        .contact-info i {
+            width: 30px;
+            color: #ccc;
+            margin-right: 1rem;
+        }
+        .contact-info p {
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+        .contact-form input, .contact-form textarea {
+            width: 100%;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: var(--gray-800);
+            border: 1px solid var(--gray-700);
+            color: var(--white);
+            font-family: 'Inter', sans-serif;
+            transition: 0.2s;
+        }
+        .contact-form input:focus, .contact-form textarea:focus {
+            outline: none;
+            border-color: var(--white);
+            background: var(--gray-900);
+        }
+        .contact-form button {
+            width: 100%;
+            background: white;
+            color: black;
+            border: none;
+            font-weight: bold;
+            padding: 1rem;
+            cursor: pointer;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark-charcoal);
+            padding: 3rem 0 2rem;
+            text-align: center;
+            border-top: 1px solid var(--border-light);
+        }
+        .social-icons a {
+            color: #ccc;
+            font-size: 1.6rem;
+            margin: 0 1rem;
+            transition: 0.2s;
+        }
+        .social-icons a:hover {
+            color: white;
+            transform: scale(1.1);
+        }
+        .footer-copyright {
+            margin-top: 2rem;
+            font-size: 0.8rem;
+            color: var(--gray-500);
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .about-grid, .contact-wrapper {
+                grid-template-columns: 1fr;
             }
-            #output {
-                font-size: 0.9rem;
+            .hero h1 {
+                font-size: 2.7rem;
             }
-            .input-line {
-                font-size: 1rem;
+            h2 {
+                font-size: 2rem;
             }
-            #command-input {
-                font-size: 1rem;
+            .container {
+                padding: 0 1.5rem;
             }
         }
 
-        /* Сховати скролбар, але залишити функціональність */
-        #output::-webkit-scrollbar {
-            width: 5px;
-            background: #111;
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                background: #000000dd;
+                backdrop-filter: blur(12px);
+                padding: 1.5rem;
+                border-radius: 0 0 20px 20px;
+                margin-top: 1rem;
+                gap: 1.2rem;
+                text-align: center;
+            }
+            .nav-links.active {
+                display: flex;
+            }
+            .mobile-menu-btn {
+                display: block;
+            }
+            section {
+                padding: 3rem 0;
+            }
         }
-        #output::-webkit-scrollbar-thumb {
-            background: #555;
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            .btn {
+                padding: 0.7rem 1.5rem;
+            }
         }
     </style>
 </head>
 <body>
 
-    <!-- Полотно для ефекту падаючого коду -->
-    <canvas id="matrix-canvas"></canvas>
+<header>
+    <div class="container navbar">
+        <a href="#" class="logo">MONOCHROME<span> | BARBER</span></a>
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Меню">
+            <i class="fas fa-bars"></i>
+        </button>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#home">Головна</a></li>
+            <li><a href="#about">Про нас</a></li>
+            <li><a href="#services">Послуги</a></li>
+            <li><a href="#prices">Ціни</a></li>
+            <li><a href="#gallery">Галерея</a></li>
+            <li><a href="#contact">Контакти</a></li>
+        </ul>
+    </div>
+</header>
 
-    <!-- Основний термінал -->
-    <div class="terminal-container">
-        <div id="output"></div>
-        <div class="input-line">
-            <span class="prompt">root@hack:~$</span>
-            <input type="text" id="command-input" placeholder="введіть команду..." autofocus>
+<main>
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container hero-content">
+            <h1>ЧОРНО-БІЛА <br>ЕСТЕТИКА <span class="highlight">&</span> СТИЛЬ</h1>
+            <p>Класичні чоловічі стрижки, догляд за бородою та бездоганний сервіс у монохромному ритмі міста.</p>
+            <a href="#contact" class="btn btn-outline">Записатись онлайн</a>
+        </div>
+    </section>
+
+    <!-- About -->
+    <section id="about">
+        <div class="container">
+            <h2>Про нас</h2>
+            <div class="about-grid">
+                <div class="about-text">
+                    <p><strong>MONOCHROME BARBER</strong> — це простір, де форма зустрічається зі змістом. Ми створили атмосферу, в якій головне — це деталі, контраст і ідеальна геометрія стрижки.</p>
+                    <p>Наші майстри володіють унікальними техніками класичного та сучасного барберингу. Ми працюємо виключно з преміальними засобами, цінуємо час клієнта та даруємо впевненість після кожного візиту.</p>
+                    <p>Лаконічний чорно-білий інтер'єр, фокус на якість та індивідуальний підхід — те, що робить нас справжніми.</p>
+                </div>
+                <div class="about-img">
+                    <img src="https://images.unsplash.com/photo-1493256338651-d47f67745c21?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80&grayscale" alt="Інтер'єр перукарні чорно-білий" style="filter: grayscale(100%);">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services -->
+    <section id="services">
+        <div class="container">
+            <h2>Наші послуги</h2>
+            <div class="section-subtitle">Класика та сучасність у кожному русі</div>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-cut"></i></div>
+                    <h3>Чоловіча стрижка</h3>
+                    <p>Модельні, класичні, андеркати, фейди. Підбір ідеальної форми під тип обличчя.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-beard"></i></div>
+                    <h3>Борода та вуса</h3>
+                    <p>Стилізація, корекція, контуринг. Догляд, що підкреслює мужність.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-hot-tub"></i></div>
+                    <h3>Гаряче бриття</h3>
+                    <p>Ритуал чистоти з використанням традиційного бриття та гарячих рушників.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-male"></i></div>
+                    <h3>Complex (Стрижка + борода)</h3>
+                    <p>Повний образ: стрижка + модель бороди + оксамитове гоління.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Prices -->
+    <section id="prices">
+        <div class="container">
+            <h2>Прайс-лист</h2>
+            <div class="section-subtitle">Прозорі ціни в чорно-білих тонах</div>
+            <div class="price-grid">
+                <div class="price-category">
+                    <h3>Стрижки</h3>
+                    <div class="price-item"><span class="service-name">Чоловіча стрижка (машинка/ножиці)</span><span class="price-value">350 ₴</span></div>
+                    <div class="price-item"><span class="service-name">Стрижка під насадку</span><span class="price-value">250 ₴</span></div>
+                    <div class="price-item"><span class="service-name">Стрижка + мийка голови</span><span class="price-value">400 ₴</span></div>
+                    <div class="price-item"><span class="service-name">Дитяча стрижка (до 12 років)</span><span class="price-value">280 ₴</span></div>
+                </div>
+                <div class="price-category">
+                    <h3>Борода та догляд</h3>
+                    <div class="price-item"><span class="service-name">Моделювання бороди</span><span class="price-value">200 ₴</span></div>
+                    <div class="price-item"><span class="service-name">Гаряче бриття (шия/скроні)</span><span class="price-value">180 ₴</span></div>
+                    <div class="price-item"><span class="service-name">Королівське гоління (повне)</span><span class="price-value">320 ₴</span></div>
+                    <div class="price-item"><span class="service-name">Борода + тонізація</span><span class="price-value">250 ₴</span></div>
+                </div>
+                <div class="price-category">
+                    <h3>Комбо</h3>
+                    <div class="price-item"><span class="service-name">Стрижка + борода</span><span class="price-value">550 ₴</span></div>
+                    <div class="price-item"><span class="service-name">Premium стиль (стрижка+борода+бриття)</span><span class="price-value">750 ₴</span></div>
+                    <div class="price-item"><span class="service-name">Експрес-догляд (борода+вуса)</span><span class="price-value">280 ₴</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery -->
+    <section id="gallery">
+        <div class="container">
+            <h2>Галерея робіт</h2>
+            <div class="section-subtitle">Натхнення в монохромі</div>
+            <div class="gallery-grid">
+                <div class="gallery-item"><img src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80&grayscale" alt="Стрижка fade"></div>
+                <div class="gallery-item"><img src="https://images.unsplash.com/photo-1585747860714-2ba2eae9e5e5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80&grayscale" alt="Борода модель"></div>
+                <div class="gallery-item"><img src="https://images.unsplash.com/photo-1562322140-8baeececf3df?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80&grayscale" alt="Бриття"></div>
+                <div class="gallery-item"><img src="https://images.unsplash.com/photo-1503951914875-3c6f3e8c1f5e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80&grayscale" alt="Стильна зачіска"></div>
+                <div class="gallery-item"><img src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80&grayscale" alt="Догляд"></div>
+                <div class="gallery-item"><img src="https://images.unsplash.com/photo-1605497788044-5a32c7078486?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80&grayscale" alt="Інтер'єр"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact & Booking -->
+    <section id="contact">
+        <div class="container">
+            <h2>Контакти та запис</h2>
+            <div class="contact-wrapper">
+                <div class="contact-info">
+                    <p><i class="fas fa-map-marker-alt"></i> м. Київ, вул. Хрещатик 15Б (вхід з арки)</p>
+                    <p><i class="fas fa-phone-alt"></i> +380 (67) 123 45 67</p>
+                    <p><i class="fas fa-envelope"></i> info@monochrome-barber.com</p>
+                    <p><i class="fas fa-clock"></i> Пн–Пт: 10:00 – 21:00<br> Сб–Нд: 11:00 – 19:00</p>
+                    <div class="social-icons" style="margin-top: 2rem;">
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Telegram"><i class="fab fa-telegram"></i></a>
+                    </div>
+                </div>
+                <div class="contact-form">
+                    <form id="bookingForm">
+                        <input type="text" id="name" placeholder="Ваше ім'я" required>
+                        <input type="tel" id="phone" placeholder="Номер телефону" required>
+                        <input type="text" id="serviceSelect" placeholder="Бажана послуга (стрижка / борода)">
+                        <input type="datetime-local" id="dateTime" style="color-scheme: dark;">
+                        <textarea rows="3" placeholder="Додаткові побажання..."></textarea>
+                        <button type="submit" class="btn-dark" style="background:white; color:black; font-weight:bold;">Забронювати час</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <div class="container">
+        <div class="social-icons">
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-tiktok"></i></a>
+        </div>
+        <div class="footer-copyright">
+            <p>© 2025 MONOCHROME BARBERSHOP — чорно-білий стиль, ідеальна геометрія.</p>
         </div>
     </div>
+</footer>
 
-    <script>
-        (function() {
-            // ==========================================================================
-            // 1. ІНІЦІАЛІЗАЦІЯ ЗМІННИХ, НАЛАШТУВАННЯ, КОНФІГИ
-            // ==========================================================================
+<script>
+    // Mobile menu toggle
+    const mobileBtn = document.getElementById('mobileMenuBtn');
+    const navLinks = document.getElementById('navLinks');
 
-            // Отримуємо елементи DOM
-            const outputEl = document.getElementById('output');
-            const inputEl = document.getElementById('command-input');
-            const canvas = document.getElementById('matrix-canvas');
-            const ctx = canvas.getContext('2d');
+    if (mobileBtn) {
+        mobileBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+    }
 
-            // Стан терміналу
-            let commandHistory = [];
-            let historyIndex = -1;
-            let isProcessing = false; // для імітації друку
-            let currentLine = null;    // для ефекту друкування
-
-            // Команди та їх обробники (легко додавати нові через JS)
-            const commands = {};
-
-            // Функція для додавання команд (щоб легко розширювати)
-            function registerCommand(name, handler, description) {
-                commands[name] = { handler, description };
-            }
-
-            // ==========================================================================
-            // 2. ЗВУКИ (використовуємо Web Audio API)
-            // ==========================================================================
-
-            let audioCtx = null; // ініціалізується після першого взаємодії
-
-            function initAudio() {
-                if (audioCtx) return;
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                // resume, якщо вона призупинена (політика автозапуску)
-                if (audioCtx.state === 'suspended') {
-                    audioCtx.resume();
+    // Close menu on link click (smooth scroll)
+    document.querySelectorAll('.nav-links a').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href').substring(1);
+            const targetSection = document.getElementById(targetId);
+            if (targetSection) {
+                targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                if (navLinks.classList.contains('active')) {
+                    navLinks.classList.remove('active');
                 }
+            } else if (this.getAttribute('href') === '#') {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                if (navLinks.classList.contains('active')) navLinks.classList.remove('active');
             }
+        });
+    });
 
-            // Відтворити простий звук (частота, тривалість, форма хвилі)
-            function playSound(freq = 800, duration = 0.1, type = 'sine') {
-                if (!audioCtx) return;
-                if (audioCtx.state !== 'running') return;
-                const osc = audioCtx.createOscillator();
-                const gainNode = audioCtx.createGain();
-                osc.type = type;
-                osc.frequency.value = freq;
-                gainNode.gain.value = 0.1; // тихо, щоб не дратувало
-                osc.connect(gainNode);
-                gainNode.connect(audioCtx.destination);
-                osc.start();
-                osc.stop(audioCtx.currentTime + duration);
-            }
-
-            // Звуки для різних подій
-            function playKeySound() {
-                playSound(600, 0.03, 'sine');
-            }
-
-            function playAccessGranted() {
-                // висхідний сигнал
-                if (!audioCtx) return;
-                if (audioCtx.state !== 'running') return;
-                const now = audioCtx.currentTime;
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.type = 'sawtooth';
-                gain.gain.value = 0.1;
-                osc.frequency.setValueAtTime(400, now);
-                osc.frequency.exponentialRampToValueAtTime(1200, now + 0.3);
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start();
-                osc.stop(now + 0.4);
-            }
-
-            function playAccessDenied() {
-                // низький гудок
-                if (!audioCtx) return;
-                if (audioCtx.state !== 'running') return;
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.type = 'triangle';
-                gain.gain.value = 0.15;
-                osc.frequency.value = 180;
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.5);
-            }
-
-            // ==========================================================================
-            // 3. ФУНКЦІЇ ДЛЯ ВИВЕДЕННЯ ТЕКСТУ З ЕФЕКТОМ ДРУКУВАННЯ
-            // ==========================================================================
-
-            // Додає рядок у вивід (миттєво)
-            function printLine(text, className = '') {
-                const line = document.createElement('div');
-                line.className = 'line' + (className ? ' ' + className : '');
-                line.textContent = text;
-                outputEl.appendChild(line);
-                outputEl.scrollTop = outputEl.scrollHeight;
-                return line;
-            }
-
-            // Друкує текст із затримкою (ефект друкарської машинки)
-            function typeText(text, className = '', delay = 30) {
-                return new Promise((resolve) => {
-                    if (isProcessing) {
-                        // якщо вже щось друкується, просто додамо рядок без ефекту (уникнення конфліктів)
-                        printLine(text, className);
-                        resolve();
-                        return;
-                    }
-                    isProcessing = true;
-                    const line = document.createElement('div');
-                    line.className = 'line' + (className ? ' ' + className : '');
-                    outputEl.appendChild(line);
-                    let i = 0;
-                    const interval = setInterval(() => {
-                        if (i < text.length) {
-                            line.textContent += text[i];
-                            i++;
-                            outputEl.scrollTop = outputEl.scrollHeight;
-                        } else {
-                            clearInterval(interval);
-                            isProcessing = false;
-                            resolve();
-                        }
-                    }, delay);
-                });
-            }
-
-            // Друк з нового рядка, але як частина логу (без блокування)
-            async function println(text, className = '', typeEffect = true) {
-                if (typeEffect) {
-                    await typeText(text, className, 20);
-                } else {
-                    printLine(text, className);
-                }
-            }
-
-            // Очистити вивід
-            function clearOutput() {
-                outputEl.innerHTML = '';
-                // додаємо порожній рядок для краси
-                printLine('Термінал очищено.', '');
-            }
-
-            // ==========================================================================
-            // 4. КОМАНДИ (реєструємо всі)
-            // ==========================================================================
-
-            // Допоміжна: випадковий "злом"
-            function randomHackResult() {
-                const rand = Math.random();
-                if (rand < 0.4) {
-                    return { success: true, msg: 'Доступ до головного сервера отримано. Паролі: admin:qwerty, root:toor' };
-                } else if (rand < 0.8) {
-                    return { success: false, msg: 'Брандмауер заблокував доступ. Виявлено вторгнення!' };
-                } else {
-                    return { success: true, msg: 'Вразливість знайдено! Встановлено бекдор. Рівень доступу: SYSTEM' };
-                }
-            }
-
-            // --- Команда help ---
-            registerCommand('help', async () => {
-                await println('Доступні команди:', '');
-                for (let cmd in commands) {
-                    if (commands.hasOwnProperty(cmd)) {
-                        const desc = commands[cmd].description || 'немає опису';
-                        await println(`  ${cmd} – ${desc}`, '', false);
-                    }
-                }
-                await println('Для додавання нових команд: напишіть "addcmd [назва] [опис]"', '');
-            }, 'показати список команд');
-
-            // --- Команда clear ---
-            registerCommand('clear', () => {
-                clearOutput();
-            }, 'очистити екран');
-
-            // --- Команда hack ---
-            registerCommand('hack', async () => {
-                await println('Запуск експлойту...', '');
-                await println('Завантаження шелл-коду: [■■■■■■■□□□] 70%', '');
-                await new Promise(r => setTimeout(r, 400));
-                await println('Обхід ASLR...', '');
-                await new Promise(r => setTimeout(r, 300));
-                await println('Ін'єкція в процес lsass...', '');
-                await new Promise(r => setTimeout(r, 500));
-                const result = randomHackResult();
-                if (result.success) {
-                    playAccessGranted();
-                    await println('✅ ACCESS GRANTED', 'access-granted');
-                    await println(result.msg, '');
-                } else {
-                    playAccessDenied();
-                    await println('❌ ACCESS DENIED', 'access-denied');
-                    await println(result.msg, 'error');
-                }
-            }, 'спробувати зламати систему');
-
-            // --- Команда scan ---
-            registerCommand('scan', async () => {
-                await println('Сканування мережі 192.168.1.0/24...', '');
-                for (let i = 0; i < 5; i++) {
-                    await new Promise(r => setTimeout(r, 200));
-                    await println(`  Хост 192.168.1.${i+10} – відкрито порти: 22, 80, 443`, '');
-                }
-                await println('Знайдено вразливий хост: 192.168.1.105 (Windows 7, MS17-010)', '');
-            }, 'сканувати мережу');
-
-            // --- Команда login ---
-            registerCommand('login', async () => {
-                await println('Локальний вхід. Введіть ім\'я користувача:', '');
-                // тут можна було б зробити підказку, але спростимо
-                await new Promise(r => setTimeout(r, 300));
-                await println('> guest', '');
-                await println('Пароль:', '');
-                await new Promise(r => setTimeout(r, 400));
-                await println('> ********', '');
-                await println('Невірний логін або пароль. Спробуйте ще.', 'error');
-                playAccessDenied();
-            }, 'імітація логіну');
-
-            // --- Команда echo (додаткова, для прикладу) ---
-            registerCommand('echo', async (args) => {
-                if (args.length === 0) {
-                    await println('помилка: вкажіть текст для виведення', 'error');
-                } else {
-                    await println(args.join(' '), '');
-                }
-            }, 'вивести текст');
-
-            // --- Команда date ---
-            registerCommand('date', async () => {
-                await println(new Date().toString(), '');
-            }, 'показати поточну дату');
-
-            // --- Команда uptime (жарт) ---
-            registerCommand('uptime', async () => {
-                await println('система працює 0 днів, 0 годин, 2 хвилини (так, ми тільки що завантажились)', '');
-            }, 'показати час роботи');
-
-            // --- Команда addcmd (додати нову команду прямо з терміналу) ---
-            registerCommand('addcmd', async (args) => {
-                // addcmd <назва> <опис> -- просто реєструє заглушку
-                if (args.length < 2) {
-                    await println('Використання: addcmd <назва> <опис>', 'error');
-                    return;
-                }
-                const cmdName = args[0];
-                const desc = args.slice(1).join(' ');
-                if (commands[cmdName]) {
-                    await println(`Команда ${cmdName} вже існує. Перезаписати? (y/n)`, '');
-                    // тут спрощено — просто перезапишемо
-                }
-                registerCommand(cmdName, async () => {
-                    await println(`Це команда "${cmdName}". Виконайте щось корисне.`, '');
-                }, desc);
-                await println(`Команду "${cmdName}" додано.`, '');
-            }, 'додати нову команду (назва опис)');
-
-            // ==========================================================================
-            // 5. ОБРОБНИК ВВЕДЕННЯ КОМАНД
-            // ==========================================================================
-
-            async function handleCommand(input) {
-                if (!input.trim()) return;
-
-                // зберігаємо в історію
-                commandHistory.push(input);
-                historyIndex = commandHistory.length; // скидаємо індекс
-
-                // відображаємо введену команду (як у терміналі)
-                await println(`> ${input}`, 'input-line');
-
-                // парсимо команду та аргументи
-                const parts = input.trim().split(' ');
-                const cmd = parts[0].toLowerCase();
-                const args = parts.slice(1);
-
-                // перевіряємо, чи існує команда
-                if (commands[cmd]) {
-                    try {
-                        await commands[cmd].handler(args);
-                    } catch (e) {
-                        await println(`Помилка виконання команди: ${e.message}`, 'error');
-                    }
-                } else {
-                    await println(`-bash: ${cmd}: команду не знайдено`, 'error');
-                    playAccessDenied(); // звук помилки
-                }
-                // додатковий звук клавіші при обробці команд (як фідбек)
-                playKeySound();
-            }
-
-            // ==========================================================================
-            // 6. ЗАВАНТАЖЕННЯ СИСТЕМИ (BOOT SEQUENCE)
-            // ==========================================================================
-
-            async function bootSequence() {
-                // Виводимо привітання з ефектом друку
-                await println('', '', false); // порожній рядок
-                await println('Ініціалізація ядра Linux 5.10.0-h4ck3r', '', 30);
-                await new Promise(r => setTimeout(r, 200));
-                await println('Завантаження модулів: netfilter, iptables, random', '', 25);
-                await new Promise(r => setTimeout(r, 300));
-                await println('Перевірка цілісності файлової системи...', '', 20);
-                for (let i = 0; i < 3; i++) {
-                    await new Promise(r => setTimeout(r, 150));
-                    await println(`  [${'.'.repeat(i+1)}${' '.repeat(2-i)}] перевірка томів`, '', 10);
-                }
-                await println('Мережевий інтерфейс eth0: 10.0.0.2', '', 20);
-                await new Promise(r => setTimeout(r, 250));
-                await println('Запуск служб: sshd, apache, mysql', '', 15);
-                await println('', '', 10);
-                await println('+---------------------------------------------------+', '', 5);
-                await println('|           H A C K E R   T E R M I N A L          |', 'access-granted', 30);
-                await println('|         Чорно-біла версія Matrix style           |', '', 20);
-                await println('|           Введіть "help" для списку команд       |', '', 20);
-                await println('+---------------------------------------------------+', '', 10);
-                await println('', '', 5);
-                // Звук завершення завантаження
-                playAccessGranted();
-            }
-
-            // ==========================================================================
-            // 7. ФОН – ПАДАЮЧИЙ КОД (білий, як у Matrix, але без зеленого)
-            // ==========================================================================
-
-            function initMatrixRain() {
-                // Встановлюємо розміри canvas
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-
-                const fontSize = 18;
-                const columns = Math.floor(canvas.width / fontSize);
-                const drops = new Array(columns).fill(1); // y-позиції крапель
-
-                // Символи для падіння (кирилиця, латиниця, цифри)
-                const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+{}[]|:;"<>,.?/~`абвгґдеєжзиіїйклмнопрстуфхцчшщьюя';
-
-                function draw() {
-                    // Чорний фон з легким згасанням (щоб створити шлейф)
-                    ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
-                    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-                    // Білий текст
-                    ctx.fillStyle = '#fff';
-                    ctx.font = fontSize + 'px "Courier New", monospace';
-                    ctx.shadowColor = '#fff';
-                    ctx.shadowBlur = 3;
-
-                    for (let i = 0; i < drops.length; i++) {
-                        const text = chars[Math.floor(Math.random() * chars.length)];
-                        const x = i * fontSize;
-                        const y = drops[i] * fontSize;
-
-                        ctx.fillText(text, x, y);
-
-                        // Випадкове скидання краплі
-                        if (y > canvas.height && Math.random() > 0.975) {
-                            drops[i] = 0;
-                        }
-                        drops[i] += 0.8; // швидкість падіння
-                    }
-                    requestAnimationFrame(draw);
-                }
-                draw();
-            }
-
-            // Оновлювати розмір canvas при зміні вікна
-            window.addEventListener('resize', () => {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
+    // Hero button smooth scroll to contact
+    const bookBtns = document.querySelectorAll('.btn-outline, .btn-dark');
+    bookBtns.forEach(btn => {
+        if (btn.getAttribute('href') === '#contact') {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
             });
+        }
+    });
 
-            // ==========================================================================
-            // 8. ОБРОБКА ПОДІЙ ВВЕДЕННЯ
-            // ==========================================================================
+    // Form submit with alert (no backend)
+    const form = document.getElementById('bookingForm');
+    if (form) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('name')?.value || 'Гість';
+            alert(`Дякуємо, ${name}! Ваша заявка на запис прийнята. Ми зателефонуємо для підтвердження. ✂️`);
+            form.reset();
+        });
+    }
 
-            inputEl.addEventListener('keydown', async (e) => {
-                if (e.key === 'Enter') {
-                    const command = inputEl.value;
-                    inputEl.value = ''; // очистити поле
-                    if (!command) return;
-
-                    // ініціалізація аудіо при першому натисканні
-                    initAudio();
-                    playKeySound(); // звук натискання Enter
-
-                    await handleCommand(command);
-                } else if (e.key === 'ArrowUp') {
-                    e.preventDefault();
-                    if (commandHistory.length > 0) {
-                        if (historyIndex > 0) historyIndex--;
-                        inputEl.value = commandHistory[historyIndex] || '';
-                    }
-                } else if (e.key === 'ArrowDown') {
-                    e.preventDefault();
-                    if (commandHistory.length > 0 && historyIndex < commandHistory.length - 1) {
-                        historyIndex++;
-                        inputEl.value = commandHistory[historyIndex] || '';
-                    } else {
-                        inputEl.value = '';
-                    }
-                } else {
-                    // звук при наборі (крім спецклавіш)
-                    if (e.key.length === 1 && !e.ctrlKey && !e.altKey) {
-                        // ініціалізуємо аудіо при першому символі
-                        initAudio();
-                        playKeySound();
-                    }
-                }
-            });
-
-            // Клік на термінал фокусує поле введення
-            document.querySelector('.terminal-container').addEventListener('click', () => {
-                inputEl.focus();
-            });
-
-            // Запобігаємо випадковому відправленню форми
-            inputEl.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') e.preventDefault();
-            });
-
-            // ==========================================================================
-            // 9. СТАРТ
-            // ==========================================================================
-
-            window.onload = async () => {
-                // Запускаємо падаючий код
-                initMatrixRain();
-
-                // Завантажуємо термінал (boot sequence)
-                await bootSequence();
-
-                // Фокус на введення
-                inputEl.focus();
-
-                // Ініціалізація аудіо контексту при першому русі миші (для політики автозапуску)
-                document.body.addEventListener('mousemove', () => {
-                    initAudio();
-                }, { once: true });
-                document.body.addEventListener('touchstart', () => {
-                    initAudio();
-                }, { once: true });
-            };
-
-            // ==========================================================================
-            // 10. ДОДАТКОВІ ФУНКЦІЇ ДЛЯ ЗБІЛЬШЕННЯ КІЛЬКОСТІ РЯДКІВ (жартівливі)
-            // ==========================================================================
-            // Цей блок містить довгі коментарі, "зайві" функції, щоб досягти >2000 рядків.
-            // Вони не впливають на роботу, але демонструють можливості розширення.
-
-            /* --------------------------------------------------------------------------
-            *  Модуль емуляції файлової системи (не використовується, але для об'єму)
-            *  -------------------------------------------------------------------------- */
-            const fakeFS = {
-                root: {
-                    type: 'dir',
-                    content: {
-                        etc: { type: 'dir', content: { passwd: 'root:x:0:0:root:/root:/bin/bash' } },
-                        home: { type: 'dir', content: { hacker: { type: 'dir', content: {} } } },
-                        var: { type: 'dir', content: { log: { type: 'dir', content: {} } } }
-                    }
-                },
-                pwd: ['root']
-            };
-
-            function fakeLS(path) { return Object.keys(fakeFS.root.content); }
-            function fakeCD(path) { /* нічого не робить */ }
-
-            /* --------------------------------------------------------------------------
-            *  Генератор випадкових IP-адрес (займає місце)
-            *  -------------------------------------------------------------------------- */
-            function randomIP() {
-                return `${Math.floor(Math.random()*256)}.${Math.floor(Math.random()*256)}.${Math.floor(Math.random()*256)}.${Math.floor(Math.random()*256)}`;
-            }
-
-            /* --------------------------------------------------------------------------
-            *  Масив зі 100 випадкових фраз для відповідей (заповнювач)
-            *  -------------------------------------------------------------------------- */
-            const phrases = [
-                "З'єднання встановлено.", "Порт 22 відкрито.", "Виявлено IDS.", "Сканування завершено.",
-                "Отримано банер: Apache/2.4.41", "SQL-ін'єкція можлива.", "Знайдено резервну копію.",
-                // ... ще багато, але скоротимо для компактності відповіді. У реальному коді тут було б >50 рядків.
-                "Вразливість CVE-2021-41773", "Виконується експлойт.", "Шелл отримано.", "Несанкціонований доступ."
-            ];
-            // повторення для рядків
-            for (let i=0; i<20; i++) { phrases.push(`Додаткове повідомлення ${i}`); }
-
-            /* --------------------------------------------------------------------------
-            *  Функції для роботи з псевдо-мережею (демонстрація)
-            *  -------------------------------------------------------------------------- */
-            function ping(host) { return `PING ${host} ... 64 bytes received`; }
-            function traceroute(host) { return '1 192.168.1.1 2ms'; }
-
-            /* --------------------------------------------------------------------------
-            *  Великий коментар із документацією до кожної функції (штучне збільшення)
-            *  -------------------------------------------------------------------------- */
-
-            // ==========================================================================
-            // КІНЕЦЬ. Загальна кількість рядків перевищує 2100 (з урахуванням коментарів)
-            // ==========================================================================
-        })();
-    </script>
+    // Add grayscale filter to images if needed for consistency (already applied in CSS)
+    // Additional interactive: subtle scroll shadow
+    window.addEventListener('scroll', () => {
+        const header = document.querySelector('header');
+        if (window.scrollY > 10) {
+            header.style.borderBottomColor = '#333';
+        } else {
+            header.style.borderBottomColor = 'var(--border-light)';
+        }
+    });
+</script>
 </body>
 </html>
