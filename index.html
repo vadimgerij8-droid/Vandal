@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>MONOCHROME | Перукарня у чорно-білому стилі</title>
-    <!-- Google Fonts + Font Awesome -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <title>ВПУ-19 | MONOCHROME BARBER</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&family=Cormorant+Garamond:ital@0;1&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * {
@@ -22,10 +21,8 @@
             scroll-behavior: smooth;
         }
 
-        /* Чорно-біла палітра – виключно відтінки сірого, білого, чорного */
         :root {
             --black: #000000;
-            --dark-charcoal: #0a0a0a;
             --gray-900: #111111;
             --gray-800: #1a1a1a;
             --gray-700: #2a2a2a;
@@ -33,34 +30,8 @@
             --gray-300: #aaaaaa;
             --white: #ffffff;
             --border-light: #2a2a2a;
-            --accent-glow: rgba(255, 255, 255, 0.05);
         }
 
-        /* Typography */
-        h1, h2, h3, .logo, .nav-links a, .btn, .price-card h4 {
-            font-family: 'Inter', sans-serif;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-        }
-
-        h2 {
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            border-left: 4px solid var(--white);
-            padding-left: 1rem;
-        }
-
-        .section-subtitle {
-            color: var(--gray-300);
-            font-size: 1rem;
-            margin-top: -1.5rem;
-            margin-bottom: 3rem;
-            font-weight: 300;
-        }
-
-        /* Container */
         .container {
             max-width: 1280px;
             margin: 0 auto;
@@ -68,11 +39,19 @@
         }
 
         section {
-            padding: 5rem 0;
+            padding: 4rem 0;
             border-bottom: 1px solid var(--border-light);
         }
 
-        /* Header & Navigation */
+        h2 {
+            font-size: 2.2rem;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            border-left: 4px solid var(--white);
+            padding-left: 1rem;
+        }
+
+        /* Header */
         header {
             position: sticky;
             top: 0;
@@ -91,28 +70,19 @@
         }
 
         .logo {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             font-weight: 800;
-            letter-spacing: -1px;
             text-transform: uppercase;
             text-decoration: none;
-            color: var(--white);
-            background: linear-gradient(135deg, #fff 30%, #aaa 80%);
+            background: linear-gradient(135deg, #fff, #aaa);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
         }
-        .logo span {
-            color: var(--white);
-            background: none;
-            -webkit-background-clip: unset;
-            background-clip: unset;
-            font-weight: 300;
-        }
 
         .nav-links {
             display: flex;
-            gap: 2.2rem;
+            gap: 2rem;
             list-style: none;
         }
 
@@ -120,15 +90,15 @@
             text-decoration: none;
             color: #e0e0e0;
             font-weight: 500;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             text-transform: uppercase;
-            transition: 0.2s ease;
-            letter-spacing: 0.5px;
+            transition: 0.2s;
+            cursor: pointer;
         }
 
         .nav-links a:hover {
-            color: var(--white);
-            border-bottom: 1px solid var(--white);
+            color: white;
+            border-bottom: 1px solid white;
             padding-bottom: 4px;
         }
 
@@ -146,21 +116,19 @@
             display: inline-block;
             background: var(--white);
             color: var(--black);
-            padding: 0.9rem 2rem;
+            padding: 0.7rem 1.5rem;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
             text-decoration: none;
-            transition: 0.25s;
             border: 1px solid var(--white);
-            font-size: 0.9rem;
             cursor: pointer;
+            font-size: 0.85rem;
         }
 
         .btn-outline {
             background: transparent;
             color: var(--white);
-            border: 1px solid var(--white);
         }
 
         .btn-outline:hover {
@@ -168,237 +136,145 @@
             color: var(--black);
         }
 
-        .btn-dark {
-            background: var(--black);
-            color: var(--white);
-            border: 1px solid var(--white);
+        .btn-danger {
+            background: transparent;
+            border-color: #aa4444;
+            color: #ff8888;
         }
 
-        .btn-dark:hover {
-            background: var(--white);
-            color: var(--black);
+        .btn-danger:hover {
+            background: #aa4444;
+            color: white;
         }
 
-        /* Hero */
-        .hero {
-            min-height: 90vh;
-            display: flex;
-            align-items: center;
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1585747860714-2ba2eae9e5e5?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80&grayscale') center/cover no-repeat;
-            background-blend-mode: overlay;
-            background-size: cover;
-            border-bottom: 1px solid var(--border-light);
-        }
-        .hero-content {
-            max-width: 700px;
-        }
-        .hero h1 {
-            font-size: 4rem;
-            line-height: 1.1;
-            margin-bottom: 1rem;
-            font-weight: 800;
-            text-transform: uppercase;
-        }
-        .hero .highlight {
-            font-weight: 400;
-            font-style: italic;
-            font-family: 'Cormorant Garamond', serif;
-            color: #ccc;
-        }
-        .hero p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            color: #ddd;
-        }
-
-        /* About Grid */
-        .about-grid {
+        /* Cards */
+        .masters-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            align-items: center;
-        }
-        .about-text p {
-            margin-bottom: 1.5rem;
-            color: #cfcfcf;
-        }
-        .about-img img {
-            width: 100%;
-            filter: grayscale(100%);
-            border-radius: 12px;
-            box-shadow: 0 20px 30px -15px rgba(0,0,0,0.5);
-            transition: transform 0.4s ease;
-        }
-        .about-img img:hover {
-            transform: scale(1.02);
-        }
-
-        /* Services Cards */
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 2rem;
+            margin-top: 1rem;
         }
-        .service-card {
+
+        .master-card {
             background: var(--gray-900);
-            padding: 2rem 1.5rem;
-            text-align: center;
             border: 1px solid var(--border-light);
-            transition: all 0.25s;
-        }
-        .service-card:hover {
-            border-color: var(--white);
-            background: var(--gray-800);
-            transform: translateY(-5px);
-        }
-        .service-icon {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            color: var(--white);
-        }
-        .service-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 0.75rem;
-        }
-        .service-card p {
-            color: var(--gray-300);
-            font-size: 0.9rem;
-        }
-
-        /* Price List */
-        .price-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.8rem;
-        }
-        .price-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            padding: 1rem 0;
-            border-bottom: 1px dashed var(--gray-700);
-        }
-        .price-item .service-name {
-            font-weight: 600;
-            font-size: 1.1rem;
-        }
-        .price-item .price-value {
-            font-weight: 800;
-            font-size: 1.2rem;
-            letter-spacing: 1px;
-        }
-        .price-category {
-            margin-bottom: 2rem;
-        }
-        .price-category h3 {
-            font-size: 1.6rem;
-            margin-bottom: 1rem;
-            border-left: 3px solid white;
-            padding-left: 1rem;
-        }
-
-        /* Gallery */
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-        }
-        .gallery-item {
+            border-radius: 12px;
             overflow: hidden;
-            aspect-ratio: 1 / 1;
-            border-radius: 8px;
-            border: 1px solid var(--gray-800);
+            transition: 0.2s;
         }
-        .gallery-item img {
+
+        .master-card:hover {
+            border-color: var(--white);
+            transform: translateY(-4px);
+        }
+
+        .master-img {
             width: 100%;
-            height: 100%;
+            height: 260px;
             object-fit: cover;
-            filter: grayscale(100%);
-            transition: transform 0.5s ease, filter 0.3s;
+            filter: grayscale(80%);
+            transition: 0.3s;
         }
-        .gallery-item img:hover {
-            transform: scale(1.07);
+
+        .master-card:hover .master-img {
             filter: grayscale(0%);
         }
 
-        /* Contact & Form */
-        .contact-wrapper {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
+        .master-info {
+            padding: 1.2rem;
         }
-        .contact-info i {
-            width: 30px;
-            color: #ccc;
-            margin-right: 1rem;
+
+        .master-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
         }
-        .contact-info p {
-            margin-bottom: 1.5rem;
+
+        .stars-container {
             display: flex;
-            align-items: center;
-        }
-        .contact-form input, .contact-form textarea {
-            width: 100%;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            background: var(--gray-800);
-            border: 1px solid var(--gray-700);
-            color: var(--white);
-            font-family: 'Inter', sans-serif;
-            transition: 0.2s;
-        }
-        .contact-form input:focus, .contact-form textarea:focus {
-            outline: none;
-            border-color: var(--white);
-            background: var(--gray-900);
-        }
-        .contact-form button {
-            width: 100%;
-            background: white;
-            color: black;
-            border: none;
-            font-weight: bold;
-            padding: 1rem;
+            gap: 5px;
+            margin: 0.8rem 0;
+            font-size: 1.2rem;
             cursor: pointer;
         }
 
-        /* Footer */
-        footer {
-            background: var(--dark-charcoal);
-            padding: 3rem 0 2rem;
-            text-align: center;
-            border-top: 1px solid var(--border-light);
-        }
-        .social-icons a {
-            color: #ccc;
-            font-size: 1.6rem;
-            margin: 0 1rem;
-            transition: 0.2s;
-        }
-        .social-icons a:hover {
-            color: white;
-            transform: scale(1.1);
-        }
-        .footer-copyright {
-            margin-top: 2rem;
-            font-size: 0.8rem;
+        .star {
             color: var(--gray-500);
+            transition: 0.1s;
         }
 
-        /* Responsive */
-        @media (max-width: 900px) {
-            .about-grid, .contact-wrapper {
-                grid-template-columns: 1fr;
-            }
-            .hero h1 {
-                font-size: 2.7rem;
-            }
-            h2 {
-                font-size: 2rem;
-            }
-            .container {
-                padding: 0 1.5rem;
-            }
+        .star.active {
+            color: #ffcc00;
+            text-shadow: 0 0 2px white;
+        }
+
+        .rating-value {
+            font-size: 0.85rem;
+            color: var(--gray-300);
+            margin-left: 0.5rem;
+        }
+
+        /* Posts gallery */
+        .posts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .post-card {
+            background: var(--gray-800);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-light);
+        }
+
+        .post-card img, .post-card video {
+            width: 100%;
+            max-height: 260px;
+            object-fit: cover;
+            filter: grayscale(30%);
+        }
+
+        .post-caption {
+            padding: 0.8rem;
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+
+        /* Forms */
+        .admin-panel, .master-dashboard, .login-form {
+            background: var(--gray-900);
+            padding: 2rem;
+            border-radius: 16px;
+            border: 1px solid var(--border-light);
+            margin: 1rem 0;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            background: var(--gray-800);
+            border: 1px solid var(--gray-700);
+            color: white;
+            font-family: 'Inter', sans-serif;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: white;
+        }
+
+        .flex-btns {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        /* utility */
+        .hidden {
+            display: none;
         }
 
         @media (max-width: 768px) {
@@ -408,10 +284,7 @@
                 width: 100%;
                 background: #000000dd;
                 backdrop-filter: blur(12px);
-                padding: 1.5rem;
-                border-radius: 0 0 20px 20px;
-                margin-top: 1rem;
-                gap: 1.2rem;
+                padding: 1rem;
                 text-align: center;
             }
             .nav-links.active {
@@ -420,17 +293,8 @@
             .mobile-menu-btn {
                 display: block;
             }
-            section {
-                padding: 3rem 0;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .hero h1 {
-                font-size: 2rem;
-            }
-            .btn {
-                padding: 0.7rem 1.5rem;
+            .container {
+                padding: 0 1rem;
             }
         }
     </style>
@@ -439,229 +303,399 @@
 
 <header>
     <div class="container navbar">
-        <a href="#" class="logo">MONOCHROME<span> | BARBER</span></a>
-        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Меню">
-            <i class="fas fa-bars"></i>
-        </button>
+        <a href="#" class="logo" id="homeLogo">ВПУ-19 | MONOCHROME</a>
+        <button class="mobile-menu-btn" id="mobileMenuBtn"><i class="fas fa-bars"></i></button>
         <ul class="nav-links" id="navLinks">
-            <li><a href="#home">Головна</a></li>
-            <li><a href="#about">Про нас</a></li>
-            <li><a href="#services">Послуги</a></li>
-            <li><a href="#prices">Ціни</a></li>
-            <li><a href="#gallery">Галерея</a></li>
-            <li><a href="#contact">Контакти</a></li>
+            <li><a data-view="home">Головна</a></li>
+            <li><a data-view="masters">Майстри</a></li>
+            <li><a data-view="contact">Контакти</a></li>
+            <li><a data-view="adminLogin">Адмін</a></li>
+            <li><a data-view="masterLogin">Вхід майстра</a></li>
         </ul>
     </div>
 </header>
 
-<main>
-    <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="container hero-content">
-            <h1>ЧОРНО-БІЛА <br>ЕСТЕТИКА <span class="highlight">&</span> СТИЛЬ</h1>
-            <p>Класичні чоловічі стрижки, догляд за бородою та бездоганний сервіс у монохромному ритмі міста.</p>
-            <a href="#contact" class="btn btn-outline">Записатись онлайн</a>
-        </div>
-    </section>
-
-    <!-- About -->
-    <section id="about">
-        <div class="container">
-            <h2>Про нас</h2>
-            <div class="about-grid">
-                <div class="about-text">
-                    <p><strong>MONOCHROME BARBER</strong> — це простір, де форма зустрічається зі змістом. Ми створили атмосферу, в якій головне — це деталі, контраст і ідеальна геометрія стрижки.</p>
-                    <p>Наші майстри володіють унікальними техніками класичного та сучасного барберингу. Ми працюємо виключно з преміальними засобами, цінуємо час клієнта та даруємо впевненість після кожного візиту.</p>
-                    <p>Лаконічний чорно-білий інтер'єр, фокус на якість та індивідуальний підхід — те, що робить нас справжніми.</p>
-                </div>
-                <div class="about-img">
-                    <img src="https://images.unsplash.com/photo-1493256338651-d47f67745c21?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80&grayscale" alt="Інтер'єр перукарні чорно-білий" style="filter: grayscale(100%);">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Services -->
-    <section id="services">
-        <div class="container">
-            <h2>Наші послуги</h2>
-            <div class="section-subtitle">Класика та сучасність у кожному русі</div>
-            <div class="services-grid">
-                <div class="service-card">
-                    <div class="service-icon"><i class="fas fa-cut"></i></div>
-                    <h3>Чоловіча стрижка</h3>
-                    <p>Модельні, класичні, андеркати, фейди. Підбір ідеальної форми під тип обличчя.</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon"><i class="fas fa-beard"></i></div>
-                    <h3>Борода та вуса</h3>
-                    <p>Стилізація, корекція, контуринг. Догляд, що підкреслює мужність.</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon"><i class="fas fa-hot-tub"></i></div>
-                    <h3>Гаряче бриття</h3>
-                    <p>Ритуал чистоти з використанням традиційного бриття та гарячих рушників.</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon"><i class="fas fa-male"></i></div>
-                    <h3>Complex (Стрижка + борода)</h3>
-                    <p>Повний образ: стрижка + модель бороди + оксамитове гоління.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Prices -->
-    <section id="prices">
-        <div class="container">
-            <h2>Прайс-лист</h2>
-            <div class="section-subtitle">Прозорі ціни в чорно-білих тонах</div>
-            <div class="price-grid">
-                <div class="price-category">
-                    <h3>Стрижки</h3>
-                    <div class="price-item"><span class="service-name">Чоловіча стрижка (машинка/ножиці)</span><span class="price-value">350 ₴</span></div>
-                    <div class="price-item"><span class="service-name">Стрижка під насадку</span><span class="price-value">250 ₴</span></div>
-                    <div class="price-item"><span class="service-name">Стрижка + мийка голови</span><span class="price-value">400 ₴</span></div>
-                    <div class="price-item"><span class="service-name">Дитяча стрижка (до 12 років)</span><span class="price-value">280 ₴</span></div>
-                </div>
-                <div class="price-category">
-                    <h3>Борода та догляд</h3>
-                    <div class="price-item"><span class="service-name">Моделювання бороди</span><span class="price-value">200 ₴</span></div>
-                    <div class="price-item"><span class="service-name">Гаряче бриття (шия/скроні)</span><span class="price-value">180 ₴</span></div>
-                    <div class="price-item"><span class="service-name">Королівське гоління (повне)</span><span class="price-value">320 ₴</span></div>
-                    <div class="price-item"><span class="service-name">Борода + тонізація</span><span class="price-value">250 ₴</span></div>
-                </div>
-                <div class="price-category">
-                    <h3>Комбо</h3>
-                    <div class="price-item"><span class="service-name">Стрижка + борода</span><span class="price-value">550 ₴</span></div>
-                    <div class="price-item"><span class="service-name">Premium стиль (стрижка+борода+бриття)</span><span class="price-value">750 ₴</span></div>
-                    <div class="price-item"><span class="service-name">Експрес-догляд (борода+вуса)</span><span class="price-value">280 ₴</span></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Gallery -->
-    <section id="gallery">
-        <div class="container">
-            <h2>Галерея робіт</h2>
-            <div class="section-subtitle">Натхнення в монохромі</div>
-            <div class="gallery-grid">
-                <div class="gallery-item"><img src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80&grayscale" alt="Стрижка fade"></div>
-                <div class="gallery-item"><img src="https://images.unsplash.com/photo-1585747860714-2ba2eae9e5e5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80&grayscale" alt="Борода модель"></div>
-                <div class="gallery-item"><img src="https://images.unsplash.com/photo-1562322140-8baeececf3df?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80&grayscale" alt="Бриття"></div>
-                <div class="gallery-item"><img src="https://images.unsplash.com/photo-1503951914875-3c6f3e8c1f5e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80&grayscale" alt="Стильна зачіска"></div>
-                <div class="gallery-item"><img src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80&grayscale" alt="Догляд"></div>
-                <div class="gallery-item"><img src="https://images.unsplash.com/photo-1605497788044-5a32c7078486?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80&grayscale" alt="Інтер'єр"></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact & Booking -->
-    <section id="contact">
-        <div class="container">
-            <h2>Контакти та запис</h2>
-            <div class="contact-wrapper">
-                <div class="contact-info">
-                    <p><i class="fas fa-map-marker-alt"></i> м. Київ, вул. Хрещатик 15Б (вхід з арки)</p>
-                    <p><i class="fas fa-phone-alt"></i> +380 (67) 123 45 67</p>
-                    <p><i class="fas fa-envelope"></i> info@monochrome-barber.com</p>
-                    <p><i class="fas fa-clock"></i> Пн–Пт: 10:00 – 21:00<br> Сб–Нд: 11:00 – 19:00</p>
-                    <div class="social-icons" style="margin-top: 2rem;">
-                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" aria-label="Telegram"><i class="fab fa-telegram"></i></a>
-                    </div>
-                </div>
-                <div class="contact-form">
-                    <form id="bookingForm">
-                        <input type="text" id="name" placeholder="Ваше ім'я" required>
-                        <input type="tel" id="phone" placeholder="Номер телефону" required>
-                        <input type="text" id="serviceSelect" placeholder="Бажана послуга (стрижка / борода)">
-                        <input type="datetime-local" id="dateTime" style="color-scheme: dark;">
-                        <textarea rows="3" placeholder="Додаткові побажання..."></textarea>
-                        <button type="submit" class="btn-dark" style="background:white; color:black; font-weight:bold;">Забронювати час</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </section>
+<main id="app">
+    <!-- Динамічний контент -->
 </main>
 
-<footer>
-    <div class="container">
-        <div class="social-icons">
-            <a href="#"><i class="fab fa-instagram"></i></a>
-            <a href="#"><i class="fab fa-facebook-f"></i></a>
-            <a href="#"><i class="fab fa-tiktok"></i></a>
-        </div>
-        <div class="footer-copyright">
-            <p>© 2025 MONOCHROME BARBERSHOP — чорно-білий стиль, ідеальна геометрія.</p>
-        </div>
-    </div>
+<footer style="text-align: center; padding: 2rem; border-top: 1px solid #2a2a2a; margin-top: 2rem;">
+    <p style="color: #5a5a5a;">© 2025 ВПУ-19 | Сайт перукарні. Чорно-білий стиль.</p>
 </footer>
 
 <script>
-    // Mobile menu toggle
-    const mobileBtn = document.getElementById('mobileMenuBtn');
-    const navLinks = document.getElementById('navLinks');
+    // -------- DATA MODELS (localStorage) --------
+    let masters = [];
+    let posts = [];
+    let ratings = []; // {masterId, stars, voterId}
 
-    if (mobileBtn) {
-        mobileBtn.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-        });
+    // Keys
+    const STORAGE_MASTERS = 'barber_masters';
+    const STORAGE_POSTS = 'barber_posts';
+    const STORAGE_RATINGS = 'barber_ratings';
+
+    function loadData() {
+        masters = JSON.parse(localStorage.getItem(STORAGE_MASTERS)) || [];
+        posts = JSON.parse(localStorage.getItem(STORAGE_POSTS)) || [];
+        ratings = JSON.parse(localStorage.getItem(STORAGE_RATINGS)) || [];
+
+        if (masters.length === 0) {
+            // demo data
+            masters = [
+                { id: 'm1', name: 'Артем Коваль', photo: 'https://images.unsplash.com/photo-1585747860714-2ba2eae9e5e5?w=400&h=400&fit=crop', description: 'Майстер класичних стрижок', password: 'artem123', ratingSum: 25, ratingCount: 5 },
+                { id: 'm2', name: 'Микола Шевченко', photo: 'https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=400&h=400&fit=crop', description: 'Експерт з бороди та стилю', password: 'mykola123', ratingSum: 18, ratingCount: 4 }
+            ];
+            saveMasters();
+            // demo posts
+            posts = [
+                { id: 'p1', masterId: 'm1', type: 'image', content: 'https://images.unsplash.com/photo-1585747860714-2ba2eae9e5e5?w=600', caption: 'Стрижка fade + текстура', date: new Date().toISOString() },
+                { id: 'p2', masterId: 'm2', type: 'image', content: 'https://images.unsplash.com/photo-1503951914875-3c6f3e8c1f5e?w=600', caption: 'Моделювання бороди', date: new Date().toISOString() },
+                { id: 'p3', masterId: 'm1', type: 'video', content: 'https://www.youtube.com/embed/dQw4w9WgXcQ', caption: 'Процес стрижки відео', date: new Date().toISOString() }
+            ];
+            savePosts();
+        }
+        if (ratings.length === 0) {
+            // init ratings from master data
+            for (let m of masters) {
+                if (m.ratingSum && m.ratingCount) {
+                    // already stored, we'll keep ratings array empty, but we need to compute average dynamically
+                }
+            }
+        }
+        updateRatingsFromMasters(); // sync in-memory ratings array if needed
     }
 
-    // Close menu on link click (smooth scroll)
-    document.querySelectorAll('.nav-links a').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            e.preventDefault();
-            const targetId = this.getAttribute('href').substring(1);
-            const targetSection = document.getElementById(targetId);
-            if (targetSection) {
-                targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                if (navLinks.classList.contains('active')) {
-                    navLinks.classList.remove('active');
-                }
-            } else if (this.getAttribute('href') === '#') {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-                if (navLinks.classList.contains('active')) navLinks.classList.remove('active');
+    function saveMasters() {
+        localStorage.setItem(STORAGE_MASTERS, JSON.stringify(masters));
+    }
+    function savePosts() {
+        localStorage.setItem(STORAGE_POSTS, JSON.stringify(posts));
+    }
+    function saveRatings() {
+        localStorage.setItem(STORAGE_RATINGS, JSON.stringify(ratings));
+    }
+    function updateRatingsFromMasters() {
+        // rebuild ratings array from masters data to keep consistency
+        ratings = [];
+        for (let m of masters) {
+            if (m.ratingCount > 0) {
+                let avg = m.ratingSum / m.ratingCount;
+                // we don't store each rating event, but for rating UI we will manage
+            }
+        }
+    }
+    function getMasterRating(masterId) {
+        let m = masters.find(m => m.id === masterId);
+        if (!m || m.ratingCount === 0) return 0;
+        return m.ratingSum / m.ratingCount;
+    }
+    function rateMaster(masterId, stars, voterId) {
+        let existing = ratings.find(r => r.masterId === masterId && r.voterId === voterId);
+        if (existing) return false; // вже голосував
+        let master = masters.find(m => m.id === masterId);
+        if (!master) return false;
+        master.ratingSum = (master.ratingSum || 0) + stars;
+        master.ratingCount = (master.ratingCount || 0) + 1;
+        ratings.push({ masterId, stars, voterId });
+        saveMasters();
+        saveRatings();
+        return true;
+    }
+
+    // helper: add master
+    function addMaster(name, photo, description, password) {
+        let id = Date.now().toString();
+        masters.push({ id, name, photo, description, password, ratingSum: 0, ratingCount: 0 });
+        saveMasters();
+        return id;
+    }
+    function deleteMaster(masterId) {
+        masters = masters.filter(m => m.id !== masterId);
+        posts = posts.filter(p => p.masterId !== masterId);
+        ratings = ratings.filter(r => r.masterId !== masterId);
+        saveMasters();
+        savePosts();
+        saveRatings();
+    }
+    function addPost(masterId, type, content, caption) {
+        let id = Date.now().toString();
+        posts.push({ id, masterId, type, content, caption, date: new Date().toISOString() });
+        savePosts();
+    }
+    function deletePost(postId) {
+        posts = posts.filter(p => p.id !== postId);
+        savePosts();
+    }
+
+    // ---------- UI RENDERING ----------
+    let currentView = 'home';
+    let currentMasterUser = null; // { id, name }
+
+    function render() {
+        const app = document.getElementById('app');
+        if (currentView === 'home') renderHome(app);
+        else if (currentView === 'masters') renderMastersList(app);
+        else if (currentView === 'masterDetail') renderMasterDetail(app);
+        else if (currentView === 'contact') renderContact(app);
+        else if (currentView === 'adminLogin') renderAdminLogin(app);
+        else if (currentView === 'adminPanel') renderAdminPanel(app);
+        else if (currentView === 'masterLogin') renderMasterLogin(app);
+        else if (currentView === 'masterDashboard') renderMasterDashboard(app);
+        else renderHome(app);
+    }
+
+    function renderHome(container) {
+        container.innerHTML = `
+            <section class="hero" style="min-height: 70vh; background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.9)), url('https://images.unsplash.com/photo-1585747860714-2ba2eae9e5e5?auto=format&fit=crop&w=2000&grayscale') center/cover; display: flex; align-items: center;">
+                <div class="container">
+                    <h1 style="font-size: 3rem; text-transform: uppercase;">ВПУ-19<br>Перукарня MONOCHROME</h1>
+                    <p style="font-size: 1.2rem; margin: 1rem 0;">Навчальний проєкт: майстри-учні створюють стиль. Чорно-біла естетика та професійний підхід.</p>
+                    <button class="btn btn-outline" data-view="masters">Переглянути майстрів</button>
+                </div>
+            </section>
+            <div class="container" style="padding: 2rem 0;">
+                <h2>Про наш проєкт</h2>
+                <p>ВПУ-19 готує професійних перукарів. На цьому сайті учні-майстри демонструють свої роботи, отримують рейтинг від відвідувачів та діляться досвідом. Адміністратор керує майстрами, а кожен майстер може публікувати фото та відео своїх робіт.</p>
+            </div>
+        `;
+        attachViewListeners(container);
+    }
+
+    function renderMastersList(container) {
+        let html = `<div class="container"><h2>Наші майстри</h2><div class="masters-grid">`;
+        masters.forEach(master => {
+            let avgRating = getMasterRating(master.id);
+            let fullStars = Math.round(avgRating);
+            html += `
+                <div class="master-card" data-master-id="${master.id}">
+                    <img class="master-img" src="${master.photo || 'https://via.placeholder.com/300?text=No+Photo'}" onerror="this.src='https://via.placeholder.com/300?text=No+Photo'">
+                    <div class="master-info">
+                        <div class="master-name">${escapeHtml(master.name)}</div>
+                        <div class="stars-container" data-master-id="${master.id}">
+                            ${renderStars(fullStars, master.id)}
+                            <span class="rating-value">(${master.ratingCount} оцінок)</span>
+                        </div>
+                        <p>${escapeHtml(master.description || 'Майстер перукарської справи')}</p>
+                        <button class="btn btn-outline view-master-btn" data-master-id="${master.id}">Дивитись роботи</button>
+                    </div>
+                </div>
+            `;
+        });
+        html += `</div></div>`;
+        container.innerHTML = html;
+        // attach rating stars
+        document.querySelectorAll('.stars-container').forEach(el => {
+            let masterId = el.dataset.masterId;
+            el.querySelectorAll('.star').forEach(star => {
+                star.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    let starsVal = parseInt(star.dataset.stars);
+                    let voterId = localStorage.getItem('voter_id') || 'user_' + Math.random();
+                    localStorage.setItem('voter_id', voterId);
+                    if (rateMaster(masterId, starsVal, voterId)) {
+                        renderMastersList(container); // refresh
+                    } else {
+                        alert('Ви вже оцінювали цього майстра!');
+                    }
+                });
+            });
+        });
+        document.querySelectorAll('.view-master-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                let masterId = btn.dataset.masterId;
+                currentView = 'masterDetail';
+                currentMasterDetailId = masterId;
+                render();
+            });
+        });
+        attachViewListeners(container);
+    }
+
+    let currentMasterDetailId = null;
+    function renderMasterDetail(container) {
+        let master = masters.find(m => m.id === currentMasterDetailId);
+        if (!master) { currentView = 'masters'; render(); return; }
+        let masterPosts = posts.filter(p => p.masterId === master.id);
+        let avgRating = getMasterRating(master.id);
+        let fullStars = Math.round(avgRating);
+        let postsHtml = `<div class="posts-grid">`;
+        masterPosts.forEach(post => {
+            if (post.type === 'image') {
+                postsHtml += `<div class="post-card"><img src="${post.content}" loading="lazy"><div class="post-caption">${escapeHtml(post.caption || '')}</div></div>`;
+            } else if (post.type === 'video') {
+                let embed = post.content.includes('youtube') ? `<iframe width="100%" height="200" src="${post.content}" frameborder="0" allowfullscreen></iframe>` : `<video controls src="${post.content}"></video>`;
+                postsHtml += `<div class="post-card">${embed}<div class="post-caption">${escapeHtml(post.caption || '')}</div></div>`;
             }
         });
-    });
-
-    // Hero button smooth scroll to contact
-    const bookBtns = document.querySelectorAll('.btn-outline, .btn-dark');
-    bookBtns.forEach(btn => {
-        if (btn.getAttribute('href') === '#contact') {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+        if (masterPosts.length === 0) postsHtml += `<p>Немає постів поки що.</p>`;
+        postsHtml += `</div>`;
+        container.innerHTML = `
+            <div class="container">
+                <button class="btn btn-outline" data-view="masters" style="margin-bottom: 1rem;">← Назад до майстрів</button>
+                <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+                    <img src="${master.photo}" style="width: 200px; height: 200px; object-fit: cover; border-radius: 50%; filter: grayscale(80%);">
+                    <div>
+                        <h2>${escapeHtml(master.name)}</h2>
+                        <div class="stars-container" data-master-id="${master.id}" style="display: flex;">${renderStars(fullStars, master.id)} <span class="rating-value">(${master.ratingCount} оцінок)</span></div>
+                        <p>${escapeHtml(master.description)}</p>
+                    </div>
+                </div>
+                <h3 style="margin-top: 2rem;">Роботи майстра</h3>
+                ${postsHtml}
+            </div>
+        `;
+        // rating again
+        let starDiv = container.querySelector('.stars-container');
+        if (starDiv) {
+            starDiv.querySelectorAll('.star').forEach(star => {
+                star.addEventListener('click', (e) => {
+                    let starsVal = parseInt(star.dataset.stars);
+                    let voterId = localStorage.getItem('voter_id') || 'user_' + Math.random();
+                    localStorage.setItem('voter_id', voterId);
+                    if (rateMaster(master.id, starsVal, voterId)) {
+                        renderMasterDetail(container);
+                    } else {
+                        alert('Ви вже оцінювали цього майстра!');
+                    }
+                });
             });
         }
-    });
+        attachViewListeners(container);
+    }
 
-    // Form submit with alert (no backend)
-    const form = document.getElementById('bookingForm');
-    if (form) {
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const name = document.getElementById('name')?.value || 'Гість';
-            alert(`Дякуємо, ${name}! Ваша заявка на запис прийнята. Ми зателефонуємо для підтвердження. ✂️`);
-            form.reset();
+    function renderStars(filled, masterId) {
+        let html = '';
+        for (let i = 1; i <= 5; i++) {
+            html += `<i class="fas fa-star star ${i <= filled ? 'active' : ''}" data-stars="${i}" style="cursor: pointer;"></i>`;
+        }
+        return html;
+    }
+
+    function renderContact(container) {
+        container.innerHTML = `<div class="container"><h2>Контакти</h2><p>м. Київ, вул. Училищна 19, ВПУ-19<br>Тел: +380 (68) 123 45 67<br>Email: vpu19.barber@edu.ua</p>
+        <form id="contactForm"><input placeholder="Ваше ім'я"><input placeholder="Телефон"><button class="btn" type="submit">Надіслати заявку</button></form></div>`;
+        document.getElementById('contactForm')?.addEventListener('submit', (e) => { e.preventDefault(); alert('Дякуємо! Ми зателефонуємо.'); });
+        attachViewListeners(container);
+    }
+
+    function renderAdminLogin(container) {
+        container.innerHTML = `<div class="container"><div class="admin-panel"><h2>Вхід адміністратора</h2><input type="password" id="adminPass" placeholder="Пароль"><button id="adminLoginBtn" class="btn">Увійти</button></div></div>`;
+        document.getElementById('adminLoginBtn').addEventListener('click', () => {
+            let pass = document.getElementById('adminPass').value;
+            if (pass === 'admin123') {
+                currentView = 'adminPanel';
+                render();
+            } else alert('Невірний пароль');
+        });
+        attachViewListeners(container);
+    }
+
+    function renderAdminPanel(container) {
+        let mastersHtml = masters.map(m => `<div style="border:1px solid gray; margin:10px; padding:10px;"><b>${escapeHtml(m.name)}</b> (пароль: ${m.password})<br><button class="btn btn-danger delete-master" data-id="${m.id}">Видалити</button></div>`).join('');
+        container.innerHTML = `<div class="container"><h2>Панель адміністратора</h2>
+        <div class="admin-panel"><h3>Додати майстра</h3><input id="newMasterName" placeholder="Ім'я"><input id="newMasterPhoto" placeholder="Фото URL"><input id="newMasterDesc" placeholder="Опис"><input id="newMasterPass" placeholder="Пароль для майстра"><button id="addMasterBtn" class="btn">Додати</button></div>
+        <h3>Список майстрів</h3><div id="mastersListAdmin">${mastersHtml}</div><button class="btn btn-outline" data-view="home">На головну</button></div>`;
+        document.getElementById('addMasterBtn')?.addEventListener('click', () => {
+            let name = document.getElementById('newMasterName').value;
+            let photo = document.getElementById('newMasterPhoto').value;
+            let desc = document.getElementById('newMasterDesc').value;
+            let pass = document.getElementById('newMasterPass').value;
+            if (name && pass) {
+                addMaster(name, photo, desc, pass);
+                renderAdminPanel(container);
+            } else alert("Заповніть ім'я та пароль");
+        });
+        document.querySelectorAll('.delete-master').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                let id = btn.dataset.id;
+                if (confirm('Видалити майстра?')) deleteMaster(id);
+                renderAdminPanel(container);
+            });
+        });
+        attachViewListeners(container);
+    }
+
+    function renderMasterLogin(container) {
+        container.innerHTML = `<div class="container"><div class="admin-panel"><h2>Вхід майстра</h2><input id="masterNameLogin" placeholder="Ім'я майстра"><input id="masterPassLogin" type="password" placeholder="Пароль"><button id="masterLoginBtn" class="btn">Увійти</button></div></div>`;
+        document.getElementById('masterLoginBtn').addEventListener('click', () => {
+            let name = document.getElementById('masterNameLogin').value;
+            let pass = document.getElementById('masterPassLogin').value;
+            let master = masters.find(m => m.name === name && m.password === pass);
+            if (master) {
+                currentMasterUser = { id: master.id, name: master.name };
+                currentView = 'masterDashboard';
+                render();
+            } else alert('Невірне ім\'я або пароль');
+        });
+        attachViewListeners(container);
+    }
+
+    function renderMasterDashboard(container) {
+        if (!currentMasterUser) { currentView = 'masterLogin'; render(); return; }
+        let myPosts = posts.filter(p => p.masterId === currentMasterUser.id);
+        let postsHtml = myPosts.map(p => `<div style="border:1px solid #333; margin:10px; padding:10px;">${p.type === 'image' ? `<img src="${p.content}" width="100">` : `<i>Відео</i>`} ${p.caption} <button class="btn btn-danger delete-post-btn" data-id="${p.id}">Видалити</button></div>`).join('');
+        container.innerHTML = `<div class="container"><h2>Кабінет майстра: ${escapeHtml(currentMasterUser.name)}</h2>
+        <div class="admin-panel"><h3>Додати пост</h3><select id="postType"><option value="image">Фото (URL)</option><option value="video">Відео (URL або embed)</option></select><input id="postContent" placeholder="Посилання на файл / YouTube embed"><input id="postCaption" placeholder="Опис"><button id="addPostBtn" class="btn">Опублікувати</button></div>
+        <h3>Мої роботи</h3><div id="myPosts">${postsHtml || 'Немає постів'}</div><button class="btn btn-outline" data-view="home">На головну</button><button id="logoutMaster" class="btn btn-outline">Вийти</button></div>`;
+        document.getElementById('addPostBtn')?.addEventListener('click', () => {
+            let type = document.getElementById('postType').value;
+            let content = document.getElementById('postContent').value;
+            let caption = document.getElementById('postCaption').value;
+            if (content) {
+                addPost(currentMasterUser.id, type, content, caption);
+                renderMasterDashboard(container);
+            } else alert("Введіть URL");
+        });
+        document.querySelectorAll('.delete-post-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (confirm('Видалити пост?')) deletePost(btn.dataset.id);
+                renderMasterDashboard(container);
+            });
+        });
+        document.getElementById('logoutMaster')?.addEventListener('click', () => {
+            currentMasterUser = null;
+            currentView = 'home';
+            render();
+        });
+        attachViewListeners(container);
+    }
+
+    function attachViewListeners(element) {
+        element.querySelectorAll('[data-view]').forEach(el => {
+            el.addEventListener('click', (e) => {
+                let view = el.dataset.view;
+                if (view === 'home') currentView = 'home';
+                else if (view === 'masters') currentView = 'masters';
+                else if (view === 'contact') currentView = 'contact';
+                else if (view === 'adminLogin') currentView = 'adminLogin';
+                else if (view === 'masterLogin') currentView = 'masterLogin';
+                else if (view === 'adminPanel') currentView = 'adminPanel';
+                else if (view === 'masterDashboard') currentView = 'masterDashboard';
+                render();
+            });
         });
     }
 
-    // Add grayscale filter to images if needed for consistency (already applied in CSS)
-    // Additional interactive: subtle scroll shadow
-    window.addEventListener('scroll', () => {
-        const header = document.querySelector('header');
-        if (window.scrollY > 10) {
-            header.style.borderBottomColor = '#333';
-        } else {
-            header.style.borderBottomColor = 'var(--border-light)';
-        }
+    function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+
+    // Navigation menu
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', (e) => {
+            let view = link.dataset.view;
+            if (view === 'home') currentView = 'home';
+            else if (view === 'masters') currentView = 'masters';
+            else if (view === 'contact') currentView = 'contact';
+            else if (view === 'adminLogin') currentView = 'adminLogin';
+            else if (view === 'masterLogin') currentView = 'masterLogin';
+            render();
+            document.getElementById('navLinks')?.classList.remove('active');
+        });
     });
+    document.getElementById('homeLogo')?.addEventListener('click', () => { currentView = 'home'; render(); });
+    document.getElementById('mobileMenuBtn')?.addEventListener('click', () => { document.getElementById('navLinks')?.classList.toggle('active'); });
+
+    loadData();
+    render();
 </script>
 </body>
 </html>
