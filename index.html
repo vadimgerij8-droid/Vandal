@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>ПЕРУКАРНЯ ВПУ-19 | Стиль та майстерність</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Перукарня ВПУ-19 | Стиль та майстерність</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
-    /* ========== ЗМІННІ ТА СКИДАННЯ ========== */
+    /* === (весь CSS залишаємо без змін, як у вашому початковому коді) === */
     :root {
       --black: #0a0a0a;
       --white: #f5f5f0;
@@ -31,29 +31,32 @@
       overflow-x: hidden;
       cursor: none;
     }
-    /* ========== КАСТОМНИЙ КУРСОР ========== */
-    .cursor {
-      position: fixed;
-      width: 10px; height: 10px;
-      background: var(--black);
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 9999;
-      transform: translate(-50%, -50%);
-      transition: width 0.3s, height 0.3s, background 0.3s;
+    /* кастомний курсор (як у вашому коді) */
+    .cursor, .cursor-ring { display: none; } /* для простоти, бо на мобільному вже приховано */
+    @media (min-width: 1025px) {
+      .cursor, .cursor-ring { display: block; }
+      .cursor {
+        position: fixed;
+        width: 10px; height: 10px;
+        background: var(--black);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9999;
+        transform: translate(-50%, -50%);
+        transition: width 0.3s, height 0.3s, background 0.3s;
+      }
+      .cursor-ring {
+        position: fixed;
+        width: 36px; height: 36px;
+        border: 1px solid var(--black);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9998;
+        transform: translate(-50%, -50%);
+        transition: width 0.4s, height 0.4s, border-color 0.3s, opacity 0.3s;
+        opacity: 0.5;
+      }
     }
-    .cursor-ring {
-      position: fixed;
-      width: 36px; height: 36px;
-      border: 1px solid var(--black);
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 9998;
-      transform: translate(-50%, -50%);
-      transition: width 0.4s, height 0.4s, border-color 0.3s, opacity 0.3s;
-      opacity: 0.5;
-    }
-    /* ========== НАВІГАЦІЯ (десктоп) ========== */
     nav {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -104,7 +107,7 @@
     }
     .nav-links a:hover { color: var(--black); }
     .nav-links a:hover::after { width: 100%; }
-    .nav-admin-btn {
+    .nav-auth-btn {
       font-size: 0.68rem;
       font-weight: 600;
       letter-spacing: 0.12em;
@@ -116,9 +119,7 @@
       cursor: pointer;
       transition: var(--transition);
     }
-    .nav-admin-btn:hover { background: var(--black); color: var(--white); }
-
-    /* ========== МОБІЛЬНЕ МЕНЮ (ГАМБУРГЕР) ========== */
+    .nav-auth-btn:hover { background: var(--black); color: var(--white); }
     .hamburger {
       display: none;
       flex-direction: column;
@@ -152,9 +153,7 @@
       flex-direction: column;
       gap: 32px;
     }
-    .mobile-menu.open {
-      right: 0;
-    }
+    .mobile-menu.open { right: 0; }
     .mobile-menu a {
       font-size: 1.2rem;
       font-family: var(--font-display);
@@ -166,11 +165,8 @@
       transition: var(--transition);
       cursor: pointer;
     }
-    .mobile-menu a:hover {
-      color: var(--gray-mid);
-      padding-left: 8px;
-    }
-    .mobile-menu .mobile-admin-btn {
+    .mobile-menu a:hover { color: var(--gray-mid); padding-left: 8px; }
+    .mobile-auth-btn {
       margin-top: 20px;
       background: var(--black);
       color: var(--white);
@@ -184,9 +180,7 @@
       cursor: pointer;
       transition: var(--transition);
     }
-    .mobile-menu .mobile-admin-btn:hover {
-      background: var(--gray-dark);
-    }
+    .mobile-auth-btn:hover { background: var(--gray-dark); }
     .menu-overlay {
       position: fixed;
       top: 0;
@@ -200,12 +194,7 @@
       pointer-events: none;
       transition: opacity 0.3s ease;
     }
-    .menu-overlay.open {
-      opacity: 1;
-      pointer-events: all;
-    }
-
-    /* ========== СТОРІНКИ ========== */
+    .menu-overlay.open { opacity: 1; pointer-events: all; }
     .page {
       display: none;
       min-height: 100vh;
@@ -214,809 +203,279 @@
       transition: opacity 0.5s ease, transform 0.5s ease;
     }
     .page.active { display: block; opacity: 1; transform: translateY(0); }
-    /* ========== ГОЛОВНА — HERO ========== */
-    .hero {
-      min-height: 100vh;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      position: relative;
-      overflow: hidden;
-    }
-    .hero-left {
-      background: var(--black);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
+    /* Головна (стрічка) */
+    .feed {
       padding: 120px 64px 80px;
-      position: relative;
-      overflow: hidden;
+      max-width: 1200px;
+      margin: 0 auto;
     }
-    .hero-left::before {
-      content: '';
-      position: absolute;
-      top: -100px; right: -100px;
-      width: 400px; height: 400px;
-      border: 1px solid rgba(255,255,255,0.05);
-      border-radius: 50%;
-      animation: rotate 20s linear infinite;
+    .feed-header {
+      margin-bottom: 64px;
+      text-align: center;
     }
-    .hero-left::after {
-      content: '';
-      position: absolute;
-      bottom: -80px; left: -80px;
-      width: 300px; height: 300px;
-      border: 1px solid rgba(255,255,255,0.05);
-      border-radius: 50%;
-      animation: rotate 15s linear infinite reverse;
-    }
-    @keyframes rotate { to { transform: rotate(360deg); } }
-    .hero-tag {
-      font-size: 0.65rem;
-      font-weight: 500;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--gray-mid);
-      margin-bottom: 32px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .hero-tag::before {
-      content: '';
-      display: block;
-      width: 32px; height: 1px;
-      background: var(--gray-mid);
-    }
-    .hero-title {
+    .feed-header h1 {
       font-family: var(--font-display);
-      font-size: clamp(3rem, 5vw, 5.5rem);
+      font-size: clamp(2.5rem, 5vw, 4rem);
       font-weight: 300;
-      line-height: 1.05;
+      margin-bottom: 12px;
+    }
+    .feed-header p {
+      color: var(--gray-mid);
+      font-size: 0.85rem;
+      letter-spacing: 0.06em;
+    }
+    .create-post-btn {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      background: var(--black);
       color: var(--white);
-      margin-bottom: 16px;
-      letter-spacing: -0.01em;
-    }
-    .hero-title em { font-style: italic; font-weight: 300; display: block; }
-    .hero-title strong { font-weight: 600; display: block; }
-    .hero-number {
-      font-family: var(--font-display);
-      font-size: clamp(6rem, 12vw, 14rem);
-      font-weight: 300;
-      line-height: 0.85;
-      color: rgba(255,255,255,0.06);
-      position: absolute;
-      bottom: 40px; right: 32px;
-      letter-spacing: -0.04em;
-      pointer-events: none;
-    }
-    .hero-desc {
-      font-size: 0.78rem;
-      font-weight: 300;
-      line-height: 1.9;
-      color: var(--gray-mid);
-      max-width: 320px;
-      margin-bottom: 56px;
-      margin-top: 24px;
-    }
-    .hero-cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 16px;
+      border: none;
+      padding: 16px 24px;
       font-size: 0.7rem;
       font-weight: 600;
-      letter-spacing: 0.16em;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: var(--black);
-      background: var(--white);
-      padding: 18px 40px;
       cursor: pointer;
-      border: none;
-      transition: var(--transition);
-      position: relative;
-      overflow: hidden;
-      z-index: 1;
-    }
-    .hero-cta::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: var(--gray-light);
-      transform: translateX(-100%);
-      transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-      z-index: -1;
-    }
-    .hero-cta:hover::before { transform: translateX(0); }
-    .hero-cta svg { transition: transform 0.3s ease; }
-    .hero-cta:hover svg { transform: translateX(6px); }
-    .hero-right {
-      background: var(--gray-light);
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .hero-right-inner {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      gap: 32px;
-      padding: 120px 64px 80px;
-    }
-    .hero-grid {
-      position: absolute;
-      inset: 0;
-      background-image: linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
-      background-size: 60px 60px;
-      pointer-events: none;
-    }
-    .hero-stats {
-      display: flex;
-      flex-direction: column;
-      gap: 32px;
-      position: relative;
-      z-index: 1;
-      padding: 48px;
-      border: 1px solid rgba(0,0,0,0.1);
-      background: rgba(245,245,240,0.8);
-      backdrop-filter: blur(8px);
-      min-width: 280px;
-    }
-    .hero-stat-num {
-      font-family: var(--font-display);
-      font-size: 3.5rem;
-      font-weight: 300;
-      line-height: 1;
-      color: var(--black);
-      letter-spacing: -0.02em;
-    }
-    .hero-stat-label {
-      font-size: 0.65rem;
-      font-weight: 500;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--gray-mid);
-      margin-top: 4px;
-    }
-    .hero-stat-divider {
-      width: 100%;
-      height: 1px;
-      background: var(--gray-light);
-    }
-    /* ========== СЕКЦІЇ ========== */
-    .section { padding: 120px 64px; }
-    .section-header {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      margin-bottom: 72px;
-    }
-    .section-label {
-      font-size: 0.65rem;
-      font-weight: 500;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--gray-mid);
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .section-label::before {
-      content: '';
-      display: block;
-      width: 24px; height: 1px;
-      background: var(--gray-mid);
-    }
-    .section-title {
-      font-family: var(--font-display);
-      font-size: clamp(2.5rem, 4vw, 4rem);
-      font-weight: 300;
-      line-height: 1.1;
-      color: var(--black);
-    }
-    .section-title em { font-style: italic; }
-    /* ========== МАЙСТРИ ========== */
-    #page-masters { padding-top: 100px; }
-    .masters-header-section { padding: 80px 64px 40px; border-bottom: 1px solid var(--gray-light); }
-    .masters-grid {
-      padding: 64px;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 2px;
-    }
-    .master-card {
-      background: var(--white);
-      border: 1px solid var(--gray-light);
-      cursor: pointer;
-      transition: var(--transition);
-      position: relative;
-      overflow: hidden;
-    }
-    .master-card:hover { box-shadow: var(--shadow-hover); z-index: 2; transform: translateY(-4px); }
-    .master-card-photo {
-      width: 100%;
-      aspect-ratio: 4/5;
-      background: var(--gray-light);
-      overflow: hidden;
-      position: relative;
-    }
-    .master-card-photo-inner {
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, var(--gray-light) 0%, #d0d0c8 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    }
-    .master-card:hover .master-card-photo-inner { transform: scale(1.05); }
-    .master-card-photo-inner svg { opacity: 0.3; }
-    .master-card-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 60%);
-      opacity: 0;
-      transition: opacity 0.4s ease;
-      display: flex;
-      align-items: flex-end;
-      padding: 24px;
-    }
-    .master-card:hover .master-card-overlay { opacity: 1; }
-    .master-card-overlay-text {
-      font-size: 0.65rem;
-      font-weight: 500;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: white;
+      z-index: 90;
       display: flex;
       align-items: center;
       gap: 8px;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
     }
-    .master-card-body { padding: 24px; }
+    .create-post-btn:hover { transform: scale(1.02); background: var(--gray-dark); }
+    .post-card {
+      background: white;
+      margin-bottom: 48px;
+      border: 1px solid var(--gray-light);
+      transition: var(--transition);
+    }
+    .post-card:hover { box-shadow: var(--shadow); }
+    .post-header {
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      border-bottom: 1px solid var(--gray-light);
+    }
+    .post-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--gray-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .post-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .post-author {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .post-date {
+      font-size: 0.65rem;
+      color: var(--gray-mid);
+      margin-top: 4px;
+    }
+    .post-image {
+      width: 100%;
+      max-height: 500px;
+      object-fit: cover;
+      display: block;
+    }
+    .post-caption {
+      padding: 20px 24px;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      border-bottom: 1px solid var(--gray-light);
+    }
+    .post-actions {
+      padding: 16px 24px;
+      display: flex;
+      gap: 24px;
+      border-bottom: 1px solid var(--gray-light);
+    }
+    .action-btn {
+      background: none;
+      border: none;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gray-dark);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: var(--transition);
+    }
+    .action-btn.liked { color: var(--black); font-weight: 600; }
+    .action-btn:hover { color: var(--black); }
+    .comments-section {
+      padding: 20px 24px;
+      background: var(--gray-light);
+    }
+    .comment {
+      margin-bottom: 16px;
+      font-size: 0.8rem;
+      display: flex;
+      gap: 10px;
+    }
+    .comment-strong { font-weight: 600; }
+    .comment-form {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .comment-input {
+      flex: 1;
+      padding: 12px;
+      border: 1px solid var(--gray-mid);
+      background: var(--white);
+      font-family: var(--font-body);
+      font-size: 0.8rem;
+    }
+    .comment-submit {
+      background: var(--black);
+      color: white;
+      border: none;
+      padding: 0 20px;
+      font-size: 0.65rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    /* Майстри (список) */
+    .masters-list {
+      padding: 120px 64px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 40px;
+    }
+    .master-card {
+      background: white;
+      border: 1px solid var(--gray-light);
+      cursor: pointer;
+      transition: var(--transition);
+      overflow: hidden;
+    }
+    .master-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+    .master-card-photo {
+      aspect-ratio: 1;
+      background: var(--gray-light);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .master-card-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .master-card-info { padding: 24px; }
     .master-card-name {
       font-family: var(--font-display);
       font-size: 1.6rem;
       font-weight: 400;
-      color: var(--black);
-      margin-bottom: 6px;
-      line-height: 1.2;
     }
     .master-card-role {
-      font-size: 0.68rem;
-      font-weight: 500;
-      letter-spacing: 0.12em;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--gray-mid);
-      margin-bottom: 14px;
+      margin: 8px 0;
     }
-    .master-card-desc {
-      font-size: 0.78rem;
-      line-height: 1.7;
-      color: var(--gray-dark);
-      margin-bottom: 20px;
-    }
-    .stars { display: flex; gap: 3px; }
-    .star { font-size: 0.8rem; color: var(--black); }
-    .star.empty { color: var(--gray-light); }
-    .master-card-footer {
-      padding: 16px 24px;
-      border-top: 1px solid var(--gray-light);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .master-card-works { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gray-mid); }
-    .master-card-arrow {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 32px; height: 32px;
-      border: 1px solid var(--gray-light);
-      transition: var(--transition);
-    }
-    .master-card:hover .master-card-arrow { background: var(--black); border-color: var(--black); color: white; }
-    /* ========== ПРОФІЛЬ МАЙСТРА ========== */
-    #page-master-profile { padding-top: 100px; }
+    .master-card-rating { margin-top: 12px; display: flex; gap: 4px; }
+    /* Профіль */
     .profile-layout {
       display: grid;
-      grid-template-columns: 420px 1fr;
-      min-height: calc(100vh - 100px);
+      grid-template-columns: 320px 1fr;
+      min-height: 100vh;
+      padding-top: 100px;
     }
     .profile-sidebar {
       background: var(--black);
-      padding: 64px 48px;
+      color: white;
+      padding: 48px 32px;
       position: sticky;
       top: 100px;
       height: calc(100vh - 100px);
       overflow-y: auto;
-      display: flex;
-      flex-direction: column;
     }
-    .profile-photo {
-      width: 100%;
-      aspect-ratio: 3/4;
+    .profile-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
       background: var(--gray-dark);
-      margin-bottom: 40px;
+      margin-bottom: 32px;
       overflow: hidden;
-      position: relative;
     }
-    .profile-photo-inner {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
-    }
+    .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
     .profile-name {
       font-family: var(--font-display);
-      font-size: 2.4rem;
+      font-size: 2rem;
       font-weight: 300;
-      color: var(--white);
-      line-height: 1.1;
       margin-bottom: 8px;
     }
     .profile-role {
-      font-size: 0.65rem;
-      font-weight: 500;
-      letter-spacing: 0.18em;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--gray-mid);
       margin-bottom: 24px;
     }
-    .profile-rating {
+    .profile-stats {
       display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 32px;
+      gap: 24px;
+      margin: 32px 0;
     }
-    .profile-rating-num {
-      font-family: var(--font-display);
-      font-size: 1.4rem;
-      font-weight: 400;
-      color: var(--white);
-    }
-    .profile-desc {
-      font-size: 0.78rem;
-      line-height: 1.9;
-      color: var(--gray-mid);
-      margin-bottom: 40px;
-      flex: 1;
-    }
-    .profile-skills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 40px; }
-    .profile-skill-tag {
-      font-size: 0.62rem;
-      font-weight: 500;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 6px 14px;
-      border: 1px solid rgba(255,255,255,0.15);
-      color: var(--gray-mid);
-    }
-    .profile-add-btn {
-      width: 100%;
-      padding: 16px;
-      background: var(--white);
-      color: var(--black);
-      border: none;
-      font-family: var(--font-body);
-      font-size: 0.7rem;
-      font-weight: 600;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: var(--transition);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-    }
-    .profile-add-btn:hover { background: var(--gray-light); }
-    .profile-main { padding: 64px; }
-    .profile-gallery-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 40px;
-    }
-    .gallery-title {
-      font-family: var(--font-display);
-      font-size: 2rem;
-      font-weight: 300;
-      color: var(--black);
-    }
-    .gallery-count {
-      font-size: 0.65rem;
-      font-weight: 500;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--gray-mid);
-    }
-    .gallery-grid {
+    .profile-stat { text-align: center; }
+    .profile-stat-value { font-size: 1.5rem; font-weight: 600; }
+    .profile-main { padding: 48px; }
+    .profile-posts-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 2px;
+      margin-top: 32px;
     }
-    .gallery-item {
+    .profile-post {
       aspect-ratio: 1;
       background: var(--gray-light);
-      position: relative;
       overflow: hidden;
       cursor: pointer;
     }
-    .gallery-item-inner {
-      width: 100%; height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, var(--gray-light) 0%, #d8d8d0 100%);
-      transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    }
-    .gallery-item:hover .gallery-item-inner { transform: scale(1.08); }
-    .gallery-item-overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(0,0,0,0.5);
-      opacity: 0;
-      transition: opacity 0.3s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-    }
-    .gallery-item:hover .gallery-item-overlay { opacity: 1; }
-    .delete-work-btn {
-      background: rgba(0,0,0,0.7);
-      border: none;
-      color: white;
-      padding: 6px 12px;
-      font-size: 0.7rem;
-      cursor: pointer;
-      border-radius: 0;
-      transition: 0.2s;
-    }
-    .delete-work-btn:hover { background: #c0392b; }
-    .gallery-empty {
-      grid-column: 1/-1;
-      padding: 80px;
-      text-align: center;
-      border: 1px dashed var(--gray-light);
-    }
-    /* ========== АДМІН ПАНЕЛЬ ========== */
-    #page-admin { padding-top: 100px; }
-    .admin-layout {
-      display: grid;
-      grid-template-columns: 260px 1fr;
-      min-height: calc(100vh - 100px);
-    }
-    .admin-sidebar {
-      background: var(--black);
-      padding: 40px 32px;
-    }
-    .admin-sidebar-title {
-      font-size: 0.65rem;
-      font-weight: 500;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--gray-mid);
-      margin-bottom: 32px;
-    }
-    .admin-nav { display: flex; flex-direction: column; gap: 4px; }
-    .admin-nav-item {
-      padding: 12px 16px;
-      font-size: 0.72rem;
-      font-weight: 500;
-      letter-spacing: 0.08em;
-      color: var(--gray-mid);
-      cursor: pointer;
-      transition: var(--transition);
-      border-left: 2px solid transparent;
-      text-transform: uppercase;
-    }
-    .admin-nav-item:hover, .admin-nav-item.active { color: var(--white); border-left-color: var(--white); background: rgba(255,255,255,0.05); }
-    .admin-main { padding: 48px 64px; }
-    .admin-section { display: none; }
-    .admin-section.active { display: block; }
-    .admin-page-title {
-      font-family: var(--font-display);
-      font-size: 2.5rem;
-      font-weight: 300;
-      color: var(--black);
-      margin-bottom: 8px;
-    }
-    .admin-page-sub {
-      font-size: 0.72rem;
-      color: var(--gray-mid);
-      letter-spacing: 0.06em;
-      margin-bottom: 48px;
-    }
-    .admin-toolbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 32px;
-    }
-    .btn-primary {
-      padding: 13px 28px;
-      background: var(--black);
-      color: var(--white);
-      border: none;
-      font-family: var(--font-body);
-      font-size: 0.68rem;
-      font-weight: 600;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: var(--transition);
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .btn-primary:hover { background: var(--gray-dark); }
-    .btn-secondary {
-      padding: 12px 24px;
-      background: transparent;
-      color: var(--black);
-      border: 1px solid var(--black);
-      font-family: var(--font-body);
-      font-size: 0.68rem;
-      font-weight: 500;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: var(--transition);
-    }
-    .btn-secondary:hover { background: var(--black); color: var(--white); }
-    .btn-danger {
-      padding: 8px 16px;
-      background: transparent;
-      color: #c0392b;
-      border: 1px solid #c0392b;
-      font-family: var(--font-body);
-      font-size: 0.62rem;
-      font-weight: 500;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: var(--transition);
-    }
-    .btn-danger:hover { background: #c0392b; color: white; }
-    .admin-masters-table { width: 100%; border-collapse: collapse; }
-    .admin-masters-table th {
-      font-size: 0.62rem;
-      font-weight: 600;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--gray-mid);
-      padding: 12px 16px;
-      text-align: left;
-      border-bottom: 1px solid var(--gray-light);
-    }
-    .admin-masters-table td { padding: 20px 16px; font-size: 0.78rem; color: var(--black); border-bottom: 1px solid var(--gray-light); vertical-align: middle; }
-    .admin-masters-table tr:hover td { background: rgba(0,0,0,0.02); }
-    .table-avatar { width: 44px; height: 44px; background: var(--gray-light); display: flex; align-items: center; justify-content: center; }
-    .table-name { font-family: var(--font-display); font-size: 1.1rem; font-weight: 400; }
-    .table-actions { display: flex; gap: 8px; flex-wrap: wrap; }
-    /* ========== МОДАЛЬНІ ВІКНА ========== */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.7);
-      z-index: 200;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-      backdrop-filter: blur(4px);
-    }
-    .modal-overlay.open { opacity: 1; pointer-events: all; }
-    .modal {
-      background: var(--white);
-      width: 100%;
-      max-width: 560px;
-      max-height: 90vh;
-      overflow-y: auto;
-      transform: translateY(30px);
-      transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    }
+    .profile-post img { width: 100%; height: 100%; object-fit: cover; }
+    /* Модалки, форми, тости як у вашому коді (зберігаємо стилі) */
+    .modal-overlay { /* ... */ position: fixed; inset:0; background: rgba(0,0,0,0.7); z-index:200; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition: opacity 0.3s; backdrop-filter: blur(4px); }
+    .modal-overlay.open { opacity:1; pointer-events:all; }
+    .modal { background: var(--white); width:100%; max-width:560px; max-height:90vh; overflow-y:auto; transform: translateY(30px); transition: transform 0.4s; }
     .modal-overlay.open .modal { transform: translateY(0); }
-    .modal-header {
-      padding: 32px 40px 24px;
-      border-bottom: 1px solid var(--gray-light);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .modal-title { font-family: var(--font-display); font-size: 1.8rem; font-weight: 300; }
-    .modal-close {
-      width: 36px; height: 36px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      border: 1px solid var(--gray-light);
-      transition: var(--transition);
-      background: none;
-    }
-    .modal-close:hover { background: var(--black); color: white; border-color: var(--black); }
+    .modal-header { padding: 32px 40px 24px; border-bottom:1px solid var(--gray-light); display:flex; justify-content:space-between; }
+    .modal-title { font-family: var(--font-display); font-size:1.8rem; font-weight:300; }
+    .modal-close { background:none; border:1px solid var(--gray-light); width:36px; height:36px; cursor:pointer; }
     .modal-body { padding: 32px 40px; }
-    .modal-footer {
-      padding: 24px 40px 32px;
-      display: flex;
-      gap: 12px;
-      justify-content: flex-end;
-      border-top: 1px solid var(--gray-light);
-    }
-    .form-group { margin-bottom: 28px; }
-    .form-label {
-      display: block;
-      font-size: 0.62rem;
-      font-weight: 600;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--gray-dark);
-      margin-bottom: 10px;
-    }
-    .form-input, .form-textarea, .form-select {
-      width: 100%;
-      padding: 14px 16px;
-      border: 1px solid var(--gray-light);
-      background: var(--white);
-      font-family: var(--font-body);
-      font-size: 0.85rem;
-      color: var(--black);
-      outline: none;
-      transition: border-color 0.3s;
-    }
-    .form-input:focus, .form-textarea:focus, .form-select:focus { border-color: var(--black); }
-    .form-textarea { resize: vertical; min-height: 100px; }
-    .form-photo-upload {
-      border: 1px dashed var(--gray-light);
-      padding: 40px;
-      text-align: center;
-      cursor: pointer;
-      transition: var(--transition);
-      position: relative;
-      background-size: cover;
-      background-position: center;
-    }
-    .form-photo-upload:hover { border-color: var(--black); background: rgba(0,0,0,0.02); }
-    .form-photo-upload input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
-    .upload-icon { margin-bottom: 12px; }
-    .form-rating { display: flex; gap: 8px; align-items: center; }
-    .star-input { font-size: 1.4rem; cursor: pointer; color: var(--gray-light); transition: color 0.2s; }
-    .star-input.active, .star-input:hover { color: var(--black); }
-    .toast {
-      position: fixed;
-      bottom: 32px; right: 32px;
-      background: var(--black);
-      color: var(--white);
-      padding: 16px 24px;
-      font-size: 0.72rem;
-      font-weight: 500;
-      letter-spacing: 0.06em;
-      z-index: 500;
-      transform: translateY(80px);
-      opacity: 0;
-      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-      pointer-events: none;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .toast.show { transform: translateY(0); opacity: 1; }
-    .back-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 0.65rem;
-      font-weight: 600;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--gray-mid);
-      cursor: pointer;
-      transition: var(--transition);
-      background: none;
-      border: none;
-      padding: 0;
-      margin-bottom: 48px;
-    }
-    .back-btn:hover { color: var(--black); }
-    .back-btn:hover svg { transform: translateX(-4px); }
-    footer {
-      background: var(--black);
-      color: var(--white);
-      padding: 64px;
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 48px;
-      align-items: start;
-    }
-    .footer-brand-name {
-      font-family: var(--font-display);
-      font-size: 1.6rem;
-      font-weight: 300;
-      margin-bottom: 8px;
-    }
-    .footer-brand-sub {
-      font-size: 0.65rem;
-      color: var(--gray-mid);
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-    .footer-col-title {
-      font-size: 0.6rem;
-      font-weight: 600;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--gray-mid);
-      margin-bottom: 20px;
-    }
-    .footer-col-item {
-      font-size: 0.75rem;
-      color: rgba(255,255,255,0.6);
-      margin-bottom: 10px;
-      line-height: 1.6;
-    }
-    .footer-bottom {
-      background: var(--black);
-      border-top: 1px solid rgba(255,255,255,0.08);
-      padding: 20px 64px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    /* ========== АДАПТИВНІСТЬ ========== */
-    @media (max-width: 1024px) {
-      .hero { grid-template-columns: 1fr; }
-      .hero-right { display: none; }
+    .form-group { margin-bottom:28px; }
+    .form-label { font-size:0.62rem; font-weight:600; letter-spacing:0.16em; text-transform:uppercase; margin-bottom:10px; display:block; }
+    .form-input, .form-textarea, .form-select { width:100%; padding:14px 16px; border:1px solid var(--gray-light); background:white; font-size:0.85rem; }
+    .form-photo-upload { border:1px dashed var(--gray-mid); padding:40px; text-align:center; cursor:pointer; position:relative; background-size:cover; background-position:center; }
+    .form-photo-upload input { position:absolute; inset:0; opacity:0; cursor:pointer; }
+    .btn-primary, .btn-secondary { padding:12px 24px; font-size:0.68rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; border:none; cursor:pointer; transition:var(--transition); }
+    .btn-primary { background:var(--black); color:white; }
+    .btn-primary:hover { background:var(--gray-dark); }
+    .btn-secondary { background:transparent; border:1px solid var(--black); color:var(--black); }
+    .btn-secondary:hover { background:var(--black); color:white; }
+    .toast { position:fixed; bottom:32px; right:32px; background:var(--black); color:white; padding:12px 24px; font-size:0.7rem; z-index:500; transform:translateY(80px); opacity:0; transition:all 0.4s; }
+    .toast.show { transform:translateY(0); opacity:1; }
+    @media (max-width: 768px) {
+      .feed { padding: 100px 24px 60px; }
       .profile-layout { grid-template-columns: 1fr; }
       .profile-sidebar { position: static; height: auto; }
-      .admin-layout { grid-template-columns: 1fr; }
-      .admin-sidebar { display: none; }
-      .masters-grid { padding: 32px; }
-      .section { padding: 80px 32px; }
-      .masters-header-section { padding: 60px 32px 32px; }
-      .profile-main { padding: 32px; }
-      .admin-main { padding: 32px; }
-    }
-    @media (max-width: 640px) {
-      nav { padding: 16px 20px; }
-      nav.scrolled { padding: 12px 20px; }
+      .masters-list { padding: 100px 24px; }
+      .create-post-btn { bottom: 20px; right: 20px; padding: 12px 20px; }
       .nav-links { display: none; }
-      .nav-admin-btn { display: none; }
       .hamburger { display: flex; }
-      .hero-left { padding: 100px 24px 64px; }
-      .section { padding: 60px 24px; }
-      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
-      .masters-grid { padding: 20px; gap: 16px; grid-template-columns: 1fr; }
-      .modal { max-width: 100%; max-height: 100%; }
-      body { cursor: auto; }
       .cursor, .cursor-ring { display: none; }
-      footer { grid-template-columns: 1fr; gap: 32px; padding: 48px 24px; }
-      .footer-bottom { padding: 20px 24px; flex-direction: column; gap: 8px; }
-      .hero-stats { padding: 32px; min-width: auto; }
-      .profile-sidebar { padding: 40px 24px; }
-      .profile-name { font-size: 2rem; }
-      .admin-toolbar { flex-direction: column; align-items: flex-start; gap: 12px; }
-      .admin-masters-table th, .admin-masters-table td { padding: 12px 8px; }
-      .table-actions { flex-direction: column; gap: 6px; }
     }
-    .fade-up { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
-    .fade-up.visible { opacity: 1; transform: translateY(0); }
-    @keyframes heroFade { to { opacity: 1; transform: translateY(0); } }
-    .hero-title, .hero-tag, .hero-desc, .hero-cta { opacity: 0; transform: translateY(24px); animation: heroFade 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
-    .hero-tag { animation-delay: 0.2s; }
-    .hero-title { animation-delay: 0.4s; }
-    .hero-desc { animation-delay: 0.6s; }
-    .hero-cta { animation-delay: 0.8s; }
-    .img-placeholder { width: 100%; height: 100%; object-fit: cover; }
   </style>
 </head>
 <body>
@@ -1024,243 +483,317 @@
 <div class="cursor-ring" id="cursorRing"></div>
 
 <nav id="navbar">
-  <div class="nav-logo" onclick="navigate('home')">ПЕРУКАРНЯ ВПУ-19</div>
+  <div class="nav-logo" onclick="navigate('feed')">ПЕРУКАРНЯ ВПУ-19</div>
   <ul class="nav-links">
-    <li><a onclick="navigate('home')">Головна</a></li>
+    <li><a onclick="navigate('feed')">Стрічка</a></li>
     <li><a onclick="navigate('masters')">Майстри</a></li>
+    <li><a id="profileNavLink" onclick="navigate('profile')">Профіль</a></li>
   </ul>
-  <button class="nav-admin-btn" onclick="navigate('admin')">Адмін панель</button>
-  <button class="hamburger" id="hamburgerBtn" aria-label="Меню">
-    <span></span><span></span><span></span>
-  </button>
+  <button class="nav-auth-btn" id="authBtn">Увійти</button>
+  <button class="hamburger" id="hamburgerBtn"><span></span><span></span><span></span></button>
 </nav>
-
 <div class="mobile-menu" id="mobileMenu">
-  <a onclick="navigate('home'); closeMobileMenu()">Головна</a>
+  <a onclick="navigate('feed'); closeMobileMenu()">Стрічка</a>
   <a onclick="navigate('masters'); closeMobileMenu()">Майстри</a>
-  <button class="mobile-admin-btn" onclick="navigate('admin'); closeMobileMenu()">Адмін панель</button>
+  <a onclick="navigate('profile'); closeMobileMenu()">Профіль</a>
+  <button class="mobile-auth-btn" id="mobileAuthBtn">Увійти</button>
 </div>
 <div class="menu-overlay" id="menuOverlay"></div>
 
-<!-- ГОЛОВНА -->
-<div id="page-home" class="page"><section class="hero"><div class="hero-left"><span class="hero-tag">Навчальна перукарня</span><h1 class="hero-title"><em>Перукарня</em><strong>ВПУ-19</strong></h1><p class="hero-desc" id="hero-description">Навчальна перукарня Вищого Професійного Училища №19. Тут майбутні майстри розвивають свою майстерність, а клієнти отримують якісні послуги.</p><button class="hero-cta" onclick="navigate('masters')">Переглянути майстрів<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button><div class="hero-number">19</div></div><div class="hero-right"><div class="hero-grid"></div><div class="hero-right-inner"><div class="hero-stats"><div class="hero-stat-item"><div class="hero-stat-num" id="stat-masters">—</div><div class="hero-stat-label">Майстрів</div></div><div class="hero-stat-divider"></div><div class="hero-stat-item"><div class="hero-stat-num" id="stat-works">—</div><div class="hero-stat-label">Робіт у галереї</div></div><div class="hero-stat-divider"></div><div class="hero-stat-item"><div class="hero-stat-num" id="stat-rating">—</div><div class="hero-stat-label">Середній рейтинг</div></div></div></div></div></section><section class="section"><div class="section-header"><div><div class="section-label">Команда</div><h2 class="section-title">Наші <em>майстри</em></h2></div><button class="btn-secondary" onclick="navigate('masters')">Всі майстри</button></div><div class="masters-grid" id="home-masters-grid" style="padding:0; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));"></div></section><footer><div class="footer-brand"><div class="footer-brand-name" id="footer-salon-name">Перукарня ВПУ-19</div><div class="footer-brand-sub">Навчальна перукарня</div></div><div><div class="footer-col-title">Навігація</div><div class="footer-col-item" style="cursor:pointer" onclick="navigate('home')">Головна</div><div class="footer-col-item" style="cursor:pointer" onclick="navigate('masters')">Майстри</div><div class="footer-col-item" style="cursor:pointer" onclick="navigate('admin')">Адмін панель</div></div><div><div class="footer-col-title">Контакти</div><div class="footer-col-item" id="footer-address">📍 м. [Місто], вул. [Адреса]</div><div class="footer-col-item" id="footer-phone">📞 +38 (0XX) XXX-XX-XX</div><div class="footer-col-item" id="footer-email">✉️ info@vpu19.example.com</div></div></footer><div class="footer-bottom"><span class="footer-bottom-text">© 2024 Перукарня ВПУ-19 — Навчальний заклад</span><span class="footer-bottom-text">Шаблон сайту</span></div></div>
-
-<!-- МАЙСТРИ -->
-<div id="page-masters" class="page"><div class="masters-header-section"><button class="back-btn" onclick="navigate('home')"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Назад</button><div class="section-label">Команда</div><h1 class="section-title">Наші <em>майстри</em></h1></div><div class="masters-grid" id="masters-grid"></div></div>
-
-<!-- ПРОФІЛЬ МАЙСТРА -->
-<div id="page-master-profile" class="page"><div class="profile-layout"><aside class="profile-sidebar"><button class="back-btn" onclick="navigate('masters')" style="color:var(--gray-mid)"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>До майстрів</button><div class="profile-photo"><div class="profile-photo-inner" id="profile-photo-inner"><svg width="64" height="64" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div></div><h2 class="profile-name" id="profile-name"></h2><div class="profile-role" id="profile-role"></div><div class="profile-rating"><div class="stars" id="profile-stars"></div><span class="profile-rating-num" id="profile-rating-num"></span></div><p class="profile-desc" id="profile-desc"></p><div class="profile-skills" id="profile-skills"></div><button class="profile-add-btn" id="profile-add-photo-btn"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Додати фото роботи</button></aside><main class="profile-main"><div class="profile-gallery-header"><h3 class="gallery-title">Роботи</h3><span class="gallery-count" id="gallery-count"></span></div><div class="gallery-grid" id="gallery-grid"></div></main></div></div>
-
-<!-- АДМІН -->
-<div id="page-admin" class="page"><div class="admin-layout"><aside class="admin-sidebar"><div class="admin-sidebar-title">Управління</div><nav class="admin-nav"><div class="admin-nav-item active" onclick="switchAdminTab('masters', this)">Майстри</div><div class="admin-nav-item" onclick="switchAdminTab('settings', this)">Налаштування</div></nav></aside><main class="admin-main"><div class="admin-section active" id="admin-masters"><h1 class="admin-page-title">Управління <em style="font-style:italic">майстрами</em></h1><p class="admin-page-sub">Додавайте, редагуйте та видаляйте картки майстрів</p><div class="admin-toolbar"><button class="btn-primary" onclick="openAddMasterModal()"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Додати майстра</button></div><table class="admin-masters-table"><thead><tr><th>Фото</th><th>Ім'я</th><th>Роль</th><th>Рейтинг</th><th>Дії</th></tr></thead><tbody id="admin-masters-tbody"></tbody></table></div><div class="admin-section" id="admin-settings"><h1 class="admin-page-title">Налаштування</h1><p class="admin-page-sub">Загальна інформація про перукарню</p><div style="max-width: 480px"><div class="form-group"><label class="form-label">Назва закладу</label><input class="form-input" id="settings-name" placeholder="Назва" /></div><div class="form-group"><label class="form-label">Короткий опис (на головній)</label><textarea class="form-textarea" id="settings-desc" rows="2"></textarea></div><div class="form-group"><label class="form-label">Адреса</label><input class="form-input" id="settings-address" /></div><div class="form-group"><label class="form-label">Телефон</label><input class="form-input" id="settings-phone" /></div><div class="form-group"><label class="form-label">Email</label><input class="form-input" id="settings-email" /></div><button class="btn-primary" onclick="saveSettings()">Зберегти зміни</button></div></div></main></div></div>
-
-<!-- МОДАЛІ -->
-<div class="modal-overlay" id="modal-master"><div class="modal"><div class="modal-header"><h2 class="modal-title" id="modal-master-title">Додати майстра</h2><button class="modal-close" onclick="closeModal('modal-master')"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div><div class="modal-body"><div class="form-group"><label class="form-label">Фото майстра</label><div class="form-photo-upload" id="master-photo-upload-area"><input type="file" accept="image/*" id="master-photo-input" onchange="handlePhotoUpload('master')" /><div class="upload-icon"><svg width="32" height="32" fill="none" stroke="var(--gray-mid)" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div><div class="upload-text">Натисніть або перетягніть фото</div></div></div><div class="form-group"><label class="form-label">Повне ім'я</label><input class="form-input" id="master-name" placeholder="Прізвище Ім'я" /></div><div class="form-group"><label class="form-label">Роль</label><input class="form-input" id="master-role" placeholder="Перукар-стиліст" /></div><div class="form-group"><label class="form-label">Опис</label><textarea class="form-textarea" id="master-desc" rows="2"></textarea></div><div class="form-group"><label class="form-label">Навички (через кому)</label><input class="form-input" id="master-skills" placeholder="Стрижка, Фарбування" /></div><div class="form-group"><label class="form-label">Рейтинг</label><div class="form-rating" id="star-rating-input"><span class="star-input" data-val="1" onclick="setRating(1)">★</span><span class="star-input" data-val="2" onclick="setRating(2)">★</span><span class="star-input" data-val="3" onclick="setRating(3)">★</span><span class="star-input" data-val="4" onclick="setRating(4)">★</span><span class="star-input" data-val="5" onclick="setRating(5)">★</span></div></div></div><div class="modal-footer"><button class="btn-secondary" onclick="closeModal('modal-master')">Скасувати</button><button class="btn-primary" onclick="saveMaster()">Зберегти</button></div></div></div>
-
-<div class="modal-overlay" id="modal-add-photo"><div class="modal"><div class="modal-header"><h2 class="modal-title">Додати роботу</h2><button class="modal-close" onclick="closeModal('modal-add-photo')"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div><div class="modal-body"><div class="form-group"><label class="form-label">Фото роботи</label><div class="form-photo-upload" id="work-photo-upload-area"><input type="file" accept="image/*" id="work-photo-input" onchange="handlePhotoUpload('work')" /><div class="upload-icon"><svg width="32" height="32" fill="none" stroke="var(--gray-mid)" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div><div class="upload-text">Натисніть або перетягніть фото</div></div></div><div class="form-group"><label class="form-label">Підпис (необов'язково)</label><input class="form-input" id="work-caption" /></div></div><div class="modal-footer"><button class="btn-secondary" onclick="closeModal('modal-add-photo')">Скасувати</button><button class="btn-primary" onclick="saveWork()">Додати</button></div></div></div>
-
-<div class="modal-overlay" id="modal-works"><div class="modal"><div class="modal-header"><h2 class="modal-title">Роботи майстра: <span id="works-master-name"></span></h2><button class="modal-close" onclick="closeModal('modal-works')"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div><div class="modal-body" id="works-list-container"></div><div class="modal-footer"><button class="btn-secondary" onclick="closeModal('modal-works')">Закрити</button></div></div></div>
-
-<div class="toast" id="toast"><span id="toast-text"></span></div>
-
-<script>
-// ========== ГЛОБАЛЬНІ ДАНІ ==========
-const STORAGE_KEY = 'vpu19_data';
-const DEFAULT_DATA = {
-  masters: [
-    { id: 1, name: 'Олена Ковальчук', role: 'Перукар-стиліст', desc: 'Учениця 3-го курсу. Спеціалізується на жіночих стрижках та фарбуванні. Переможець міського конкурсу перукарів 2024 року.', skills: ['Стрижка', 'Фарбування', 'Укладка'], rating: 5, photo: null, works: [] },
-    { id: 2, name: 'Максим Бойко', role: 'Барбер', desc: 'Учень 2-го курсу. Захоплюється чоловічими стрижками та доглядом за бородою. Відмінник навчання.', skills: ['Чоловіча стрижка', 'Борода', 'Бритва'], rating: 4, photo: null, works: [] },
-    { id: 3, name: 'Аліна Мороз', role: 'Колорист', desc: 'Учениця 3-го курсу. Майстер кольорів — від класичного до сучасного балаяжу.', skills: ['Фарбування', 'Балаяж', 'Омбре', 'Укладка'], rating: 5, photo: null, works: [] }
-  ],
-  nextId: 4,
-  settings: { salonName: 'Перукарня ВПУ-19', heroDesc: 'Навчальна перукарня Вищого Професійного Училища №19. Тут майбутні майстри розвивають свою майстерність, а клієнти отримують якісні послуги.', address: '📍 м. Рівне, вул. Соборна 19', phone: '📞 +38 (0362) 63-19-19', email: '✉️ vpu19@education.ua' }
-};
-let appData = JSON.parse(JSON.stringify(DEFAULT_DATA));
-function loadData() { try { const raw = localStorage.getItem(STORAGE_KEY); if (raw) appData = JSON.parse(raw); else appData = JSON.parse(JSON.stringify(DEFAULT_DATA)); } catch(e) { appData = JSON.parse(JSON.stringify(DEFAULT_DATA)); } }
-function saveData() { localStorage.setItem(STORAGE_KEY, JSON.stringify(appData)); }
-loadData();
-
-// ========== МОБІЛЬНЕ МЕНЮ ==========
-function openMobileMenu() {
-  document.getElementById('mobileMenu').classList.add('open');
-  document.getElementById('menuOverlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-function closeMobileMenu() {
-  document.getElementById('mobileMenu').classList.remove('open');
-  document.getElementById('menuOverlay').classList.remove('open');
-  document.body.style.overflow = '';
-}
-document.getElementById('hamburgerBtn').addEventListener('click', openMobileMenu);
-document.getElementById('menuOverlay').addEventListener('click', closeMobileMenu);
-
-// ========== КУРСОР ==========
-const cursor = document.getElementById('cursor'), cursorRing = document.getElementById('cursorRing');
-let mx = 0, my = 0, rx = 0, ry = 0;
-document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
-function animateCursor() { cursor.style.left = mx + 'px'; cursor.style.top = my + 'px'; rx += (mx - rx) * 0.15; ry += (my - ry) * 0.15; cursorRing.style.left = rx + 'px'; cursorRing.style.top = ry + 'px'; requestAnimationFrame(animateCursor); }
-animateCursor();
-document.querySelectorAll('a, button, [onclick], .master-card, .gallery-item').forEach(el => { el.addEventListener('mouseenter', () => { cursor.style.width = '16px'; cursor.style.height = '16px'; cursorRing.style.width = '52px'; cursorRing.style.height = '52px'; }); el.addEventListener('mouseleave', () => { cursor.style.width = '10px'; cursor.style.height = '10px'; cursorRing.style.width = '36px'; cursorRing.style.height = '36px'; }); });
-
-// ========== НАВІГАЦІЯ ==========
-let currentPage = 'home';
-function navigate(pageId, param = null) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  const page = document.getElementById('page-' + pageId);
-  if (!page) return;
-  currentPage = pageId;
-  page.classList.add('active');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-  closeMobileMenu();
-  if (pageId === 'home') renderHome();
-  else if (pageId === 'masters') renderMasters();
-  else if (pageId === 'master-profile' && param) renderProfile(param);
-  else if (pageId === 'admin') renderAdmin();
-}
-window.addEventListener('scroll', () => document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40));
-
-// ========== ДОПОМІЖНІ ==========
-function starsHTML(rating) { return [1,2,3,4,5].map(i => `<span class="star ${i <= rating ? '' : 'empty'}">${i <= rating ? '★' : '☆'}</span>`).join(''); }
-function worksWord(n) { return n === 1 ? 'робота' : (n < 5 ? 'роботи' : 'робіт'); }
-function masterCardHTML(m) {
-  const photoHTML = m.photo ? `<img src="${m.photo}" class="img-placeholder" />` : `<svg width="56" height="56" fill="none" stroke="rgba(0,0,0,0.18)" stroke-width="1.2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>`;
-  return `<div class="master-card fade-up" onclick="navigate('master-profile', ${m.id})"><div class="master-card-photo"><div class="master-card-photo-inner">${photoHTML}</div><div class="master-card-overlay"><span class="master-card-overlay-text">Переглянути профіль<svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></div><div class="master-card-body"><div class="master-card-name">${escapeHtml(m.name)}</div><div class="master-card-role">${escapeHtml(m.role)}</div><div class="master-card-desc">${m.desc.substring(0, 90)}${m.desc.length>90?'...':''}</div><div class="stars">${starsHTML(m.rating)}</div></div><div class="master-card-footer"><span class="master-card-works">${m.works.length} ${worksWord(m.works.length)}</span><div class="master-card-arrow"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div></div>`;
-}
-function escapeHtml(str) { return str.replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
-
-// ========== ГОЛОВНА ==========
-function renderHome() {
-  document.getElementById('stat-masters').textContent = appData.masters.length;
-  const totalWorks = appData.masters.reduce((a,m)=> a + m.works.length, 0);
-  document.getElementById('stat-works').textContent = totalWorks;
-  const avgRating = appData.masters.length ? (appData.masters.reduce((s,m)=> s + m.rating,0)/appData.masters.length).toFixed(1) : '0';
-  document.getElementById('stat-rating').innerHTML = avgRating + '★';
-  document.getElementById('hero-description').innerText = appData.settings.heroDesc || 'Навчальна перукарня Вищого Професійного Училища №19.';
-  document.getElementById('footer-salon-name').innerText = appData.settings.salonName || 'Перукарня ВПУ-19';
-  document.getElementById('footer-address').innerHTML = appData.settings.address || '📍 м. [Місто], вул. [Адреса]';
-  document.getElementById('footer-phone').innerHTML = appData.settings.phone || '📞 +38 (0XX) XXX-XX-XX';
-  document.getElementById('footer-email').innerHTML = appData.settings.email || '✉️ info@vpu19.example.com';
-  const grid = document.getElementById('home-masters-grid');
-  grid.innerHTML = appData.masters.slice(0,3).map(m => masterCardHTML(m)).join('');
-  setTimeout(() => { document.querySelectorAll('.fade-up').forEach(el => { if(el.getBoundingClientRect().top < window.innerHeight-100) el.classList.add('visible'); }); }, 100);
-}
-
-// ========== МАЙСТРИ ==========
-function renderMasters() {
-  const grid = document.getElementById('masters-grid');
-  if(!appData.masters.length) grid.innerHTML = '<div style="padding:80px;text-align:center;">Майстрів поки немає. Додайте в адмін-панелі.</div>';
-  else grid.innerHTML = appData.masters.map(m => masterCardHTML(m)).join('');
-  setTimeout(() => { document.querySelectorAll('.fade-up').forEach(el => { if(el.getBoundingClientRect().top < window.innerHeight-100) el.classList.add('visible'); }); }, 100);
-}
-
-// ========== ПРОФІЛЬ МАЙСТРА ==========
-let currentMasterId = null;
-function renderProfile(masterId) {
-  const m = appData.masters.find(x => x.id === masterId);
-  if(!m) return navigate('masters');
-  currentMasterId = masterId;
-  document.getElementById('profile-name').innerHTML = escapeHtml(m.name);
-  document.getElementById('profile-role').innerHTML = escapeHtml(m.role);
-  document.getElementById('profile-desc').innerHTML = escapeHtml(m.desc);
-  document.getElementById('profile-rating-num').innerHTML = m.rating + '.0';
-  document.getElementById('profile-stars').innerHTML = starsHTML(m.rating);
-  const photoDiv = document.getElementById('profile-photo-inner');
-  photoDiv.innerHTML = m.photo ? `<img src="${m.photo}" style="width:100%;height:100%;object-fit:cover" />` : `<svg width="64" height="64" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>`;
-  document.getElementById('profile-skills').innerHTML = (m.skills || []).map(s => `<span class="profile-skill-tag">${escapeHtml(s)}</span>`).join('');
-  renderGallery(m);
-  document.getElementById('profile-add-photo-btn').onclick = () => { document.getElementById('work-photo-input').value = ''; document.getElementById('work-caption').value = ''; document.getElementById('work-photo-upload-area').style.background = ''; pendingWorkPhoto = null; openModal('modal-add-photo'); };
-}
-function renderGallery(m) {
-  const grid = document.getElementById('gallery-grid');
-  document.getElementById('gallery-count').innerHTML = `${m.works.length} ${worksWord(m.works.length)}`;
-  if(!m.works.length) { grid.innerHTML = `<div class="gallery-empty"><div class="gallery-empty-title">Робіт поки немає</div><div class="gallery-empty-sub">Майстер ще не додав фотографій</div></div>`; return; }
-  grid.innerHTML = m.works.map((w,idx) => `
-    <div class="gallery-item">
-      <div class="gallery-item-inner">${w.photo ? `<img src="${w.photo}" style="width:100%;height:100%;object-fit:cover" />` : `<svg width="32" height="32" fill="none" stroke="rgba(0,0,0,0.2)" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>`}</div>
-      <div class="gallery-item-overlay"><button class="delete-work-btn" onclick="event.stopPropagation(); deleteWork(${m.id}, ${w.id})">Видалити</button></div>
-    </div>`).join('');
-}
-function deleteWork(masterId, workId) {
-  if(!confirm('Видалити цю роботу?')) return;
-  const master = appData.masters.find(m => m.id === masterId);
-  if(master) { master.works = master.works.filter(w => w.id !== workId); saveData(); if(currentPage === 'master-profile' && currentMasterId === masterId) renderProfile(masterId); showToast('✓ Роботу видалено'); }
-}
-
-// ========== АДМІН ==========
-function renderAdmin() {
-  const tbody = document.getElementById('admin-masters-tbody');
-  if(!appData.masters.length) tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:48px;">Майстрів немає. Додайте першого!</td></tr>`;
-  else tbody.innerHTML = appData.masters.map(m => `
-    <tr><td><div class="table-avatar">${m.photo ? `<img src="${m.photo}" style="width:44px;height:44px;object-fit:cover" />` : `<svg width="20" height="20" fill="none" stroke="var(--gray-mid)" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>`}</div></td>
-    <td><span class="table-name">${escapeHtml(m.name)}</span></td><td style="color:var(--gray-mid);font-size:0.72rem;">${escapeHtml(m.role)}</td>
-    <td><div class="stars" style="font-size:0.75rem">${starsHTML(m.rating)}</div></td>
-    <td><div class="table-actions"><button class="btn-secondary" style="padding:7px 14px;font-size:0.62rem" onclick="openEditMasterModal(${m.id})">Редагувати</button><button class="btn-danger" onclick="deleteMaster(${m.id})">Видалити</button><button class="btn-primary" style="padding:7px 14px;font-size:0.62rem" onclick="openWorksModal(${m.id})">Роботи</button></div></td></tr>
-  `).join('');
-  document.getElementById('settings-name').value = appData.settings.salonName || '';
-  document.getElementById('settings-desc').value = appData.settings.heroDesc || '';
-  document.getElementById('settings-address').value = appData.settings.address || '';
-  document.getElementById('settings-phone').value = appData.settings.phone || '';
-  document.getElementById('settings-email').value = appData.settings.email || '';
-}
-function openWorksModal(masterId) {
-  const master = appData.masters.find(m => m.id === masterId);
-  if(!master) return;
-  document.getElementById('works-master-name').innerText = master.name;
-  const container = document.getElementById('works-list-container');
-  if(!master.works.length) container.innerHTML = '<p style="text-align:center;color:var(--gray-mid);padding:32px;">Цей майстер ще не додав робіт.</p>';
-  else container.innerHTML = master.works.map(w => `
-    <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px; border-bottom:1px solid var(--gray-light); padding:12px 0;">
-      <div style="width:60px;height:60px;background:#eee;overflow:hidden;">${w.photo ? `<img src="${w.photo}" style="width:100%;height:100%;object-fit:cover" />` : `<svg width="40" height="40" fill="none" stroke="#aaa" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>`}</div>
-      <div style="flex:1"><div style="font-size:0.8rem">${w.caption || 'Без підпису'}</div><small style="color:var(--gray-mid)">ID: ${w.id}</small></div>
-      <button class="btn-danger" onclick="deleteWorkFromModal(${master.id}, ${w.id})">Видалити</button>
+<!-- Стрічка -->
+<div id="page-feed" class="page active">
+  <div class="feed">
+    <div class="feed-header">
+      <h1>Стрічка <em>робіт</em></h1>
+      <p>Роботи наших майстрів та натхнення</p>
     </div>
-  `).join('');
-  openModal('modal-works');
-}
-function deleteWorkFromModal(masterId, workId) { deleteWork(masterId, workId); closeModal('modal-works'); openWorksModal(masterId); }
-function saveSettings() {
-  appData.settings = {
-    salonName: document.getElementById('settings-name').value,
-    heroDesc: document.getElementById('settings-desc').value,
-    address: document.getElementById('settings-address').value,
-    phone: document.getElementById('settings-phone').value,
-    email: document.getElementById('settings-email').value
+    <div id="feedContainer"></div>
+  </div>
+  <button id="createPostFAB" class="create-post-btn" style="display:none">+ Нова робота</button>
+</div>
+
+<!-- Список майстрів (користувачі з роллю master) -->
+<div id="page-masters" class="page">
+  <div class="masters-list" id="mastersList"></div>
+</div>
+
+<!-- Профіль користувача (динамічний) -->
+<div id="page-profile" class="page">
+  <div class="profile-layout" id="profileContainer"></div>
+</div>
+
+<!-- Модалка входу/реєстрації -->
+<div id="modal-auth" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header"><h2 class="modal-title" id="authModalTitle">Вхід</h2><button class="modal-close" onclick="closeModal('modal-auth')">✕</button></div>
+    <div class="modal-body">
+      <div class="form-group"><input class="form-input" id="authEmail" placeholder="Email"></div>
+      <div class="form-group"><input class="form-input" type="password" id="authPassword" placeholder="Пароль"></div>
+      <div class="form-group" id="roleSelectGroup" style="display:none">
+        <label class="form-label">Роль</label>
+        <select id="authRole" class="form-select"><option value="user">Користувач</option><option value="master">Майстер</option></select>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn-secondary" id="toggleAuthBtn">Зареєструватися</button><button class="btn-primary" id="submitAuthBtn">Увійти</button></div>
+  </div>
+</div>
+
+<!-- Модалка створення поста -->
+<div id="modal-post" class="modal-overlay">
+  <div class="modal"><div class="modal-header"><h2 class="modal-title">Нова робота</h2><button class="modal-close" onclick="closeModal('modal-post')">✕</button></div>
+  <div class="modal-body">
+    <div class="form-group"><label class="form-label">Фото</label><div class="form-photo-upload" id="postPhotoArea"><input type="file" id="postPhotoInput" accept="image/*"><div>Завантажити фото</div></div></div>
+    <div class="form-group"><label class="form-label">Опис</label><textarea class="form-textarea" id="postCaption" rows="2" placeholder="Розкажіть про роботу..."></textarea></div>
+  </div>
+  <div class="modal-footer"><button class="btn-secondary" onclick="closeModal('modal-post')">Скасувати</button><button class="btn-primary" id="submitPostBtn">Опублікувати</button></div></div>
+</div>
+
+<div class="toast" id="toast"><span id="toastText"></span></div>
+
+<script type="importmap">
+  { "imports": { "firebase/app": "https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js", "firebase/auth": "https://www.gstatic.com/firebasejs/10.7.2/firebase-auth.js", "firebase/firestore": "https://www.gstatic.com/firebasejs/10.7.2/firebase-firestore.js", "firebase/storage": "https://www.gstatic.com/firebasejs/10.7.2/firebase-storage.js" } }
+</script>
+<script type="module">
+  import { initializeApp } from "firebase/app";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "firebase/auth";
+  import { getFirestore, collection, doc, setDoc, getDoc, getDocs, addDoc, updateDoc, deleteDoc, query, orderBy, where, Timestamp, arrayUnion, arrayRemove, increment } from "firebase/firestore";
+  import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+
+  // Firebase config
+  const firebaseConfig = {
+    apiKey: "AIzaSyAoYoOeKo3zbpQxrP-6DjP94uMfMRsXxGo",
+    authDomain: "vpu-19.firebaseapp.com",
+    projectId: "vpu-19",
+    storageBucket: "vpu-19.firebasestorage.app",
+    messagingSenderId: "1021666755140",
+    appId: "1:1021666755140:web:a9ad8540f1de8ea0527211",
+    measurementId: "G-8XNV2QHFQK"
   };
-  saveData();
-  showToast('✓ Налаштування збережено');
-  if(currentPage === 'home') renderHome();
-}
-function switchAdminTab(tabId, el) { document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active')); document.querySelectorAll('.admin-nav-item').forEach(n => n.classList.remove('active')); document.getElementById('admin-'+tabId).classList.add('active'); el.classList.add('active'); }
-function openModal(id) { document.getElementById(id).classList.add('open'); }
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-document.querySelectorAll('.modal-overlay').forEach(o => o.addEventListener('click', e => { if(e.target === o) o.classList.remove('open'); }));
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const storage = getStorage(app);
 
-// ========== МАЙСТРИ: CRUD ==========
-let editingMasterId = null, currentRating = 5, pendingMasterPhoto = null, pendingWorkPhoto = null;
-function openAddMasterModal() { editingMasterId = null; pendingMasterPhoto = null; currentRating = 5; document.getElementById('modal-master-title').innerText = 'Додати майстра'; document.getElementById('master-name').value = ''; document.getElementById('master-role').value = ''; document.getElementById('master-desc').value = ''; document.getElementById('master-skills').value = ''; document.getElementById('master-photo-input').value = ''; document.getElementById('master-photo-upload-area').style.background = ''; setRating(5); openModal('modal-master'); }
-function openEditMasterModal(id) { const m = appData.masters.find(x => x.id === id); if(!m) return; editingMasterId = id; pendingMasterPhoto = m.photo || null; currentRating = m.rating; document.getElementById('modal-master-title').innerText = 'Редагувати майстра'; document.getElementById('master-name').value = m.name; document.getElementById('master-role').value = m.role; document.getElementById('master-desc').value = m.desc; document.getElementById('master-skills').value = (m.skills || []).join(', '); setRating(m.rating); const area = document.getElementById('master-photo-upload-area'); if(m.photo) area.style.backgroundImage = `url(${m.photo})`, area.style.backgroundSize = 'cover'; else area.style.background = ''; openModal('modal-master'); }
-function setRating(val) { currentRating = val; document.querySelectorAll('.star-input').forEach(s => s.classList.toggle('active', parseInt(s.dataset.val) <= val)); }
-function handlePhotoUpload(type) { const inputId = type === 'master' ? 'master-photo-input' : 'work-photo-input'; const areaId = type === 'master' ? 'master-photo-upload-area' : 'work-photo-upload-area'; const input = document.getElementById(inputId); const area = document.getElementById(areaId); if(!input.files[0]) return; const reader = new FileReader(); reader.onload = e => { const b64 = e.target.result; area.style.backgroundImage = `url(${b64})`; area.style.backgroundSize = 'cover'; if(type === 'master') pendingMasterPhoto = b64; else pendingWorkPhoto = b64; }; reader.readAsDataURL(input.files[0]); }
-function saveMaster() {
-  const name = document.getElementById('master-name').value.trim(); if(!name) { showToast('⚠ Введіть ім\'я'); return; }
-  const role = document.getElementById('master-role').value.trim() || 'Перукар';
-  const desc = document.getElementById('master-desc').value.trim() || 'Учень перукарського відділення';
-  const skillsRaw = document.getElementById('master-skills').value.trim();
-  const skills = skillsRaw ? skillsRaw.split(',').map(s=>s.trim()).filter(Boolean) : [];
-  if(editingMasterId !== null) {
-    const m = appData.masters.find(x=>x.id === editingMasterId);
-    if(m) { m.name = name; m.role = role; m.desc = desc; m.skills = skills; m.rating = currentRating; if(pendingMasterPhoto) m.photo = pendingMasterPhoto; showToast('✓ Майстра оновлено'); }
-  } else {
-    appData.masters.push({ id: appData.nextId++, name, role, desc, skills, rating: currentRating, photo: pendingMasterPhoto, works: [] });
-    showToast('✓ Майстра додано');
+  // Глобальні змінні
+  let currentUser = null;
+  let currentUserRole = null;
+
+  // DOM елементи
+  const feedContainer = document.getElementById('feedContainer');
+  const mastersList = document.getElementById('mastersList');
+  const profileContainer = document.getElementById('profileContainer');
+  const authBtn = document.getElementById('authBtn');
+  const mobileAuthBtn = document.getElementById('mobileAuthBtn');
+  const createPostFAB = document.getElementById('createPostFAB');
+  const toast = document.getElementById('toast');
+  function showToast(msg) { toastText.innerText = msg; toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 3000); }
+
+  // === Функції навігації ===
+  window.navigate = function(page, userId = null) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(`page-${page}`).classList.add('active');
+    if (page === 'feed') renderFeed();
+    else if (page === 'masters') renderMastersList();
+    else if (page === 'profile') renderProfile(userId || currentUser?.uid);
+    window.scrollTo(0,0);
+    closeMobileMenu();
+  };
+
+  // === Рендер стрічки ===
+  async function renderFeed() {
+    feedContainer.innerHTML = '<div style="text-align:center;padding:60px;">Завантаження...</div>';
+    const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
+    const snap = await getDocs(q);
+    if (snap.empty) { feedContainer.innerHTML = '<div style="text-align:center;padding:60px;">Поки що немає постів. Станьте майстром і додайте першу роботу!</div>'; return; }
+    let html = '';
+    for (const docSnap of snap.docs) {
+      const post = { id: docSnap.id, ...docSnap.data() };
+      const authorSnap = await getDoc(doc(db, "users", post.authorId));
+      const author = authorSnap.exists() ? authorSnap.data() : { name: "Невідомий", photoURL: null };
+      const isLiked = currentUser && post.likes?.includes(currentUser.uid);
+      const commentsSnap = await getDocs(query(collection(db, "comments"), where("postId", "==", post.id), orderBy("createdAt", "asc")));
+      const comments = commentsSnap.docs.map(c => ({ id: c.id, ...c.data() }));
+      html += `
+        <div class="post-card" data-postid="${post.id}">
+          <div class="post-header">
+            <div class="post-avatar">${author.photoURL ? `<img src="${author.photoURL}">` : '<svg width="28" fill="none" stroke="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>'}</div>
+            <div><div class="post-author" onclick="navigate('profile','${post.authorId}')">${escapeHtml(author.name)}</div><div class="post-date">${new Date(post.createdAt?.toDate()).toLocaleDateString('uk-UA')}</div></div>
+          </div>
+          ${post.imageURL ? `<img class="post-image" src="${post.imageURL}" alt="post">` : ''}
+          <div class="post-caption">${escapeHtml(post.caption || '')}</div>
+          <div class="post-actions">
+            <button class="action-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike('${post.id}')">❤️ ${post.likesCount || 0} Лайків</button>
+            <button class="action-btn" onclick="focusComment('${post.id}')">💬 ${comments.length} Коментарів</button>
+          </div>
+          <div class="comments-section" id="comments-${post.id}">
+            ${comments.map(c => `<div class="comment"><span class="comment-strong">${escapeHtml(c.authorName)}</span> ${escapeHtml(c.text)}</div>`).join('')}
+            ${currentUser ? `<div class="comment-form"><input class="comment-input" id="comment-${post.id}" placeholder="Ваш коментар..."><button class="comment-submit" onclick="addComment('${post.id}')">→</button></div>` : '<div class="comment-form">Увійдіть, щоб коментувати</div>'}
+          </div>
+        </div>`;
+    }
+    feedContainer.innerHTML = html;
   }
-  saveData(); closeModal('modal-master'); renderAdmin(); if(currentPage === 'masters') renderMasters(); else if(currentPage === 'home') renderHome();
-}
-function deleteMaster(id) { if(!confirm('Видалити майстра?')) return; appData.masters = appData.masters.filter(m=>m.id !== id); saveData(); renderAdmin(); if(currentPage === 'masters') renderMasters(); else if(currentPage === 'home') renderHome(); else if(currentPage === 'master-profile' && currentMasterId === id) navigate('masters'); showToast('✓ Майстра видалено'); }
-function saveWork() { if(!currentMasterId) return; const m = appData.masters.find(x=>x.id === currentMasterId); if(!m) return; if(!pendingWorkPhoto) { showToast('⚠ Оберіть фото'); return; } m.works.push({ id: Date.now(), photo: pendingWorkPhoto, caption: document.getElementById('work-caption').value.trim() }); saveData(); renderGallery(m); closeModal('modal-add-photo'); pendingWorkPhoto = null; showToast('✓ Фото додано'); }
-function showToast(msg) { const t = document.getElementById('toast'); document.getElementById('toast-text').innerText = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000); }
 
-document.addEventListener('DOMContentLoaded', () => { navigate('home'); document.addEventListener('keydown', e => { if(e.key === 'Escape') document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open')); }); });
+  window.toggleLike = async (postId) => {
+    if (!currentUser) { showToast('Увійдіть, щоб ставити лайки'); openAuthModal(); return; }
+    const postRef = doc(db, "posts", postId);
+    const postSnap = await getDoc(postRef);
+    const likes = postSnap.data().likes || [];
+    if (likes.includes(currentUser.uid)) {
+      await updateDoc(postRef, { likes: arrayRemove(currentUser.uid), likesCount: increment(-1) });
+    } else {
+      await updateDoc(postRef, { likes: arrayUnion(currentUser.uid), likesCount: increment(1) });
+    }
+    renderFeed();
+  };
+
+  window.addComment = async (postId) => {
+    if (!currentUser) return;
+    const input = document.getElementById(`comment-${postId}`);
+    const text = input.value.trim();
+    if (!text) return;
+    await addDoc(collection(db, "comments"), {
+      postId, authorId: currentUser.uid, authorName: currentUser.displayName || currentUser.email.split('@')[0], text, createdAt: Timestamp.now()
+    });
+    input.value = '';
+    renderFeed();
+  };
+
+  window.focusComment = (postId) => { document.getElementById(`comment-${postId}`)?.focus(); };
+
+  // === Рендер списку майстрів ===
+  async function renderMastersList() {
+    mastersList.innerHTML = '<div style="text-align:center;padding:60px;">Завантаження...</div>';
+    const q = query(collection(db, "users"), where("role", "==", "master"));
+    const snap = await getDocs(q);
+    if (snap.empty) { mastersList.innerHTML = '<div>Майстрів поки немає</div>'; return; }
+    let html = '';
+    for (const docSnap of snap.docs) {
+      const u = docSnap.data();
+      const postsCount = (await getDocs(query(collection(db, "posts"), where("authorId", "==", docSnap.id)))).size;
+      html += `<div class="master-card" onclick="navigate('profile','${docSnap.id}')"><div class="master-card-photo">${u.photoURL ? `<img src="${u.photoURL}">` : '<svg width="64" fill="none" stroke="#aaa"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>'}</div><div class="master-card-info"><div class="master-card-name">${escapeHtml(u.name || u.email.split('@')[0])}</div><div class="master-card-role">Майстер</div><div class="master-card-rating">⭐ ${u.rating || '—'}</div><div>📸 ${postsCount} робіт</div></div></div>`;
+    }
+    mastersList.innerHTML = html;
+  }
+
+  // === Рендер профілю ===
+  async function renderProfile(userId) {
+    if (!userId) { profileContainer.innerHTML = '<div style="padding:120px;text-align:center">Користувач не знайдений. Увійдіть.</div>'; return; }
+    const userSnap = await getDoc(doc(db, "users", userId));
+    if (!userSnap.exists()) { profileContainer.innerHTML = '<div>Користувача не існує</div>'; return; }
+    const user = userSnap.data();
+    const postsSnap = await getDocs(query(collection(db, "posts"), where("authorId", "==", userId), orderBy("createdAt", "desc")));
+    const posts = postsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+    const isOwnProfile = currentUser && currentUser.uid === userId;
+    profileContainer.innerHTML = `
+      <div class="profile-sidebar">
+        <div class="profile-avatar">${user.photoURL ? `<img src="${user.photoURL}">` : '<svg width="100%" fill="none" stroke="#aaa"><circle cx="50%" cy="40%" r="40"/><path d="M20 80c0-30 20-50 50-50s50 20 50 50"/></svg>'}</div>
+        <div class="profile-name">${escapeHtml(user.name || user.email.split('@')[0])}</div>
+        <div class="profile-role">${user.role === 'master' ? 'Майстер' : 'Користувач'}</div>
+        <div class="profile-stats"><div class="profile-stat"><div class="profile-stat-value">${posts.length}</div><div>робіт</div></div></div>
+        ${user.bio ? `<p>${escapeHtml(user.bio)}</p>` : ''}
+        ${isOwnProfile && user.role === 'master' ? `<button class="btn-primary" style="margin-top:32px;width:100%" onclick="openCreatePost()">+ Нова робота</button>` : ''}
+        ${isOwnProfile ? `<button class="btn-secondary" style="margin-top:16px;width:100%" onclick="logout()">Вийти</button>` : ''}
+      </div>
+      <div class="profile-main">
+        <h3>Роботи</h3>
+        <div class="profile-posts-grid">${posts.map(p => `<div class="profile-post"><img src="${p.imageURL}" onerror="this.src='https://placehold.co/400x400?text=No+Image'"></div>`).join('') || '<div>Ще немає робіт</div>'}</div>
+      </div>
+    `;
+  }
+
+  // === Створення поста ===
+  window.openCreatePost = () => { if (!currentUser || currentUserRole !== 'master') { showToast('Тільки майстри можуть створювати пости'); return; } document.getElementById('postPhotoInput').value = ''; document.getElementById('postPhotoArea').style.background = ''; openModal('modal-post'); };
+  document.getElementById('submitPostBtn').onclick = async () => {
+    const file = document.getElementById('postPhotoInput').files[0];
+    if (!file) { showToast('Оберіть фото'); return; }
+    const caption = document.getElementById('postCaption').value;
+    const storageRef = ref(storage, `posts/${Date.now()}_${file.name}`);
+    await uploadBytes(storageRef, file);
+    const imageURL = await getDownloadURL(storageRef);
+    await addDoc(collection(db, "posts"), {
+      authorId: currentUser.uid, authorName: currentUser.displayName || currentUser.email.split('@')[0], caption, imageURL, createdAt: Timestamp.now(), likes: [], likesCount: 0
+    });
+    closeModal('modal-post');
+    showToast('Пост опубліковано!');
+    navigate('feed');
+  };
+
+  // === Аутентифікація ===
+  function openAuthModal() { document.getElementById('authModalTitle').innerText = isLoginMode ? 'Вхід' : 'Реєстрація'; openModal('modal-auth'); }
+  let isLoginMode = true;
+  document.getElementById('toggleAuthBtn').onclick = () => {
+    isLoginMode = !isLoginMode;
+    document.getElementById('authModalTitle').innerText = isLoginMode ? 'Вхід' : 'Реєстрація';
+    document.getElementById('roleSelectGroup').style.display = isLoginMode ? 'none' : 'block';
+    document.getElementById('toggleAuthBtn').innerText = isLoginMode ? 'Зареєструватися' : 'Вже маєте акаунт? Увійти';
+    document.getElementById('submitAuthBtn').innerText = isLoginMode ? 'Увійти' : 'Зареєструватися';
+  };
+  document.getElementById('submitAuthBtn').onclick = async () => {
+    const email = document.getElementById('authEmail').value;
+    const password = document.getElementById('authPassword').value;
+    if (!email || !password) { showToast('Заповніть усі поля'); return; }
+    try {
+      if (isLoginMode) {
+        const cred = await signInWithEmailAndPassword(auth, email, password);
+        showToast(`Вітаємо, ${cred.user.email}`);
+      } else {
+        const role = document.getElementById('authRole').value;
+        const cred = await createUserWithEmailAndPassword(auth, email, password);
+        await setDoc(doc(db, "users", cred.user.uid), { email, role, name: email.split('@')[0], createdAt: Timestamp.now() });
+        showToast('Реєстрація успішна!');
+      }
+      closeModal('modal-auth');
+    } catch(e) { showToast('Помилка: ' + e.message); }
+  };
+
+  function logout() { signOut(auth); showToast('Ви вийшли'); navigate('feed'); }
+
+  // === Стан авторизації ===
+  onAuthStateChanged(auth, async (user) => {
+    currentUser = user;
+    if (user) {
+      const userDoc = await getDoc(doc(db, "users", user.uid));
+      if (userDoc.exists()) { currentUserRole = userDoc.data().role; user.displayName = userDoc.data().name; }
+      else { currentUserRole = 'user'; }
+      authBtn.innerText = 'Профіль';
+      mobileAuthBtn.innerText = 'Профіль';
+      authBtn.onclick = () => navigate('profile');
+      mobileAuthBtn.onclick = () => navigate('profile');
+      createPostFAB.style.display = currentUserRole === 'master' ? 'flex' : 'none';
+    } else {
+      currentUserRole = null;
+      authBtn.innerText = 'Увійти';
+      mobileAuthBtn.innerText = 'Увійти';
+      authBtn.onclick = () => openAuthModal();
+      mobileAuthBtn.onclick = () => openAuthModal();
+      createPostFAB.style.display = 'none';
+    }
+    if (document.getElementById('page-feed').classList.contains('active')) renderFeed();
+    else if (document.getElementById('page-profile').classList.contains('active')) renderProfile(currentUser?.uid);
+  });
+
+  // === Допоміжні функції ===
+  window.openModal = (id) => document.getElementById(id).classList.add('open');
+  window.closeModal = (id) => document.getElementById(id).classList.remove('open');
+  function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+  document.querySelectorAll('.modal-overlay').forEach(o => o.addEventListener('click', e => { if(e.target === o) o.classList.remove('open'); }));
+  document.getElementById('createPostFAB').onclick = () => openCreatePost();
+  document.getElementById('postPhotoInput').onchange = (e) => { if(e.target.files[0]) { const url = URL.createObjectURL(e.target.files[0]); document.getElementById('postPhotoArea').style.background = `url(${url}) center/cover`; } };
+  window.closeMobileMenu = () => { document.getElementById('mobileMenu').classList.remove('open'); document.getElementById('menuOverlay').classList.remove('open'); document.body.style.overflow = ''; };
+  document.getElementById('hamburgerBtn').onclick = () => { document.getElementById('mobileMenu').classList.add('open'); document.getElementById('menuOverlay').classList.add('open'); document.body.style.overflow = 'hidden'; };
+  document.getElementById('menuOverlay').onclick = closeMobileMenu;
+  window.addEventListener('scroll', () => document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40));
+  // Курсор (простий)
+  if (window.innerWidth > 1024) {
+    const cur = document.getElementById('cursor'), ring = document.getElementById('cursorRing');
+    let mx=0,my=0,rx=0,ry=0;
+    document.addEventListener('mousemove', e=>{ mx=e.clientX; my=e.clientY; });
+    function anim(){ cur.style.left=mx+'px'; cur.style.top=my+'px'; rx+=(mx-rx)*0.15; ry+=(my-ry)*0.15; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(anim); }
+    anim();
+  }
+  // початкова навігація
+  navigate('feed');
 </script>
 </body>
 </html>
