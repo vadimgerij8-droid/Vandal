@@ -1,906 +1,1120 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>SALADE FRESH | ВПУ 19 — Сучасний барбершоп</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-
-  html {
-    scroll-behavior: smooth;
-  }
-
-  /* ========= GREEN SALAD COLOR SYSTEM ========= */
-  :root {
-    --deep-forest: #0f1f0c;
-    --charcoal: #1a2a16;
-    --fresh-leaf: #2e4827;
-    --salad-base: #7cb518;
-    --salad-bright: #a7e05e;
-    --salad-glow: #c7f29e;
-    --salad-moss: #5f8b2c;
-    --cream: #f7f9e4;
-    --light-mist: #dde6cf;
-    --silver-green: #b9c9a4;
-    --ink-light: #232d1f;
-    --paper-green: #f0f5e6;
-    --shadow-green: rgba(124, 181, 24, 0.2);
-    --accent-dark: #3a6220;
-    --accent-fire: #9ccc5c;
-  }
-
-  body {
-    background: var(--deep-forest);
-    color: var(--cream);
-    font-family: 'DM Sans', sans-serif;
-    overflow-x: hidden;
-  }
-
-  /* custom scroll */
-  ::-webkit-scrollbar { width: 5px; }
-  ::-webkit-scrollbar-track { background: var(--charcoal); }
-  ::-webkit-scrollbar-thumb { background: var(--salad-base); border-radius: 8px; }
-
-  /* noise overlay subtle */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.07'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 9999;
-    opacity: 0.25;
-  }
-
-  /* HEADER — glassmorph green */
-  header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 500;
-    padding: 0.8rem 0;
-    background: rgba(15, 31, 12, 0.85);
-    backdrop-filter: blur(14px);
-    border-bottom: 1px solid var(--salad-moss);
-    transition: all 0.2s;
-  }
-
-  .nav-wrap {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 2rem;
-  }
-
-  .logo {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.8rem;
-    letter-spacing: 2px;
-    color: var(--salad-glow);
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-  }
-
-  .logo-sep {
-    width: 1px;
-    height: 1.6rem;
-    background: var(--salad-bright);
-  }
-
-  .logo-sub {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.7rem;
-    font-weight: 300;
-    letter-spacing: 4px;
-    color: var(--silver-green);
-  }
-
-  .nav-links {
-    display: flex;
-    gap: 2rem;
-    list-style: none;
-  }
-
-  .nav-links a {
-    font-size: 0.78rem;
-    font-weight: 500;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--light-mist);
-    text-decoration: none;
-    transition: color 0.2s;
-    position: relative;
-  }
-
-  .nav-links a::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: -4px;
-    width: 0;
-    height: 2px;
-    background: var(--salad-bright);
-    transition: width 0.25s ease;
-  }
-
-  .nav-links a:hover {
-    color: var(--salad-glow);
-  }
-
-  .nav-links a:hover::after {
-    width: 100%;
-  }
-
-  .nav-cta {
-    background: var(--salad-base);
-    color: var(--deep-forest);
-    padding: 0.55rem 1.6rem;
-    font-size: 0.78rem;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    text-decoration: none;
-    border-radius: 40px;
-    transition: all 0.2s;
-    white-space: nowrap;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-  }
-
-  .nav-cta:hover {
-    background: var(--salad-bright);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 14px rgba(124, 181, 24, 0.3);
-  }
-
-  .mobile-btn {
-    display: none;
-    background: none;
-    border: none;
-    color: var(--salad-glow);
-    font-size: 1.6rem;
-    cursor: pointer;
-  }
-
-  /* HERO SECTION */
-  .hero {
-    min-height: 100vh;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    position: relative;
-    padding-top: 72px;
-  }
-
-  .hero-visual {
-    position: relative;
-    background: url('https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=900&q=80') center/cover no-repeat;
-    filter: grayscale(20%) contrast(1.05) brightness(0.9);
-  }
-
-  .hero-visual::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to right, var(--deep-forest) 0%, rgba(46, 72, 39, 0.7) 100%);
-  }
-
-  .hero-content {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 4rem 4rem 4rem 3rem;
-    position: relative;
-  }
-
-  .hero-tag {
-    font-size: 0.7rem;
-    font-weight: 600;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: var(--salad-bright);
-    margin-bottom: 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .hero-tag::before {
-    content: '';
-    width: 40px;
-    height: 2px;
-    background: var(--salad-bright);
-  }
-
-  .hero h1 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(3.5rem, 6vw, 6.5rem);
-    line-height: 0.95;
-    letter-spacing: 1px;
-    color: var(--cream);
-    margin-bottom: 1.8rem;
-  }
-
-  .hero h1 em {
-    font-family: 'DM Serif Display', serif;
-    font-style: italic;
-    color: var(--salad-glow);
-    font-size: 0.75em;
-  }
-
-  .hero-desc {
-    color: var(--light-mist);
-    font-size: 1rem;
-    line-height: 1.7;
-    max-width: 380px;
-    margin-bottom: 2.5rem;
-  }
-
-  .btn-green {
-    background: var(--salad-base);
-    color: var(--deep-forest);
-    padding: 0.8rem 2rem;
-    font-size: 0.82rem;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    text-decoration: none;
-    display: inline-block;
-    transition: 0.2s;
-    border-radius: 40px;
-    border: 1px solid var(--salad-base);
-  }
-
-  .btn-green:hover {
-    background: transparent;
-    color: var(--salad-bright);
-    border-color: var(--salad-bright);
-  }
-
-  .btn-ghost {
-    background: transparent;
-    color: var(--light-mist);
-    padding: 0.8rem 2rem;
-    font-size: 0.82rem;
-    font-weight: 500;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    text-decoration: none;
-    display: inline-block;
-    border: 1px solid var(--fresh-leaf);
-    border-radius: 40px;
-    transition: 0.2s;
-  }
-
-  .btn-ghost:hover {
-    border-color: var(--salad-bright);
-    color: var(--salad-glow);
-  }
-
-  .hero-stats {
-    display: flex;
-    gap: 2.5rem;
-    margin-top: 3rem;
-    padding-top: 2rem;
-    border-top: 1px solid var(--fresh-leaf);
-  }
-
-  .hero-stat-num {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 2.4rem;
-    color: var(--salad-glow);
-    line-height: 1;
-  }
-
-  .hero-stat-label {
-    font-size: 0.72rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--silver-green);
-  }
-
-  /* sections common */
-  .section {
-    padding: 6rem 0;
-    border-bottom: 1px solid var(--fresh-leaf);
-  }
-
-  .container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 2rem;
-  }
-
-  .section-label {
-    font-size: 0.68rem;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: var(--salad-bright);
-    margin-bottom: 1.2rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .section-label::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(to right, var(--fresh-leaf), transparent);
-  }
-
-  .section-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(2.2rem, 4vw, 3.8rem);
-    letter-spacing: 1px;
-    color: var(--cream);
-    line-height: 1;
-    margin-bottom: 0.6rem;
-  }
-
-  .section-sub {
-    color: var(--silver-green);
-    font-size: 0.95rem;
-    font-weight: 300;
-    margin-bottom: 3.5rem;
-    max-width: 500px;
-  }
-
-  /* masters card style */
-  #masters {
-    background: var(--charcoal);
-  }
-
-  .masters-controls {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
-  }
-
-  .filter-sort-group {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-  }
-
-  .master-search {
-    background: var(--ink-light);
-    border: 1px solid var(--fresh-leaf);
-    padding: 0.5rem 1rem;
-    color: var(--cream);
-    border-radius: 40px;
-    font-family: 'DM Sans', sans-serif;
-    outline: none;
-  }
-
-  .master-search:focus {
-    border-color: var(--salad-base);
-  }
-
-  .sort-select {
-    background: var(--ink-light);
-    border: 1px solid var(--fresh-leaf);
-    padding: 0.5rem 1rem;
-    color: var(--cream);
-    border-radius: 40px;
-    font-family: 'DM Sans', sans-serif;
-    cursor: pointer;
-  }
-
-  .masters-tabs {
-    display: flex;
-    gap: 0.5rem;
-    border-bottom: 1px solid var(--fresh-leaf);
-    margin-bottom: 2rem;
-  }
-
-  .master-tab {
-    padding: 0.6rem 1.4rem;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--silver-green);
-    cursor: pointer;
-    background: none;
-    border: none;
-    border-bottom: 2px solid transparent;
-    transition: 0.2s;
-  }
-
-  .master-tab.active {
-    color: var(--salad-bright);
-    border-bottom-color: var(--salad-bright);
-  }
-
-  .masters-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.8rem;
-  }
-
-  .master-card {
-    background: var(--deep-forest);
-    border: 1px solid var(--fresh-leaf);
-    border-radius: 24px;
-    overflow: hidden;
-    transition: transform 0.25s, border-color 0.2s, box-shadow 0.2s;
-  }
-
-  .master-card:hover {
-    transform: translateY(-8px);
-    border-color: var(--salad-base);
-    box-shadow: 0 20px 30px -12px rgba(124, 181, 24, 0.2);
-  }
-
-  .master-photo {
-    width: 100%;
-    aspect-ratio: 4/3;
-    object-fit: cover;
-    filter: grayscale(40%);
-    transition: filter 0.4s;
-  }
-
-  .master-card:hover .master-photo {
-    filter: grayscale(10%);
-  }
-
-  .master-info {
-    padding: 1.5rem;
-  }
-
-  .master-name {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.6rem;
-    letter-spacing: 1px;
-    color: var(--cream);
-  }
-
-  .master-specialty {
-    font-size: 0.75rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--salad-bright);
-    margin-bottom: 0.8rem;
-  }
-
-  .master-stars {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-  }
-
-  .stars {
-    color: var(--salad-bright);
-    font-size: 0.85rem;
-  }
-
-  .score {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.3rem;
-    color: var(--cream);
-  }
-
-  .rating-row {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .rating-label {
-    font-size: 0.75rem;
-    color: var(--silver-green);
-    width: 80px;
-  }
-
-  .rating-bar-wrap {
-    flex: 1;
-    height: 5px;
-    background: var(--fresh-leaf);
-    border-radius: 4px;
-    overflow: hidden;
-  }
-
-  .rating-bar-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--salad-base), var(--salad-bright));
-    border-radius: 4px;
-  }
-
-  .master-skills {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
-    margin: 1rem 0;
-  }
-
-  .skill-tag {
-    font-size: 0.65rem;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    background: var(--fresh-leaf);
-    padding: 0.25rem 0.7rem;
-    border-radius: 20px;
-    color: var(--silver-green);
-  }
-
-  .master-stats {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    background: var(--charcoal);
-    border-top: 1px solid var(--fresh-leaf);
-  }
-
-  .master-stat {
-    padding: 0.8rem;
-    text-align: center;
-  }
-
-  .master-stat-val {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.4rem;
-    color: var(--salad-glow);
-  }
-
-  /* feed, sidebar, etc — green adaptation */
-  .post-card, .sidebar-card {
-    background: var(--charcoal);
-    border: 1px solid var(--fresh-leaf);
-    border-radius: 24px;
-    transition: all 0.2s;
-  }
-
-  .post-card:hover {
-    border-color: var(--salad-base);
-  }
-
-  .post-tag {
-    color: var(--salad-bright);
-    border-color: var(--salad-moss);
-  }
-
-  .post-action.liked {
-    color: var(--salad-bright);
-  }
-
-  .btn-gold, .form-submit {
-    background: var(--salad-base);
-    color: var(--deep-forest);
-    border: none;
-    border-radius: 40px;
-  }
-
-  .btn-gold:hover, .form-submit:hover {
-    background: var(--salad-bright);
-  }
-
-  .cloud-tag.active {
-    background: var(--salad-base);
-    color: var(--deep-forest);
-    border-color: var(--salad-base);
-  }
-
-  .service-tile::before {
-    background: var(--salad-bright);
-  }
-
-  .service-price {
-    color: var(--salad-bright);
-  }
-
-  .p-val {
-    color: var(--salad-bright);
-  }
-
-  .footer-col h4 {
-    color: var(--salad-bright);
-  }
-
-  .scroll-top {
-    position: fixed;
-    bottom: 30px;
-    right: 25px;
-    background: var(--salad-base);
-    width: 44px;
-    height: 44px;
-    border-radius: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--deep-forest);
-    cursor: pointer;
-    z-index: 1000;
-    transition: 0.2s;
-    opacity: 0;
-    visibility: hidden;
-  }
-
-  .scroll-top.visible {
-    opacity: 1;
-    visibility: visible;
-  }
-
-  .scroll-top:hover {
-    transform: scale(1.05);
-    background: var(--salad-bright);
-  }
-
-  @media (max-width: 1100px) {
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ПЕРУКАРНЯ ВПУ-19 | Стиль та майстерність</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ========== ЗМІННІ ТА СКИДАННЯ ========== */
+    :root {
+      --black: #0a0a0a;
+      --white: #f5f5f0;
+      --gray-light: #e8e8e3;
+      --gray-mid: #b0b0a8;
+      --gray-dark: #2a2a2a;
+      --accent: #1a1a1a;
+      --font-display: 'Cormorant Garamond', serif;
+      --font-body: 'Montserrat', sans-serif;
+      --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      --shadow: 0 8px 40px rgba(0,0,0,0.12);
+      --shadow-hover: 0 16px 60px rgba(0,0,0,0.22);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--white);
+      color: var(--black);
+      overflow-x: hidden;
+      cursor: none;
+    }
+    /* ========== КАСТОМНИЙ КУРСОР ========== */
+    .cursor {
+      position: fixed;
+      width: 10px; height: 10px;
+      background: var(--black);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width 0.3s, height 0.3s, background 0.3s;
+    }
+    .cursor-ring {
+      position: fixed;
+      width: 36px; height: 36px;
+      border: 1px solid var(--black);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: width 0.4s, height 0.4s, border-color 0.3s, opacity 0.3s;
+      opacity: 0.5;
+    }
+    /* ========== НАВІГАЦІЯ ========== */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 24px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(245,245,240,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid transparent;
+      transition: var(--transition);
+    }
+    nav.scrolled { border-bottom-color: var(--gray-light); padding: 16px 48px; }
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--black);
+      cursor: pointer;
+    }
+    .nav-links { display: flex; gap: 40px; list-style: none; }
+    .nav-links a {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gray-dark);
+      text-decoration: none;
+      position: relative;
+      transition: var(--transition);
+      cursor: pointer;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -3px; left: 0;
+      width: 0; height: 1px;
+      background: var(--black);
+      transition: width 0.3s ease;
+    }
+    .nav-links a:hover { color: var(--black); }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-admin-btn {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 8px 20px;
+      border: 1px solid var(--black);
+      background: transparent;
+      color: var(--black);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .nav-admin-btn:hover { background: var(--black); color: var(--white); }
+    /* ========== СТОРІНКИ ========== */
+    .page {
+      display: none;
+      min-height: 100vh;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .page.active { display: block; opacity: 1; transform: translateY(0); }
+    /* ========== ГОЛОВНА — HERO ========== */
     .hero {
-      grid-template-columns: 1fr;
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      position: relative;
+      overflow: hidden;
     }
-    .hero-visual {
-      display: none;
-    }
-  }
-
-  @media (max-width: 680px) {
-    .nav-links {
-      display: none;
-    }
-    .mobile-btn {
-      display: block;
-    }
-    .nav-links.open {
+    .hero-left {
+      background: var(--black);
       display: flex;
       flex-direction: column;
+      justify-content: center;
+      padding: 120px 64px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-left::before {
+      content: '';
       position: absolute;
-      top: 68px;
-      left: 0;
-      right: 0;
-      background: var(--deep-forest);
-      padding: 2rem;
-      backdrop-filter: blur(12px);
+      top: -100px; right: -100px;
+      width: 400px; height: 400px;
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 50%;
+      animation: rotate 20s linear infinite;
     }
-    .masters-controls {
+    .hero-left::after {
+      content: '';
+      position: absolute;
+      bottom: -80px; left: -80px;
+      width: 300px; height: 300px;
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 50%;
+      animation: rotate 15s linear infinite reverse;
+    }
+    @keyframes rotate { to { transform: rotate(360deg); } }
+    .hero-tag {
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gray-mid);
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hero-tag::before {
+      content: '';
+      display: block;
+      width: 32px; height: 1px;
+      background: var(--gray-mid);
+    }
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 5vw, 5.5rem);
+      font-weight: 300;
+      line-height: 1.05;
+      color: var(--white);
+      margin-bottom: 16px;
+      letter-spacing: -0.01em;
+    }
+    .hero-title em { font-style: italic; font-weight: 300; display: block; }
+    .hero-title strong { font-weight: 600; display: block; }
+    .hero-number {
+      font-family: var(--font-display);
+      font-size: clamp(6rem, 12vw, 14rem);
+      font-weight: 300;
+      line-height: 0.85;
+      color: rgba(255,255,255,0.06);
+      position: absolute;
+      bottom: 40px; right: 32px;
+      letter-spacing: -0.04em;
+      pointer-events: none;
+    }
+    .hero-desc {
+      font-size: 0.78rem;
+      font-weight: 300;
+      line-height: 1.9;
+      color: var(--gray-mid);
+      max-width: 320px;
+      margin-bottom: 56px;
+      margin-top: 24px;
+    }
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--black);
+      background: var(--white);
+      padding: 18px 40px;
+      cursor: pointer;
+      border: none;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+    .hero-cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--gray-light);
+      transform: translateX(-100%);
+      transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      z-index: -1;
+    }
+    .hero-cta:hover::before { transform: translateX(0); }
+    .hero-cta svg { transition: transform 0.3s ease; }
+    .hero-cta:hover svg { transform: translateX(6px); }
+    .hero-right {
+      background: var(--gray-light);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero-right-inner {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       flex-direction: column;
-      align-items: stretch;
+      gap: 32px;
+      padding: 120px 64px 80px;
     }
-  }
-
-  .fade-up {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.6s, transform 0.6s;
-  }
-  .fade-up.visible {
-    opacity: 1;
-    transform: none;
-  }
-  #scroll-bar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 3px;
-    background: var(--salad-bright);
-    width: 0%;
-    z-index: 1000;
-  }
-</style>
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+    .hero-stats {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      position: relative;
+      z-index: 1;
+      padding: 48px;
+      border: 1px solid rgba(0,0,0,0.1);
+      background: rgba(245,245,240,0.8);
+      backdrop-filter: blur(8px);
+      min-width: 280px;
+    }
+    .hero-stat-num {
+      font-family: var(--font-display);
+      font-size: 3.5rem;
+      font-weight: 300;
+      line-height: 1;
+      color: var(--black);
+      letter-spacing: -0.02em;
+    }
+    .hero-stat-label {
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gray-mid);
+      margin-top: 4px;
+    }
+    .hero-stat-divider {
+      width: 100%;
+      height: 1px;
+      background: var(--gray-light);
+    }
+    /* ========== СЕКЦІЇ ========== */
+    .section { padding: 120px 64px; }
+    .section-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 72px;
+    }
+    .section-label {
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gray-mid);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .section-label::before {
+      content: '';
+      display: block;
+      width: 24px; height: 1px;
+      background: var(--gray-mid);
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 4vw, 4rem);
+      font-weight: 300;
+      line-height: 1.1;
+      color: var(--black);
+    }
+    .section-title em { font-style: italic; }
+    /* ========== МАЙСТРИ ========== */
+    #page-masters { padding-top: 100px; }
+    .masters-header-section { padding: 80px 64px 40px; border-bottom: 1px solid var(--gray-light); }
+    .masters-grid {
+      padding: 64px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2px;
+    }
+    .master-card {
+      background: var(--white);
+      border: 1px solid var(--gray-light);
+      cursor: pointer;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    .master-card:hover { box-shadow: var(--shadow-hover); z-index: 2; transform: translateY(-4px); }
+    .master-card-photo {
+      width: 100%;
+      aspect-ratio: 4/5;
+      background: var(--gray-light);
+      overflow: hidden;
+      position: relative;
+    }
+    .master-card-photo-inner {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, var(--gray-light) 0%, #d0d0c8 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .master-card:hover .master-card-photo-inner { transform: scale(1.05); }
+    .master-card-photo-inner svg { opacity: 0.3; }
+    .master-card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      display: flex;
+      align-items: flex-end;
+      padding: 24px;
+    }
+    .master-card:hover .master-card-overlay { opacity: 1; }
+    .master-card-overlay-text {
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .master-card-body { padding: 24px; }
+    .master-card-name {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      font-weight: 400;
+      color: var(--black);
+      margin-bottom: 6px;
+      line-height: 1.2;
+    }
+    .master-card-role {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gray-mid);
+      margin-bottom: 14px;
+    }
+    .master-card-desc {
+      font-size: 0.78rem;
+      line-height: 1.7;
+      color: var(--gray-dark);
+      margin-bottom: 20px;
+    }
+    .stars { display: flex; gap: 3px; }
+    .star { font-size: 0.8rem; color: var(--black); }
+    .star.empty { color: var(--gray-light); }
+    .master-card-footer {
+      padding: 16px 24px;
+      border-top: 1px solid var(--gray-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .master-card-works { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gray-mid); }
+    .master-card-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px; height: 32px;
+      border: 1px solid var(--gray-light);
+      transition: var(--transition);
+    }
+    .master-card:hover .master-card-arrow { background: var(--black); border-color: var(--black); color: white; }
+    /* ========== ПРОФІЛЬ МАЙСТРА ========== */
+    #page-master-profile { padding-top: 100px; }
+    .profile-layout {
+      display: grid;
+      grid-template-columns: 420px 1fr;
+      min-height: calc(100vh - 100px);
+    }
+    .profile-sidebar {
+      background: var(--black);
+      padding: 64px 48px;
+      position: sticky;
+      top: 100px;
+      height: calc(100vh - 100px);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+    .profile-photo {
+      width: 100%;
+      aspect-ratio: 3/4;
+      background: var(--gray-dark);
+      margin-bottom: 40px;
+      overflow: hidden;
+      position: relative;
+    }
+    .profile-photo-inner {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+    }
+    .profile-name {
+      font-family: var(--font-display);
+      font-size: 2.4rem;
+      font-weight: 300;
+      color: var(--white);
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+    .profile-role {
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gray-mid);
+      margin-bottom: 24px;
+    }
+    .profile-rating {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 32px;
+    }
+    .profile-rating-num {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 400;
+      color: var(--white);
+    }
+    .profile-desc {
+      font-size: 0.78rem;
+      line-height: 1.9;
+      color: var(--gray-mid);
+      margin-bottom: 40px;
+      flex: 1;
+    }
+    .profile-skills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 40px; }
+    .profile-skill-tag {
+      font-size: 0.62rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border: 1px solid rgba(255,255,255,0.15);
+      color: var(--gray-mid);
+    }
+    .profile-add-btn {
+      width: 100%;
+      padding: 16px;
+      background: var(--white);
+      color: var(--black);
+      border: none;
+      font-family: var(--font-body);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .profile-add-btn:hover { background: var(--gray-light); }
+    .profile-main { padding: 64px; }
+    .profile-gallery-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 40px;
+    }
+    .gallery-title {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 300;
+      color: var(--black);
+    }
+    .gallery-count {
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gray-mid);
+    }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+    .gallery-item {
+      aspect-ratio: 1;
+      background: var(--gray-light);
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .gallery-item-inner {
+      width: 100%; height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--gray-light) 0%, #d8d8d0 100%);
+      transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .gallery-item:hover .gallery-item-inner { transform: scale(1.08); }
+    .gallery-item-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      opacity: 0;
+      transition: opacity 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+    .gallery-item:hover .gallery-item-overlay { opacity: 1; }
+    .delete-work-btn {
+      background: rgba(0,0,0,0.7);
+      border: none;
+      color: white;
+      padding: 6px 12px;
+      font-size: 0.7rem;
+      cursor: pointer;
+      border-radius: 0;
+      transition: 0.2s;
+    }
+    .delete-work-btn:hover { background: #c0392b; }
+    .gallery-empty {
+      grid-column: 1/-1;
+      padding: 80px;
+      text-align: center;
+      border: 1px dashed var(--gray-light);
+    }
+    /* ========== АДМІН ПАНЕЛЬ ========== */
+    #page-admin { padding-top: 100px; }
+    .admin-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      min-height: calc(100vh - 100px);
+    }
+    .admin-sidebar {
+      background: var(--black);
+      padding: 40px 32px;
+    }
+    .admin-sidebar-title {
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gray-mid);
+      margin-bottom: 32px;
+    }
+    .admin-nav { display: flex; flex-direction: column; gap: 4px; }
+    .admin-nav-item {
+      padding: 12px 16px;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      color: var(--gray-mid);
+      cursor: pointer;
+      transition: var(--transition);
+      border-left: 2px solid transparent;
+      text-transform: uppercase;
+    }
+    .admin-nav-item:hover, .admin-nav-item.active { color: var(--white); border-left-color: var(--white); background: rgba(255,255,255,0.05); }
+    .admin-main { padding: 48px 64px; }
+    .admin-section { display: none; }
+    .admin-section.active { display: block; }
+    .admin-page-title {
+      font-family: var(--font-display);
+      font-size: 2.5rem;
+      font-weight: 300;
+      color: var(--black);
+      margin-bottom: 8px;
+    }
+    .admin-page-sub {
+      font-size: 0.72rem;
+      color: var(--gray-mid);
+      letter-spacing: 0.06em;
+      margin-bottom: 48px;
+    }
+    .admin-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+    }
+    .btn-primary {
+      padding: 13px 28px;
+      background: var(--black);
+      color: var(--white);
+      border: none;
+      font-family: var(--font-body);
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-primary:hover { background: var(--gray-dark); }
+    .btn-secondary {
+      padding: 12px 24px;
+      background: transparent;
+      color: var(--black);
+      border: 1px solid var(--black);
+      font-family: var(--font-body);
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .btn-secondary:hover { background: var(--black); color: var(--white); }
+    .btn-danger {
+      padding: 8px 16px;
+      background: transparent;
+      color: #c0392b;
+      border: 1px solid #c0392b;
+      font-family: var(--font-body);
+      font-size: 0.62rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .btn-danger:hover { background: #c0392b; color: white; }
+    .admin-masters-table { width: 100%; border-collapse: collapse; }
+    .admin-masters-table th {
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gray-mid);
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--gray-light);
+    }
+    .admin-masters-table td { padding: 20px 16px; font-size: 0.78rem; color: var(--black); border-bottom: 1px solid var(--gray-light); vertical-align: middle; }
+    .admin-masters-table tr:hover td { background: rgba(0,0,0,0.02); }
+    .table-avatar { width: 44px; height: 44px; background: var(--gray-light); display: flex; align-items: center; justify-content: center; }
+    .table-name { font-family: var(--font-display); font-size: 1.1rem; font-weight: 400; }
+    .table-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    /* ========== МОДАЛЬНІ ВІКНА ========== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      backdrop-filter: blur(4px);
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal {
+      background: var(--white);
+      width: 100%;
+      max-width: 560px;
+      max-height: 90vh;
+      overflow-y: auto;
+      transform: translateY(30px);
+      transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .modal-overlay.open .modal { transform: translateY(0); }
+    .modal-header {
+      padding: 32px 40px 24px;
+      border-bottom: 1px solid var(--gray-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .modal-title { font-family: var(--font-display); font-size: 1.8rem; font-weight: 300; }
+    .modal-close {
+      width: 36px; height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border: 1px solid var(--gray-light);
+      transition: var(--transition);
+      background: none;
+    }
+    .modal-close:hover { background: var(--black); color: white; border-color: var(--black); }
+    .modal-body { padding: 32px 40px; }
+    .modal-footer {
+      padding: 24px 40px 32px;
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      border-top: 1px solid var(--gray-light);
+    }
+    .form-group { margin-bottom: 28px; }
+    .form-label {
+      display: block;
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gray-dark);
+      margin-bottom: 10px;
+    }
+    .form-input, .form-textarea, .form-select {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid var(--gray-light);
+      background: var(--white);
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      color: var(--black);
+      outline: none;
+      transition: border-color 0.3s;
+    }
+    .form-input:focus, .form-textarea:focus, .form-select:focus { border-color: var(--black); }
+    .form-textarea { resize: vertical; min-height: 100px; }
+    .form-photo-upload {
+      border: 1px dashed var(--gray-light);
+      padding: 40px;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition);
+      position: relative;
+      background-size: cover;
+      background-position: center;
+    }
+    .form-photo-upload:hover { border-color: var(--black); background: rgba(0,0,0,0.02); }
+    .form-photo-upload input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+    .upload-icon { margin-bottom: 12px; }
+    .form-rating { display: flex; gap: 8px; align-items: center; }
+    .star-input { font-size: 1.4rem; cursor: pointer; color: var(--gray-light); transition: color 0.2s; }
+    .star-input.active, .star-input:hover { color: var(--black); }
+    .toast {
+      position: fixed;
+      bottom: 32px; right: 32px;
+      background: var(--black);
+      color: var(--white);
+      padding: 16px 24px;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      z-index: 500;
+      transform: translateY(80px);
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gray-mid);
+      cursor: pointer;
+      transition: var(--transition);
+      background: none;
+      border: none;
+      padding: 0;
+      margin-bottom: 48px;
+    }
+    .back-btn:hover { color: var(--black); }
+    .back-btn:hover svg { transform: translateX(-4px); }
+    footer {
+      background: var(--black);
+      color: var(--white);
+      padding: 64px;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+    .footer-brand-name {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      font-weight: 300;
+      margin-bottom: 8px;
+    }
+    .footer-brand-sub {
+      font-size: 0.65rem;
+      color: var(--gray-mid);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .footer-col-title {
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gray-mid);
+      margin-bottom: 20px;
+    }
+    .footer-col-item {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 10px;
+      line-height: 1.6;
+    }
+    .footer-bottom {
+      background: var(--black);
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding: 20px 64px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    @media (max-width: 1024px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-right { display: none; }
+      .profile-layout { grid-template-columns: 1fr; }
+      .profile-sidebar { position: static; height: auto; }
+      .admin-layout { grid-template-columns: 1fr; }
+      .admin-sidebar { display: none; }
+      .masters-grid { padding: 32px; }
+    }
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      body { cursor: auto; }
+      .cursor, .cursor-ring { display: none; }
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    .fade-up { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+    @keyframes heroFade { to { opacity: 1; transform: translateY(0); } }
+    .hero-title, .hero-tag, .hero-desc, .hero-cta { opacity: 0; transform: translateY(24px); animation: heroFade 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+    .hero-tag { animation-delay: 0.2s; }
+    .hero-title { animation-delay: 0.4s; }
+    .hero-desc { animation-delay: 0.6s; }
+    .hero-cta { animation-delay: 0.8s; }
+    .img-placeholder { width: 100%; height: 100%; object-fit: cover; }
+  </style>
 </head>
 <body>
-<div id="scroll-bar"></div>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<nav id="navbar"><div class="nav-logo" onclick="navigate('home')">ПЕРУКАРНЯ ВПУ-19</div><ul class="nav-links"><li><a onclick="navigate('home')">Головна</a></li><li><a onclick="navigate('masters')">Майстри</a></li></ul><button class="nav-admin-btn" onclick="navigate('admin')">Адмін панель</button></nav>
 
-<header>
-  <div class="nav-wrap">
-    <a href="#home" class="logo">SALADE<span class="logo-sep"></span><span class="logo-sub">ВПУ 19</span></a>
-    <button class="mobile-btn" id="mobileBtn"><i class="fas fa-leaf"></i></button>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="#home">Головна</a></li>
-      <li><a href="#masters">Майстри</a></li>
-      <li><a href="#feed">Стрічка</a></li>
-      <li><a href="#services">Послуги</a></li>
-      <li><a href="#prices">Ціни</a></li>
-      <li><a href="#gallery">Галерея</a></li>
-      <li><a href="#contact">Контакти</a></li>
-    </ul>
-    <a href="#contact" class="nav-cta">Записатись</a>
-  </div>
-</header>
+<!-- ГОЛОВНА -->
+<div id="page-home" class="page"><section class="hero"><div class="hero-left"><span class="hero-tag">Навчальна перукарня</span><h1 class="hero-title"><em>Перукарня</em><strong>ВПУ-19</strong></h1><p class="hero-desc" id="hero-description">Навчальна перукарня Вищого Професійного Училища №19. Тут майбутні майстри розвивають свою майстерність, а клієнти отримують якісні послуги.</p><button class="hero-cta" onclick="navigate('masters')">Переглянути майстрів<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button><div class="hero-number">19</div></div><div class="hero-right"><div class="hero-grid"></div><div class="hero-right-inner"><div class="hero-stats"><div class="hero-stat-item"><div class="hero-stat-num" id="stat-masters">—</div><div class="hero-stat-label">Майстрів</div></div><div class="hero-stat-divider"></div><div class="hero-stat-item"><div class="hero-stat-num" id="stat-works">—</div><div class="hero-stat-label">Робіт у галереї</div></div><div class="hero-stat-divider"></div><div class="hero-stat-item"><div class="hero-stat-num" id="stat-rating">—</div><div class="hero-stat-label">Середній рейтинг</div></div></div></div></div></section><section class="section"><div class="section-header"><div><div class="section-label">Команда</div><h2 class="section-title">Наші <em>майстри</em></h2></div><button class="btn-secondary" onclick="navigate('masters')">Всі майстри</button></div><div class="masters-grid" id="home-masters-grid" style="padding:0; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));"></div></section><footer><div class="footer-brand"><div class="footer-brand-name" id="footer-salon-name">Перукарня ВПУ-19</div><div class="footer-brand-sub">Навчальна перукарня</div></div><div><div class="footer-col-title">Навігація</div><div class="footer-col-item" style="cursor:pointer" onclick="navigate('home')">Головна</div><div class="footer-col-item" style="cursor:pointer" onclick="navigate('masters')">Майстри</div><div class="footer-col-item" style="cursor:pointer" onclick="navigate('admin')">Адмін панель</div></div><div><div class="footer-col-title">Контакти</div><div class="footer-col-item" id="footer-address">📍 м. [Місто], вул. [Адреса]</div><div class="footer-col-item" id="footer-phone">📞 +38 (0XX) XXX-XX-XX</div><div class="footer-col-item" id="footer-email">✉️ info@vpu19.example.com</div></div></footer><div class="footer-bottom"><span class="footer-bottom-text">© 2024 Перукарня ВПУ-19 — Навчальний заклад</span><span class="footer-bottom-text">Шаблон сайту</span></div></div>
 
-<section id="home" class="hero">
-  <div class="hero-visual"></div>
-  <div class="hero-content">
-    <p class="hero-tag">Fresh Cut Barbershop · Київ</p>
-    <h1>ЗЕЛЕНИЙ СТИЛЬ<br><em>салатовий заряд</em><br>ЕСТЕТИКИ</h1>
-    <p class="hero-desc">Сучасні стрижки, фреш-фейди та догляд за бородою. Еко-атмосфера та професійний підхід.</p>
-    <div class="hero-btns">
-      <a href="#contact" class="btn-green">Записатись зараз</a>
-      <a href="#feed" class="btn-ghost">Стрічка майстрів</a>
-    </div>
-    <div class="hero-stats">
-      <div><div class="hero-stat-num">14+</div><div class="hero-stat-label">Майстрів</div></div>
-      <div><div class="hero-stat-num">4.9</div><div class="hero-stat-label">Рейтинг</div></div>
-      <div><div class="hero-stat-num">1.2k+</div><div class="hero-stat-label">Клієнтів</div></div>
-    </div>
-  </div>
-</section>
+<!-- МАЙСТРИ -->
+<div id="page-masters" class="page"><div class="masters-header-section"><button class="back-btn" onclick="navigate('home')"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Назад</button><div class="section-label">Команда</div><h1 class="section-title">Наші <em>майстри</em></h1></div><div class="masters-grid" id="masters-grid"></div></div>
 
-<section id="masters" class="section">
-  <div class="container">
-    <p class="section-label">Рейтинг майстрів</p>
-    <h2 class="section-title">FRESH MASTERS</h2>
-    <div class="masters-controls">
-      <div class="filter-sort-group">
-        <input type="text" id="masterSearch" class="master-search" placeholder="Пошук майстра...">
-        <select id="sortMasters" class="sort-select">
-          <option value="rating">За рейтингом ↓</option>
-          <option value="name">За іменем</option>
-          <option value="works">За кількістю робіт</option>
-        </select>
-      </div>
-    </div>
-    <div class="masters-tabs" id="masterTabsContainer">
-      <button class="master-tab active" data-tab="all">Всі</button>
-      <button class="master-tab" data-tab="top">Топ-3</button>
-      <button class="master-tab" data-tab="classics">Класика</button>
-      <button class="master-tab" data-tab="modern">Модерн</button>
-    </div>
-    <div class="masters-grid" id="mastersGrid"></div>
-  </div>
-</section>
+<!-- ПРОФІЛЬ МАЙСТРА -->
+<div id="page-master-profile" class="page"><div class="profile-layout"><aside class="profile-sidebar"><button class="back-btn" onclick="navigate('masters')" style="color:var(--gray-mid)"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>До майстрів</button><div class="profile-photo"><div class="profile-photo-inner" id="profile-photo-inner"><svg width="64" height="64" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div></div><h2 class="profile-name" id="profile-name"></h2><div class="profile-role" id="profile-role"></div><div class="profile-rating"><div class="stars" id="profile-stars"></div><span class="profile-rating-num" id="profile-rating-num"></span></div><p class="profile-desc" id="profile-desc"></p><div class="profile-skills" id="profile-skills"></div><button class="profile-add-btn" id="profile-add-photo-btn"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Додати фото роботи</button></aside><main class="profile-main"><div class="profile-gallery-header"><h3 class="gallery-title">Роботи</h3><span class="gallery-count" id="gallery-count"></span></div><div class="gallery-grid" id="gallery-grid"></div></main></div></div>
 
-<section id="feed" class="section">
-  <div class="container">
-    <p class="section-label">Свіжі роботи</p>
-    <h2 class="section-title">СТРІЧКА НАТХНЕННЯ</h2>
-    <div class="feed-layout" style="display:grid; grid-template-columns:1fr 380px; gap:2rem;">
-      <div class="feed-main" id="postFeed"></div>
-      <div class="feed-sidebar" id="dynamicSidebar"></div>
-    </div>
-  </div>
-</section>
+<!-- АДМІН -->
+<div id="page-admin" class="page"><div class="admin-layout"><aside class="admin-sidebar"><div class="admin-sidebar-title">Управління</div><nav class="admin-nav"><div class="admin-nav-item active" onclick="switchAdminTab('masters', this)">Майстри</div><div class="admin-nav-item" onclick="switchAdminTab('settings', this)">Налаштування</div></nav></aside><main class="admin-main"><div class="admin-section active" id="admin-masters"><h1 class="admin-page-title">Управління <em style="font-style:italic">майстрами</em></h1><p class="admin-page-sub">Додавайте, редагуйте та видаляйте картки майстрів</p><div class="admin-toolbar"><button class="btn-primary" onclick="openAddMasterModal()"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Додати майстра</button></div><table class="admin-masters-table"><thead><tr><th>Фото</th><th>Ім'я</th><th>Роль</th><th>Рейтинг</th><th>Дії</th></tr></thead><tbody id="admin-masters-tbody"></tbody></table></div><div class="admin-section" id="admin-settings"><h1 class="admin-page-title">Налаштування</h1><p class="admin-page-sub">Загальна інформація про перукарню</p><div style="max-width: 480px"><div class="form-group"><label class="form-label">Назва закладу</label><input class="form-input" id="settings-name" placeholder="Назва" /></div><div class="form-group"><label class="form-label">Короткий опис (на головній)</label><textarea class="form-textarea" id="settings-desc" rows="2"></textarea></div><div class="form-group"><label class="form-label">Адреса</label><input class="form-input" id="settings-address" /></div><div class="form-group"><label class="form-label">Телефон</label><input class="form-input" id="settings-phone" /></div><div class="form-group"><label class="form-label">Email</label><input class="form-input" id="settings-email" /></div><button class="btn-primary" onclick="saveSettings()">Зберегти зміни</button></div></div></main></div></div>
 
-<section id="services" class="section" style="background:var(--charcoal)">
-  <div class="container">
-    <div class="services-grid" style="display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--fresh-leaf); border-radius:24px; overflow:hidden;">
-      <div class="service-tile" style="background:var(--deep-forest); padding:2rem;"><div class="service-icon-wrap"><i class="fas fa-cut"></i></div><h3>Чоловіча стрижка</h3><p>Фейди, андеркати, текстура</p><div class="service-price">350 ₴</div></div>
-      <div class="service-tile" style="background:var(--deep-forest); padding:2rem;"><div class="service-icon-wrap"><i class="fas fa-fire"></i></div><h3>Борода та вуса</h3><p>Моделювання, контуринг</p><div class="service-price">200 ₴</div></div>
-      <div class="service-tile" style="background:var(--deep-forest); padding:2rem;"><div class="service-icon-wrap"><i class="fas fa-spa"></i></div><h3>Гаряче бриття</h3><p>Ритуал чистоти</p><div class="service-price">180 ₴</div></div>
-      <div class="service-tile" style="background:var(--deep-forest); padding:2rem;"><div class="service-icon-wrap"><i class="fas fa-crown"></i></div><h3>Premium Комплекс</h3><p>Стрижка+борода+бриття</p><div class="service-price">750 ₴</div></div>
-    </div>
-  </div>
-</section>
+<!-- МОДАЛІ -->
+<div class="modal-overlay" id="modal-master"><div class="modal"><div class="modal-header"><h2 class="modal-title" id="modal-master-title">Додати майстра</h2><button class="modal-close" onclick="closeModal('modal-master')"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div><div class="modal-body"><div class="form-group"><label class="form-label">Фото майстра</label><div class="form-photo-upload" id="master-photo-upload-area"><input type="file" accept="image/*" id="master-photo-input" onchange="handlePhotoUpload('master')" /><div class="upload-icon"><svg width="32" height="32" fill="none" stroke="var(--gray-mid)" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div><div class="upload-text">Натисніть або перетягніть фото</div></div></div><div class="form-group"><label class="form-label">Повне ім'я</label><input class="form-input" id="master-name" placeholder="Прізвище Ім'я" /></div><div class="form-group"><label class="form-label">Роль</label><input class="form-input" id="master-role" placeholder="Перукар-стиліст" /></div><div class="form-group"><label class="form-label">Опис</label><textarea class="form-textarea" id="master-desc" rows="2"></textarea></div><div class="form-group"><label class="form-label">Навички (через кому)</label><input class="form-input" id="master-skills" placeholder="Стрижка, Фарбування" /></div><div class="form-group"><label class="form-label">Рейтинг</label><div class="form-rating" id="star-rating-input"><span class="star-input" data-val="1" onclick="setRating(1)">★</span><span class="star-input" data-val="2" onclick="setRating(2)">★</span><span class="star-input" data-val="3" onclick="setRating(3)">★</span><span class="star-input" data-val="4" onclick="setRating(4)">★</span><span class="star-input" data-val="5" onclick="setRating(5)">★</span></div></div></div><div class="modal-footer"><button class="btn-secondary" onclick="closeModal('modal-master')">Скасувати</button><button class="btn-primary" onclick="saveMaster()">Зберегти</button></div></div></div>
 
-<section id="prices" class="section">
-  <div class="container">
-    <p class="section-label">Прозорі ціни</p>
-    <h2 class="section-title">ПРАЙС-ЛИСТ</h2>
-    <div class="price-wrapper" style="display:grid; grid-template-columns:1fr 1fr; gap:3rem;"><div><div class="price-group"><h3>Стрижки</h3><div class="price-row"><span>Чоловіча стрижка</span><span class="p-dots"></span><span class="p-val">350 ₴</span></div><div class="price-row"><span>Стрижка + мийка</span><span class="p-dots"></span><span class="p-val">400 ₴</span></div><div class="price-row"><span>Дитяча (до 12)</span><span class="p-dots"></span><span class="p-val">280 ₴</span></div></div><div class="price-group"><h3>Борода</h3><div class="price-row"><span>Моделювання</span><span class="p-dots"></span><span class="p-val">200 ₴</span></div><div class="price-row"><span>Гаряче бриття</span><span class="p-dots"></span><span class="p-val">180 ₴</span></div></div></div><div><div class="price-group"><h3>Комбо</h3><div class="price-row"><span>Стрижка + борода</span><span class="p-dots"></span><span class="p-val">550 ₴</span></div><div class="price-row"><span>Premium комплекс</span><span class="p-dots"></span><span class="p-val">750 ₴</span></div></div><div style="margin-top:2rem; background:var(--charcoal); padding:1.8rem; border-radius:24px;"><div style="color:var(--salad-bright);">Абонементи</div><p>5 візитів -15%, 10 -25%</p></div></div></div>
-  </div>
-</section>
+<div class="modal-overlay" id="modal-add-photo"><div class="modal"><div class="modal-header"><h2 class="modal-title">Додати роботу</h2><button class="modal-close" onclick="closeModal('modal-add-photo')"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div><div class="modal-body"><div class="form-group"><label class="form-label">Фото роботи</label><div class="form-photo-upload" id="work-photo-upload-area"><input type="file" accept="image/*" id="work-photo-input" onchange="handlePhotoUpload('work')" /><div class="upload-icon"><svg width="32" height="32" fill="none" stroke="var(--gray-mid)" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div><div class="upload-text">Натисніть або перетягніть фото</div></div></div><div class="form-group"><label class="form-label">Підпис (необов'язково)</label><input class="form-input" id="work-caption" /></div></div><div class="modal-footer"><button class="btn-secondary" onclick="closeModal('modal-add-photo')">Скасувати</button><button class="btn-primary" onclick="saveWork()">Додати</button></div></div></div>
 
-<section id="gallery" class="section" style="background:var(--charcoal)"><div class="container"><div class="gallery-bento" style="display:grid; gap:10px; grid-template-columns:repeat(3,1fr);">...</div></div></section>
+<div class="modal-overlay" id="modal-works"><div class="modal"><div class="modal-header"><h2 class="modal-title">Роботи майстра: <span id="works-master-name"></span></h2><button class="modal-close" onclick="closeModal('modal-works')"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div><div class="modal-body" id="works-list-container"></div><div class="modal-footer"><button class="btn-secondary" onclick="closeModal('modal-works')">Закрити</button></div></div></div>
 
-<section id="contact" class="section"><div class="container"><div class="contact-grid" style="display:grid; grid-template-columns:1fr 1.2fr; gap:3rem;"><div><h3 style="color:var(--salad-glow);">Приходьте до нас</h3><div class="info-line"><i class="fas fa-map-marker-alt"></i><div>м. Київ, Хрещатик 15Б</div></div><div class="info-line"><i class="fas fa-phone-alt"></i><div>+380 (67) 123 45 67</div></div><div class="socials"><a class="social-link" href="#"><i class="fab fa-instagram"></i></a></div></div><div class="booking-form"><form id="bookingForm"><input type="text" placeholder="Ім'я" id="fName" required><input type="tel" placeholder="Телефон" id="fPhone"><select id="fService"><option>Чоловіча стрижка</option></select><button type="submit" class="form-submit">Записатись</button><div id="successMsg" class="success-msg"></div></form></div></div></div></section>
-<footer class="footer"><div class="container"><div class="footer-bottom"><span>© 2025 SALADE FRESH · ВПУ 19</span></div></div></footer>
-<div class="scroll-top" id="scrollTopBtn"><i class="fas fa-arrow-up"></i></div>
+<div class="toast" id="toast"><span id="toast-text"></span></div>
 
 <script>
-  // MASTERS DATA (green salad enhanced)
-  const mastersData = [
-    { id:1, name:"Максим Ковальчук", specialty:"Старший барбер · 5 років", rating:4.9, works:812, reviews:247, repeat:98, category:"top classics", skills:["Fade","Класика","Борода"], photo:"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600", ratings:{hair:4.9,beard:4.8,service:5.0} },
-    { id:2, name:"Артем Шевченко", specialty:"Барбер · 3 роки", rating:4.8, works:603, reviews:189, repeat:94, category:"top modern", skills:["Андеркат","Textured crop"], photo:"https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600", ratings:{hair:4.8,decor:4.8,service:4.7} },
-    { id:3, name:"Дмитро Бондар", specialty:"Барбер · 2 роки", rating:4.6, works:441, reviews:134, repeat:90, category:"classics", skills:["Crew cut","Помпадур"], photo:"https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600", ratings:{hair:4.6,beard:4.5,service:4.7} },
-    { id:4, name:"Олег Зелений", specialty:"Еко-барбер", rating:4.85, works:512, reviews:201, repeat:96, category:"modern", skills:["Skin fade","Бриття","Дизайн"], photo:"https://images.unsplash.com/photo-1585747860714-2ba2eae9e5e5?w=600", ratings:{hair:4.9,beard:4.7,service:4.9} },
-    { id:5, name:"Ігор Лайм", specialty:"Стиліст", rating:4.75, works:378, reviews:142, repeat:92, category:"modern classics", skills:["Моделювання","Fade"], photo:"https://images.unsplash.com/photo-1562322140-8baeececf3df?w=600", ratings:{hair:4.7,beard:4.8,service:4.6} }
-  ];
-  let currentFilter = "all";
-  let currentSearch = "";
-  let currentSort = "rating";
+// ========== ГЛОБАЛЬНІ ДАНІ ==========
+const STORAGE_KEY = 'vpu19_data';
+const DEFAULT_DATA = {
+  masters: [
+    { id: 1, name: 'Олена Ковальчук', role: 'Перукар-стиліст', desc: 'Учениця 3-го курсу. Спеціалізується на жіночих стрижках та фарбуванні. Переможець міського конкурсу перукарів 2024 року.', skills: ['Стрижка', 'Фарбування', 'Укладка'], rating: 5, photo: null, works: [] },
+    { id: 2, name: 'Максим Бойко', role: 'Барбер', desc: 'Учень 2-го курсу. Захоплюється чоловічими стрижками та доглядом за бородою. Відмінник навчання.', skills: ['Чоловіча стрижка', 'Борода', 'Бритва'], rating: 4, photo: null, works: [] },
+    { id: 3, name: 'Аліна Мороз', role: 'Колорист', desc: 'Учениця 3-го курсу. Майстер кольорів — від класичного до сучасного балаяжу.', skills: ['Фарбування', 'Балаяж', 'Омбре', 'Укладка'], rating: 5, photo: null, works: [] }
+  ],
+  nextId: 4,
+  settings: { salonName: 'Перукарня ВПУ-19', heroDesc: 'Навчальна перукарня Вищого Професійного Училища №19. Тут майбутні майстри розвивають свою майстерність, а клієнти отримують якісні послуги.', address: '📍 м. Рівне, вул. Соборна 19', phone: '📞 +38 (0362) 63-19-19', email: '✉️ vpu19@education.ua' }
+};
+let appData = JSON.parse(JSON.stringify(DEFAULT_DATA));
+function loadData() { try { const raw = localStorage.getItem(STORAGE_KEY); if (raw) appData = JSON.parse(raw); else appData = JSON.parse(JSON.stringify(DEFAULT_DATA)); } catch(e) { appData = JSON.parse(JSON.stringify(DEFAULT_DATA)); } }
+function saveData() { localStorage.setItem(STORAGE_KEY, JSON.stringify(appData)); }
+loadData();
 
-  function renderMasters() {
-    let filtered = mastersData.filter(m => {
-      if(currentFilter === "top") return m.rating >= 4.8;
-      if(currentFilter === "classics") return m.category.includes("classics");
-      if(currentFilter === "modern") return m.category.includes("modern");
-      return true;
-    });
-    if(currentSearch) filtered = filtered.filter(m => m.name.toLowerCase().includes(currentSearch.toLowerCase()) || m.specialty.toLowerCase().includes(currentSearch.toLowerCase()));
-    if(currentSort === "rating") filtered.sort((a,b)=>b.rating - a.rating);
-    if(currentSort === "name") filtered.sort((a,b)=>a.name.localeCompare(b.name));
-    if(currentSort === "works") filtered.sort((a,b)=>b.works - a.works);
-    const grid = document.getElementById("mastersGrid");
-    grid.innerHTML = filtered.map(m => `<div class="master-card fade-up"><img class="master-photo" src="${m.photo}" alt="${m.name}"><div class="master-info"><div class="master-name">${m.name}</div><div class="master-specialty">${m.specialty}</div><div class="master-stars"><span class="stars">★ ${m.rating}</span><span class="score">${m.rating}</span></div><div class="master-skills">${m.skills.map(s=>`<span class="skill-tag">${s}</span>`).join('')}</div></div><div class="master-stats"><div class="master-stat"><div class="master-stat-val">${m.works}</div><div>роботи</div></div><div class="master-stat"><div class="master-stat-val">${m.reviews}</div><div>відгуки</div></div><div class="master-stat"><div class="master-stat-val">${m.repeat}%</div><div>повторні</div></div></div></div>`).join('');
-    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+// ========== КУРСОР ==========
+const cursor = document.getElementById('cursor'), cursorRing = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+function animateCursor() { cursor.style.left = mx + 'px'; cursor.style.top = my + 'px'; rx += (mx - rx) * 0.15; ry += (my - ry) * 0.15; cursorRing.style.left = rx + 'px'; cursorRing.style.top = ry + 'px'; requestAnimationFrame(animateCursor); }
+animateCursor();
+document.querySelectorAll('a, button, [onclick], .master-card, .gallery-item').forEach(el => { el.addEventListener('mouseenter', () => { cursor.style.width = '16px'; cursor.style.height = '16px'; cursorRing.style.width = '52px'; cursorRing.style.height = '52px'; }); el.addEventListener('mouseleave', () => { cursor.style.width = '10px'; cursor.style.height = '10px'; cursorRing.style.width = '36px'; cursorRing.style.height = '36px'; }); });
+
+// ========== НАВІГАЦІЯ ==========
+let currentPage = 'home';
+function navigate(pageId, param = null) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const page = document.getElementById('page-' + pageId);
+  if (!page) return;
+  currentPage = pageId;
+  page.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (pageId === 'home') renderHome();
+  else if (pageId === 'masters') renderMasters();
+  else if (pageId === 'master-profile' && param) renderProfile(param);
+  else if (pageId === 'admin') renderAdmin();
+}
+window.addEventListener('scroll', () => document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40));
+
+// ========== ДОПОМІЖНІ ==========
+function starsHTML(rating) { return [1,2,3,4,5].map(i => `<span class="star ${i <= rating ? '' : 'empty'}">${i <= rating ? '★' : '☆'}</span>`).join(''); }
+function worksWord(n) { return n === 1 ? 'робота' : (n < 5 ? 'роботи' : 'робіт'); }
+function masterCardHTML(m) {
+  const photoHTML = m.photo ? `<img src="${m.photo}" class="img-placeholder" />` : `<svg width="56" height="56" fill="none" stroke="rgba(0,0,0,0.18)" stroke-width="1.2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>`;
+  return `<div class="master-card fade-up" onclick="navigate('master-profile', ${m.id})"><div class="master-card-photo"><div class="master-card-photo-inner">${photoHTML}</div><div class="master-card-overlay"><span class="master-card-overlay-text">Переглянути профіль<svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></div><div class="master-card-body"><div class="master-card-name">${escapeHtml(m.name)}</div><div class="master-card-role">${escapeHtml(m.role)}</div><div class="master-card-desc">${m.desc.substring(0, 90)}${m.desc.length>90?'...':''}</div><div class="stars">${starsHTML(m.rating)}</div></div><div class="master-card-footer"><span class="master-card-works">${m.works.length} ${worksWord(m.works.length)}</span><div class="master-card-arrow"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div></div>`;
+}
+function escapeHtml(str) { return str.replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+
+// ========== ГОЛОВНА ==========
+function renderHome() {
+  document.getElementById('stat-masters').textContent = appData.masters.length;
+  const totalWorks = appData.masters.reduce((a,m)=> a + m.works.length, 0);
+  document.getElementById('stat-works').textContent = totalWorks;
+  const avgRating = appData.masters.length ? (appData.masters.reduce((s,m)=> s + m.rating,0)/appData.masters.length).toFixed(1) : '0';
+  document.getElementById('stat-rating').innerHTML = avgRating + '★';
+  document.getElementById('hero-description').innerText = appData.settings.heroDesc || 'Навчальна перукарня Вищого Професійного Училища №19.';
+  document.getElementById('footer-salon-name').innerText = appData.settings.salonName || 'Перукарня ВПУ-19';
+  document.getElementById('footer-address').innerHTML = appData.settings.address || '📍 м. [Місто], вул. [Адреса]';
+  document.getElementById('footer-phone').innerHTML = appData.settings.phone || '📞 +38 (0XX) XXX-XX-XX';
+  document.getElementById('footer-email').innerHTML = appData.settings.email || '✉️ info@vpu19.example.com';
+  const grid = document.getElementById('home-masters-grid');
+  grid.innerHTML = appData.masters.slice(0,3).map(m => masterCardHTML(m)).join('');
+  setTimeout(() => { document.querySelectorAll('.fade-up').forEach(el => { if(el.getBoundingClientRect().top < window.innerHeight-100) el.classList.add('visible'); }); }, 100);
+}
+
+// ========== МАЙСТРИ ==========
+function renderMasters() {
+  const grid = document.getElementById('masters-grid');
+  if(!appData.masters.length) grid.innerHTML = '<div style="padding:80px;text-align:center;">Майстрів поки немає. Додайте в адмін-панелі.</div>';
+  else grid.innerHTML = appData.masters.map(m => masterCardHTML(m)).join('');
+  setTimeout(() => { document.querySelectorAll('.fade-up').forEach(el => { if(el.getBoundingClientRect().top < window.innerHeight-100) el.classList.add('visible'); }); }, 100);
+}
+
+// ========== ПРОФІЛЬ МАЙСТРА ==========
+let currentMasterId = null;
+function renderProfile(masterId) {
+  const m = appData.masters.find(x => x.id === masterId);
+  if(!m) return navigate('masters');
+  currentMasterId = masterId;
+  document.getElementById('profile-name').innerHTML = escapeHtml(m.name);
+  document.getElementById('profile-role').innerHTML = escapeHtml(m.role);
+  document.getElementById('profile-desc').innerHTML = escapeHtml(m.desc);
+  document.getElementById('profile-rating-num').innerHTML = m.rating + '.0';
+  document.getElementById('profile-stars').innerHTML = starsHTML(m.rating);
+  const photoDiv = document.getElementById('profile-photo-inner');
+  photoDiv.innerHTML = m.photo ? `<img src="${m.photo}" style="width:100%;height:100%;object-fit:cover" />` : `<svg width="64" height="64" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>`;
+  document.getElementById('profile-skills').innerHTML = (m.skills || []).map(s => `<span class="profile-skill-tag">${escapeHtml(s)}</span>`).join('');
+  renderGallery(m);
+  document.getElementById('profile-add-photo-btn').onclick = () => { document.getElementById('work-photo-input').value = ''; document.getElementById('work-caption').value = ''; document.getElementById('work-photo-upload-area').style.background = ''; pendingWorkPhoto = null; openModal('modal-add-photo'); };
+}
+function renderGallery(m) {
+  const grid = document.getElementById('gallery-grid');
+  document.getElementById('gallery-count').innerHTML = `${m.works.length} ${worksWord(m.works.length)}`;
+  if(!m.works.length) { grid.innerHTML = `<div class="gallery-empty"><div class="gallery-empty-title">Робіт поки немає</div><div class="gallery-empty-sub">Майстер ще не додав фотографій</div></div>`; return; }
+  grid.innerHTML = m.works.map((w,idx) => `
+    <div class="gallery-item">
+      <div class="gallery-item-inner">${w.photo ? `<img src="${w.photo}" style="width:100%;height:100%;object-fit:cover" />` : `<svg width="32" height="32" fill="none" stroke="rgba(0,0,0,0.2)" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>`}</div>
+      <div class="gallery-item-overlay"><button class="delete-work-btn" onclick="event.stopPropagation(); deleteWork(${m.id}, ${w.id})">Видалити</button></div>
+    </div>`).join('');
+}
+function deleteWork(masterId, workId) {
+  if(!confirm('Видалити цю роботу?')) return;
+  const master = appData.masters.find(m => m.id === masterId);
+  if(master) { master.works = master.works.filter(w => w.id !== workId); saveData(); if(currentPage === 'master-profile' && currentMasterId === masterId) renderProfile(masterId); showToast('✓ Роботу видалено'); }
+}
+
+// ========== АДМІН ==========
+function renderAdmin() {
+  const tbody = document.getElementById('admin-masters-tbody');
+  if(!appData.masters.length) tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:48px;">Майстрів немає. Додайте першого!</td></tr>`;
+  else tbody.innerHTML = appData.masters.map(m => `
+    <tr><td><div class="table-avatar">${m.photo ? `<img src="${m.photo}" style="width:44px;height:44px;object-fit:cover" />` : `<svg width="20" height="20" fill="none" stroke="var(--gray-mid)" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>`}</div></td>
+    <td><span class="table-name">${escapeHtml(m.name)}</span></td><td style="color:var(--gray-mid);font-size:0.72rem;">${escapeHtml(m.role)}</td>
+    <td><div class="stars" style="font-size:0.75rem">${starsHTML(m.rating)}</div></td>
+    <td><div class="table-actions"><button class="btn-secondary" style="padding:7px 14px;font-size:0.62rem" onclick="openEditMasterModal(${m.id})">Редагувати</button><button class="btn-danger" onclick="deleteMaster(${m.id})">Видалити</button><button class="btn-primary" style="padding:7px 14px;font-size:0.62rem" onclick="openWorksModal(${m.id})">Роботи</button></div></td></tr>
+  `).join('');
+  // налаштування форми
+  document.getElementById('settings-name').value = appData.settings.salonName || '';
+  document.getElementById('settings-desc').value = appData.settings.heroDesc || '';
+  document.getElementById('settings-address').value = appData.settings.address || '';
+  document.getElementById('settings-phone').value = appData.settings.phone || '';
+  document.getElementById('settings-email').value = appData.settings.email || '';
+}
+function openWorksModal(masterId) {
+  const master = appData.masters.find(m => m.id === masterId);
+  if(!master) return;
+  document.getElementById('works-master-name').innerText = master.name;
+  const container = document.getElementById('works-list-container');
+  if(!master.works.length) container.innerHTML = '<p style="text-align:center;color:var(--gray-mid);padding:32px;">Цей майстер ще не додав робіт.</p>';
+  else container.innerHTML = master.works.map(w => `
+    <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px; border-bottom:1px solid var(--gray-light); padding:12px 0;">
+      <div style="width:60px;height:60px;background:#eee;overflow:hidden;">${w.photo ? `<img src="${w.photo}" style="width:100%;height:100%;object-fit:cover" />` : `<svg width="40" height="40" fill="none" stroke="#aaa" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>`}</div>
+      <div style="flex:1"><div style="font-size:0.8rem">${w.caption || 'Без підпису'}</div><small style="color:var(--gray-mid)">ID: ${w.id}</small></div>
+      <button class="btn-danger" onclick="deleteWorkFromModal(${master.id}, ${w.id})">Видалити</button>
+    </div>
+  `).join('');
+  openModal('modal-works');
+}
+function deleteWorkFromModal(masterId, workId) { deleteWork(masterId, workId); closeModal('modal-works'); openWorksModal(masterId); }
+function saveSettings() {
+  appData.settings = {
+    salonName: document.getElementById('settings-name').value,
+    heroDesc: document.getElementById('settings-desc').value,
+    address: document.getElementById('settings-address').value,
+    phone: document.getElementById('settings-phone').value,
+    email: document.getElementById('settings-email').value
+  };
+  saveData();
+  showToast('✓ Налаштування збережено');
+  if(currentPage === 'home') renderHome();
+}
+function switchAdminTab(tabId, el) { document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active')); document.querySelectorAll('.admin-nav-item').forEach(n => n.classList.remove('active')); document.getElementById('admin-'+tabId).classList.add('active'); el.classList.add('active'); }
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(o => o.addEventListener('click', e => { if(e.target === o) o.classList.remove('open'); }));
+
+// ========== МАЙСТРИ: CRUD ==========
+let editingMasterId = null, currentRating = 5, pendingMasterPhoto = null, pendingWorkPhoto = null;
+function openAddMasterModal() { editingMasterId = null; pendingMasterPhoto = null; currentRating = 5; document.getElementById('modal-master-title').innerText = 'Додати майстра'; document.getElementById('master-name').value = ''; document.getElementById('master-role').value = ''; document.getElementById('master-desc').value = ''; document.getElementById('master-skills').value = ''; document.getElementById('master-photo-input').value = ''; document.getElementById('master-photo-upload-area').style.background = ''; setRating(5); openModal('modal-master'); }
+function openEditMasterModal(id) { const m = appData.masters.find(x => x.id === id); if(!m) return; editingMasterId = id; pendingMasterPhoto = m.photo || null; currentRating = m.rating; document.getElementById('modal-master-title').innerText = 'Редагувати майстра'; document.getElementById('master-name').value = m.name; document.getElementById('master-role').value = m.role; document.getElementById('master-desc').value = m.desc; document.getElementById('master-skills').value = (m.skills || []).join(', '); setRating(m.rating); const area = document.getElementById('master-photo-upload-area'); if(m.photo) area.style.backgroundImage = `url(${m.photo})`, area.style.backgroundSize = 'cover'; else area.style.background = ''; openModal('modal-master'); }
+function setRating(val) { currentRating = val; document.querySelectorAll('.star-input').forEach(s => s.classList.toggle('active', parseInt(s.dataset.val) <= val)); }
+function handlePhotoUpload(type) { const inputId = type === 'master' ? 'master-photo-input' : 'work-photo-input'; const areaId = type === 'master' ? 'master-photo-upload-area' : 'work-photo-upload-area'; const input = document.getElementById(inputId); const area = document.getElementById(areaId); if(!input.files[0]) return; const reader = new FileReader(); reader.onload = e => { const b64 = e.target.result; area.style.backgroundImage = `url(${b64})`; area.style.backgroundSize = 'cover'; if(type === 'master') pendingMasterPhoto = b64; else pendingWorkPhoto = b64; }; reader.readAsDataURL(input.files[0]); }
+function saveMaster() {
+  const name = document.getElementById('master-name').value.trim(); if(!name) { showToast('⚠ Введіть ім\'я'); return; }
+  const role = document.getElementById('master-role').value.trim() || 'Перукар';
+  const desc = document.getElementById('master-desc').value.trim() || 'Учень перукарського відділення';
+  const skillsRaw = document.getElementById('master-skills').value.trim();
+  const skills = skillsRaw ? skillsRaw.split(',').map(s=>s.trim()).filter(Boolean) : [];
+  if(editingMasterId !== null) {
+    const m = appData.masters.find(x=>x.id === editingMasterId);
+    if(m) { m.name = name; m.role = role; m.desc = desc; m.skills = skills; m.rating = currentRating; if(pendingMasterPhoto) m.photo = pendingMasterPhoto; showToast('✓ Майстра оновлено'); }
+  } else {
+    appData.masters.push({ id: appData.nextId++, name, role, desc, skills, rating: currentRating, photo: pendingMasterPhoto, works: [] });
+    showToast('✓ Майстра додано');
   }
+  saveData(); closeModal('modal-master'); renderAdmin(); if(currentPage === 'masters') renderMasters(); else if(currentPage === 'home') renderHome();
+}
+function deleteMaster(id) { if(!confirm('Видалити майстра?')) return; appData.masters = appData.masters.filter(m=>m.id !== id); saveData(); renderAdmin(); if(currentPage === 'masters') renderMasters(); else if(currentPage === 'home') renderHome(); else if(currentPage === 'master-profile' && currentMasterId === id) navigate('masters'); showToast('✓ Майстра видалено'); }
+function saveWork() { if(!currentMasterId) return; const m = appData.masters.find(x=>x.id === currentMasterId); if(!m) return; if(!pendingWorkPhoto) { showToast('⚠ Оберіть фото'); return; } m.works.push({ id: Date.now(), photo: pendingWorkPhoto, caption: document.getElementById('work-caption').value.trim() }); saveData(); renderGallery(m); closeModal('modal-add-photo'); pendingWorkPhoto = null; showToast('✓ Фото додано'); }
+function showToast(msg) { const t = document.getElementById('toast'); document.getElementById('toast-text').innerText = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000); }
 
-  function updateTopSidebar() {
-    const top = [...mastersData].sort((a,b)=>b.rating - a.rating).slice(0,3);
-    const sidebarHtml = `<div class="sidebar-card"><div class="sidebar-head">Топ майстрів</div>${top.map((m,idx)=>`<div class="top-master-row"><div class="top-master-row-rank ${idx===0?'g':idx===1?'s':'b'}">${idx+1}</div><img class="top-master-thumb" src="${m.photo}" width="38"><div><div class="top-master-name">${m.name}</div><div class="top-master-pts">${m.works} робіт</div></div><div class="top-master-score">${m.rating}<small>/5</small></div></div>`).join('')}</div><div class="sidebar-card"><div class="sidebar-head">Теги стрічки</div><div class="tag-cloud" id="tagCloudDynamic"><span class="cloud-tag active" data-tag="all">Всі</span><span class="cloud-tag" data-tag="Fade">Fade</span><span class="cloud-tag" data-tag="Борода">Борода</span><span class="cloud-tag" data-tag="Класика">Класика</span><span class="cloud-tag" data-tag="Андеркат">Андеркат</span><span class="cloud-tag" data-tag="Поради">Поради</span></div></div>`;
-    document.getElementById("dynamicSidebar").innerHTML = sidebarHtml;
-    attachTagFilters();
-  }
-
-  const postsData = [
-    { id:1, author:"Максим Ковальчук", role:"⭐ Топ майстер", avatar:"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100", time:"2 год. тому", img:"https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=800", tag:"Fade", title:"Ідеальний скін-фейд", text:"Класичний high skin fade. Чіткий перехід.", likes:48, comments:12 },
-    { id:2, author:"Артем Шевченко", role:"✦ Silver", avatar:"https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100", time:"5 год. тому", img:"https://images.unsplash.com/photo-1585747860714-2ba2eae9e5e5?w=800", tag:"Борода", title:"Моделювання бороди", text:"Форма під тип обличчя", likes:31, comments:7 },
-    { id:3, author:"Дмитро Бондар", role:"✦ Bronze", avatar:"https://images.unsplash.com/photo-1560250097-0b93528c311a?w=100", time:"Вчора", img:"https://images.unsplash.com/photo-1562322140-8baeececf3df?w=800", tag:"Класика", title:"Помпадур", text:"Сучасна інтерпретація", likes:24, comments:5 }
-  ];
-  let activePostTag = "all";
-
-  function renderPosts() {
-    let filtered = activePostTag === "all" ? postsData : postsData.filter(p => p.tag === activePostTag);
-    const feedDiv = document.getElementById("postFeed");
-    feedDiv.innerHTML = filtered.map(p => `<div class="post-card fade-up"><div class="post-header"><img class="post-avatar" src="${p.avatar}"><div><div class="post-meta-name">${p.author}</div><div class="post-meta-role">${p.role}</div></div><span class="post-time">${p.time}</span></div><img class="post-image" src="${p.img}"><div class="post-body"><span class="post-tag">${p.tag}</span><div class="post-title">${p.title}</div><p class="post-text">${p.text}</p><div class="post-actions"><button class="post-action like-btn" data-likes="${p.likes}"><i class="fas fa-heart"></i> <span>${p.likes}</span></button><button class="post-action"><i class="fas fa-comment"></i> <span>${p.comments}</span></button></div></div></div>`).join('');
-    document.querySelectorAll('.like-btn').forEach(btn => {
-      btn.addEventListener('click', function(e) {
-        this.classList.toggle('liked');
-        let span = this.querySelector('span');
-        let val = parseInt(span.innerText);
-        span.innerText = this.classList.contains('liked') ? val+1 : val-1;
-      });
-    });
-  }
-
-  function attachTagFilters() {
-    document.querySelectorAll('.cloud-tag').forEach(tag => {
-      tag.addEventListener('click', (e) => {
-        document.querySelectorAll('.cloud-tag').forEach(t => t.classList.remove('active'));
-        tag.classList.add('active');
-        activePostTag = tag.dataset.tag;
-        renderPosts();
-      });
-    });
-  }
-
-  const observer = new IntersectionObserver((entries) => { entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }); }, { threshold:0.1 });
-
-  document.getElementById("masterSearch").addEventListener('input', e => { currentSearch = e.target.value; renderMasters(); });
-  document.getElementById("sortMasters").addEventListener('change', e => { currentSort = e.target.value; renderMasters(); });
-  document.querySelectorAll(".master-tab").forEach(tab => {
-    tab.addEventListener('click', () => {
-      document.querySelectorAll(".master-tab").forEach(t=>t.classList.remove('active'));
-      tab.classList.add('active');
-      currentFilter = tab.dataset.tab;
-      renderMasters();
-    });
-  });
-
-  document.getElementById('bookingForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const msgDiv = document.getElementById('successMsg');
-    msgDiv.innerHTML = "✓ Дякуємо! Ваш запис підтверджено. Ми зателефонуємо за 15 хвилин ✂️";
-    msgDiv.style.display = "block";
-    setTimeout(()=> msgDiv.style.display = "none", 4000);
-    e.target.reset();
-  });
-
-  window.addEventListener('scroll', () => {
-    let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-    let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-    let scrolled = (winScroll / height) * 100;
-    document.getElementById('scroll-bar').style.width = scrolled + "%";
-    const topBtn = document.getElementById('scrollTopBtn');
-    if(window.scrollY > 400) topBtn.classList.add('visible');
-    else topBtn.classList.remove('visible');
-  });
-  document.getElementById('scrollTopBtn').addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
-  const mobileBtn = document.getElementById('mobileBtn');
-  const navLinks = document.getElementById('navLinks');
-  mobileBtn.addEventListener('click', () => navLinks.classList.toggle('open'));
-  document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', e => { const id = a.getAttribute('href').slice(1); if(id && document.getElementById(id)) { e.preventDefault(); document.getElementById(id).scrollIntoView({behavior:'smooth'}); navLinks.classList.remove('open'); } }));
-
-  renderMasters();
-  updateTopSidebar();
-  renderPosts();
-  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+document.addEventListener('DOMContentLoaded', () => { navigate('home'); document.addEventListener('keydown', e => { if(e.key === 'Escape') document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open')); }); });
 </script>
 </body>
 </html>
