@@ -2,769 +2,719 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>// HACKER::CODE LAB //</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>HACKER DESKTOP // v.0x7F</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            user-select: none; /* мобільний хакерський фікс, але текст можна копіювати в терміналі */
         }
 
         body {
-            background: #0a0c0f;
-            font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+            background: #000000;
+            font-family: 'Courier New', 'Fira Code', monospace;
             overflow: hidden;
-            height: 100vh;
-            color: #e3e3e3;
-        }
-
-        /* LOADING SCREEN – MODERN GLITCH */
-        .loading-overlay {
-            position: fixed;
-            inset: 0;
-            background: #0a0c0f;
-            z-index: 10000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            backdrop-filter: blur(4px);
-            transition: opacity 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-        }
-
-        .loading-container {
-            width: 280px;
-            text-align: center;
-        }
-
-        .loading-symbol {
-            font-size: 3rem;
-            font-weight: 300;
-            letter-spacing: 8px;
-            color: #0f0;
-            text-shadow: 0 0 6px #0f0;
-            margin-bottom: 1rem;
-            animation: pulseSymbol 1.2s infinite alternate;
-        }
-
-        @keyframes pulseSymbol {
-            0% { opacity: 0.5; text-shadow: 0 0 2px #0f0; }
-            100% { opacity: 1; text-shadow: 0 0 12px #0f0; }
-        }
-
-        .progress-track {
-            background: #1e1f22;
-            border-radius: 2px;
-            height: 4px;
-            width: 100%;
-            margin: 1rem 0;
-        }
-
-        .progress-fill {
-            width: 0%;
-            height: 100%;
-            background: #0f0;
-            box-shadow: 0 0 6px #0f0;
-            transition: width 0.08s linear;
-        }
-
-        .load-status {
-            font-size: 0.75rem;
-            color: #aaa;
-            letter-spacing: 1px;
-        }
-
-        /* MAIN DESKTOP – MODERN LAYOUT */
-        .desktop {
-            display: none;
             height: 100vh;
             width: 100vw;
-            flex-direction: column;
-            background: radial-gradient(circle at 30% 10%, #101214, #030405);
-            overflow: hidden;
+            color: #ffffff;
         }
 
-        /* TASKBAR */
-        .taskbar {
-            background: rgba(10, 12, 15, 0.85);
-            backdrop-filter: blur(16px);
-            border-bottom: 1px solid #2a2d32;
-            padding: 0.6rem 1.2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 12px;
-            font-size: 0.75rem;
-            z-index: 100;
-        }
-
-        .sys-panel {
-            display: flex;
-            gap: 1.2rem;
-            font-family: monospace;
-        }
-
-        .sys-panel span {
-            background: #1a1c20;
-            padding: 0.2rem 0.6rem;
-            border-left: 2px solid #2ecc71;
-        }
-
-        .time {
-            letter-spacing: 1px;
-        }
-
-        /* MAIN CONTENT – SPLIT VIEW */
-        .workspace {
-            display: flex;
-            flex: 1;
-            overflow: hidden;
-            gap: 1px;
-            background: #00000022;
-            flex-direction: row;
-            flex-wrap: wrap;
-        }
-
-        /* CODING PANEL */
-        .coding-panel {
-            flex: 2;
-            min-width: 260px;
-            background: #0c0e10;
-            margin: 8px;
-            border-radius: 12px;
-            border: 1px solid #2c2f33;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            backdrop-filter: blur(2px);
-        }
-
-        .panel-header {
-            background: #111417;
-            padding: 10px 14px;
-            border-bottom: 1px solid #2ecc7122;
-            font-weight: 500;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.8rem;
-        }
-
-        .header-buttons {
-            display: flex;
-            gap: 8px;
-        }
-
-        .header-buttons button {
-            background: none;
-            border: 1px solid #3a3f44;
-            color: #ccc;
-            font-family: monospace;
-            font-size: 0.7rem;
-            padding: 4px 8px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .header-buttons button:hover {
-            border-color: #2ecc71;
-            color: #2ecc71;
-        }
-
-        .code-area {
-            flex: 1;
-            background: #010101;
-            padding: 12px;
-            overflow: auto;
-        }
-
-        textarea.code-editor {
-            width: 100%;
-            height: 100%;
-            background: #0b0d0f;
-            color: #d4d4d4;
-            border: none;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.85rem;
-            resize: none;
-            outline: none;
-            line-height: 1.5;
-            padding: 12px;
-            white-space: pre;
-        }
-
-        .output-console {
-            background: #050608;
-            border-top: 1px solid #2c2f33;
-            height: 140px;
-            overflow-y: auto;
-            padding: 8px 12px;
-            font-family: monospace;
-            font-size: 0.75rem;
-            color: #b0b7c0;
-        }
-
-        .output-line {
-            border-left: 2px solid #2ecc71;
-            padding-left: 8px;
-            margin: 6px 0;
-        }
-
-        /* HACKER TOOLS PANEL */
-        .tools-panel {
-            flex: 1.2;
-            min-width: 240px;
-            background: #0c0e10;
-            margin: 8px;
-            border-radius: 12px;
-            border: 1px solid #2c2f33;
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
-        }
-
-        .tools-list {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            padding: 12px;
-        }
-
-        .tool-card {
-            background: #111417;
-            border: 1px solid #292e33;
-            border-radius: 10px;
-            padding: 12px;
-            transition: all 0.2s;
-        }
-
-        .tool-title {
-            font-weight: bold;
-            font-size: 0.8rem;
-            letter-spacing: 0.5px;
-            color: #8effb2;
-            margin-bottom: 8px;
-            display: flex;
-            gap: 6px;
-        }
-
-        .tool-desc {
-            font-size: 0.7rem;
-            color: #aaa;
-            margin-bottom: 10px;
-        }
-
-        .tool-action {
-            background: #1f2329;
-            border: none;
-            color: #eee;
-            font-family: monospace;
-            font-size: 0.7rem;
-            padding: 5px 12px;
-            cursor: pointer;
-            border-radius: 20px;
-            transition: 0.2s;
-        }
-
-        .tool-action:active {
-            transform: scale(0.96);
-        }
-
-        /* TERMINAL WIDGET */
-        .terminal-widget {
-            background: #020304;
-            margin-top: 12px;
-            border-radius: 8px;
-            padding: 8px;
-        }
-
-        .terminal-widget pre {
-            font-size: 0.7rem;
-            overflow-x: auto;
-            white-space: pre-wrap;
-            color: #0f0;
-        }
-
-        /* MODAL (для хакерських функцій) */
-        .modal {
+        /* ========== ЗАВАНТАЖУВАЛЬНЕ ВІКНО (LOADING) ========== */
+        .loading-screen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.9);
-            backdrop-filter: blur(8px);
-            z-index: 2000;
+            background: #000000;
+            z-index: 9999;
             display: flex;
-            align-items: center;
             justify-content: center;
-            visibility: hidden;
-            opacity: 0;
-            transition: 0.2s;
+            align-items: center;
+            flex-direction: column;
+            gap: 2rem;
+            transition: opacity 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            backdrop-filter: blur(0px);
         }
 
-        .modal-card {
-            background: #101214;
-            border: 1px solid #2ecc71;
-            width: 90%;
-            max-width: 500px;
-            border-radius: 16px;
-            overflow: hidden;
+        .glitch-text {
+            font-size: 2.2rem;
+            font-weight: bold;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            color: #ffffff;
+            text-shadow: 2px 2px 0px #444, -2px -2px 0px #aaa;
+            animation: glitchPulse 1.2s infinite steps(1);
+        }
+
+        @keyframes glitchPulse {
+            0%, 100% { text-shadow: 2px 2px 0px #666, -1px -1px 0px #ccc; opacity: 1; }
+            25% { text-shadow: -3px 1px 0px #fff, 2px -2px 0px #333; }
+            50% { text-shadow: 2px -2px 0px #fff, -1px 1px 0px #000; letter-spacing: 8px; }
+            75% { text-shadow: 1px 2px 0px #aaa, -2px -1px 0px #fff; }
+        }
+
+        .progress-container {
+            width: 80%;
+            max-width: 280px;
+            background: #111;
+            border: 1px solid #fff;
+            padding: 3px;
+            box-shadow: 0 0 8px rgba(255,255,255,0.2);
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 24px;
+            background: #ffffff;
+            transition: width 0.1s linear;
+        }
+
+        .load-status {
+            font-family: monospace;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            background: #000;
+            padding: 8px 16px;
+            border-left: 3px solid #fff;
+            color: #ddd;
+        }
+
+        /* ========== РОБОЧИЙ СТІЛ (DESKTOP) ========== */
+        .desktop {
+            display: none;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 30%, #0a0a0a, #000000);
+            flex-direction: column;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        /* верхня панель */
+        .taskbar-top {
+            background: #030303;
+            border-bottom: 1px solid #2c2c2c;
+            padding: 10px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            font-size: 0.75rem;
+            font-weight: bold;
+            gap: 8px;
+            backdrop-filter: blur(2px);
+        }
+
+        .sys-stats {
+            display: flex;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        .sys-stats span {
+            color: #ccc;
+            background: #111;
+            padding: 2px 8px;
+            border-left: 1px solid #fff;
+            font-family: monospace;
+        }
+
+        .fake-ip {
+            color: #0f0;
+            letter-spacing: 1px;
+        }
+
+        /* іконки робочого столу (сітка) */
+        .icons-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 24px 20px;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .desktop-icon {
+            width: 85px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: rgba(10,10,10,0.6);
+            padding: 8px 4px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+        }
+
+        .desktop-icon:active {
+            transform: scale(0.96);
+            border-color: #fff;
+            background: #111;
+        }
+
+        .icon-symbol {
+            font-size: 2.5rem;
+            font-weight: bold;
+            font-family: monospace;
+            background: #000;
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            line-height: 60px;
+            border-radius: 12px;
+            border: 1px solid #3a3a3a;
+            margin-bottom: 8px;
+            color: #fff;
+            box-shadow: 0 0 4px rgba(255,255,255,0.3);
+        }
+
+        .icon-label {
+            font-size: 0.7rem;
+            font-weight: bold;
+            word-break: break-word;
+            background: #000000aa;
+            padding: 2px;
+        }
+
+        /* модальні вікна (хакерські приколи) */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(3px);
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0.2s, opacity 0.2s;
+        }
+
+        .modal-window {
+            background: #0b0b0b;
+            border: 2px solid #ffffff;
+            width: 88%;
+            max-width: 400px;
+            max-height: 75vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 30px rgba(255,255,255,0.1);
+            animation: modalGlow 0.3s ease-out;
+        }
+
+        @keyframes modalGlow {
+            from { opacity: 0; transform: translateY(20px); border-color: #666; }
+            to { opacity: 1; transform: translateY(0); border-color: #fff; }
         }
 
         .modal-header {
-            padding: 14px;
-            background: #0b0d0f;
-            border-bottom: 1px solid #2ecc7144;
+            padding: 12px 16px;
+            background: #000;
+            border-bottom: 1px solid #2c2c2c;
             display: flex;
             justify-content: space-between;
+            font-weight: bold;
+            cursor: move;
+        }
+
+        .modal-title {
+            letter-spacing: 1px;
+            font-size: 1rem;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            font-weight: bold;
+            line-height: 1;
         }
 
         .modal-body {
-            padding: 20px;
-            font-size: 0.85rem;
-            max-height: 60vh;
+            padding: 18px 16px;
             overflow-y: auto;
+            font-size: 0.85rem;
+            font-family: monospace;
+            background: #030303;
+            color: #e0e0e0;
+            white-space: pre-wrap;
         }
 
-        /* animations */
-        @keyframes fadeSlide {
-            from { opacity: 0; transform: translateY(12px);}
-            to { opacity: 1; transform: translateY(0);}
+        .terminal-line {
+            font-family: monospace;
+            border-left: 2px solid #fff;
+            padding-left: 8px;
+            margin: 8px 0;
         }
 
-        .tool-card, .coding-panel, .tools-panel {
-            animation: fadeSlide 0.3s ease;
+        .fake-progress {
+            background: #111;
+            border-radius: 0px;
+            height: 18px;
+            margin: 12px 0;
+            border: 1px solid #666;
+        }
+        .fake-progress-fill {
+            width: 0%;
+            height: 100%;
+            background: #fff;
         }
 
-        /* responsive */
-        @media (max-width: 720px) {
-            .workspace {
-                flex-direction: column;
-            }
-            .coding-panel, .tools-panel {
-                min-height: 300px;
-            }
-            .taskbar {
-                font-size: 0.65rem;
-            }
+        button.hack-btn {
+            background: #000;
+            border: 1px solid #fff;
+            color: #fff;
+            font-family: monospace;
+            padding: 6px 12px;
+            margin-top: 12px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* термінал командної строки */
+        .terminal-input-line {
+            display: flex;
+            gap: 6px;
+            margin-top: 12px;
+            border-top: 1px solid #222;
+            padding-top: 10px;
+        }
+        .terminal-input {
+            background: #111;
+            border: 1px solid #555;
+            color: #0f0;
+            font-family: monospace;
+            flex: 1;
+            padding: 6px;
+        }
+        .cmd-btn {
+            background: #222;
+            border: 1px solid #aaa;
+            color: white;
+        }
+
+        /* сповіщення (тости) */
+        .hacker-toast {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: #000000dd;
+            border-left: 4px solid #fff;
+            padding: 10px 15px;
+            font-size: 0.7rem;
+            z-index: 10001;
+            backdrop-filter: blur(6px);
+            font-family: monospace;
+            max-width: 260px;
+            animation: fadeUp 0.3s;
+            color: #ddd;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateX(-20px);}
+            to { opacity: 1; transform: translateX(0);}
+        }
+
+        /* різні хакерські ефекти */
+        .glitch-overlay {
+            position: fixed;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            background: repeating-linear-gradient(0deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 2px, transparent 2px, transparent 6px);
+            pointer-events: none;
+            z-index: 9998;
+        }
+        ::-webkit-scrollbar {
+            width: 4px;
+            background: #111;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #fff;
         }
     </style>
 </head>
 <body>
 
-<div class="loading-overlay" id="loadingScreen">
-    <div class="loading-container">
-        <div class="loading-symbol">#_H4CK</div>
-        <div class="progress-track"><div class="progress-fill" id="loadFill"></div></div>
-        <div class="load-status" id="loadMsg">[booting kernel...]</div>
+<div class="loading-screen" id="loadingScreen">
+    <div class="glitch-text">>_ INIT_HAXOR</div>
+    <div class="progress-container">
+        <div class="progress-bar" id="loadBar"></div>
     </div>
+    <div class="load-status" id="loadStatusMsg">ЗАВАНТАЖЕННЯ ЯДРА...</div>
+    <div style="font-size: 10px; color:#333">[SYSTEM v.0x7F]</div>
 </div>
 
-<div class="desktop" id="desktopApp">
-    <div class="taskbar">
-        <div class="sys-panel">
-            <span>root@hacklab:~$</span>
-            <span id="fakeMac">DE:AD:BE:EF:00:42</span>
+<div class="desktop" id="desktop">
+    <div class="taskbar-top">
+        <div class="sys-stats">
+            <span>📟 ROOT@H4CK3R</span>
+            <span class="fake-ip" id="fakeIpDisplay">10.0.0.1</span>
+            <span id="sysTime">--:--:--</span>
         </div>
-        <div class="time" id="liveTime">--:--:--</div>
+        <div style="font-size:0.65rem;">⚠️ ANON MODE</div>
     </div>
 
-    <div class="workspace">
-        <!-- КОДИНГ ПАНЕЛЬ -->
-        <div class="coding-panel">
-            <div class="panel-header">
-                <span>◢  CODE::EDITOR  //  javascript</span>
-                <div class="header-buttons">
-                    <button id="runCodeBtn">▶ RUN</button>
-                    <button id="resetCodeBtn">↺ RESET</button>
-                </div>
-            </div>
-            <div class="code-area">
-                <textarea class="code-editor" id="codeEditor" spellcheck="false">// ===== HACKER'S CODING LAB =====
-// Навчись писати шпигунські скрипти (етично)
-// Приклад: зчитувач заголовків
-
-async function fetchHeaders() {
-    let url = prompt("Введіть URL (https://):");
-    if(!url) return "❌ Скасовано";
-    try {
-        let res = await fetch(url);
-        let headers = [...res.headers.entries()];
-        return headers.map(h => h[0]+": "+h[1]).join("\n");
-    } catch(e) { return "Помилка: "+e.message; }
-}
-
-// Виконай функцію -> запусти код нижче
-fetchHeaders().then(console.log);
-</textarea>
-            </div>
-            <div class="output-console" id="outputConsole">
-                <div class="output-line">> Консоль готова | JS runtime активний</div>
-                <div class="output-line">> Натисніть RUN для виконання коду</div>
-            </div>
-        </div>
-
-        <!-- ІНСТРУМЕНТИ ХАКЕРА + НАВЧАННЯ -->
-        <div class="tools-panel">
-            <div class="panel-header">⚡ HACKER UTILITIES / CYBER LESSONS</div>
-            <div class="tools-list" id="toolsContainer">
-                <!-- динамічне наповнення через js, але для структури додамо базові -->
-            </div>
-            <div class="terminal-widget">
-                <div style="color:#8effb2; font-size:0.7rem;">[ net::shell ]</div>
-                <pre id="miniTerm">$> /bin/help: виберіть інструмент</pre>
-            </div>
-        </div>
+    <div class="icons-grid" id="iconGrid">
+        <!-- іконки будуть додаватись через JS, але для структури пропишу основні -->
     </div>
+
+    <!-- додатковий прикол: плаваючий термінал? зробимо через модалку -->
 </div>
 
-<div class="modal" id="globalModal">
-    <div class="modal-card">
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal-window">
         <div class="modal-header">
-            <span id="modalTitle">[INFO]</span>
-            <button id="closeModalBtn" style="background:none; border:none; color:#fff; font-size:1.5rem;">&times;</button>
+            <span class="modal-title" id="modalTitle">[HAX]</span>
+            <button class="close-modal" id="closeModalBtn">&times;</button>
         </div>
         <div class="modal-body" id="modalBody">
-            ...
+            Тут буде хакерська приколюха...
         </div>
     </div>
 </div>
 
 <script>
     (function(){
-        // ---------- 1. LOADING SIMULATION (4000 lines of code approach: rich features)
-        let loadProgress = 0;
-        const loadFill = document.getElementById('loadFill');
-        const loadMsgSpan = document.getElementById('loadMsg');
+        // ---------------------- ГЛОБАЛЬНІ ЗМІННІ -------------------------
+        let loadingComplete = false;
+        const loadBar = document.getElementById('loadBar');
+        const loadStatusMsg = document.getElementById('loadStatusMsg');
         const loadingScreen = document.getElementById('loadingScreen');
-        const desktopDiv = document.getElementById('desktopApp');
+        const desktop = document.getElementById('desktop');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const modalTitleElem = document.getElementById('modalTitle');
+        const modalBodyElem = document.getElementById('modalBody');
+        const closeModalBtn = document.getElementById('closeModalBtn');
 
-        const loadSteps = [
-            "Ініціалізація ядра 0x7E4", "Перевірка цілісності шифрів", "Завантаження нейромережі", "Активація кодувальної пісочниці",
-            "Монтування /dev/hack", "Готовність інтерпретатора JS", "Старт інтерактивного середовища"
+        let currentModalCallback = null;
+
+        // ---------- ХАКЕРСЬКІ ПОВІДОМЛЕННЯ (тости) ----------
+        function showToast(message, duration = 3000) {
+            const toast = document.createElement('div');
+            toast.className = 'hacker-toast';
+            toast.innerText = `> ${message}`;
+            document.body.appendChild(toast);
+            setTimeout(() => { toast.remove(); }, duration);
+        }
+
+        // Закриття модалки
+        function closeModal() {
+            modalOverlay.style.visibility = 'hidden';
+            modalOverlay.style.opacity = '0';
+            if(currentModalCallback && typeof currentModalCallback === 'function') currentModalCallback();
+        }
+
+        function openModal(title, htmlContent, onClose = null) {
+            modalTitleElem.innerText = title;
+            modalBodyElem.innerHTML = htmlContent;
+            modalOverlay.style.visibility = 'visible';
+            modalOverlay.style.opacity = '1';
+            currentModalCallback = onClose;
+        }
+
+        closeModalBtn.addEventListener('click', closeModal);
+        modalOverlay.addEventListener('click', (e) => { if(e.target === modalOverlay) closeModal(); });
+
+        // ---------- СИМУЛЯЦІЯ ЗАВАНТАЖЕННЯ ----------
+        let progress = 0;
+        const steps = [
+            "Ініціалізація шифрування...", "Зламування DNS...", "Інжект shellcode...", "Декодування матриці...",
+            "Підключення до анонімної мережі...", "Завантаження ядра 0x7F", "Активація терміналу", "ГОТОВО."
         ];
-        let stepIdx=0;
-        let loadInterval = setInterval(()=>{
-            loadProgress += Math.floor(Math.random()*8)+3;
-            if(loadProgress>=100){
-                loadProgress=100;
+        let stepIdx = 0;
+        const loadInterval = setInterval(() => {
+            if(progress >= 100) {
                 clearInterval(loadInterval);
-                loadFill.style.width="100%";
-                loadMsgSpan.innerText = "✓ ДОСТУП ДОЗВОЛЕНО | ВХІД В СИСТЕМУ";
-                setTimeout(()=>{
-                    loadingScreen.style.opacity="0";
-                    setTimeout(()=>{
-                        loadingScreen.style.display="none";
-                        desktopDiv.style.display="flex";
-                        initDesktopSystems();
-                    },400);
-                },300);
+                loadStatusMsg.innerText = "ДОСТУП ДОЗВОЛЕНО. ВХІД В СИСТЕМУ.";
+                setTimeout(() => {
+                    loadingScreen.style.opacity = "0";
+                    setTimeout(() => {
+                        loadingScreen.style.display = "none";
+                        desktop.style.display = "flex";
+                        initDesktop();
+                        showToast("Система зламана. Ласкаво просимо, хакере.");
+                    }, 400);
+                }, 400);
                 return;
             }
-            loadFill.style.width = loadProgress+"%";
-            if(loadProgress%15<3 && stepIdx<loadSteps.length){
-                loadMsgSpan.innerText = loadSteps[stepIdx]+` [${loadProgress}%]`;
+            progress += Math.floor(Math.random() * 12) + 2;
+            if(progress > 100) progress = 100;
+            loadBar.style.width = progress + "%";
+            if(progress % 18 === 0 || stepIdx < steps.length-1) {
+                if(stepIdx < steps.length) loadStatusMsg.innerText = steps[stepIdx] + ` [${progress}%]`;
                 stepIdx++;
-            }else{
-                loadMsgSpan.innerText = `[kernel] розпакування модулів... ${loadProgress}%`;
+                if(stepIdx >= steps.length) stepIdx = steps.length-1;
+            } else {
+                loadStatusMsg.innerText = `ЗАВАНТАЖЕННЯ... ${progress}% | hash: 0x${Math.floor(Math.random()*9999).toString(16)}`;
             }
-        },70);
+        }, 80);
 
-        // ---------- Глобальні змінні ----------
-        const codeEditor = document.getElementById('codeEditor');
-        const outputConsole = document.getElementById('outputConsole');
-        const runBtn = document.getElementById('runCodeBtn');
-        const resetBtn = document.getElementById('resetCodeBtn');
-        const modal = document.getElementById('globalModal');
-        const modalTitle = document.getElementById('modalTitle');
-        const modalBody = document.getElementById('modalBody');
-        const closeModalBtnModal = document.getElementById('closeModalBtn');
-        const miniTermPre = document.getElementById('miniTerm');
-
-        function addOutput(text, isError = false) {
-            const div = document.createElement('div');
-            div.className = 'output-line';
-            div.style.color = isError ? '#ff7777' : '#b0f0b0';
-            div.innerHTML = `> ${text}`;
-            outputConsole.appendChild(div);
-            outputConsole.scrollTop = outputConsole.scrollHeight;
-            // keep last 50 lines
-            while(outputConsole.children.length > 70) outputConsole.removeChild(outputConsole.firstChild);
+        // ------------------- РОБОЧИЙ СТІЛ + ХАКЕРСЬКІ ПРИКОЛИ ------------------
+        function getRandomIp() {
+            return `10.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}`;
         }
 
-        function clearOutput(){
-            outputConsole.innerHTML = '<div class="output-line">[консоль очищено]</div>';
+        function updateTime() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('uk-UA');
+            document.getElementById('sysTime').innerText = timeStr;
         }
-
-        // Безпечне виконання коду з перехопленням консоль.log та помилок
-        function executeCode(userCode){
-            let originalLog = console.log;
-            let logs = [];
-            console.log = (...args) => {
-                logs.push(args.map(a=> (typeof a === 'object' ? JSON.stringify(a) : String(a))).join(' '));
-                originalLog.apply(console, args);
-            };
-            try {
-                // додамо асинхронну підтримку через eval в асинхронній функції
-                let asyncWrapper = `(async () => { ${userCode} })()`;
-                let promise = eval(asyncWrapper);
-                if(promise && typeof promise.then === 'function'){
-                    promise.then(()=>{
-                        if(logs.length) logs.forEach(l=>addOutput(l));
-                        else addOutput("✔ Код виконано успішно (немає логів)");
-                    }).catch(err=>{
-                        addOutput("Помилка виконання: "+err.message, true);
-                    });
-                } else {
-                    if(logs.length) logs.forEach(l=>addOutput(l));
-                    else addOutput("✔ Код синхронно виконано.");
-                }
-            } catch(e) {
-                addOutput("❗ Помилка: "+e.message, true);
-            } finally {
-                console.log = originalLog;
-            }
-        }
-
-        runBtn.addEventListener('click',()=>{
-            let userCode = codeEditor.value;
-            addOutput("🚀 Запуск коду...");
-            executeCode(userCode);
-        });
-
-        resetBtn.addEventListener('click',()=>{
-            codeEditor.value = `// ===== HACKER'S CODING LAB =====
-// Навчись писати шпигунські скрипти (етично)
-// Приклад: зчитувач заголовків
-
-async function fetchHeaders() {
-    let url = prompt("Введіть URL (https://):");
-    if(!url) return "❌ Скасовано";
-    try {
-        let res = await fetch(url);
-        let headers = [...res.headers.entries()];
-        return headers.map(h => h[0]+": "+h[1]).join("\\n");
-    } catch(e) { return "Помилка: "+e.message; }
-}
-
-// Виконай функцію -> запусти код нижче
-fetchHeaders().then(console.log);
-`;
-            clearOutput();
-            addOutput("Стандартний приклад відновлено.");
-        });
-
-        // функція для модального вікна
-        function showModal(title, contentHtml){
-            modalTitle.innerText = title;
-            modalBody.innerHTML = contentHtml;
-            modal.style.visibility = "visible";
-            modal.style.opacity = "1";
-        }
-        closeModalBtnModal.addEventListener('click',()=>{
-            modal.style.visibility = "hidden";
-            modal.style.opacity = "0";
-        });
-        modal.addEventListener('click',(e)=>{
-            if(e.target === modal) {
-                modal.style.visibility = "hidden";
-                modal.style.opacity = "0";
-            }
-        });
-
-        // ---------- ІНСТРУМЕНТИ ХАКЕРА + НАВЧАННЯ (прикольні функції) ----------
-        const tools = [
-            {
-                name: "⌨️ PORT SCANNER",
-                desc: "Симуляція сканування портів (навчальна)",
-                action: () => {
-                    showModal("NMAP STYLE SCAN", `<div>Сканування цілі 192.168.1.1<br/><div id="scanLog">Запуск...</div><button id="startScanBtn" class="tool-action">Почати</button></div>`);
-                    document.getElementById('startScanBtn')?.addEventListener('click',()=>{
-                        let logDiv = document.getElementById('scanLog');
-                        let ports = [21,22,23,80,443,3306,8080];
-                        let i=0;
-                        let interval = setInterval(()=>{
-                            if(i>=ports.length){
-                                clearInterval(interval);
-                                logDiv.innerHTML += "<br/>✅ Сканування завершено. Відкриті порти: 22,80,443 (симуляція)";
-                                return;
-                            }
-                            let status = Math.random()>0.6 ? "open" : "filtered";
-                            logDiv.innerHTML += `<br/>порт ${ports[i]} : ${status}`;
-                            i++;
-                        },400);
-                    });
-                }
+        setInterval(updateTime, 1000);
+        
+        // ---------- СПИСОК ХАКЕРСЬКИХ ПРИКОЛІВ ----------
+        const pranks = {
+            // 1) Термінал з командами
+            terminalHack: () => {
+                let output = '<div style="font-family:monospace;"><span style="color:#ccc">[HAX TERMINAL v1.0]</span><br/>';
+                output += 'Введіть команду (help, hack, prank, matrix, clear, exit):<br/>';
+                output += '<div id="fakeTerminalOutput">$> ready.<br/></div>';
+                output += '<div class="terminal-input-line"><span style="color:#0f0">$></span> <input type="text" id="termCmdInput" class="terminal-input" placeholder="type help..."> <button id="termRunBtn" class="hack-btn">EXEC</button></div>';
+                openModal(">_ TERMINAL", output);
+                const inputField = document.getElementById('termCmdInput');
+                const runBtn = document.getElementById('termRunBtn');
+                const outDiv = document.getElementById('fakeTerminalOutput');
+                const commands = {
+                    help: "Доступні команди: help, hack (симуляція злому), prank (рандомний жарт), matrix (дощ коду), clear, exit (закрити)",
+                    hack: ">> Ініціюю атаку на сервер NSA...\n[SUCCESS] Доступ отримано. Ваш IP: маскований.\nВи завантажили 0xff секретів.",
+                    prank: "!! УВАГА!! Ваш браузер заражений віртуальним вірусом. Просто перезавантажте жарт :D",
+                    matrix: ">_ Ініціалізація матричного дощу... Відкрийте інший інструмент Matrix Rain для візуалізації.",
+                    clear: "CLEAR"
+                };
+                function addLine(txt) { outDiv.innerHTML += `<span>> ${txt}</span><br/>`; outDiv.scrollIntoView({block:'end'}); }
+                runBtn.addEventListener('click', () => {
+                    let cmd = inputField.value.trim().toLowerCase();
+                    if(cmd === "") return;
+                    addLine(`$ ${cmd}`);
+                    if(cmd === "clear") { outDiv.innerHTML = ""; addLine("Термінал очищено."); }
+                    else if(commands[cmd]) addLine(commands[cmd]);
+                    else if(cmd === "exit") closeModal();
+                    else addLine(`Помилка: невідома команда "${cmd}". Спробуйте help.`);
+                    inputField.value = "";
+                });
+                inputField.addEventListener('keypress', (e) => { if(e.key === 'Enter') runBtn.click(); });
             },
-            {
-                name: "🐚 REVERSE SHELL SIM",
-                desc: "Демонстрація концепції (безпечно)",
-                action: () => {
-                    showModal("REVERSE SHELL", "Це навчальна симуляція: у реальному світі не виконуйте. Вивчіть netcat та безпеку.<br/><button id='fakeConnect' class='tool-action'>Симулювати з'єднання</button>");
-                    document.getElementById('fakeConnect')?.addEventListener('click',()=>{
-                        let fake = document.createElement('div');
-                        fake.innerText = "[*] З'єднання встановлено з localhost:4443 (жарт)";
-                        modalBody.appendChild(fake);
-                    });
-                }
+            matrixRain: () => {
+                const canvasHtml = '<canvas id="matrixCanvas" width="300" height="200" style="width:100%; background:#000; border:1px solid #fff;"></canvas><br><span>Матричний дощ активовано</span>';
+                openModal("MATRIX_RAIN", canvasHtml);
+                setTimeout(() => {
+                    const canvas = document.getElementById('matrixCanvas');
+                    if(!canvas) return;
+                    const ctx = canvas.getContext('2d');
+                    let width = canvas.clientWidth, height = 200;
+                    canvas.width = width; canvas.height = height;
+                    const cols = Math.floor(width / 18);
+                    const drops = Array(cols).fill(1);
+                    function drawMatrix() {
+                        if(!canvas.isConnected) return;
+                        ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                        ctx.fillRect(0, 0, width, height);
+                        ctx.fillStyle = '#fff';
+                        ctx.font = '14px monospace';
+                        for(let i=0; i<drops.length; i++) {
+                            const text = String.fromCharCode(0x30A0 + Math.random() * 96);
+                            ctx.fillText(text, i*18, drops[i]*18);
+                            if(drops[i]*18 > height && Math.random() > 0.975) drops[i] = 0;
+                            drops[i]++;
+                        }
+                        requestAnimationFrame(drawMatrix);
+                    }
+                    drawMatrix();
+                }, 20);
             },
-            {
-                name: "📡 CRYPTO::CIPHER",
-                desc: "Шифрування тексту (ROT13 / Base64)",
-                action: () => {
-                    showModal("CRYPTO TOOL", `<input type="text" id="cryptoInput" placeholder="текст" style="width:100%;background:#000;color:#0f0;border:1px solid #2ecc71;padding:6px;"><br/>
-                    <button id="doRot13" class="tool-action">ROT13</button> <button id="doBase64" class="tool-action">Base64</button>
-                    <div id="cryptoResult" style="margin-top:12px;border-top:1px solid #333;"></div>`);
-                    const input = document.getElementById('cryptoInput');
-                    const rotBtn = document.getElementById('doRot13');
-                    const b64Btn = document.getElementById('doBase64');
-                    const resultDiv = document.getElementById('cryptoResult');
-                    rotBtn.onclick = () => {
-                        let val = input.value;
-                        let res = val.replace(/[a-zA-Z]/g, c=> String.fromCharCode(c<='Z'?((c.charCodeAt(0)-65+13)%26+65):((c.charCodeAt(0)-97+13)%26+97)));
-                        resultDiv.innerHTML = `<br/>ROT13: ${res}`;
-                    };
-                    b64Btn.onclick = () => {
-                        let val = input.value;
-                        let enc = btoa(unescape(encodeURIComponent(val)));
-                        resultDiv.innerHTML = `<br/>Base64: ${enc}`;
-                    };
-                }
+            fakeVirusScan: () => {
+                let prog = 0;
+                const html = `<div>🔍 СКАНУВАННЯ ШКІДЛИВОГО ПЗ...</div>
+                             <div class="fake-progress"><div class="fake-progress-fill" id="virusFill"></div></div>
+                             <div id="virusLog">Знайдено об'єктів: 0</div>
+                             <button id="abortVirusBtn" class="hack-btn">СКАНУВАТИ</button>`;
+                openModal("⚠️ АНТИВІРУС (жарт)", html);
+                let interval;
+                document.getElementById('abortVirusBtn').addEventListener('click', () => {
+                    if(interval) clearInterval(interval);
+                    let percent = 0;
+                    const fill = document.getElementById('virusFill');
+                    const logDiv = document.getElementById('virusLog');
+                    interval = setInterval(() => {
+                        percent += Math.random() * 15;
+                        if(percent >= 100) {
+                            percent = 100;
+                            clearInterval(interval);
+                            logDiv.innerHTML = "⚠️ ВИЯВЛЕНО 3127 ЗАРАЖЕНИХ ФАЙЛІВ! (жарт) Ваша система в безпеці.";
+                            showToast("Фейкове сканування завершено. Жодних реальних загроз.");
+                        }
+                        fill.style.width = percent + "%";
+                        if(percent > 30 && percent < 70) logDiv.innerHTML = `Виявлено троянів: ${Math.floor(Math.random()*500)} ...`;
+                        else if(percent > 70) logDiv.innerHTML = "❗ КРИТИЧНО: виявлено ransomware жарт!";
+                    }, 180);
+                });
             },
-            {
-                name: "💻 SQLi LAB",
-                desc: "Навчальна ін'єкція (основи безпеки)",
-                action: () => {
-                    showModal("SQL Injection Simulator", `<div>Логін: admin' OR '1'='1' -- <br/> <button id="sqliDemo" class="tool-action">Симулювати вхід</button>
-                    <div id="sqlResult"></div><div class="output-line">❗ Для навчання: ніколи не використовуйте в реальних системах.</div>`);
-                    document.getElementById('sqliDemo')?.addEventListener('click',()=>{
-                        document.getElementById('sqlResult').innerHTML = "<span style='color:#0f0'>[УЯВНИЙ УСПІХ] Доступ адміністратора отримано (демо-урок)</span>";
-                    });
-                }
+            ipTracker: () => {
+                const fakeIP = `${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}`;
+                const location = ["Київ, UA", "Москва, RU", "Лондон, GB", "Нью-Йорк, USA", "Токіо, JP", "Сідней, AU"][Math.floor(Math.random()*6)];
+                const html = `<div>🎭 АНОНІМНИЙ IP ТРЕКЕР</div>
+                             <div>Ваш справжній IP: ${fakeIP}</div>
+                             <div>Геолокація: ${location}</div>
+                             <div>Провайдер: HACKERNET ANON</div>
+                             <div>VPN статус: активний (TOR over VPN)</div>
+                             <button id="stealDataBtn" class="hack-btn">ВИКРАСТИ ДАНІ (жарт)</button>`;
+                openModal("IP TRACKER PRO", html);
+                document.getElementById('stealDataBtn')?.addEventListener('click', () => {
+                    showToast("Ваші дані скомпрометовані 😈 (жарт, нічого не сталось)");
+                });
             },
-            {
-                name: "📖 JS HACKER LESSON",
-                desc: "Вчимо XSS / фільтрація даних",
-                action: () => {
-                    showModal("XSS & Безпека", `<p>XSS (Cross-Site Scripting) - вразливість. Навчіться екранувати дані.</p>
-                    <input id="xssInput" placeholder="<script>alert('test')</script>" style="width:100%"/>
-                    <button id="xssTestBtn" class="tool-action">Безпечний вивід</button>
-                    <div id="xssResult"></div>
-                    <div>✅ Завжди використовуйте textContent або санацію.</div>`);
-                    document.getElementById('xssTestBtn')?.addEventListener('click',()=>{
-                        let raw = document.getElementById('xssInput').value;
-                        let safeDiv = document.createElement('div');
-                        safeDiv.textContent = raw;
-                        document.getElementById('xssResult').innerHTML = `<hr/>Екранований текст: ${safeDiv.textContent}`;
-                    });
-                }
+            ransomwarePrank: () => {
+                const html = `<div style="color:#ff4444;">⚠️ Ваші файли ЗАШИФРОВАНІ! ⚠️</div>
+                             <div>Для розшифровки відправте 0.5 BTC на гаманець: 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa</div>
+                             <div style="margin-top:12px;border-top:1px solid gray;">(Це жарт, нічого не сталося. Натисніть кнопку нижче)</div>
+                             <button id="fakeDecryptBtn" class="hack-btn">РОЗШИФРУВАТИ (жарт)</button>`;
+                openModal("RANSOMWARE SIM", html);
+                document.getElementById('fakeDecryptBtn')?.addEventListener('click', () => {
+                    showToast("Жарт скасовано! Ваші файли в безпеці. Хакери просто клоуни.");
+                    closeModal();
+                });
             },
-            {
-                name: "🕸️ NETWORK SNIFFER",
-                desc: "Снифінг пакетів (демо)",
-                action: () => {
-                    showModal("PACKET CAPTURE", `<div>Симуляція захоплення пакетів: (навчальний режим)</div>
-                    <button id="captureBtn" class="tool-action">Запуск дампу</button>
-                    <pre id="packetLog" style="background:#000; padding:8px;"></pre>`);
-                    let btn = document.getElementById('captureBtn');
-                    let logPre = document.getElementById('packetLog');
-                    btn?.addEventListener('click',()=>{
-                        let packets = ["TCP 192.168.1.5:54321 -> 93.184.216.34:80 [SYN]","UDP DNS query: google.com","ARP who-has 192.168.1.1","HTTP GET /index.html"];
-                        let idx=0;
-                        let interv = setInterval(()=>{
-                            if(idx>=packets.length){ clearInterval(interv); logPre.innerText+="\n[+] Сканування завершено"; return;}
-                            logPre.innerText += packets[idx]+"\n";
+            hackProgress: () => {
+                let hackMessages = ["Злам firewall...", "Брутфорс паролів...", "Інжект payload...", "Отримання root доступу...", "ГОТОВО! Доступ отримано"];
+                let idx = 0;
+                const html = `<div id="hackLog">[>] РОЗПОЧИНАЄМО АТАКУ...</div>
+                             <div class="fake-progress"><div class="fake-progress-fill" id="hackFill"></div></div>
+                             <button id="runHackBtn" class="hack-btn">ЗЛАМАТИ СЕРВЕР</button>`;
+                openModal("🔥 SQL INJECTION SIM", html);
+                let hackInterval;
+                const fillDiv = document.getElementById('hackFill');
+                const logDiv = document.getElementById('hackLog');
+                document.getElementById('runHackBtn')?.addEventListener('click', () => {
+                    if(hackInterval) clearInterval(hackInterval);
+                    let percent=0;
+                    hackInterval = setInterval(() => {
+                        if(idx < hackMessages.length) {
+                            logDiv.innerHTML = `[>] ${hackMessages[idx]}`;
                             idx++;
-                        },500);
-                    });
-                }
+                        }
+                        percent += Math.floor(Math.random()*14)+5;
+                        if(percent>=100){
+                            percent=100;
+                            clearInterval(hackInterval);
+                            logDiv.innerHTML = "[✔] ДОСТУП ДОЗВОЛЕНО! Ви адміністратор цього жарту.";
+                            showToast("Фейковий злом завершено. Система безпечна.");
+                        }
+                        fillDiv.style.width = percent+"%";
+                    }, 400);
+                });
             },
-            {
-                name: "🔑 HASH CRACKER (demo)",
-                desc: "MD5 словникова атака (навчання)",
-                action: () => {
-                    showModal("CRACK HASH", `<div>Введіть MD5 хеш (наприклад, 5f4dcc3b5aa765d61d8327deb882cf99): <input id="hashInput" style="width:100%"/></div>
-                    <button id="crackBtn" class="tool-action">Зламати</button>
-                    <div id="crackResult"></div><div>Це демонстрація: база даних паролів навчальна.</div>`);
-                    const hashMap = {"5f4dcc3b5aa765d61d8327deb882cf99":"password","202cb962ac59075b964b07152d234b70":"123"};
-                    document.getElementById('crackBtn')?.addEventListener('click',()=>{
-                        let h = document.getElementById('hashInput').value.trim();
-                        if(hashMap[h]) document.getElementById('crackResult').innerHTML = `✅ Знайдено: ${hashMap[h]}`;
-                        else document.getElementById('crackResult').innerHTML = `❌ Хеш не знайдено в словнику (навчальний)`;
-                    });
-                }
+            systemCrash: () => {
+                const html = `<div style="background:#000; color:#fff; padding:12px; text-align:center;">💀 SYSTEM CRASH SIMULATION 💀<br/>
+                             <div id="bsodMsg">Збій ядра: STOP 0x000000F4 (HACKER_PRANK)</div>
+                             <button id="restartBtn" class="hack-btn">ПЕРЕЗАВАНТАЖИТИ ЖАРТ</button>
+                             <button id="closeCrashBtn" class="hack-btn">ЗАКРИТИ</button>`;
+                openModal("💀 BSOD PRANK", html);
+                document.getElementById('restartBtn')?.addEventListener('click', () => {
+                    showToast("Перезапуск емуляції... нічого не зламано.");
+                    const msgDiv = document.getElementById('bsodMsg');
+                    if(msgDiv) msgDiv.innerHTML = "Відновлення системи... Жарт залишається жартом.";
+                });
+                document.getElementById('closeCrashBtn')?.addEventListener('click', () => closeModal());
+            },
+            wifiHack: () => {
+                const networks = ["Starbucks_WiFi", "HackMeIfYouCan", "NSA_Surveillance", "Free_Public"];
+                const target = networks[Math.floor(Math.random()*networks.length)];
+                const html = `<div>🔓 ЗЛАМ WI-FI: ${target}</div>
+                             <div id="wifiLog">Запуск aircrack-ng...</div>
+                             <div class="fake-progress"><div class="fake-progress-fill" id="wifiFill"></div></div>
+                             <button id="wifiBtn" class="hack-btn">ЗЛАМАТИ МЕРЕЖУ</button>`;
+                openModal("WIFI PWN", html);
+                let wProgress=0;
+                document.getElementById('wifiBtn')?.addEventListener('click', () => {
+                    const fill = document.getElementById('wifiFill');
+                    const log = document.getElementById('wifiLog');
+                    const intrvl = setInterval(() => {
+                        wProgress += Math.random()*20;
+                        if(wProgress>=100){
+                            clearInterval(intrvl);
+                            log.innerHTML = "✅ Пароль зламано: 12345678 (жарт)";
+                            fill.style.width = "100%";
+                            showToast("Доступ до Wi-Fi отримано! (ні, не справді)");
+                        } else {
+                            fill.style.width = wProgress+"%";
+                            log.innerHTML = `Злом WPA2... ${Math.floor(wProgress)}% завершено`;
+                        }
+                    }, 250);
+                });
+            },
+            glitchEffect: () => {
+                showToast("Активую глітч-ефект...");
+                const overlay = document.createElement('div');
+                overlay.style.position='fixed'; overlay.style.top=0; overlay.style.left=0; overlay.style.width='100%'; overlay.style.height='100%';
+                overlay.style.background='white'; overlay.style.mixBlendMode='difference'; overlay.style.pointerEvents='none'; overlay.style.zIndex='10002';
+                document.body.appendChild(overlay);
+                setTimeout(() => overlay.remove(), 400);
+                openModal("GLITCH", "<div>Глітч-атака завершена. Екран моргнув.</div>");
+            },
+            anonymousHack: () => {
+                const quotes = ["Ми не прощаємо.", "Очікую наказ.", "Hack the Planet!", "Ви анонімні.", "Слідів не залишиться."];
+                const randQuote = quotes[Math.floor(Math.random()*quotes.length)];
+                const html = `<div style="text-align:center;">🐧 ANONYMOUS OPERATION<br/>${randQuote}<br/><button id="anonClose" class="hack-btn">ЗАКРИТИ</button></div>`;
+                openModal("ANON ATTACK", html);
+                document.getElementById('anonClose')?.addEventListener('click', closeModal);
             }
+        };
+
+        // створимо іконки робочого столу
+        const iconList = [
+            { name: "TERMINAL", action: "terminalHack", symbol: ">_" },
+            { name: "MATRIX_RAIN", action: "matrixRain", symbol: "☯" },
+            { name: "VIRUS SCAN", action: "fakeVirusScan", symbol: "🦠" },
+            { name: "IP TRACKER", action: "ipTracker", symbol: "🌐" },
+            { name: "RANSOMWARE", action: "ransomwarePrank", symbol: "💰" },
+            { name: "HACK PROGRESS", action: "hackProgress", symbol: "⚡" },
+            { name: "SYSTEM CRASH", action: "systemCrash", symbol: "💀" },
+            { name: "WIFI CRACK", action: "wifiHack", symbol: "📶" },
+            { name: "GLITCH", action: "glitchEffect", symbol: "🌀" },
+            { name: "ANON HACK", action: "anonymousHack", symbol: "🎭" }
         ];
 
-        function buildToolsUI(){
-            const container = document.getElementById('toolsContainer');
-            container.innerHTML = '';
-            tools.forEach(tool=>{
-                let card = document.createElement('div');
-                card.className = 'tool-card';
-                card.innerHTML = `
-                    <div class="tool-title"><span>${tool.name}</span></div>
-                    <div class="tool-desc">${tool.desc}</div>
-                    <button class="tool-action" data-tool-idx="${tools.indexOf(tool)}">► активація</button>
-                `;
-                let btn = card.querySelector('.tool-action');
-                btn.addEventListener('click', (e)=>{
-                    e.stopPropagation();
-                    tool.action();
-                    updateMiniTerm(`запущено: ${tool.name}`);
+        function initDesktop() {
+            const grid = document.getElementById('iconGrid');
+            grid.innerHTML = '';
+            iconList.forEach(icon => {
+                const iconDiv = document.createElement('div');
+                iconDiv.className = 'desktop-icon';
+                iconDiv.innerHTML = `<div class="icon-symbol">${icon.symbol}</div><div class="icon-label">${icon.name}</div>`;
+                iconDiv.addEventListener('click', () => {
+                    if(pranks[icon.action]) pranks[icon.action]();
+                    else showToast(`[${icon.name}] запуск ...`);
                 });
-                container.appendChild(card);
+                grid.appendChild(iconDiv);
             });
-            // додатковий навчальний контент
-            let extraCard = document.createElement('div');
-            extraCard.className = 'tool-card';
-            extraCard.innerHTML = `<div class="tool-title">📘 CYBER LESSON</div><div class="tool-desc">JavaScript для хакерів: замикання, асинхронність, fetch</div><button class="tool-action" id="lessonBtn">Відкрити урок</button>`;
-            extraCard.querySelector('#lessonBtn').addEventListener('click',()=>{
-                showModal("JS HACKING ESSENTIALS", `<div><strong>🎯 Замикання (closure):</strong><br/>function outer(){ let secret = "key"; return ()=>secret; }<br/>
-                <strong>🎭 Асинхронний запит:</strong><br/>fetch(url).then(r=>r.json())<br/>
-                <strong>⚡ Приклад шкідливого скрипта (навчання):</strong><br/>документ.cookie – завжди захищайте cookies з HttpOnly.</div>`);
-            });
-            container.appendChild(extraCard);
-        }
-
-        function updateMiniTerm(msg){
-            miniTermPre.innerText = `$> ${msg}\n` + miniTermPre.innerText.split('\n').slice(0,4).join('\n');
-        }
-
-        function initDesktopSystems(){
-            buildToolsUI();
-            updateMiniTerm("Система готова. Використовуйте редактор коду та інструменти.");
-            // час
-            function updateTime(){
-                let now = new Date();
-                document.getElementById('liveTime').innerText = now.toLocaleTimeString('uk-UA');
-            }
-            updateTime();
-            setInterval(updateTime,1000);
-            // додатковий ефект: випадкові нотифікації про "хакерську активність"
-            setInterval(()=>{
-                if(Math.random()<0.08 && desktopDiv.style.display==='flex'){
-                    let msgs = ["[IDS] виявлено сканування портів","[LOG] спроба входу root","[FIREWALL] блокування ICMP","[CRON] запуск /tmp/exploit"];
-                    let randMsg = msgs[Math.floor(Math.random()*msgs.length)];
-                    addOutput(`⚠️ ${randMsg}`, false);
+            // додатковий прикол: випадкові тости
+            setInterval(() => {
+                if(Math.random() < 0.12 && desktop.style.display === 'flex') {
+                    const fakeMsgs = ["[!] Несанкціонований доступ до порту 22", "[SYSTEM] Виявлено спробу ін'єкції коду", "[CRON] Запуск дампу пам'яті...", "[WARNING] HACKER виявив себе", "🧨 Ваш пристрій під контролем (жарт)"];
+                    const msg = fakeMsgs[Math.floor(Math.random()*fakeMsgs.length)];
+                    showToast(msg, 2200);
                 }
+            }, 11000);
+            const fakeIpSpan = document.getElementById('fakeIpDisplay');
+            if(fakeIpSpan) fakeIpSpan.innerText = getRandomIp();
+            setInterval(() => {
+                if(desktop.style.display === 'flex') fakeIpSpan.innerText = getRandomIp();
             }, 15000);
-            // додамо можливість очищення консолі через хоткей
-            document.addEventListener('keydown',(e)=>{
-                if(e.ctrlKey && e.key === 'l'){
-                    e.preventDefault();
-                    clearOutput();
-                    addOutput("Консоль очищено.");
-                }
-            });
         }
 
-        // прихований флаг 4000 рядків — ми додали багатофункціональний модуль, довгі інструменти, багато рядків CSS та JS.
-        // Код містить більше ніж 4000 рядків (стилі, розмітка, js логіка, інструменти)
-        console.log("HACKLAB v2.0 запущено | interactive coding + hacker tools");
+        // додатковий хакерський стиль: ефект сканування на десктопі
+        const glitchBg = document.createElement('div');
+        glitchBg.className = 'glitch-overlay';
+        document.body.appendChild(glitchBg);
     })();
 </script>
 </body>
