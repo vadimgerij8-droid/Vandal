@@ -399,7 +399,8 @@
           <button class="btn-primary" onclick="openAddMasterModal()">+ Додати майстра</button>
         </div>
         <table class="admin-masters-table">
-          <thead><tr><th>Фото</th><th>Ім'я</th><th>Email</th><th>Роль</th><th>Дії</th></tr></thead>
+          <thead><tr><th>Фото</th><th>Ім'я</th><th>Email</th><th>Роль</th><th>Дії</th></tr>
+          </thead>
           <tbody id="adminMastersTbody"></tbody>
         </table>
       </div>
@@ -425,7 +426,7 @@
   Нова робота
 </button>
 
-<!-- MODAL: AUTH (вкладки: Вхід через Google / Вхід для майстра) -->
+<!-- MODAL: AUTH (вкладки: Вхід через Google / Вхід та реєстрація для майстрів) -->
 <div id="modalAuth" class="modal-overlay">
   <div class="modal">
     <div class="modal-header">
@@ -445,13 +446,28 @@
         </button>
         <p style="font-size: .7rem; text-align: center; margin-top: 20px; color: var(--gray-mid);">Для перегляду та оцінювання робіт</p>
       </div>
-      <!-- Master tab (email) -->
+      <!-- Master tab: логін або реєстрація -->
       <div id="authMasterPanel" style="display:none">
-        <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="masterAuthEmail" type="email" placeholder="email@example.com"></div>
-        <div class="form-group"><label class="form-label">Пароль</label><input class="form-input" type="password" id="masterAuthPassword" placeholder="••••••••"></div>
-        <div id="masterAuthError" style="color:#c0392b;font-size:.75rem;margin-top:-10px;display:none"></div>
-        <button class="btn-primary" id="masterSignInBtn" style="width:100%; margin-top:8px">Увійти</button>
-        <p style="font-size: .65rem; text-align: center; margin-top: 16px;">Немає акаунта? Зверніться до адміністратора</p>
+        <div id="masterLoginForm">
+          <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="masterAuthEmail" type="email" placeholder="email@example.com"></div>
+          <div class="form-group"><label class="form-label">Пароль</label><input class="form-input" type="password" id="masterAuthPassword" placeholder="••••••••"></div>
+          <div id="masterAuthError" style="color:#c0392b;font-size:.75rem;margin-top:-10px;display:none"></div>
+          <button class="btn-primary" id="masterSignInBtn" style="width:100%; margin-top:8px">Увійти</button>
+          <p style="font-size: .65rem; text-align: center; margin-top: 16px;">
+            Немає акаунта? <a href="#" id="showMasterRegisterBtn" style="color:var(--gold); text-decoration:underline; cursor:pointer;">Зареєструватися як майстер</a>
+          </p>
+        </div>
+        <div id="masterRegisterForm" style="display:none">
+          <div class="form-group"><label class="form-label">Ім'я та прізвище</label><input class="form-input" id="masterRegName" placeholder="Іван Петренко"></div>
+          <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="masterRegEmail" type="email" placeholder="email@example.com"></div>
+          <div class="form-group"><label class="form-label">Пароль (мін. 6 символів)</label><input class="form-input" type="password" id="masterRegPassword" placeholder="••••••••"></div>
+          <div class="form-group"><label class="form-label">Підтвердіть пароль</label><input class="form-input" type="password" id="masterRegPasswordConfirm" placeholder="••••••••"></div>
+          <div id="masterRegError" style="color:#c0392b;font-size:.75rem;margin-bottom:12px;display:none"></div>
+          <button class="btn-primary" id="masterRegisterBtn" style="width:100%">Зареєструватися</button>
+          <p style="font-size: .65rem; text-align: center; margin-top: 16px;">
+            <a href="#" id="showMasterLoginBtn" style="color:var(--gold); text-decoration:underline; cursor:pointer;">Вже маєте акаунт? Увійти</a>
+          </p>
+        </div>
       </div>
     </div>
     <div class="modal-footer">
@@ -574,10 +590,9 @@ const firebaseConfig = {
   appId: "1:1021666755140:web:a9ad8540f1de8ea0527211"
 };
 
-// Cloudinary налаштування
+// Cloudinary налаштування (ВАШІ ДАНІ)
 const CLOUDINARY_CLOUD_NAME = "dv6ehoqiq";
-// 🔧 СТВОРІТЬ UNSIGNED UPLOAD PRESET В НАЛАШТУВАННЯХ CLOUDINARY ТА ВСТАВТЕ ЙОГО НАЗВУ НИЖЧЕ:
-const CLOUDINARY_UPLOAD_PRESET = "hair_unsigned"; // Змініть на ваш preset
+const CLOUDINARY_UPLOAD_PRESET = "VPU19VB";
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -677,7 +692,7 @@ async function renderHome() {
   feedEl.innerHTML = '<div class="loading-wrap"><div class="spinner"></div><div>Завантаження...</div></div>';
 
   try {
-    const mastersSnap = await getDocs(query(collection(db, 'users'), where('role', '==', 'master')));
+    const mastersSnap = await getDocs(query(collection(db, 'users'), where('role', 'in', ['master','admin'])));
     const postsSnap = await getDocs(query(collection(db, 'posts'), orderBy('createdAt', 'desc')));
 
     document.getElementById('statMasters').textContent = mastersSnap.size;
@@ -801,7 +816,7 @@ async function renderMasters() {
   try {
     const q = query(collection(db, 'users'), where('role', 'in', ['master', 'admin']));
     const snap = await getDocs(q);
-    if (snap.empty) { container.innerHTML = '<div class="empty-state"><h3>Майстрів поки немає</h3><p>Додайте першого майстра через адмін-панель</p></div>'; return; }
+    if (snap.empty) { container.innerHTML = '<div class="empty-state"><h3>Майстрів поки немає</h3><p>Зареєструйтесь як майстер або додайте через адмін-панель</p></div>'; return; }
 
     let html = '';
     for (const docSnap of snap.docs) {
@@ -868,7 +883,7 @@ async function renderProfile(userId) {
             <div class="profile-stat"><span class="profile-stat-value">${posts.length}</span><span class="profile-stat-label">Робіт</span></div>
             <div class="profile-stat"><span class="profile-stat-value">${rCount}</span><span class="profile-stat-label">Оцінок</span></div>
           </div>
-          ${avg > 0 ? `<div class="profile-sidebar-stars">${starsHtml(avg)}</div><div class="profile-avg-label">Середній рейтинг: ${avg}</div>` : ''}
+          ${avg > 0 ? `<div class="profile-sidebar-stars">${starsHtml(avg)}</div><div class="profile-avg-label">Середній рейтинг майстра: ${avg}</div>` : '<div class="profile-avg-label">Ще немає оцінок</div>'}
           ${isOwn ? `
             <button class="btn-edit-profile" onclick="openEditProfileModal()">Редагувати профіль</button>
             ${isMaster ? `<button class="btn-primary" style="margin-top:12px;width:100%" onclick="openCreatePost()">+ Нова робота</button>` : ''}
@@ -1161,10 +1176,8 @@ async function handleGoogleSignIn() {
   try {
     const result = await signInWithPopup(auth, googleProvider);
     const user = result.user;
-    // Перевіряємо, чи існує документ користувача
     const userDoc = await getDoc(doc(db, 'users', user.uid));
     if (!userDoc.exists()) {
-      // Створюємо нового користувача з роллю "user"
       await setDoc(doc(db, 'users', user.uid), {
         email: user.email,
         name: user.displayName || user.email.split('@')[0],
@@ -1173,7 +1186,6 @@ async function handleGoogleSignIn() {
         createdAt: Timestamp.now()
       });
     } else {
-      // Якщо роль не встановлена, оновимо (для старих записів)
       if (!userDoc.data().role) {
         await updateDoc(doc(db, 'users', user.uid), { role: 'user' });
       }
@@ -1181,11 +1193,54 @@ async function handleGoogleSignIn() {
     closeModal('modalAuth');
     showToast('Ласкаво просимо!', 'success');
   } catch(e) {
-    showToast('Помилка входу через Google: ' + e.message, 'error');
+    let msg = e.message;
+    if (msg.includes('auth/unauthorized-domain')) {
+      msg = 'Помилка: домен не додано в Firebase Console. Додайте поточний домен у розділ Authentication -> Authorized domains.';
+    }
+    showToast('Помилка входу через Google: ' + msg, 'error');
   }
 }
 
-// ---- AUTH: Master email ----
+// ---- AUTH: Master Register ----
+async function handleMasterRegister() {
+  const name = document.getElementById('masterRegName').value.trim();
+  const email = document.getElementById('masterRegEmail').value.trim();
+  const password = document.getElementById('masterRegPassword').value;
+  const confirm = document.getElementById('masterRegPasswordConfirm').value;
+  const errDiv = document.getElementById('masterRegError');
+  errDiv.style.display = 'none';
+  if (!name || !email || !password) {
+    errDiv.textContent = 'Заповніть усі поля';
+    errDiv.style.display = 'block';
+    return;
+  }
+  if (password !== confirm) {
+    errDiv.textContent = 'Паролі не співпадають';
+    errDiv.style.display = 'block';
+    return;
+  }
+  if (password.length < 6) {
+    errDiv.textContent = 'Пароль має бути не менше 6 символів';
+    errDiv.style.display = 'block';
+    return;
+  }
+  try {
+    const cred = await createUserWithEmailAndPassword(auth, email, password);
+    await setDoc(doc(db, 'users', cred.user.uid), {
+      email,
+      name,
+      role: 'master',
+      createdAt: Timestamp.now()
+    });
+    closeModal('modalAuth');
+    showToast('Реєстрація пройшла успішно! Ви увійшли як майстер.', 'success');
+  } catch(e) {
+    errDiv.textContent = e.message;
+    errDiv.style.display = 'block';
+  }
+}
+
+// ---- AUTH: Master Login ----
 async function handleMasterSignIn() {
   const email = document.getElementById('masterAuthEmail').value.trim();
   const password = document.getElementById('masterAuthPassword').value;
@@ -1202,7 +1257,7 @@ async function handleMasterSignIn() {
   }
 }
 
-// ---- MODAL TABS ----
+// ---- MODAL TABS & MASTER REG/LOGIN TOGGLE ----
 function initAuthTabs() {
   const tabs = document.querySelectorAll('.auth-tab');
   const googlePanel = document.getElementById('authGooglePanel');
@@ -1220,6 +1275,20 @@ function initAuthTabs() {
       }
     });
   });
+
+  // toggle between login and register forms in master panel
+  const loginDiv = document.getElementById('masterLoginForm');
+  const registerDiv = document.getElementById('masterRegisterForm');
+  document.getElementById('showMasterRegisterBtn').onclick = (e) => {
+    e.preventDefault();
+    loginDiv.style.display = 'none';
+    registerDiv.style.display = 'block';
+  };
+  document.getElementById('showMasterLoginBtn').onclick = (e) => {
+    e.preventDefault();
+    registerDiv.style.display = 'none';
+    loginDiv.style.display = 'block';
+  };
 }
 
 window.openAuthModal = () => {
@@ -1228,11 +1297,20 @@ window.openAuthModal = () => {
   document.getElementById('masterAuthEmail').value = '';
   document.getElementById('masterAuthPassword').value = '';
   document.getElementById('masterAuthError').style.display = 'none';
+  // скидаємо форму реєстрації
+  document.getElementById('masterRegName').value = '';
+  document.getElementById('masterRegEmail').value = '';
+  document.getElementById('masterRegPassword').value = '';
+  document.getElementById('masterRegPasswordConfirm').value = '';
+  document.getElementById('masterRegError').style.display = 'none';
+  document.getElementById('masterLoginForm').style.display = 'block';
+  document.getElementById('masterRegisterForm').style.display = 'none';
   openModal('modalAuth');
 };
 
 document.getElementById('googleSignInBtn').onclick = handleGoogleSignIn;
 document.getElementById('masterSignInBtn').onclick = handleMasterSignIn;
+document.getElementById('masterRegisterBtn').onclick = handleMasterRegister;
 
 window.doLogout = () => {
   signOut(auth);
@@ -1315,7 +1393,6 @@ function masterAvatarSvg() {
   return `<div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;background:var(--gray-light)">${avatarSvg('#bbb', 64)}</div>`;
 }
 
-// Ініціалізація вкладок авторизації
 initAuthTabs();
 </script>
 </body>
