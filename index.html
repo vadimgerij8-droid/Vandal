@@ -208,6 +208,8 @@
     .btn-danger { padding: 7px 14px; background: transparent; color: #c0392b; border: 1px solid #c0392b; font-family: var(--font-body); font-size: .62rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; cursor: pointer; transition: var(--transition); }
     .btn-danger:hover { background: #c0392b; color: white; }
     .btn-sm { padding: 6px 14px; font-size: .62rem; }
+    .btn-google { background: #fff; color: #333; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; margin-top: 12px; }
+    .btn-google:hover { background: #f5f5f5; }
 
     /* ===== MODALS ===== */
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.7); z-index: 200; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .3s ease; backdrop-filter: blur(4px); padding: 20px; }
@@ -229,6 +231,9 @@
     .form-photo-upload:hover { border-color: var(--black); background-color: rgba(0,0,0,.02); }
     .form-photo-upload input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
     .upload-hint { font-size: .72rem; color: var(--gray-mid); pointer-events: none; }
+    .auth-tabs { display: flex; gap: 20px; margin-bottom: 24px; border-bottom: 1px solid var(--gray-light); }
+    .auth-tab { padding: 10px 0; font-size: .8rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; cursor: pointer; color: var(--gray-mid); transition: var(--transition); }
+    .auth-tab.active { color: var(--black); border-bottom: 2px solid var(--black); }
 
     /* ===== TOAST ===== */
     .toast { position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--black); color: var(--white); padding: 14px 24px; font-size: .72rem; font-weight: 500; letter-spacing: .06em; z-index: 500; opacity: 0; transition: all .4s cubic-bezier(.25,.46,.45,.94); pointer-events: none; white-space: nowrap; }
@@ -348,7 +353,7 @@
       <div class="footer-col-item" id="footerEmail">✉️ vpu19@education.ua</div>
     </div>
   </footer>
-  <div class="footer-bottom"><span>© 2024 Перукарня ВПУ-19</span><span>Firebase Powered</span></div>
+  <div class="footer-bottom"><span>© 2024 Перукарня ВПУ-19</span><span>Firebase + Cloudinary</span></div>
 </div>
 
 <!-- PAGE: MASTERS -->
@@ -414,27 +419,43 @@
   </div>
 </div>
 
-<!-- CREATE POST FAB -->
+<!-- CREATE POST FAB (тільки для майстрів/адмінів) -->
 <button class="create-post-fab" id="createPostFab" onclick="openCreatePost()">
   <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
   Нова робота
 </button>
 
-<!-- MODAL: AUTH -->
+<!-- MODAL: AUTH (вкладки: Вхід через Google / Вхід для майстра) -->
 <div id="modalAuth" class="modal-overlay">
   <div class="modal">
     <div class="modal-header">
-      <h2 class="modal-title" id="authModalTitle">Вхід майстра</h2>
+      <h2 class="modal-title">Вхід</h2>
       <button class="modal-close" onclick="closeModal('modalAuth')">✕</button>
     </div>
     <div class="modal-body">
-      <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="authEmail" type="email" placeholder="email@example.com"></div>
-      <div class="form-group"><label class="form-label">Пароль</label><input class="form-input" type="password" id="authPassword" placeholder="••••••••"></div>
-      <div id="authError" style="color:#c0392b;font-size:.75rem;margin-top:-10px;display:none"></div>
+      <div class="auth-tabs" id="authTabs">
+        <div class="auth-tab active" data-tab="google">Для клієнтів</div>
+        <div class="auth-tab" data-tab="master">Для майстрів</div>
+      </div>
+      <!-- Google tab -->
+      <div id="authGooglePanel">
+        <button class="btn-primary btn-google" id="googleSignInBtn">
+          <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          Увійти через Google
+        </button>
+        <p style="font-size: .7rem; text-align: center; margin-top: 20px; color: var(--gray-mid);">Для перегляду та оцінювання робіт</p>
+      </div>
+      <!-- Master tab (email) -->
+      <div id="authMasterPanel" style="display:none">
+        <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="masterAuthEmail" type="email" placeholder="email@example.com"></div>
+        <div class="form-group"><label class="form-label">Пароль</label><input class="form-input" type="password" id="masterAuthPassword" placeholder="••••••••"></div>
+        <div id="masterAuthError" style="color:#c0392b;font-size:.75rem;margin-top:-10px;display:none"></div>
+        <button class="btn-primary" id="masterSignInBtn" style="width:100%; margin-top:8px">Увійти</button>
+        <p style="font-size: .65rem; text-align: center; margin-top: 16px;">Немає акаунта? Зверніться до адміністратора</p>
+      </div>
     </div>
     <div class="modal-footer">
       <button class="btn-secondary" onclick="closeModal('modalAuth')">Скасувати</button>
-      <button class="btn-primary" id="submitAuthBtn">Увійти</button>
     </div>
   </div>
 </div>
@@ -526,8 +547,7 @@
   "imports": {
     "firebase/app": "https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js",
     "firebase/auth": "https://www.gstatic.com/firebasejs/10.7.2/firebase-auth.js",
-    "firebase/firestore": "https://www.gstatic.com/firebasejs/10.7.2/firebase-firestore.js",
-    "firebase/storage": "https://www.gstatic.com/firebasejs/10.7.2/firebase-storage.js"
+    "firebase/firestore": "https://www.gstatic.com/firebasejs/10.7.2/firebase-firestore.js"
   }
 }
 </script>
@@ -536,17 +556,15 @@
 import { initializeApp } from "firebase/app";
 import {
   getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
-  onAuthStateChanged, signOut
+  onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup
 } from "firebase/auth";
 import {
   getFirestore, collection, doc, setDoc, getDoc, getDocs, addDoc,
   updateDoc, deleteDoc, query, orderBy, where, Timestamp,
-  increment, runTransaction, serverTimestamp, getCountFromServer
+  increment, runTransaction
 } from "firebase/firestore";
-import {
-  getStorage, ref, uploadBytes, getDownloadURL
-} from "firebase/storage";
 
+// ========== КОНФІГУРАЦІЯ ==========
 const firebaseConfig = {
   apiKey: "AIzaSyAoYoOeKo3zbpQxrP-6DjP94uMfMRsXxGo",
   authDomain: "vpu-19.firebaseapp.com",
@@ -556,10 +574,15 @@ const firebaseConfig = {
   appId: "1:1021666755140:web:a9ad8540f1de8ea0527211"
 };
 
+// Cloudinary налаштування
+const CLOUDINARY_CLOUD_NAME = "dv6ehoqiq";
+// 🔧 СТВОРІТЬ UNSIGNED UPLOAD PRESET В НАЛАШТУВАННЯХ CLOUDINARY ТА ВСТАВТЕ ЙОГО НАЗВУ НИЖЧЕ:
+const CLOUDINARY_UPLOAD_PRESET = "hair_unsigned"; // Змініть на ваш preset
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-const storage = getStorage(app);
+const googleProvider = new GoogleAuthProvider();
 
 // ---- State ----
 let currentUser = null;
@@ -567,13 +590,7 @@ let currentUserDoc = null;
 let editingMasterId = null;
 let pendingMasterPhotoFile = null;
 let pendingProfilePhotoFile = null;
-
-// ---- Session ID for anonymous ratings ----
-function getSessionId() {
-  let sid = localStorage.getItem('ratingSession');
-  if (!sid) { sid = 'anon_' + Math.random().toString(36).slice(2,11); localStorage.setItem('ratingSession', sid); }
-  return sid;
-}
+let pendingPostPhotoFile = null;
 
 // ---- Helpers ----
 function esc(str) {
@@ -614,6 +631,32 @@ window.unhoverStars = postId => {
   document.querySelectorAll(`.stars-interactive [data-post="${postId}"]`).forEach(s => s.classList.remove('hovered'));
 };
 
+// ---- Cloudinary upload ----
+async function uploadToCloudinary(file, folder = '') {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+  if (folder) formData.append('folder', folder);
+  
+  const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`, {
+    method: 'POST',
+    body: formData
+  });
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error?.message || 'Помилка завантаження на Cloudinary');
+  }
+  const data = await response.json();
+  return data.secure_url;
+}
+
+// ---- Session ID for ratings ----
+function getSessionId() {
+  let sid = localStorage.getItem('ratingSession');
+  if (!sid) { sid = 'anon_' + Math.random().toString(36).slice(2,11); localStorage.setItem('ratingSession', sid); }
+  return sid;
+}
+
 // ---- Navigate ----
 window.navigate = async (page, userId = null) => {
   document.querySelectorAll('.page').forEach(p => { p.classList.remove('active'); p.style.opacity = '0'; p.style.transform = 'translateY(20px)'; });
@@ -653,9 +696,7 @@ async function renderHome() {
       return;
     }
 
-    const sid = getSessionId();
     const ratedPosts = new Set(JSON.parse(localStorage.getItem('ratedPosts') || '[]'));
-
     let html = '';
     const authorCache = {};
 
@@ -748,12 +789,8 @@ window.deletePost = async postId => {
     await deleteDoc(doc(db, 'posts', postId));
     document.getElementById(`post-${postId}`)?.remove();
     showToast('Роботу видалено', 'success');
-    // оновлюємо загальну кількість робіт
     const worksSpan = document.getElementById('statWorks');
-    if (worksSpan) {
-      const newCount = (parseInt(worksSpan.textContent) || 0) - 1;
-      worksSpan.textContent = newCount;
-    }
+    if (worksSpan) worksSpan.textContent = parseInt(worksSpan.textContent || 0) - 1;
   } catch(e) { showToast(e.message, 'error'); }
 };
 
@@ -795,7 +832,7 @@ async function renderMasters() {
   }
 }
 
-// ---- RENDER PROFILE (без orderBy, сортування на клієнті) ----
+// ---- RENDER PROFILE ----
 async function renderProfile(userId) {
   const container = document.getElementById('profileContainer');
   if (!userId) {
@@ -808,7 +845,6 @@ async function renderProfile(userId) {
     const userSnap = await getDoc(doc(db, 'users', userId));
     if (!userSnap.exists()) { container.innerHTML = '<div style="padding:120px;text-align:center">Користувача не знайдено</div>'; return; }
     const user = userSnap.data();
-    // Отримуємо всі пости автора без orderBy, потім сортуємо на клієнті
     const postsQuery = query(collection(db, 'posts'), where('authorId', '==', userId));
     const postsSnap = await getDocs(postsQuery);
     let posts = postsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
@@ -825,8 +861,8 @@ async function renderProfile(userId) {
       <div class="profile-layout">
         <div class="profile-sidebar">
           <div class="profile-avatar">${user.photoURL ? `<img src="${esc(user.photoURL)}">` : `<div class="profile-avatar-placeholder">${avatarSvg('#888', 56)}</div>`}</div>
-          <div class="profile-name">${esc(user.name || user.email?.split('@')[0] || 'Майстер')}</div>
-          <div class="profile-role-badge">${user.role === 'admin' ? 'Адміністратор' : user.role === 'master' ? 'Майстер' : 'Користувач'}</div>
+          <div class="profile-name">${esc(user.name || user.email?.split('@')[0] || 'Користувач')}</div>
+          <div class="profile-role-badge">${user.role === 'admin' ? 'Адміністратор' : user.role === 'master' ? 'Майстер' : 'Клієнт'}</div>
           ${user.bio ? `<p class="profile-bio">${esc(user.bio)}</p>` : ''}
           <div class="profile-stats">
             <div class="profile-stat"><span class="profile-stat-value">${posts.length}</span><span class="profile-stat-label">Робіт</span></div>
@@ -893,9 +929,8 @@ document.getElementById('saveProfileBtn').onclick = async () => {
   try {
     const updates = { name, bio };
     if (pendingProfilePhotoFile) {
-      const sRef = ref(storage, `avatars/${currentUser.uid}`);
-      await uploadBytes(sRef, pendingProfilePhotoFile);
-      updates.photoURL = await getDownloadURL(sRef);
+      const photoURL = await uploadToCloudinary(pendingProfilePhotoFile, `avatars/${currentUser.uid}`);
+      updates.photoURL = photoURL;
     }
     await updateDoc(doc(db, 'users', currentUser.uid), updates);
     currentUserDoc = { ...currentUserDoc, ...updates };
@@ -927,6 +962,7 @@ async function renderAdmin() {
         <td><select onchange="changeRole('${docSnap.id}',this.value)" style="border:1px solid var(--gray-light);padding:4px 8px;font-size:.72rem;background:white;cursor:pointer">
           <option${u.role==='master'?' selected':''}>master</option>
           <option${u.role==='admin'?' selected':''}>admin</option>
+          <option${u.role==='user'?' selected':''}>user</option>
         </select></td>
         <td class="table-actions">
           <button class="btn-secondary btn-sm" onclick="editMaster('${docSnap.id}')">Редагувати</button>
@@ -1013,9 +1049,8 @@ document.getElementById('saveMasterBtn').onclick = async () => {
     if (editingMasterId) {
       const updates = { name, role, bio };
       if (pendingMasterPhotoFile) {
-        const sRef = ref(storage, `avatars/${editingMasterId}`);
-        await uploadBytes(sRef, pendingMasterPhotoFile);
-        updates.photoURL = await getDownloadURL(sRef);
+        const photoURL = await uploadToCloudinary(pendingMasterPhotoFile, `avatars/${editingMasterId}`);
+        updates.photoURL = photoURL;
       }
       await updateDoc(doc(db, 'users', editingMasterId), updates);
       showToast('Майстра оновлено', 'success');
@@ -1024,9 +1059,7 @@ document.getElementById('saveMasterBtn').onclick = async () => {
       const cred = await createUserWithEmailAndPassword(auth, email, password);
       let photoURL = null;
       if (pendingMasterPhotoFile) {
-        const sRef = ref(storage, `avatars/${cred.user.uid}`);
-        await uploadBytes(sRef, pendingMasterPhotoFile);
-        photoURL = await getDownloadURL(sRef);
+        photoURL = await uploadToCloudinary(pendingMasterPhotoFile, `avatars/${cred.user.uid}`);
       }
       await setDoc(doc(db, 'users', cred.user.uid), { email, name, role, bio, photoURL, createdAt: Timestamp.now() });
       showToast('Майстра додано', 'success');
@@ -1074,10 +1107,11 @@ function applySettings(s) {
   if (s.email) document.getElementById('footerEmail').textContent = s.email;
 }
 
-// ---- POSTS ----
+// ---- POSTS (тільки майстри/адміни) ----
 window.openCreatePost = () => {
   if (!currentUser) { openAuthModal(); return; }
   if (!['master','admin'].includes(currentUserDoc?.role)) { showToast('Тільки майстри можуть публікувати роботи', 'error'); return; }
+  pendingPostPhotoFile = null;
   document.getElementById('postPhotoInput').value = '';
   document.getElementById('postCaption').value = '';
   document.getElementById('postPhotoArea').style.backgroundImage = '';
@@ -1085,8 +1119,9 @@ window.openCreatePost = () => {
 };
 
 document.getElementById('postPhotoInput').onchange = e => {
-  if (e.target.files[0]) {
-    const url = URL.createObjectURL(e.target.files[0]);
+  pendingPostPhotoFile = e.target.files[0];
+  if (pendingPostPhotoFile) {
+    const url = URL.createObjectURL(pendingPostPhotoFile);
     const area = document.getElementById('postPhotoArea');
     area.style.backgroundImage = `url(${url})`;
     area.style.backgroundSize = 'cover';
@@ -1096,16 +1131,13 @@ document.getElementById('postPhotoInput').onchange = e => {
 };
 
 document.getElementById('submitPostBtn').onclick = async () => {
-  const file = document.getElementById('postPhotoInput').files[0];
-  if (!file) { showToast('Оберіть фото', 'error'); return; }
+  if (!pendingPostPhotoFile) { showToast('Оберіть фото', 'error'); return; }
   const btn = document.getElementById('submitPostBtn');
   btn.textContent = 'Завантаження...';
   btn.disabled = true;
   try {
     const caption = document.getElementById('postCaption').value.trim();
-    const sRef = ref(storage, `posts/${currentUser.uid}_${Date.now()}`);
-    await uploadBytes(sRef, file);
-    const imageURL = await getDownloadURL(sRef);
+    const imageURL = await uploadToCloudinary(pendingPostPhotoFile, `posts/${currentUser.uid}`);
     await addDoc(collection(db, 'posts'), {
       authorId: currentUser.uid,
       imageURL, caption,
@@ -1120,34 +1152,87 @@ document.getElementById('submitPostBtn').onclick = async () => {
   } finally {
     btn.innerHTML = '<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Опублікувати';
     btn.disabled = false;
+    pendingPostPhotoFile = null;
   }
 };
 
-// ---- AUTH ----
-window.openAuthModal = () => {
-  document.getElementById('authEmail').value = '';
-  document.getElementById('authPassword').value = '';
-  document.getElementById('authError').style.display = 'none';
-  openModal('modalAuth');
-};
-
-document.getElementById('submitAuthBtn').onclick = async () => {
-  const email = document.getElementById('authEmail').value.trim();
-  const password = document.getElementById('authPassword').value;
-  const errEl = document.getElementById('authError');
-  errEl.style.display = 'none';
-  if (!email || !password) { errEl.textContent = 'Заповніть усі поля'; errEl.style.display = 'block'; return; }
-  const btn = document.getElementById('submitAuthBtn');
-  btn.textContent = '...'; btn.disabled = true;
+// ---- AUTH: Google ----
+async function handleGoogleSignIn() {
   try {
-    await signInWithEmailAndPassword(auth, email, password);
+    const result = await signInWithPopup(auth, googleProvider);
+    const user = result.user;
+    // Перевіряємо, чи існує документ користувача
+    const userDoc = await getDoc(doc(db, 'users', user.uid));
+    if (!userDoc.exists()) {
+      // Створюємо нового користувача з роллю "user"
+      await setDoc(doc(db, 'users', user.uid), {
+        email: user.email,
+        name: user.displayName || user.email.split('@')[0],
+        photoURL: user.photoURL,
+        role: 'user',
+        createdAt: Timestamp.now()
+      });
+    } else {
+      // Якщо роль не встановлена, оновимо (для старих записів)
+      if (!userDoc.data().role) {
+        await updateDoc(doc(db, 'users', user.uid), { role: 'user' });
+      }
+    }
     closeModal('modalAuth');
     showToast('Ласкаво просимо!', 'success');
   } catch(e) {
+    showToast('Помилка входу через Google: ' + e.message, 'error');
+  }
+}
+
+// ---- AUTH: Master email ----
+async function handleMasterSignIn() {
+  const email = document.getElementById('masterAuthEmail').value.trim();
+  const password = document.getElementById('masterAuthPassword').value;
+  const errEl = document.getElementById('masterAuthError');
+  errEl.style.display = 'none';
+  if (!email || !password) { errEl.textContent = 'Заповніть усі поля'; errEl.style.display = 'block'; return; }
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    closeModal('modalAuth');
+    showToast('Вітаємо, майстре!', 'success');
+  } catch(e) {
     errEl.textContent = 'Невірний email або пароль';
     errEl.style.display = 'block';
-  } finally { btn.textContent = 'Увійти'; btn.disabled = false; }
+  }
+}
+
+// ---- MODAL TABS ----
+function initAuthTabs() {
+  const tabs = document.querySelectorAll('.auth-tab');
+  const googlePanel = document.getElementById('authGooglePanel');
+  const masterPanel = document.getElementById('authMasterPanel');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      if (tab.dataset.tab === 'google') {
+        googlePanel.style.display = 'block';
+        masterPanel.style.display = 'none';
+      } else {
+        googlePanel.style.display = 'none';
+        masterPanel.style.display = 'block';
+      }
+    });
+  });
+}
+
+window.openAuthModal = () => {
+  // Скидаємо до вкладки Google
+  document.querySelector('.auth-tab[data-tab="google"]').click();
+  document.getElementById('masterAuthEmail').value = '';
+  document.getElementById('masterAuthPassword').value = '';
+  document.getElementById('masterAuthError').style.display = 'none';
+  openModal('modalAuth');
 };
+
+document.getElementById('googleSignInBtn').onclick = handleGoogleSignIn;
+document.getElementById('masterSignInBtn').onclick = handleMasterSignIn;
 
 window.doLogout = () => {
   signOut(auth);
@@ -1229,6 +1314,9 @@ function avatarSvg(color='#aaa', size=28) {
 function masterAvatarSvg() {
   return `<div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;background:var(--gray-light)">${avatarSvg('#bbb', 64)}</div>`;
 }
+
+// Ініціалізація вкладок авторизації
+initAuthTabs();
 </script>
 </body>
 </html>
