@@ -1259,6 +1259,32 @@
       .btn-write-review { margin: 10px 16px; }
       .masters-grid { gap: 20px; }
       .admin-masters-table { font-size: .75rem; }
+
+      /* Покращена мобільна оптимізація для модальних вікон */
+      .modal-footer {
+        flex-direction: column;
+        gap: 12px;
+      }
+      .modal-footer .btn-primary,
+      .modal-footer .btn-secondary {
+        width: 100%;
+        justify-content: center;
+        padding: 16px 20px;
+        font-size: 0.8rem;
+        min-height: 56px;
+      }
+      .modal-header {
+        padding: 20px 20px 16px;
+      }
+      .modal-title {
+        font-size: 1.4rem;
+      }
+      /* Видалено хрестик для зазначених модальних вікон (стиль залишено для сумісності) */
+      #modalPost .modal-close,
+      #modalEditProfile .modal-close,
+      #modalReview .modal-close {
+        display: none;
+      }
     }
     .empty-state { 
       text-align: center; padding: 80px 24px; color: var(--gray-mid); 
@@ -1576,12 +1602,12 @@
   </div>
 </div>
 
-<!-- MODAL: CREATE POST -->
+<!-- MODAL: CREATE POST (оптимізовано: прибрано хрестик) -->
 <div id="modalPost" class="modal-overlay">
   <div class="modal">
     <div class="modal-header">
       <h2 class="modal-title"><i class="fas fa-camera"></i> Нова робота</h2>
-      <button class="modal-close" onclick="closeModal('modalPost')"><i class="fas fa-times"></i></button>
+      <!-- Кнопку закриття видалено відповідно до вимог -->
     </div>
     <div class="modal-body">
       <div class="form-group">
@@ -1601,12 +1627,12 @@
   </div>
 </div>
 
-<!-- MODAL: EDIT PROFILE -->
+<!-- MODAL: EDIT PROFILE (оптимізовано: прибрано хрестик) -->
 <div id="modalEditProfile" class="modal-overlay">
   <div class="modal">
     <div class="modal-header">
       <h2 class="modal-title"><i class="fas fa-user-edit"></i> Редагувати профіль</h2>
-      <button class="modal-close" onclick="closeModal('modalEditProfile')"><i class="fas fa-times"></i></button>
+      <!-- Кнопку закриття видалено -->
     </div>
     <div class="modal-body">
       <div class="form-group">
@@ -1631,12 +1657,12 @@
   </div>
 </div>
 
-<!-- MODAL: WRITE REVIEW -->
+<!-- MODAL: WRITE REVIEW (оптимізовано: прибрано хрестик) -->
 <div id="modalReview" class="modal-overlay">
   <div class="modal">
     <div class="modal-header">
       <h2 class="modal-title"><i class="fas fa-pen"></i> Написати відгук</h2>
-      <button class="modal-close" onclick="closeModal('modalReview')"><i class="fas fa-times"></i></button>
+      <!-- Кнопку закриття видалено -->
     </div>
     <div class="modal-body">
       <div class="form-group">
@@ -2151,7 +2177,7 @@ async function renderMasters() {
   }
 }
 
-// ---- RENDER PROFILE ----
+// ---- RENDER PROFILE (оптимізовано: у клієнта прибрано розділи Роботи, Оцінки, Відгуки) ----
 async function renderProfile(userId) {
   const container = document.getElementById('profileContainer');
   if (!userId) {
@@ -2230,6 +2256,7 @@ async function renderProfile(userId) {
       }).join('') + '</div>';
     }
     const isClientProfile = !isMaster;
+    // Для клієнта розділи "Роботи", "Оцінки", "Відгуки" не відображаються (залишено тільки текст)
     container.innerHTML = `
       <div class="profile-layout">
         <div class="profile-sidebar">
