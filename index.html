@@ -15,10 +15,8 @@
     <meta property="og:type" content="website">
     <meta property="og:image" content="/og-image.png">
 
+    <!-- hls.js залишаємо з defer, він не критичний для ініціалізації -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest" defer></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js" defer></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js" defer></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js" defer></script>
 
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="icon" href="android-chrome-192x192.png" sizes="192x192">
@@ -1620,6 +1618,11 @@
         </div>
     </aside>
 
+    <!-- Firebase SDK завантажується першим, без defer, щоб гарантовано бути доступним -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+
     <script>
         // ===== utils.js =====
         String.prototype.hashCode = function() {
@@ -1750,29 +1753,27 @@
 
         // ===== auth.js =====
         window.currentUser = null;
-        if (typeof firebase !== 'undefined') {
-            firebase.initializeApp({
-                apiKey: "AIzaSyDxEGgR8KuZh9IEeAEv5yXa2lAzdLGP5jI",
-                authDomain: "monoanime-46d6f.firebaseapp.com",
-                projectId: "monoanime-46d6f",
-                storageBucket: "monoanime-46d6f.firebasestorage.app",
-                messagingSenderId: "645025854458",
-                appId: "1:645025854458:web:f41af5e48b79517522aa43",
-                measurementId: "G-ZJB9D0CJQL"
-            });
-            firebase.auth().onAuthStateChanged((user) => {
-                window.currentUser = user ? {
-                    uid: user.uid,
-                    displayName: user.displayName || '',
-                    email: user.email || '',
-                    photoURL: user.photoURL || ''
-                } : null;
-                updateBadge?.();
-            });
-        }
+        // Firebase вже гарантовано завантажена
+        firebase.initializeApp({
+            apiKey: "AIzaSyDxEGgR8KuZh9IEeAEv5yXa2lAzdLGP5jI",
+            authDomain: "monoanime-46d6f.firebaseapp.com",
+            projectId: "monoanime-46d6f",
+            storageBucket: "monoanime-46d6f.firebasestorage.app",
+            messagingSenderId: "645025854458",
+            appId: "1:645025854458:web:f41af5e48b79517522aa43",
+            measurementId: "G-ZJB9D0CJQL"
+        });
+        firebase.auth().onAuthStateChanged((user) => {
+            window.currentUser = user ? {
+                uid: user.uid,
+                displayName: user.displayName || '',
+                email: user.email || '',
+                photoURL: user.photoURL || ''
+            } : null;
+            updateBadge?.();
+        });
 
         window.authGoogleSignIn = async function() {
-            if (typeof firebase === 'undefined') { showToast('❌ Firebase не завантажена'); return; }
             try {
                 const provider = new firebase.auth.GoogleAuthProvider();
                 const result = await firebase.auth().signInWithPopup(provider);
@@ -1788,7 +1789,6 @@
             } catch (err) { showToast(`❌ Помилка: ${err.message}`); }
         };
         window.authEmailLogin = async function() {
-            if (typeof firebase === 'undefined') { showToast('❌ Firebase не завантажена'); return; }
             const email = document.getElementById('authEmail')?.value?.trim();
             const password = document.getElementById('authPassword')?.value;
             if (!email || !password) { showToast('❌ Заповніть email та пароль'); return; }
@@ -1806,7 +1806,6 @@
             } catch (err) { showToast(`❌ Помилка входу: ${err.message}`); }
         };
         window.authEmailRegister = async function() {
-            if (typeof firebase === 'undefined') { showToast('❌ Firebase не завантажена'); return; }
             const name = document.getElementById('authName')?.value?.trim();
             const email = document.getElementById('authEmail')?.value?.trim();
             const password = document.getElementById('authPassword')?.value;
@@ -1827,7 +1826,6 @@
             } catch (err) { showToast(`❌ Помилка реєстрації: ${err.message}`); }
         };
         window.authSignOut = async function() {
-            if (typeof firebase === 'undefined') { showToast('❌ Firebase не завантажена'); return; }
             await firebase.auth().signOut();
             window.currentUser = null;
             updateBadge();
