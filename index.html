@@ -15,7 +15,6 @@
     <meta property="og:type" content="website">
     <meta property="og:image" content="/og-image.png">
 
-    <!-- hls.js залишаємо з defer, він не критичний для ініціалізації -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest" defer></script>
 
     <link rel="icon" href="favicon.ico" type="image/x-icon">
@@ -195,89 +194,24 @@
         }
 
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(16px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         @keyframes subtlePulse {
-            0%,
-            100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.02);
-            }
-        }
-        @keyframes shimmer {
-            0% {
-                background-position: -200% 0;
-            }
-            100% {
-                background-position: 200% 0;
-            }
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
         }
         @keyframes skeletonShimmer {
-            0% {
-                background-position: 200% 0;
-            }
-            100% {
-                background-position: -200% 0;
-            }
-        }
-        @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: scale(0.96);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
         }
         @keyframes scaleIn {
-            from {
-                opacity: 0;
-                transform: scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
         }
         @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        @keyframes glowPulse {
-            0%,
-            100% {
-                box-shadow: 0 0 20px rgba(var(--accent-rgb), 0.3);
-            }
-            50% {
-                box-shadow: 0 0 40px rgba(var(--accent-rgb), 0.6);
-            }
-        }
-        @keyframes floatUp {
-            0% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-6px);
-            }
-            100% {
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .glass {
@@ -294,9 +228,7 @@
         .img--loaded {
             filter: blur(0) scale(1);
         }
-        .small {
-            font-size: 0.85rem;
-        }
+        .small { font-size: 0.85rem; }
 
         .header {
             display: flex;
@@ -309,9 +241,7 @@
             border-bottom: 1px solid var(--border);
             transition: all var(--transition);
         }
-        .header:hover {
-            border-bottom-color: var(--border-hover);
-        }
+        .header:hover { border-bottom-color: var(--border-hover); }
         .logo {
             display: flex;
             align-items: center;
@@ -321,9 +251,7 @@
             text-decoration: none;
             transition: transform var(--transition);
         }
-        .logo:hover {
-            transform: translateY(-2px);
-        }
+        .logo:hover { transform: translateY(-2px); }
         .logo-icon {
             font-size: 3.6rem;
             font-weight: 900;
@@ -382,9 +310,7 @@
             margin-right: 0.65rem;
             transition: color var(--transition);
         }
-        .search-wrapper:focus-within i {
-            color: var(--accent);
-        }
+        .search-wrapper:focus-within i { color: var(--accent); }
         #searchInput {
             border: none;
             outline: none;
@@ -439,9 +365,7 @@
             border: 2px solid var(--surface);
         }
 
-        .category-section {
-            margin-bottom: 1.6rem;
-        }
+        .category-section { margin-bottom: 1.6rem; }
         .category-scroll {
             display: flex;
             gap: 0.7rem;
@@ -500,9 +424,7 @@
             font-weight: 700;
             gap: 0.5rem;
         }
-        .action-pill i {
-            font-size: 1rem;
-        }
+        .action-pill i { font-size: 1rem; }
         .actions-row {
             display: flex;
             gap: 0.7rem;
@@ -565,9 +487,7 @@
             overflow: hidden;
             border-radius: var(--radius) var(--radius) 0 0;
         }
-        .dark-mode .anime-poster {
-            background: #2a2a2a;
-        }
+        .dark-mode .anime-poster { background: #2a2a2a; }
         .anime-poster img {
             position: absolute;
             top: 0;
@@ -577,9 +497,7 @@
             object-fit: cover;
             transition: transform 0.35s ease;
         }
-        .anime-card:hover .anime-poster img {
-            transform: scale(1.06);
-        }
+        .anime-card:hover .anime-poster img { transform: scale(1.06); }
         .anime-info {
             padding: 0.9rem 1rem 1rem;
             display: flex;
@@ -651,9 +569,7 @@
             animation: scaleIn 0.3s ease;
             scroll-behavior: smooth;
         }
-        .modal-content::-webkit-scrollbar {
-            width: 6px;
-        }
+        .modal-content::-webkit-scrollbar { width: 6px; }
         .modal-content::-webkit-scrollbar-thumb {
             background: var(--border-hover);
             border-radius: 3px;
@@ -698,27 +614,20 @@
             transform: rotate(90deg);
             background: var(--hover);
         }
-        .modal-body {
-            padding: 1.8rem;
-        }
+        .modal-body { padding: 1.8rem; }
         .anime-detail-grid {
             display: flex;
             flex-wrap: wrap;
             gap: 2rem;
         }
-        .detail-poster {
-            flex: 0 0 170px;
-        }
+        .detail-poster { flex: 0 0 170px; }
         .detail-poster img {
             width: 100%;
             border-radius: var(--radius-sm);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
             border: 1px solid var(--border);
         }
-        .detail-info {
-            flex: 1;
-            min-width: 250px;
-        }
+        .detail-info { flex: 1; min-width: 250px; }
         .synopsis {
             overflow: hidden;
             display: -webkit-box;
@@ -776,10 +685,7 @@
             box-shadow: var(--shadow-sm);
             font-family: inherit;
         }
-        .voice-btn:hover {
-            background: var(--hover);
-            transform: translateY(-1px);
-        }
+        .voice-btn:hover { background: var(--hover); transform: translateY(-1px); }
         .voice-btn.active {
             background: var(--accent);
             color: var(--accent-text);
@@ -878,21 +784,13 @@
             box-shadow: var(--shadow-sm);
             font-family: inherit;
         }
-        .page-btn:hover {
-            background: var(--hover);
-            transform: scale(1.07);
-            border-color: var(--accent);
-        }
+        .page-btn:hover { background: var(--hover); transform: scale(1.07); border-color: var(--accent); }
         .page-btn.active-page {
             background: var(--accent-gradient);
             color: var(--accent-text);
             border-color: transparent;
         }
-        .page-btn:disabled {
-            opacity: 0.35;
-            cursor: not-allowed;
-            pointer-events: none;
-        }
+        .page-btn:disabled { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
 
         .tag {
             background: var(--tag-bg);
@@ -997,9 +895,7 @@
             display: flex;
             flex-direction: column;
         }
-        .settings-panel.open {
-            transform: translateX(0);
-        }
+        .settings-panel.open { transform: translateX(0); }
         .settings-header {
             display: flex;
             justify-content: space-between;
@@ -1007,18 +903,9 @@
             padding: 1.5rem 1.8rem;
             border-bottom: 1px solid var(--border);
         }
-        .settings-header h2 {
-            font-size: 1.3rem;
-            font-weight: 700;
-        }
-        .settings-body {
-            flex: 1;
-            overflow-y: auto;
-            padding: 1.5rem 1.8rem;
-        }
-        .settings-group {
-            margin-bottom: 2rem;
-        }
+        .settings-header h2 { font-size: 1.3rem; font-weight: 700; }
+        .settings-body { flex: 1; overflow-y: auto; padding: 1.5rem 1.8rem; }
+        .settings-group { margin-bottom: 2rem; }
         .settings-group-title {
             font-size: 0.75rem;
             font-weight: 700;
@@ -1034,29 +921,11 @@
             padding: 0.8rem 0;
             border-bottom: 1px solid var(--border-light);
         }
-        .settings-row:last-child {
-            border-bottom: none;
-        }
-        .settings-label {
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
-        .settings-value {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            margin-top: 0.2rem;
-        }
-        .toggle-switch {
-            position: relative;
-            display: inline-block;
-            width: 44px;
-            height: 24px;
-        }
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
+        .settings-row:last-child { border-bottom: none; }
+        .settings-label { font-weight: 500; font-size: 0.9rem; }
+        .settings-value { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem; }
+        .toggle-switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
         .slider {
             position: absolute;
             cursor: pointer;
@@ -1079,12 +948,8 @@
             transition: .3s;
             border-radius: 50%;
         }
-        input:checked+.slider {
-            background: var(--accent);
-        }
-        input:checked+.slider:before {
-            transform: translateX(20px);
-        }
+        input:checked+.slider { background: var(--accent); }
+        input:checked+.slider:before { transform: translateX(20px); }
         .settings-select {
             padding: 0.4rem 1rem;
             border-radius: 8px;
@@ -1097,13 +962,8 @@
             cursor: pointer;
             transition: border-color var(--transition);
         }
-        .settings-select:focus {
-            border-color: var(--accent);
-        }
-        .range-input {
-            width: 120px;
-            accent-color: var(--accent);
-        }
+        .settings-select:focus { border-color: var(--accent); }
+        .range-input { width: 120px; accent-color: var(--accent); }
         .settings-overlay {
             position: fixed;
             inset: 0;
@@ -1114,10 +974,7 @@
             pointer-events: none;
             transition: opacity 0.3s;
         }
-        .settings-overlay.open {
-            opacity: 1;
-            pointer-events: all;
-        }
+        .settings-overlay.open { opacity: 1; pointer-events: all; }
 
         .profile-hero {
             display: flex;
@@ -1170,24 +1027,15 @@
             color: #fff;
             font-size: 1.4rem;
         }
-        .profile-avatar-large:hover .avatar-edit-overlay {
-            opacity: 1;
-        }
-        .profile-hero-info {
-            flex: 1;
-            min-width: 200px;
-        }
+        .profile-avatar-large:hover .avatar-edit-overlay { opacity: 1; }
+        .profile-hero-info { flex: 1; min-width: 200px; }
         .profile-hero-info h3 {
             font-size: 1.6rem;
             font-weight: 800;
             margin-bottom: 0.2rem;
             color: var(--text);
         }
-        .profile-hero-info .profile-email {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            margin-bottom: 0.8rem;
-        }
+        .profile-hero-info .profile-email { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.8rem; }
         .profile-hero-info .profile-badge {
             display: inline-block;
             background: var(--accent-light);
@@ -1286,10 +1134,7 @@
             transition: all var(--transition);
             font-family: inherit;
         }
-        .profile-tab-btn:hover {
-            color: var(--text);
-            background: var(--hover);
-        }
+        .profile-tab-btn:hover { color: var(--text); background: var(--hover); }
         .profile-tab-btn.active-profile-tab {
             background: var(--accent-gradient);
             color: var(--accent-text);
@@ -1329,9 +1174,7 @@
             display: block;
             transition: transform 0.4s ease;
         }
-        .profile-media-card:hover img {
-            transform: scale(1.04);
-        }
+        .profile-media-card:hover img { transform: scale(1.04); }
         .profile-media-card .pmc-info {
             padding: 0.5rem 0.5rem 0.6rem;
             font-size: 0.72rem;
@@ -1348,12 +1191,7 @@
             color: var(--text-muted);
             grid-column: 1/-1;
         }
-        .profile-empty i {
-            font-size: 3rem;
-            display: block;
-            margin-bottom: 0.8rem;
-            opacity: 0.5;
-        }
+        .profile-empty i { font-size: 3rem; display: block; margin-bottom: 0.8rem; opacity: 0.5; }
 
         @media (max-width: 1024px) {
             .app-container { padding: 1.5rem; }
@@ -1618,7 +1456,6 @@
         </div>
     </aside>
 
-    <!-- Firebase SDK завантажується першим, без defer, щоб гарантовано бути доступним -->
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
@@ -1753,7 +1590,6 @@
 
         // ===== auth.js =====
         window.currentUser = null;
-        // Firebase вже гарантовано завантажена
         firebase.initializeApp({
             apiKey: "AIzaSyDxEGgR8KuZh9IEeAEv5yXa2lAzdLGP5jI",
             authDomain: "monoanime-46d6f.firebaseapp.com",
@@ -1853,10 +1689,20 @@
             return snapshot.docs.map(d => d.data());
         }
 
+        // ✅ Виправлена функція: зберігаємо лише потрібні поля (без seasons)
         async function cloudAddBookmark(anime) {
             if (!window.currentUser) return;
             const db = firebase.firestore();
-            await db.collection('users').doc(window.currentUser.uid).collection('bookmarks').doc(String(anime.mal_id)).set(anime);
+            const bookmarkData = {
+                mal_id: anime.mal_id,
+                title: anime.title,
+                image_url: anime.images?.jpg?.large_image_url || '',
+                url: anime.url || '',
+                score: anime.score || null,
+                year: anime.year || null,
+                timestamp: Date.now()
+            };
+            await db.collection('users').doc(window.currentUser.uid).collection('bookmarks').doc(String(anime.mal_id)).set(bookmarkData);
         }
 
         async function cloudRemoveBookmark(mal_id) {
@@ -1902,6 +1748,32 @@
             const db = firebase.firestore();
             const doc = await db.collection('users').doc(window.currentUser.uid).collection('progress').doc(String(mal_id)).get();
             return doc.exists ? doc.data() : null;
+        }
+
+        // ✅ Нові функції для синхронізації часу перегляду
+        async function cloudGetWatchTime() {
+            if (!window.currentUser) return 0;
+            try {
+                const db = firebase.firestore();
+                const doc = await db.collection('users').doc(window.currentUser.uid).collection('stats').doc('watchTime').get();
+                return doc.exists ? (doc.data().seconds || 0) : 0;
+            } catch { return 0; }
+        }
+
+        async function cloudSyncWatchTime() {
+            if (!window.currentUser) return;
+            const localSeconds = Storage.getWatchTime();
+            if (localSeconds <= 0) return;
+            try {
+                const db = firebase.firestore();
+                const docRef = db.collection('users').doc(window.currentUser.uid).collection('stats').doc('watchTime');
+                const doc = await docRef.get();
+                const cloudSeconds = doc.exists ? (doc.data().seconds || 0) : 0;
+                await docRef.set({ seconds: cloudSeconds + localSeconds });
+                localStorage.setItem('mono_anime_watch_time', JSON.stringify(0));
+            } catch (err) {
+                console.error('Watch time sync error:', err);
+            }
         }
 
         // ===== api.js =====
@@ -2329,6 +2201,48 @@
             }
         };
 
+        // ✅ Виправлена функція toggleBookmark
+        async function toggleBookmark(anime) {
+            const bookmarkData = {
+                mal_id: anime.mal_id,
+                title: anime.title,
+                image_url: anime.images?.jpg?.large_image_url || '',
+                url: anime.url || '',
+                score: anime.score || null,
+                year: anime.year || null,
+                timestamp: Date.now()
+            };
+
+            if (window.currentUser) {
+                try {
+                    const bm = await cloudGetBookmarks();
+                    const exists = bm.some(b => b.mal_id === anime.mal_id);
+                    if (exists) {
+                        await cloudRemoveBookmark(anime.mal_id);
+                        showToast('Видалено з обраного');
+                    } else {
+                        await cloudAddBookmark(anime);
+                        showToast('Додано в обране ❤️');
+                    }
+                } catch (err) {
+                    console.error('Cloud bookmark error:', err);
+                    showToast('❌ Помилка синхронізації');
+                }
+            } else {
+                let b = Storage.getBookmarks();
+                const idx = b.findIndex(x => x.mal_id === anime.mal_id);
+                if (idx > -1) {
+                    b.splice(idx, 1);
+                    showToast('Видалено з обраного');
+                } else {
+                    b.push(bookmarkData);
+                    showToast('Додано в обране ❤️');
+                }
+                Storage.saveBookmarks(b);
+            }
+            updateBadge();
+        }
+
         async function openProfileModal() {
             const profileModal = document.getElementById('profileModal');
             if (!profileModal) return;
@@ -2385,10 +2299,15 @@
 
             profileBody.innerHTML = '<div class="loader"><i class="fas fa-spinner fa-pulse"></i> Завантаження профілю...</div>';
             try {
-                const [bookmarks, history] = await Promise.all([cloudGetBookmarks(), cloudGetHistory()]);
-                const watchTime = Storage.getWatchTime();
-                const hours = Math.floor(watchTime / 3600);
-                const mins = Math.floor((watchTime % 3600) / 60);
+                // ✅ Синхронізуємо час перегляду
+                await cloudSyncWatchTime();
+                const [bookmarks, history, cloudWatchSeconds] = await Promise.all([
+                    cloudGetBookmarks(),
+                    cloudGetHistory(),
+                    cloudGetWatchTime()
+                ]);
+                const hours = Math.floor(cloudWatchSeconds / 3600);
+                const mins = Math.floor((cloudWatchSeconds % 3600) / 60);
                 const user = window.currentUser;
                 profileBody.innerHTML = `
                 <div class="profile-hero">
@@ -2441,7 +2360,7 @@
             return `<div class="profile-media-grid">
             ${list.slice(0, 36).map(item => `
                 <div class="profile-media-card" data-url="${item.url}" tabindex="0" role="button">
-                    <img src="${item.image_url}" alt="${item.title}" loading="lazy">
+                    <img src="${item.image_url || ''}" alt="${item.title}" loading="lazy">
                     <div class="pmc-info" title="${item.title}">${item.title}</div>
                 </div>
             `).join('')}
@@ -2491,27 +2410,6 @@
                 if (video._cleanupTimeUpdate) video._cleanupTimeUpdate();
                 destroyHlsForVideo(video);
             }
-        }
-
-        async function toggleBookmark(anime) {
-            if (window.currentUser) {
-                try {
-                    const bm = await cloudGetBookmarks();
-                    const exists = bm.some(b => b.mal_id === anime.mal_id);
-                    if (exists) { await cloudRemoveBookmark(anime.mal_id); showToast('Видалено з обраного'); }
-                    else { await cloudAddBookmark(anime); showToast('Додано в обране ❤️'); }
-                } catch (err) {
-                    console.error('Cloud bookmark error:', err);
-                    showToast('❌ Помилка синхронізації');
-                }
-            } else {
-                let b = Storage.getBookmarks();
-                const idx = b.findIndex(x => x.mal_id === anime.mal_id);
-                if (idx > -1) { b.splice(idx, 1); showToast('Видалено з обраного'); }
-                else { b.push(anime); showToast('Додано в обране ❤️'); }
-                Storage.saveBookmarks(b);
-            }
-            updateBadge();
         }
 
         async function openDetailModal(url) {
