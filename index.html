@@ -1348,8 +1348,9 @@
     ================================================================ -->
     <script>
         // ========================================================================
-        //  VAKDAB — AppleTV AgNative v0.7.0
+        //  VAKDAB — AppleTV AgNative v0.7.1
         //  Повноцінна підтримка uaserials.com (категорії, пошук, дешифрування плеєра)
+        //  Виправлено: iframe замінено на fetch для uaserials, try/catch для жанрів
         // ========================================================================
 
         const PROXY_URL = 'https://monoanime.animegran8.workers.dev';
@@ -1588,66 +1589,24 @@
         // ==================== ДЕШИФРУВАННЯ ПЛЕЄРА UASERIALS ====================
 
         /**
-         * Завантажує сторінку uaserials в iframe через проксі та читає змінну window.data
-         * (розшифровані дані плеєра).
-         * Повертає Promise з розшифрованим масивом або відхиляє.
+         * Завантажує розшифровані дані плеєра з uaserials через проксі.
+         * Використовує fetch замість iframe, щоб уникнути SecurityError.
+         * Повертає Promise з масивом даних або відхиляє.
          */
-        function loadUASerialsDataFromPage(url) {
-            return new Promise((resolve, reject) => {
-                const iframe = document.createElement('iframe');
-                iframe.style.display = 'none';
-                iframe.src = getProxyUrl(url);
-                document.body.appendChild(iframe);
-
-                let resolved = false;
-                const timeout = setTimeout(() => {
-                    if (!resolved) {
-                        resolved = true;
-                        document.body.removeChild(iframe);
-                        reject(new Error('Timeout loading page'));
-                    }
-                }, 15000);
-
-                iframe.onload = () => {
-                    try {
-                        const win = iframe.contentWindow;
-                        // Перевіряємо наявність data періодично (скрипт може завантажуватись асинхронно)
-                        let attempts = 0;
-                        const interval = setInterval(() => {
-                            attempts++;
-                            if (win && win.data) {
-                                clearInterval(interval);
-                                clearTimeout(timeout);
-                                resolved = true;
-                                document.body.removeChild(iframe);
-                                resolve(win.data);
-                            } else if (attempts > 20) {
-                                clearInterval(interval);
-                                if (!resolved) {
-                                    resolved = true;
-                                    document.body.removeChild(iframe);
-                                    reject(new Error('Data not found after waiting'));
-                                }
-                            }
-                        }, 500);
-                    } catch (e) {
-                        if (!resolved) {
-                            resolved = true;
-                            clearTimeout(timeout);
-                            document.body.removeChild(iframe);
-                            reject(e);
-                        }
-                    }
-                };
-                iframe.onerror = () => {
-                    if (!resolved) {
-                        resolved = true;
-                        clearTimeout(timeout);
-                        document.body.removeChild(iframe);
-                        reject(new Error('Iframe load error'));
-                    }
-                };
-            });
+        async function loadUASerialsDataFromPage(url) {
+            try {
+                const resp = await fetch(
+                    `${PROXY_URL}/extract-player?url=${encodeURIComponent(url)}`
+                );
+                if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+                const data = await resp.json();
+                if (!Array.isArray(data) || data.length === 0) {
+                    throw new Error('Порожні дані плеєра');
+                }
+                return data;
+            } catch (e) {
+                throw new Error('Не вдалося завантажити дані плеєра: ' + e.message);
+            }
         }
 
         /**
@@ -1720,7 +1679,7 @@
                 'Режисер']] : []);
             data.actors = Array.isArray(fields['Актори']) ? fields['Актори'] : (fields['Актори'] ? [fields['Актори']] : []);
 
-            // --- Плеєр: отримуємо розшифровані дані через iframe ---
+            // --- Плеєр: отримуємо розшифровані дані через fetch ---
             try {
                 const decryptedData = await loadUASerialsDataFromPage(url);
                 data.seasons = convertUASerialsData(decryptedData);
@@ -2592,10 +2551,27 @@
 
         function iconSettingsSvg() { return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>`; }
 
-        function buildLeftdock() {
+        // Безпечне завантаження жанрів — try/catch гарантує, що один збій не поламає все меню
+        async function loadGenres() {
+            try {
+                // Наразі жанри статичні, але в майбутньому тут може бути fetch
+                return fetchGenres();
+            } catch (e) {
+                console.warn('Жанри не завантажились:', e);
+                return []; // порожній список замість падіння
+            }
+        }
+
+        function fetchGenres() {
+            return Object.entries(GENRE_MAP)
+                .map(([name, slug]) => ({ slug, name }))
+                .sort((a, b) => a.name.localeCompare(b.name, 'uk'));
+        }
+
+        async function buildLeftdock() {
             const inner = document.getElementById('leftdockInner');
             if (!inner) return;
-            const genres = fetchGenres();
+
             let html = '';
             html += `<div class="agnative-leftdock__case">`;
             html += `
@@ -2622,13 +2598,21 @@
             });
 
             html += `</div><div class="agnative-leftdock__split"></div><div class="agnative-leftdock__case">`;
-            // Жанри (тільки для animeua)
-            genres.forEach(g => {
-                html += `
-              <div class="agnative-leftdock__item selector genre-item-dock" data-action="genre-${g.slug}" data-selector="true" tabindex="0" data-genre="${g.slug}">
-                <div class="menu__ico">${iconCircleLetter(g.name.charAt(0))}</div><div class="menu__text">${g.name}</div>
-              </div>`;
-            });
+
+            // Жанри (тільки для animeua, тепер з try/catch)
+            try {
+                const genres = await loadGenres();
+                genres.forEach(g => {
+                    html += `
+                  <div class="agnative-leftdock__item selector genre-item-dock" data-action="genre-${g.slug}" data-selector="true" tabindex="0" data-genre="${g.slug}">
+                    <div class="menu__ico">${iconCircleLetter(g.name.charAt(0))}</div><div class="menu__text">${g.name}</div>
+                  </div>`;
+                });
+            } catch (e) {
+                console.warn('Помилка рендеру жанрів у меню:', e);
+                // Жанри просто не покажуться, меню продовжить працювати
+            }
+
             html += `</div><div class="agnative-leftdock__split"></div><div class="agnative-leftdock__case">`;
             html += `
             <div class="agnative-leftdock__item selector" data-action="settings" data-selector="true" tabindex="0">
@@ -2666,9 +2650,6 @@
                 openGenreSection(slug, name);
             } else if (action === 'settings') { openSettingsSection(); }
         }
-
-        function fetchGenres() { return Object.entries(GENRE_MAP).map(([name, slug]) => ({ slug, name })).sort((a, b) => a.name
-                .localeCompare(b.name, 'uk')); }
 
         // ==================== SECTION MODAL ====================
         const sectionState = { type: null, genreSlug: null, genreName: null, searchQuery: '', page: 1, list: [] };
@@ -2949,9 +2930,9 @@
         });
 
         // ==================== ФІНАЛЬНИЙ СТАРТ ====================
-        function init() {
+        async function init() {
             applyTheme(Storage.getTheme());
-            buildLeftdock();
+            await buildLeftdock();
             // Завантажуємо категорію, якщо збережена
             currentCategory = Storage.getCategory() || '';
             // Якщо категорія збережена, але джерело не animeua – скидаємо (перевірка на мапінг)
@@ -2966,7 +2947,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', init);
-        console.log('🚀 VAKDAB v0.7.0 — повноцінна підтримка uaserials.com (категорії, пошук, дешифрування)');
+        console.log('🚀 VAKDAB v0.7.1 — повноцінна підтримка uaserials.com (категорії, пошук, fetch-плеєр)');
         console.log('⌨️ Клавіші: / пошук • M меню • T тема • R випадкове • Esc закрити');
     </script>
 </body>
