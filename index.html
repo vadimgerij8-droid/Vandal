@@ -1348,8 +1348,8 @@
     ================================================================ -->
     <script>
         // ========================================================================
-        //  VAKDAB — AppleTV AgNative v0.6.0 (монохромна тема, ⎈ логотип)
-        //  Додано категорії та вибір джерела
+        //  VAKDAB — AppleTV AgNative v0.7.0
+        //  Повноцінна підтримка uaserials.com (категорії, пошук, дешифрування плеєра)
         // ========================================================================
 
         const PROXY_URL = 'https://monoanime.animegran8.workers.dev';
@@ -1377,12 +1377,30 @@
             "Еччі": "echhi"
         };
 
-        // Категорії для animeua.club (відповідають розділам сайту)
+        // Категорії для animeua.club
         const CATEGORY_MAP = {
             'films': { name: 'Фільми', slug: 'films' },
             'serials': { name: 'Серіали', slug: 'serials' },
             'multserialy': { name: 'Мультсеріали', slug: 'multserialy' },
             'multfilmy': { name: 'Мультфільми', slug: 'multfilmy' }
+        };
+
+        // Категорії для uaserials.com (відповідність слагам)
+        const UASERIALS_CATEGORY_MAP = {
+            'exclusive': { name: 'Ексклюзив', slug: 'exclusive' },
+            'series': { name: 'Серіали', slug: 'series' },
+            'films': { name: 'Фільми', slug: 'films' },
+            'multfilms': { name: 'Мультфільми', slug: 'multfilms' },
+            'multserialy': { name: 'Мультсеріали', slug: 'multserialy' },
+            'anime': { name: 'Аніме', slug: 'anime' }
+        };
+
+        // Мапінг назв категорій з інтерфейсу до слагів uaserials
+        const CATEGORY_TO_UASERIALS = {
+            'films': 'films',
+            'serials': 'series',
+            'multserialy': 'multserialy',
+            'multfilmy': 'multfilms'
         };
 
         String.prototype.hashCode = function() {
@@ -1503,9 +1521,6 @@
 
         // ==================== API (uaserials.com) ====================
         async function fetchUASerials(url) {
-            // Використовуємо той самий проксі, але для uaserials.com потрібні спеціальні заголовки.
-            // Проксі їх не передає, тому спробуємо додати їх у запит до проксі (але проксі їх ігнорує).
-            // Якщо не спрацює – буде помилка, але ми обробимо.
             const proxyUrl = getProxyUrl(url);
             const resp = await fetch(proxyUrl, {
                 headers: {
@@ -1541,7 +1556,6 @@
                     score: null,
                     year: null,
                     from: 'uaserials',
-                    // зберігаємо додаткові поля для відображення
                     _season: seasonLabel?.textContent?.trim() || '',
                     _series: seriesLabel?.textContent?.trim() || ''
                 });
@@ -1550,36 +1564,143 @@
         }
 
         async function fetchUASerialsMain(page) {
-            // uaserials.com має пагінацію: /exclusive/page/2/ тощо
             const url = page === 1 ? `${UASERIALS_BASE}/exclusive/` : `${UASERIALS_BASE}/exclusive/page/${page}/`;
             const doc = await fetchUASerials(url);
             return parseUASerialsList(doc);
         }
 
+        async function fetchUASerialsCategory(categorySlug, page) {
+            const url = page === 1 ?
+                `${UASERIALS_BASE}/${categorySlug}/` :
+                `${UASERIALS_BASE}/${categorySlug}/page/${page}/`;
+            const doc = await fetchUASerials(url);
+            return parseUASerialsList(doc);
+        }
+
+        async function searchUASerials(query, page) {
+            const url = page === 1 ?
+                `${UASERIALS_BASE}/?do=search&subaction=search&story=${encodeURIComponent(query)}` :
+                `${UASERIALS_BASE}/?do=search&subaction=search&story=${encodeURIComponent(query)}&page=${page}`;
+            const doc = await fetchUASerials(url);
+            return parseUASerialsList(doc);
+        }
+
+        // ==================== ДЕШИФРУВАННЯ ПЛЕЄРА UASERIALS ====================
+
+        /**
+         * Завантажує сторінку uaserials в iframe через проксі та читає змінну window.data
+         * (розшифровані дані плеєра).
+         * Повертає Promise з розшифрованим масивом або відхиляє.
+         */
+        function loadUASerialsDataFromPage(url) {
+            return new Promise((resolve, reject) => {
+                const iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                iframe.src = getProxyUrl(url);
+                document.body.appendChild(iframe);
+
+                let resolved = false;
+                const timeout = setTimeout(() => {
+                    if (!resolved) {
+                        resolved = true;
+                        document.body.removeChild(iframe);
+                        reject(new Error('Timeout loading page'));
+                    }
+                }, 15000);
+
+                iframe.onload = () => {
+                    try {
+                        const win = iframe.contentWindow;
+                        // Перевіряємо наявність data періодично (скрипт може завантажуватись асинхронно)
+                        let attempts = 0;
+                        const interval = setInterval(() => {
+                            attempts++;
+                            if (win && win.data) {
+                                clearInterval(interval);
+                                clearTimeout(timeout);
+                                resolved = true;
+                                document.body.removeChild(iframe);
+                                resolve(win.data);
+                            } else if (attempts > 20) {
+                                clearInterval(interval);
+                                if (!resolved) {
+                                    resolved = true;
+                                    document.body.removeChild(iframe);
+                                    reject(new Error('Data not found after waiting'));
+                                }
+                            }
+                        }, 500);
+                    } catch (e) {
+                        if (!resolved) {
+                            resolved = true;
+                            clearTimeout(timeout);
+                            document.body.removeChild(iframe);
+                            reject(e);
+                        }
+                    }
+                };
+                iframe.onerror = () => {
+                    if (!resolved) {
+                        resolved = true;
+                        clearTimeout(timeout);
+                        document.body.removeChild(iframe);
+                        reject(new Error('Iframe load error'));
+                    }
+                };
+            });
+        }
+
+        /**
+         * Конвертує розшифровані дані з uaserials у формат сезонів для нашого плеєра.
+         * Вхід: масив об'єктів озвучок з полями title, seasons (або url для фільмів).
+         * Вихід: { "1": { "Дубляж": [{episode:"1", file:"https://..."}], ... }, ... }
+         */
+        function convertUASerialsData(decryptedArray) {
+            const seasons = {};
+            if (!Array.isArray(decryptedArray)) return seasons;
+            for (const dub of decryptedArray) {
+                const dubTitle = dub.title || 'Озвучка';
+                if (dub.seasons) {
+                    for (const [seasonNum, seasonData] of Object.entries(dub.seasons)) {
+                        if (!seasons[seasonNum]) seasons[seasonNum] = {};
+                        const episodes = (seasonData.episodes || []).map(ep => ({
+                            episode: ep.title || ep.source?.title || '?',
+                            file: ep.source?.url || ''
+                        }));
+                        seasons[seasonNum][dubTitle] = episodes;
+                    }
+                } else if (dub.url) {
+                    // Фільм (без сезонів)
+                    if (!seasons['1']) seasons['1'] = {};
+                    seasons['1'][dubTitle] = [{ episode: '1', file: dub.url }];
+                }
+            }
+            return seasons;
+        }
+
+        // ==================== ДЕТАЛЬНА СТОРІНКА UASERIALS ====================
+
         async function fetchUASerialsDetail(url) {
             const doc = await fetchUASerials(url);
             const data = { url };
 
-            // Назви
+            // --- Основна інформація ---
             const titleUa = safeQuery('.short-title .oname_ua', doc);
             const titleOrig = safeQuery('.oname', doc);
             data.title = (titleUa?.textContent || titleOrig?.textContent || '').trim() || 'Без назви';
 
-            // Постер
             const poster = safeQuery('.fimg img', doc);
             let posterSrc = poster?.getAttribute('src') || '';
             if (posterSrc && !posterSrc.startsWith('http')) posterSrc = UASERIALS_BASE + posterSrc;
             data.images = { jpg: { large_image_url: posterSrc } };
 
-            // Рейтинг IMDB
             const imdb = safeQuery('.short-rate-imdb span', doc);
             data.score = imdb?.textContent?.trim() || null;
 
-            // Опис
             const desc = safeQuery('.full-text', doc);
-            data.synopsis = desc?.textContent?.trim() || 'Опис відсутній.';
+            data.synopsis = desc?.textContent?.trim() || '';
 
-            // Рік, жанри, країна, озвучка тощо з .short-list li
+            // Парсимо поля зі списку
             const fields = {};
             for (const li of safeQueryAll('.short-list li', doc)) {
                 const label = safeQuery('span', li);
@@ -1590,16 +1711,24 @@
                 const allVals = values.length ? values : spans;
                 fields[key] = allVals.length > 1 ? allVals : (allVals[0] || '');
             }
-
             data.year = fields['Рік'] || null;
             data.genres = Array.isArray(fields['Жанр']) ? fields['Жанр'] : (fields['Жанр'] ? [fields['Жанр']] : []);
             data.country = fields['Країна'] || '';
-            data.voice_over = fields['Переклад'] || '';
-            data.director = fields['Режисер'] || '';
-            data.actors = fields['Актори'] || '';
+            data.voice_over = Array.isArray(fields['Переклад']) ? fields['Переклад'] : (fields['Переклад'] ? [fields[
+                'Переклад']] : []);
+            data.director = Array.isArray(fields['Режисер']) ? fields['Режисер'] : (fields['Режисер'] ? [fields[
+                'Режисер']] : []);
+            data.actors = Array.isArray(fields['Актори']) ? fields['Актори'] : (fields['Актори'] ? [fields['Актори']] : []);
 
-            // Сезони – у нас немає детальної інформації, але для сумісності зробимо порожні
-            data.seasons = {};
+            // --- Плеєр: отримуємо розшифровані дані через iframe ---
+            try {
+                const decryptedData = await loadUASerialsDataFromPage(url);
+                data.seasons = convertUASerialsData(decryptedData);
+            } catch (e) {
+                console.warn('Не вдалося отримати дані плеєра uaserials:', e);
+                data.seasons = {};
+                // Не показуємо помилку користувачеві, просто сезони будуть порожні
+            }
 
             return data;
         }
@@ -1618,16 +1747,10 @@
             return CATEGORY_MAP[slug]?.name || slug;
         }
 
-        function isCategorySupported() {
-            // Категорії підтримуються тільки для animeua
-            return currentSource === 'animeua' && currentCategory !== '';
-        }
-
         async function fetchContent() {
             if (currentTab === 'top100') {
                 if (currentSource === 'animeua') return await fetchAnimeuaTop100();
                 else {
-                    // Для uaserials немає топу, тому повертаємо головну
                     showToast('ТОП 100 доступний тільки для animeua.club');
                     currentTab = 'main';
                     currentCategory = '';
@@ -1637,19 +1760,23 @@
             }
             if (currentSearchQuery) {
                 if (currentSource === 'animeua') return await searchAnimeua(currentSearchQuery, currentPage);
-                else {
-                    // Для uaserials пошук не реалізовано, повертаємо головну
-                    showToast('Пошук доступний тільки для animeua.club');
-                    currentSearchQuery = '';
-                    document.getElementById('searchInput').value = '';
-                    document.getElementById('searchClearBtn').classList.remove('visible');
-                    return await fetchContent();
+                else return await searchUASerials(currentSearchQuery, currentPage);
+            }
+            if (currentCategory) {
+                if (currentSource === 'animeua') {
+                    return await fetchAnimeuaByCategory(currentCategory, currentPage);
+                } else {
+                    // Мапінг слага для uaserials
+                    const uaSlug = CATEGORY_TO_UASERIALS[currentCategory];
+                    if (uaSlug) {
+                        return await fetchUASerialsCategory(uaSlug, currentPage);
+                    } else {
+                        // Якщо немає відповідності, повертаємо головну
+                        return await fetchUASerialsMain(currentPage);
+                    }
                 }
             }
-            if (currentCategory && currentSource === 'animeua') {
-                return await fetchAnimeuaByCategory(currentCategory, currentPage);
-            }
-            // За замовчуванням головна сторінка
+            // За замовчуванням головна
             if (currentSource === 'animeua') return await fetchAnimeuaMain(currentPage);
             else return await fetchUASerialsMain(currentPage);
         }
@@ -1719,10 +1846,6 @@
         function renderPagination() {
             const row = document.getElementById('paginationRow');
             if (!row) return;
-            if (currentTab === 'top100' || currentSource === 'uaserials') {
-                // Для uaserials пагінація працює, але ми не знаємо чи є наступна сторінка, тому показуємо завжди
-                // Просто покажемо кнопки, але з обмеженнями
-            }
             const prevDisabled = currentPage <= 1 ? 'disabled' : '';
             row.innerHTML = `
             <button class="btn-outline" onclick="changePage(${currentPage-1})" ${prevDisabled}><i class="fas fa-chevron-left"></i> Назад</button>
@@ -1794,7 +1917,6 @@
         }
 
         function openRandomAnime() {
-            // Для animeua використовуємо rand
             if (currentSource === 'animeua') {
                 openDetailModal(`${ANIMEUA_BASE}/index.php?do=rand`);
                 showToast('🎲 Випадкове аніме');
@@ -1804,12 +1926,11 @@
         }
 
         function setCategory(slug) {
-            if (currentSource !== 'animeua') {
-                // Якщо вибрано uaserials, перемикаємо на animeua
+            // Якщо джерело uaserials і категорія не має відповідності – перемикаємо на animeua
+            if (currentSource === 'uaserials' && !CATEGORY_TO_UASERIALS[slug]) {
                 currentSource = 'animeua';
                 Storage.setSource('animeua');
                 showToast('Для категорій переключено на animeua.club');
-                // Оновлюємо налаштування, якщо відкрито
                 updateSettingsUI();
             }
             currentCategory = slug;
@@ -1883,11 +2004,9 @@
 
             try {
                 let anime;
-                // Визначаємо джерело за URL
                 if (url.includes('uaserials.com')) {
                     anime = await fetchUASerialsDetail(url);
                 } else {
-                    // Для animeua використовуємо стару функцію (перейменуємо, але вона вже є)
                     anime = await loadAnimeuaDetail(url);
                 }
                 currentDetailAnime = anime;
@@ -1951,8 +2070,7 @@
                         if (startFile) lampaPlayerInstance.loadSource(startFile, '', '');
                     } else {
                         // Якщо немає сезонів, спробуємо знайти хоч якесь відео (для фільмів)
-                        // Можна спробувати витягнути з поля file, але в uaserials ми не парсимо відео
-                        // Тому просто нічого не робимо
+                        // В uaserials ми не парсимо відео безпосередньо, тому просто нічого
                     }
                 }
 
@@ -1971,7 +2089,7 @@
             }
         }
 
-        // ==================== ДЕТАЛІ ДЛЯ ANIMEUA (стара функція, адаптована) ====================
+        // ==================== ДЕТАЛІ ДЛЯ ANIMEUA ====================
 
         async function loadAnimeuaDetail(animeUrl) {
             const doc = await fetchUA(animeUrl);
@@ -1999,7 +2117,6 @@
             const ratingEl = doc.querySelector('.pmovie__age p, .pmovie__age');
             if (ratingEl) rating = ratingEl.textContent.replace('Рейтинг:', '').trim();
 
-            // Парсинг плеєра (як раніше)
             const playerUrls = extractPlayerIframeUrls(doc);
             const allRawSources = [];
             for (const playerUrl of playerUrls) {
@@ -2056,8 +2173,6 @@
                 score: rating
             };
         }
-
-        // ==================== ДОПОМІЖНІ ФУНКЦІЇ ДЛЯ ПЛЕЄРА ====================
 
         function extractPlayerIframeUrls(doc) {
             const selectors = ['.video-responsive iframe', '.player-responsive iframe', '#player iframe',
@@ -2141,7 +2256,7 @@
             return sources;
         }
 
-        // ==================== LAMPA PLAYER (без змін) ====================
+        // ==================== LAMPA PLAYER ====================
 
         class LampaPlayer {
             constructor(container, options) {
@@ -2221,7 +2336,7 @@
                 this.videoRef.load(); if (this.container) this.container.innerHTML = ''; }
         }
 
-        // ==================== HERO BANNER (без змін) ====================
+        // ==================== HERO BANNER ====================
 
         let heroItems = [],
             heroCurrentIndex = 0,
@@ -2240,9 +2355,9 @@
                     topAnime = await fetchAnimeuaTop100();
                     ordinaryAnime = await fetchAnimeuaMain(1);
                 } else {
-                    // Для uaserials використовуємо головну
+                    // Для uaserials використовуємо головну (немає окремого топу)
                     topAnime = await fetchUASerialsMain(1);
-                    ordinaryAnime = topAnime; // немає окремого топу
+                    ordinaryAnime = topAnime;
                 }
                 const getRandomItems = (arr, n) => {
                     const validItems = arr.filter(a => a.images?.jpg?.large_image_url);
@@ -2492,7 +2607,7 @@
             </div>`;
             html += `</div><div class="agnative-leftdock__split"></div><div class="agnative-leftdock__case">`;
 
-            // Категорії: Фільми, Серіали, Мультсеріали, Мультфільми
+            // Категорії (спільні для обох джерел, але мапінг різний)
             const categories = [
                 { slug: 'films', name: 'Фільми' },
                 { slug: 'serials', name: 'Серіали' },
@@ -2507,7 +2622,7 @@
             });
 
             html += `</div><div class="agnative-leftdock__split"></div><div class="agnative-leftdock__case">`;
-            // Жанри (як було)
+            // Жанри (тільки для animeua)
             genres.forEach(g => {
                 html += `
               <div class="agnative-leftdock__item selector genre-item-dock" data-action="genre-${g.slug}" data-selector="true" tabindex="0" data-genre="${g.slug}">
@@ -2541,7 +2656,7 @@
                 const slug = action.replace('category-', '');
                 setCategory(slug);
             } else if (action.startsWith('genre-')) {
-                // Жанри – залишаємо як було, але вони працюють тільки для animeua
+                // Жанри доступні тільки для animeua
                 if (currentSource !== 'animeua') {
                     showToast('Жанри доступні тільки для animeua.club');
                     return;
@@ -2555,7 +2670,7 @@
         function fetchGenres() { return Object.entries(GENRE_MAP).map(([name, slug]) => ({ slug, name })).sort((a, b) => a.name
                 .localeCompare(b.name, 'uk')); }
 
-        // ==================== SECTION MODAL (оновлено для налаштувань) ====================
+        // ==================== SECTION MODAL ====================
         const sectionState = { type: null, genreSlug: null, genreName: null, searchQuery: '', page: 1, list: [] };
 
         function openSectionModal(title, bodyHtml) {
@@ -2703,7 +2818,7 @@
             <div class="settings-group">
               <label>Поточна категорія</label>
               <div style="font-weight:500;">${currentCategory ? getCategoryName(currentCategory) : '— (головна)'}</div>
-              <div class="note">Категорії доступні тільки для animeua.club.</div>
+              <div class="note">Категорії доступні для обох джерел (автоматичне мапінг).</div>
             </div>
           `;
             openSectionModal('Налаштування', bodyHtml);
@@ -2718,7 +2833,6 @@
         }
 
         function updateSettingsUI() {
-            // Оновлює значення select, якщо налаштування відкриті
             const select = document.getElementById('sourceSelect');
             if (select) {
                 select.value = currentSource;
@@ -2840,8 +2954,8 @@
             buildLeftdock();
             // Завантажуємо категорію, якщо збережена
             currentCategory = Storage.getCategory() || '';
-            // Якщо категорія збережена, але джерело не animeua – скидаємо
-            if (currentCategory && currentSource !== 'animeua') {
+            // Якщо категорія збережена, але джерело не animeua – скидаємо (перевірка на мапінг)
+            if (currentCategory && currentSource !== 'animeua' && !CATEGORY_TO_UASERIALS[currentCategory]) {
                 currentCategory = '';
                 Storage.setCategory('');
             }
@@ -2852,7 +2966,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', init);
-        console.log('🚀 VAKDAB v0.6.0 — додано категорії та вибір джерела');
+        console.log('🚀 VAKDAB v0.7.0 — повноцінна підтримка uaserials.com (категорії, пошук, дешифрування)');
         console.log('⌨️ Клавіші: / пошук • M меню • T тема • R випадкове • Esc закрити');
     </script>
 </body>
