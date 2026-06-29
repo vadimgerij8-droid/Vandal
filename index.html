@@ -1392,8 +1392,8 @@
             'exclusive': { name: 'Ексклюзив', slug: 'exclusive' },
             'series': { name: 'Серіали', slug: 'series' },
             'films': { name: 'Фільми', slug: 'films' },
-            'multfilms': { name: 'Мультфільми', slug: 'multfilms' },
-            'multserialy': { name: 'Мультсеріали', slug: 'multserialy' },
+            'multfilms': { name: 'Мультфільми', slug: 'fcartoon' },
+            'multserialy': { name: 'Мультсеріали', slug: 'cartoons' },
             'anime': { name: 'Аніме', slug: 'anime' }
         };
 
@@ -1401,8 +1401,8 @@
         const CATEGORY_TO_UASERIALS = {
             'films': 'films',
             'serials': 'series',
-            'multserialy': 'multserialy',
-            'multfilmy': 'multfilms',
+            'multserialy': 'cartoons',
+            'multfilmy': 'fcartoon',
             'anime': 'anime'  // Додано
         };
 
@@ -2298,13 +2298,13 @@
                     this.hls = null; }
                 v.pause();
                 if (!src) { this.state.loading = false; return; }
-                const proxyUrl = typeof getProxyUrl === 'function' ? getProxyUrl(src) : src;
+                const proxyUrl = (typeof getProxyUrl === 'function' && !src.startsWith(PROXY_URL)) ? getProxyUrl(src) : src;
                 if (typeof Hls !== 'undefined' && Hls.isSupported()) {
                     const hls = new Hls({ enableWorker: true, lowLatencyMode: false, backBufferLength: 90 });
                     this.hls = hls;
                     hls.loadSource(proxyUrl);
                     hls.attachMedia(v);
-                    hls.on(Hls.Events.MANIFEST_PARSED, () => { this.state.loading = false; });
+                    hls.on(Hls.Events.MANIFEST_PARSED, () => { this.state.loading = false; v.play().catch(()=>{}); });
                     hls.on(Hls.Events.ERROR, (ev, data) => { if (data && data.fatal) { this.state.loading = false;
                             v.src = proxyUrl; } });
                 } else {
