@@ -1378,13 +1378,10 @@
             "Еччі": "echhi"
         };
 
-        // Категорії для animeua.club
+        // Категорії для animeua.club (тільки ті, що реально існують на сайті)
         const CATEGORY_MAP = {
-            'films': { name: 'Фільми', slug: 'films' },
-            'serials': { name: 'Серіали', slug: 'serials' },
-            'multserialy': { name: 'Мультсеріали', slug: 'multserialy' },
-            'multfilmy': { name: 'Мультфільми', slug: 'multfilmy' },
-            'anime': { name: 'Аніме', slug: 'anime' }  // Додано для підтримки пункту "Аніме"
+            'film': { name: 'Фільми', slug: 'film' },
+            'anime': { name: 'Аніме', slug: 'anime' }
         };
 
         // Категорії для uaserials.com (відповідність слагам)
@@ -1392,18 +1389,18 @@
             'exclusive': { name: 'Ексклюзив', slug: 'exclusive' },
             'series': { name: 'Серіали', slug: 'series' },
             'films': { name: 'Фільми', slug: 'films' },
-            'multfilms': { name: 'Мультфільми', slug: 'fcartoon' },
-            'multserialy': { name: 'Мультсеріали', slug: 'cartoons' },
+            'fcartoon': { name: 'Мультфільми', slug: 'fcartoon' },
+            'cartoons': { name: 'Мультсеріали', slug: 'cartoons' },
             'anime': { name: 'Аніме', slug: 'anime' }
         };
 
         // Мапінг назв категорій з інтерфейсу до слагів uaserials
         const CATEGORY_TO_UASERIALS = {
-            'films': 'films',
+            'film': 'films',
             'serials': 'series',
             'multserialy': 'cartoons',
             'multfilmy': 'fcartoon',
-            'anime': 'anime'  // Додано
+            'anime': 'anime'
         };
 
         String.prototype.hashCode = function() {
@@ -1893,6 +1890,13 @@
         }
 
         function setCategory(slug) {
+            // Якщо джерело animeua, а категорія не film і не anime — перемикаємо на uaserials
+            if (currentSource === 'animeua' && slug !== 'film' && slug !== 'anime') {
+                currentSource = 'uaserials';
+                Storage.setSource('uaserials');
+                showToast('Переключено на uaserials.com');
+                updateSettingsUI();
+            }
             // Якщо джерело uaserials і категорія не має відповідності – перемикаємо на animeua
             if (currentSource === 'uaserials' && !CATEGORY_TO_UASERIALS[slug]) {
                 currentSource = 'animeua';
@@ -2619,13 +2623,13 @@
             </div>`;
             html += `</div><div class="agnative-leftdock__split"></div><div class="agnative-leftdock__case">`;
 
-            // Категорії (спільні для обох джерел, але мапінг різний)
+            // Категорії — універсальний список, slugs збігаються з CATEGORY_MAP та CATEGORY_TO_UASERIALS
             const categories = [
-                { slug: 'films', name: 'Фільми' },
+                { slug: 'film', name: 'Фільми' },
                 { slug: 'serials', name: 'Серіали' },
                 { slug: 'multserialy', name: 'Мультсеріали' },
                 { slug: 'multfilmy', name: 'Мультфільми' },
-                { slug: 'anime', name: 'Аніме' }  // Додано пункт "Аніме"
+                { slug: 'anime', name: 'Аніме' }
             ];
             categories.forEach(cat => {
                 html += `
