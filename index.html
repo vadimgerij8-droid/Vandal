@@ -1383,7 +1383,8 @@
             'films': { name: 'Фільми', slug: 'films' },
             'serials': { name: 'Серіали', slug: 'serials' },
             'multserialy': { name: 'Мультсеріали', slug: 'multserialy' },
-            'multfilmy': { name: 'Мультфільми', slug: 'multfilmy' }
+            'multfilmy': { name: 'Мультфільми', slug: 'multfilmy' },
+            'anime': { name: 'Аніме', slug: 'anime' }  // Додано для підтримки пункту "Аніме"
         };
 
         // Категорії для uaserials.com (відповідність слагам)
@@ -1401,7 +1402,8 @@
             'films': 'films',
             'serials': 'series',
             'multserialy': 'multserialy',
-            'multfilmy': 'multfilms'
+            'multfilmy': 'multfilms',
+            'anime': 'anime'  // Додано
         };
 
         String.prototype.hashCode = function() {
@@ -1627,74 +1629,20 @@
         function convertUASerialsData(decryptedArray) {
             const seasons = {};
             if (!Array.isArray(decryptedArray)) return seasons;
-
             for (const item of decryptedArray) {
-                const title = item.tabName || item.title || 'Озвучка';
-
-                // ── Формат який повертає НОВИЙ Worker: { title, seasons: { "1": { episodes: [...] } } }
+                const title = item.title || item.tabName || 'Озвучка';
                 if (item.seasons) {
                     for (const [seasonNum, seasonData] of Object.entries(item.seasons)) {
                         if (!seasons[seasonNum]) seasons[seasonNum] = {};
                         const episodes = (seasonData.episodes || []).map(ep => ({
-                            episode: ep.title || ep.source?.title || '?',
+                            episode: ep.title || '?',
                             file: ep.source?.url || ''
                         }));
                         if (episodes.length > 0) seasons[seasonNum][title] = episodes;
                     }
-
-                // ── Ashdi структура: { title, folder: [...] } — пряма структура з ashdi.vip
-                } else if (item.folder) {
-                    const parsed = parseAshdiFolder(item.folder, title, '1');
-                    for (const [s, dubs] of Object.entries(parsed)) {
-                        if (!seasons[s]) seasons[s] = {};
-                        for (const [dub, eps] of Object.entries(dubs)) {
-                            seasons[s][dub] = eps;
-                        }
-                    }
-
-                // ── Старий формат: прямий URL (фільм / embed)
-                } else if (item.url) {
-                    if (!seasons['1']) seasons['1'] = {};
-                    seasons['1'][title] = [{ episode: '1', file: item.url }];
                 }
             }
             return seasons;
-        }
-
-        // Розбирає ashdi структуру folder → { season: { dub: [ {episode, file} ] } }
-        function parseAshdiFolder(items, dubName, seasonNum) {
-            const result = {};
-            for (const item of (items || [])) {
-                if (item.folder) {
-                    const t = (item.title || '').trim();
-                    if (/^[Сс]езон\s*\d+/.test(t)) {
-                        // Це вузол сезону
-                        const sNum = (t.match(/\d+/) || [seasonNum])[0];
-                        const sub = parseAshdiFolder(item.folder, dubName, sNum);
-                        for (const [s, dubs] of Object.entries(sub)) {
-                            if (!result[s]) result[s] = {};
-                            for (const [d, eps] of Object.entries(dubs)) result[s][d] = eps;
-                        }
-                    } else {
-                        // Це вузол озвучки
-                        const sub = parseAshdiFolder(item.folder, t || dubName, seasonNum);
-                        for (const [s, dubs] of Object.entries(sub)) {
-                            if (!result[s]) result[s] = {};
-                            for (const [d, eps] of Object.entries(dubs)) result[s][d] = eps;
-                        }
-                    }
-                } else if (item.file) {
-                    const dub = dubName || 'UA';
-                    const ep  = (item.title.match(/\d+/) || ['1'])[0];
-                    if (!result[seasonNum]) result[seasonNum] = {};
-                    if (!result[seasonNum][dub]) result[seasonNum][dub] = [];
-                    result[seasonNum][dub].push({
-                        episode: ep,
-                        file: item.file
-                    });
-                }
-            }
-            return result;
         }
 
         // ==================== ДЕТАЛЬНА СТОРІНКА UASERIALS ====================
@@ -2676,7 +2624,8 @@
                 { slug: 'films', name: 'Фільми' },
                 { slug: 'serials', name: 'Серіали' },
                 { slug: 'multserialy', name: 'Мультсеріали' },
-                { slug: 'multfilmy', name: 'Мультфільми' }
+                { slug: 'multfilmy', name: 'Мультфільми' },
+                { slug: 'anime', name: 'Аніме' }  // Додано пункт "Аніме"
             ];
             categories.forEach(cat => {
                 html += `
