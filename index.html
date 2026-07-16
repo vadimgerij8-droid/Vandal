@@ -430,11 +430,13 @@
             overflow: hidden;
             box-shadow: none;
             background: #0a0a0a;
+            height: 100vh;
             height: 100svh;
             min-height: 500px;
         }
         @media (max-width: 768px) {
             .hero-wrapper {
+                height: 100vh;
                 height: 100svh;
                 min-height: 400px;
                 width: calc(100% + 2rem);
@@ -444,6 +446,7 @@
         }
         @media (max-width: 480px) {
             .hero-wrapper {
+                height: 100vh;
                 height: 100svh;
                 min-height: 360px;
                 width: calc(100% + 1.5rem);
@@ -498,6 +501,7 @@
 
         /* ===== НАЗВА НА ГЕРО ===== */
         .hero-brand-title {
+            display: none !important;
             position: absolute;
             top: 50%;
             left: 50%;
@@ -536,27 +540,28 @@
             flex-direction: column;
             align-items: flex-start;
             text-align: left;
-            padding: 80px 24px 110px;
+            padding: 80px 20px 90px;
             height: 100%;
             justify-content: flex-end;
             background: transparent;
             backdrop-filter: none;
             -webkit-backdrop-filter: none;
             border-top: none;
+            box-sizing: border-box;
         }
         @media (min-width: 480px) {
             .hero-slide-content {
-                padding: 80px 5% 115px;
+                padding: 80px 5% 90px;
             }
         }
         @media (min-width: 768px) {
             .hero-slide-content {
-                padding: 90px 6% 120px;
+                padding: 90px 6% 100px;
             }
         }
         @media (min-width: 1024px) {
             .hero-slide-content {
-                padding: 100px 8% 130px;
+                padding: 100px 8% 110px;
             }
         }
 
@@ -714,7 +719,7 @@
         /* ===== СТРІЛКИ — НАД КОНТЕНТОМ, ВНИЗУ ===== */
         .hero-nav {
             position: absolute;
-            bottom: 60px;
+            bottom: 24px;
             width: 44px;
             height: 44px;
             background: rgba(0, 0, 0, 0.30);
@@ -757,11 +762,16 @@
             right: 24px;
         }
         @media (max-width: 480px) {
+            .hero-slide-content {
+                padding: 70px 16px 80px;
+            }
+        }
+        @media (max-width: 480px) {
             .hero-nav {
                 width: 38px;
                 height: 38px;
                 font-size: 1rem;
-                bottom: 52px;
+                bottom: 20px;
             }
             .hero-nav-prev {
                 left: 16px;
@@ -772,7 +782,7 @@
         }
         @media (min-width: 768px) {
             .hero-nav {
-                bottom: 66px;
+                bottom: 24px;
                 width: 50px;
                 height: 50px;
                 font-size: 1.3rem;
@@ -788,7 +798,7 @@
         /* ===== ІНДИКАТОРИ (DOTS) ===== */
         .hero-dots {
             position: absolute;
-            bottom: 20px;
+            bottom: 6px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
@@ -816,7 +826,7 @@
         }
         @media (max-width: 480px) {
             .hero-dots {
-                bottom: 16px;
+                bottom: 4px;
                 gap: 6px;
             }
             .hero-dot {
@@ -4159,7 +4169,7 @@
         ============================================================ -->
         <div class="hero-wrapper" id="heroWrapper">
             <!-- Назва на герої -->
-            <div class="hero-brand-title">VAKDAB</div>
+            <!-- hero brand title removed -->
 
             <div id="heroSlidesContainer"></div>
             <button class="hero-nav hero-nav-prev" id="heroPrevBtn" aria-label="Попередній"><i class="fas fa-chevron-left"></i></button>
