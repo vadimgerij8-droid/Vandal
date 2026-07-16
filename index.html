@@ -430,7 +430,7 @@
         }
         @media (max-width: 768px) {
             .hero-wrapper {
-                height: 80vh;
+                height: 100vh;
                 min-height: 200px;
                 width: 100%;
                 margin: 0;
@@ -438,17 +438,17 @@
         }
         @media (max-width: 480px) {
             .hero-wrapper {
-                height: 70vh;
+                height: 100vh;
                 min-height: 180px;
                 width: 100%;
                 margin: 0;
             }
         }
 
-        /* Світла тема — білий фон, зсув вниз на 2см, додано опис */
+        /* Світла тема — білий фон */
         body:not(.dark-mode) .hero-wrapper {
             background: #ffffff;
-            margin-top: 2cm;
+            margin-top: 0;
             margin-bottom: 0;
         }
         body:not(.dark-mode) .hero-wrapper::after {
@@ -542,6 +542,7 @@
             text-align: left;
             padding-left: 20px;
             padding-right: 20px;
+            padding-top: 80px;
             padding-bottom: 110px;
             height: 100%;
             justify-content: flex-end;
@@ -554,6 +555,7 @@
             .hero-slide-content {
                 padding-left: 5%;
                 padding-right: 5%;
+                padding-top: 80px;
                 padding-bottom: 115px;
             }
         }
@@ -561,6 +563,7 @@
             .hero-slide-content {
                 padding-left: 6%;
                 padding-right: 6%;
+                padding-top: 80px;
                 padding-bottom: 120px;
             }
         }
@@ -568,6 +571,7 @@
             .hero-slide-content {
                 padding-left: 8%;
                 padding-right: 8%;
+                padding-top: 80px;
                 padding-bottom: 130px;
             }
         }
@@ -767,6 +771,11 @@
         }
         .hero-nav-next {
             right: 24px;
+        }
+        @media (max-width: 480px) {
+            .hero-slide-content {
+                padding-top: 60px;
+            }
         }
         @media (max-width: 480px) {
             .hero-nav {
